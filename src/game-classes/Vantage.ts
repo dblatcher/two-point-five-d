@@ -3,7 +3,7 @@ import { Direction } from './Direction'
 interface VantageConfig {
     x: number
     y: number
-    direction: "NORTH" | "SOUTH" | "EAST" | "WEST"
+    direction: Direction
 }
 
 class Vantage {
@@ -14,7 +14,7 @@ class Vantage {
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number) {
-        const { x, y, direction } = this.data;
+        const { x, y, direction: d } = this.data;
         const arrowCenterX = (x + .5) * gridSize
         const arrowCenterY = (y + .5) * gridSize
 
@@ -24,8 +24,6 @@ class Vantage {
             arrowLeftY = arrowCenterY,
             arrowRightX = arrowCenterX,
             arrowRightY = arrowCenterY;
-
-        const d = Direction.cardinal.get(direction) as Direction;
 
         arrowEndX += gridSize * .5 * d.x
         arrowEndY += gridSize * .5 * d.y

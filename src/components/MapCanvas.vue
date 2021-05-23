@@ -1,7 +1,8 @@
 <template>
   <figure>
-    <figcaption>{{ caption }}</figcaption>
+    <figcaption>{{caption}}</figcaption>
     <canvas ref="canvas"></canvas>
+    <button @click="draw">redraw</button>
   </figure>
 </template>
 
@@ -12,13 +13,19 @@ import store from "@/store";
 @Options({
   props: {
     caption: String,
+    timestamp: Number,
   },
 })
 export default class MapCanvas extends Vue {
   caption!: string;
+  timestamp!: number;
   $store!: typeof store;
 
   mounted() {
+    this.draw();
+  }
+
+  updated() {
     this.draw();
   }
 

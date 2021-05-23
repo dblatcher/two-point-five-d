@@ -4,7 +4,15 @@
     <p>static: {{ staticTest }}</p>
     <p>store: {{ $store.state.test }}</p>
     <button @click="testMethod()">click</button>
-    <map-canvas caption="My map canvas"/>
+    <button @click="() => {$store.commit('turnLeft');}"
+    >
+      left
+    </button>
+    <button @click="turnRight()">right</button>
+    <map-canvas
+      caption="Map"
+      v-bind:timestamp="$store.state.timestamp"
+    />
   </div>
 </template>
 
@@ -22,16 +30,14 @@ interface MyTestComponentData {
     msg: String,
   },
   components: {
-    MapCanvas
-  }
+    MapCanvas,
+  },
 })
 export default class MyTestComponent extends Vue {
   msg!: string;
   $store!: typeof store;
 
   data(): MyTestComponentData {
-    console.log(this.$store);
-
     return {
       staticTest: "static test",
     };
@@ -39,7 +45,14 @@ export default class MyTestComponent extends Vue {
 
   testMethod(): void {
     const now = new Date();
-    this.$store.commit("changeTestValue", `pupper did a click at ${now.getHours()}.${now.getMinutes()}:${now.getSeconds()}`);
+    this.$store.commit(
+      "changeTestValue",
+      `pupper did a click at ${now.getHours()}.${now.getMinutes()}:${now.getSeconds()}`
+    );
+  }
+
+  turnRight(): void {
+    this.$store.commit("turnRight");
   }
 }
 </script>

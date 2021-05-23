@@ -41,17 +41,24 @@ class Direction {
     }
 
     static get cardinal(): Map<string, Direction> {
-
         const map = new Map();
-
-        map.set("NORTH", new Direction('NORTH', 0, -1))
-        map.set("EAST", new Direction('EAST', 1, 0))
-        map.set("SOUTH", new Direction('SOUTH', 0, 1))
-        map.set("WEST", new Direction('WEST', -1, 0))
+        map.set("NORTH", NORTH)
+        map.set("EAST", EAST)
+        map.set("SOUTH", SOUTH)
+        map.set("WEST", WEST)
         return map
     }
+
+    static get north() { return NORTH }
+    static get south() { return SOUTH }
+    static get east() { return EAST }
+    static get west() { return WEST }
 }
 
 const noWhere = new Direction("?", 0, 0);
+const NORTH = new Direction('NORTH', 0, -1);
+const SOUTH = new Direction('SOUTH', 0, 1);
+const EAST = new Direction('EAST', 1, 0);
+const WEST = new Direction('WEST', -1, 0)
 
 export { Direction }

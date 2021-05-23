@@ -1,29 +1,27 @@
-import { Floor } from '@/game-classes/Floor'
-import { Vantage } from '@/game-classes/Vantage'
-import { Wall } from '@/game-classes/Wall'
 import { createStore } from 'vuex'
+import { floor, position } from './floors'
 
 
 
 export default createStore({
   state: {
     test: "pupper should click the button",
-    vantage: new Vantage({ x: 3, y: 3, direction: "SOUTH" }),
-    floor: new Floor({
-      height: 10, width: 15, walls: [
-        new Wall({ x: 2, y: 2, place: 'NORTH' }),
-        new Wall({ x: 2, y: 2, place: 'SOUTH' }),
-        new Wall({ x: 5, y: 4, place: 'WEST' }),
-        new Wall({ x: 8, y: 5, place: 'SOUTH' }),
-        new Wall({ x: 8, y: 5, place: 'WEST' }),
-        new Wall({ x: 8, y: 5, place: 'EAST' }),
-      ]
-    })
+    vantage: position,
+    floor: floor,
+    timestamp: Date.now(),
   },
   mutations: {
     changeTestValue(state, n) {
       console.log('changeTestValue committed', n)
       state.test = n.toString()
+    },
+    turnRight(state) {
+      state.vantage.data.direction = state.vantage.data.direction.rightOf
+      state.timestamp = Date.now()
+    },
+    turnLeft(state) {
+      state.vantage.data.direction = state.vantage.data.direction.leftOf
+      state.timestamp = Date.now()
     }
   },
   actions: {
