@@ -4,12 +4,14 @@
     <p>static: {{ staticTest }}</p>
     <p>store: {{ $store.state.test }}</p>
     <button @click="testMethod()">click</button>
+    <map-canvas caption="My map canvas"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import store from "@/store";
+import MapCanvas from "./MapCanvas.vue";
 
 interface MyTestComponentData {
   staticTest: string;
@@ -19,6 +21,9 @@ interface MyTestComponentData {
   props: {
     msg: String,
   },
+  components: {
+    MapCanvas
+  }
 })
 export default class MyTestComponent extends Vue {
   msg!: string;
