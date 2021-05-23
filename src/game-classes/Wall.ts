@@ -1,7 +1,9 @@
+import { Direction } from "./Direction";
+
 interface WallConfig {
     x: number
     y: number
-    place: "NORTH" | "SOUTH" | "EAST" | "WEST"
+    place: Direction
 }
 
 class Wall {
@@ -16,7 +18,7 @@ class Wall {
 
         startX = endX = this.data.x * gridSize;
         startY = endY = this.data.y * gridSize;
-        switch (this.data.place) {
+        switch (this.data.place.name) {
             case "NORTH":
                 endX += gridSize;
                 break;

@@ -9,12 +9,12 @@ const position = new Vantage({ x: 3, y: 3, direction: Direction.west });
 
 const floor = new Floor({
     height: 8, width: 10, walls: [
-        new Wall({ x: 2, y: 2, place: 'NORTH' }),
-        new Wall({ x: 2, y: 2, place: 'SOUTH' }),
-        new Wall({ x: 5, y: 4, place: 'WEST' }),
-        new Wall({ x: 8, y: 5, place: 'SOUTH' }),
-        new Wall({ x: 8, y: 5, place: 'WEST' }),
-        new Wall({ x: 8, y: 5, place: 'EAST' }),
+        new Wall({ x: 2, y: 2, place: Direction.north }),
+        new Wall({ x: 2, y: 2, place: Direction.south }),
+        new Wall({ x: 5, y: 4, place: Direction.west }),
+        new Wall({ x: 8, y: 5, place: Direction.south }),
+        new Wall({ x: 8, y: 5, place: Direction.west }),
+        new Wall({ x: 8, y: 5, place: Direction.east }),
     ]
 })
 
