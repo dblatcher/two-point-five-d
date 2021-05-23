@@ -15,14 +15,17 @@ export default createStore({
       console.log('changeTestValue committed', n)
       state.test = n.toString()
     },
-    turnRight(state) {
-      state.vantage.data.direction = state.vantage.data.direction.rightOf
+    movePlayer(state, payload: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
+      switch (payload.action) {
+        case "MOVE":
+          state.vantage.move(payload.direction, state)
+          break;
+        case "TURN":
+          state.vantage.turn(payload.direction)
+          break;
+      }
       state.timestamp = Date.now()
     },
-    turnLeft(state) {
-      state.vantage.data.direction = state.vantage.data.direction.leftOf
-      state.timestamp = Date.now()
-    }
   },
   actions: {
   },

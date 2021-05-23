@@ -2,7 +2,6 @@
   <figure>
     <figcaption>{{caption}}</figcaption>
     <canvas ref="canvas"></canvas>
-    <button @click="draw">redraw</button>
   </figure>
 </template>
 
@@ -32,7 +31,7 @@ export default class MapCanvas extends Vue {
   draw(): void {
     const { floor, vantage } = this.$store.state;
     const canvas = this.$refs.canvas as HTMLCanvasElement;
-    floor.drawAsMap(canvas, vantage, 20);
+    floor.drawAsMap(canvas, vantage, 25);
   }
 }
 </script>

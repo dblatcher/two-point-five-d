@@ -1,4 +1,5 @@
 import { Direction } from './Direction'
+import store from '@/store'
 
 interface VantageConfig {
     x: number
@@ -13,6 +14,46 @@ class Vantage {
         this.data = config
     }
 
+    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", state: typeof store.state) {
+        let direction = Direction.nowhere;
+        switch (relativeDirection) {
+            case "FORWARD":
+                direction = this.data.direction
+                break;
+            case "BACK":
+                direction = this.data.direction.behind
+                break;
+            case "LEFT":
+                direction = this.data.direction.leftOf
+                break;
+            case "RIGHT":
+                direction = this.data.direction.rightOf
+                break;
+        }
+
+        const targetX = this.data.x + direction.x;
+        const targetY = this.data.y + direction.y;
+
+        if (state.floor.isBlocked(this.data.x, this.data.y, targetX, targetY)) { return }
+
+        this.data.x = targetX
+        this.data.y = targetY
+    }
+
+    turn(direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") {
+        switch (direction) {
+            case "LEFT":
+                this.data.direction = this.data.direction.leftOf;
+                break;
+            case "RIGHT":
+                this.data.direction = this.data.direction.rightOf;
+                break;
+            case "BACK":
+                this.data.direction = this.data.direction.behind;
+                break;
+        }
+    }
+
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number) {
         const { x, y, direction: d } = this.data;
         const arrowCenterX = (x + .5) * gridSize
@@ -25,8 +66,8 @@ class Vantage {
             arrowRightX = arrowCenterX,
             arrowRightY = arrowCenterY;
 
-        arrowEndX += gridSize * .5 * d.x
-        arrowEndY += gridSize * .5 * d.y
+        arrowEndX += gridSize * .45 * d.x
+        arrowEndY += gridSize * .45 * d.y
         arrowLeftX += gridSize * .35 * d.x
         arrowLeftY += gridSize * .35 * d.y
         arrowLeftX += gridSize * .15 * d.leftOf.x

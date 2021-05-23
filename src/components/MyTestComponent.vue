@@ -4,11 +4,8 @@
     <p>static: {{ staticTest }}</p>
     <p>store: {{ $store.state.test }}</p>
     <button @click="testMethod()">click</button>
-    <button @click="() => {$store.commit('turnLeft');}"
-    >
-      left
-    </button>
-    <button @click="turnRight()">right</button>
+
+    <controls/>
     <map-canvas
       caption="Map"
       v-bind:timestamp="$store.state.timestamp"
@@ -20,6 +17,7 @@
 import { Options, Vue } from "vue-class-component";
 import store from "@/store";
 import MapCanvas from "./MapCanvas.vue";
+import Controls from "./Controls.vue";
 
 interface MyTestComponentData {
   staticTest: string;
@@ -30,7 +28,7 @@ interface MyTestComponentData {
     msg: String,
   },
   components: {
-    MapCanvas,
+    MapCanvas, Controls
   },
 })
 export default class MyTestComponent extends Vue {

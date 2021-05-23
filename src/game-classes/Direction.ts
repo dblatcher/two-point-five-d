@@ -11,7 +11,7 @@ class Direction {
     }
 
     get rightOf(): Direction {
-        let answer = noWhere;
+        let answer = nowhere;
         Direction.cardinal.forEach(direction => {
             if (direction.x == -this.y && direction.y == this.x) {
                 answer = direction
@@ -21,7 +21,7 @@ class Direction {
     }
 
     get leftOf(): Direction {
-        let answer = noWhere;
+        let answer = nowhere;
         Direction.cardinal.forEach(direction => {
             if (direction.x == this.y && direction.y == -this.x) {
                 answer = direction
@@ -31,7 +31,7 @@ class Direction {
     }
 
     get behind(): Direction {
-        let answer = noWhere;
+        let answer = nowhere;
         Direction.cardinal.forEach(direction => {
             if (direction.x == -this.x && direction.y == -this.y) {
                 answer = direction
@@ -53,9 +53,10 @@ class Direction {
     static get south() { return SOUTH }
     static get east() { return EAST }
     static get west() { return WEST }
+    static get nowhere() { return nowhere }
 }
 
-const noWhere = new Direction("?", 0, 0);
+const nowhere = new Direction("?", 0, 0);
 const NORTH = new Direction('NORTH', 0, -1);
 const SOUTH = new Direction('SOUTH', 0, 1);
 const EAST = new Direction('EAST', 1, 0);

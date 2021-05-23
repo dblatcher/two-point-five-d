@@ -14,6 +14,17 @@ class Floor {
         this.data = config
     }
 
+    isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
+        if (targetX < 0) { return true}
+        if (targetY < 0) { return true}
+        if (targetX >= this.data.width) { return true}
+        if (targetY >= this.data.height) { return true}
+
+        //TO DO - check for walls in the way
+
+        return false
+    }
+
     drawAsMap(canvas: HTMLCanvasElement, vantage?: Vantage, gridSize = 10): void {
 
         canvas.setAttribute('width', (gridSize * this.data.width).toString());
@@ -41,10 +52,10 @@ class Floor {
         }
 
         ctx.setLineDash([]);
-        this.data.walls.forEach((wall) => {wall.drawInMap(ctx,gridSize)});
+        this.data.walls.forEach((wall) => { wall.drawInMap(ctx, gridSize) });
 
         if (vantage) {
-            vantage.drawInMap(ctx,gridSize);
+            vantage.drawInMap(ctx, gridSize);
         }
     }
 }
