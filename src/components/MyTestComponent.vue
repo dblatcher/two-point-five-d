@@ -8,7 +8,6 @@
     <controls/>
     <map-canvas
       caption="Map"
-      v-bind:timestamp="$store.state.timestamp"
     />
   </div>
 </template>

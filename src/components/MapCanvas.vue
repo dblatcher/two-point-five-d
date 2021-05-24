@@ -1,24 +1,39 @@
 <template>
   <figure>
-    <figcaption>{{caption}}</figcaption>
+    <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
+    <p>
+      {{ vantage.data.x }}, {{ vantage.data.y }}
+      {{ vantage.data.direction.name }}
+    </p>
   </figure>
 </template>
 
 <script lang="ts">
+import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
-import store from "@/store";
+
+import gameStore from "@/store";
 
 @Options({
   props: {
     caption: String,
-    timestamp: Number,
   },
 })
 export default class MapCanvas extends Vue {
   caption!: string;
-  timestamp!: number;
-  $store!: typeof store;
+  $store!: typeof gameStore;
+  $refs!: { canvas: HTMLCanvasElement };
+
+  get vantage() {
+    const store = useStore() as typeof gameStore;
+    return store.state.vantage;
+  }
+
+  get floor() {
+    const store = useStore() as typeof gameStore;
+    return store.state.floor;
+  }
 
   mounted() {
     this.draw();
@@ -29,8 +44,8 @@ export default class MapCanvas extends Vue {
   }
 
   draw(): void {
-    const { floor, vantage } = this.$store.state;
-    const canvas = this.$refs.canvas as HTMLCanvasElement;
+    const { vantage, floor } = this;
+    const canvas = this.$refs.canvas;
     floor.drawAsMap(canvas, vantage, 25);
   }
 }
