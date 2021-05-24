@@ -1,3 +1,4 @@
+import { Direction } from "./Direction";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
@@ -15,12 +16,21 @@ class Floor {
     }
 
     isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
-        if (targetX < 0) { return true}
-        if (targetY < 0) { return true}
-        if (targetX >= this.data.width) { return true}
-        if (targetY >= this.data.height) { return true}
+        if (targetX < 0) { return true }
+        if (targetY < 0) { return true }
+        if (targetX >= this.data.width) { return true }
+        if (targetY >= this.data.height) { return true }
 
-        //TO DO - check for walls in the way
+        const dX = targetX - startX
+        const dY = targetY - startY
+
+        if (this.data.walls.find(
+            wall => wall.data.x == startX && wall.data.y == startY && wall.data.place.x == dX && wall.data.place.y == dY
+        )) { return true }
+
+        if (this.data.walls.find(
+            wall => wall.data.x == targetX && wall.data.y == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY
+        )) { return true }
 
         return false
     }
