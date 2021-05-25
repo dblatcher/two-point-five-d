@@ -5,9 +5,12 @@
     <p>store: {{ $store.state.test }}</p>
     <button @click="testMethod()">click</button>
 
-    <controls/>
     <map-canvas
       caption="Map"
+    />
+    <controls/>
+    <sight-canvas
+      caption="view"
     />
   </div>
 </template>
@@ -16,6 +19,7 @@
 import { Options, Vue } from "vue-class-component";
 import store from "@/store";
 import MapCanvas from "./MapCanvas.vue";
+import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
 
 interface MyTestComponentData {
@@ -27,7 +31,7 @@ interface MyTestComponentData {
     msg: String,
   },
   components: {
-    MapCanvas, Controls
+    MapCanvas, Controls, SightCanvas
   },
 })
 export default class MyTestComponent extends Vue {

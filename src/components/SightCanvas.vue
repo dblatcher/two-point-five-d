@@ -20,7 +20,7 @@ import gameStore from "@/store";
     caption: String,
   },
 })
-export default class MapCanvas extends Vue {
+export default class SightCanvas extends Vue {
   caption!: string;
   $store!: typeof gameStore;
   $refs!: { canvas: HTMLCanvasElement };
@@ -46,18 +46,13 @@ export default class MapCanvas extends Vue {
   draw(): void {
     const { vantage, floor } = this;
     const canvas = this.$refs.canvas;
-    floor.drawAsMap(canvas, vantage, 20 );
+    floor.drawAsSight(canvas, vantage);
   }
 }
 </script>
 
 <style scoped lang="scss">
 figure {
-  display: inline-block;
-  background-color: burlywood;
-}
-
-p {
-  margin: 0;
+  background-color: turquoise;
 }
 </style>

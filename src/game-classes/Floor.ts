@@ -68,6 +68,14 @@ class Floor {
             vantage.drawInMap(ctx, gridSize);
         }
     }
+
+    drawAsSight(canvas: HTMLCanvasElement, vantage?: Vantage, viewWidth = 200, viewHeight=200): void {
+        canvas.setAttribute('width', viewWidth.toString());
+        canvas.setAttribute('height', viewHeight.toString());
+
+        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+        ctx.clearRect(0, 0, viewWidth, viewHeight)
+    }
 }
 
 
