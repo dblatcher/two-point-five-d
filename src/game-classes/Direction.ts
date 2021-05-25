@@ -40,6 +40,15 @@ class Direction {
         return answer || null;
     }
 
+    static combine(directions: Direction[]) {
+        let x = 0, y = 0;
+        directions.forEach(direction => {
+            x += direction.x;
+            y += direction.y;
+        })
+        return { x, y }
+    }
+
     static get cardinal(): Map<string, Direction> {
         const map = new Map();
         map.set("NORTH", NORTH)

@@ -13,7 +13,11 @@ class Position {
         this.data = config
     }
 
-    moveAbsolute (direction:Direction, state: typeof store.state) {
+    translate(vector:PositionConfig) {
+        return new Position({ x: this.data.x + vector.x, y: this.data.y + vector.y });
+    }
+
+    moveAbsolute(direction: Direction, state: typeof store.state) {
 
         const targetX = this.data.x + direction.x;
         const targetY = this.data.y + direction.y;
@@ -36,7 +40,7 @@ class Position {
         ctx.lineTo(crossCenterX + crossArmLength, crossCenterY + crossArmLength);
         ctx.moveTo(crossCenterX + crossArmLength, crossCenterY - crossArmLength);
         ctx.lineTo(crossCenterX - crossArmLength, crossCenterY + crossArmLength);
-        
+
         ctx.stroke();
     }
 }

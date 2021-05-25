@@ -69,12 +69,64 @@ class Floor {
         }
     }
 
-    drawAsSight(canvas: HTMLCanvasElement, vantage?: Vantage, viewWidth = 200, viewHeight=200): void {
+    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 400, viewHeight = viewWidth): void {
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
 
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-        ctx.clearRect(0, 0, viewWidth, viewHeight)
+        ctx.fillRect(0, 0, viewWidth, viewHeight)
+
+        const facing = vantage.data.direction;
+
+        const row1Forward = [
+            vantage.translate(Direction.combine([facing, facing.leftOf, facing.leftOf])),
+            vantage.translate(Direction.combine([facing, facing.leftOf])),
+            vantage.translate(Direction.combine([facing])),
+            vantage.translate(Direction.combine([facing, facing.rightOf])),
+            vantage.translate(Direction.combine([facing, facing.rightOf, facing.rightOf])),
+        ]
+
+        const width = .2, midLine = .5;
+        let leftEdge = 0;
+        const xStart = 0
+        let wallToDraw: Wall | undefined;
+
+        for (let index = 0; index < row1Forward.length; index++) {
+
+            wallToDraw = this.data.walls.find(wall => {
+
+                const placeOnOtherSide = row1Forward[index].translate(facing)
+
+                return (wall.data.x === row1Forward[index].data.x
+                    && wall.data.y === row1Forward[index].data.y
+                    && wall.data.place.name === facing.name) 
+                || (wall.data.x === placeOnOtherSide.data.x
+                    && wall.data.y === placeOnOtherSide.data.y
+                    && wall.data.place.name === facing.behind.name)
+            })
+
+            if (wallToDraw) {
+                leftEdge = (index * width) + xStart
+                ctx.fillStyle = 'grey';
+                pgon([[leftEdge, midLine - width / 2], [leftEdge + width, midLine - width / 2], [leftEdge + width, midLine + width / 2], [leftEdge, midLine + width / 2]])
+                ctx.fill()
+                ctx.stroke()
+            }
+        }
+
+
+
+        function pgon(shape: [number, number][]): void {
+            ctx.moveTo(...p(...shape[0]));
+            for (let index = 1; index < shape.length; index++) {
+                ctx.lineTo(...p(...shape[index]))
+            }
+            ctx.closePath()
+        }
+
+        function p(x: number, y: number): [number, number] {
+            return [x * viewHeight, y * viewHeight]
+        }
     }
 }
 
