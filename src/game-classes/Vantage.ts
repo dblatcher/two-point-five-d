@@ -1,5 +1,6 @@
 import { Direction } from './Direction'
 import store from '@/store'
+import { Position } from './Position'
 
 interface VantageConfig {
     x: number
@@ -7,37 +8,30 @@ interface VantageConfig {
     direction: Direction
 }
 
-class Vantage {
+class Vantage extends Position {
     data: VantageConfig
 
     constructor(config: VantageConfig) {
+        super(config)
         this.data = config
     }
 
-    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", state: typeof store.state) {
-        let direction = Direction.nowhere;
+    getAbsoluteDirection(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK"): Direction {
         switch (relativeDirection) {
             case "FORWARD":
-                direction = this.data.direction
-                break;
+                return this.data.direction
             case "BACK":
-                direction = this.data.direction.behind
-                break;
+                return this.data.direction.behind
             case "LEFT":
-                direction = this.data.direction.leftOf
-                break;
+                return this.data.direction.leftOf
             case "RIGHT":
-                direction = this.data.direction.rightOf
-                break;
+                return this.data.direction.rightOf
         }
+    }
 
-        const targetX = this.data.x + direction.x;
-        const targetY = this.data.y + direction.y;
-
-        if (state.floor.isBlocked(this.data.x, this.data.y, targetX, targetY)) { return }
-
-        this.data.x = targetX
-        this.data.y = targetY
+    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", state: typeof store.state) {
+        const direction = this.getAbsoluteDirection(relativeDirection);
+        this.moveAbsolute(direction, state)
     }
 
     turn(direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") {
