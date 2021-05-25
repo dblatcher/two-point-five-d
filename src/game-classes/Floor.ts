@@ -1,4 +1,5 @@
 import { Direction } from "./Direction";
+import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
@@ -74,49 +75,70 @@ class Floor {
         canvas.setAttribute('height', viewHeight.toString());
 
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+        ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, viewWidth, viewHeight)
 
         const facing = vantage.data.direction;
 
-        const row1Forward = [
-            vantage.translate(Direction.combine([facing, facing.leftOf, facing.leftOf])),
-            vantage.translate(Direction.combine([facing, facing.leftOf])),
-            vantage.translate(Direction.combine([facing])),
-            vantage.translate(Direction.combine([facing, facing.rightOf])),
-            vantage.translate(Direction.combine([facing, facing.rightOf, facing.rightOf])),
+        const row0Forward = [
+            vantage.translate(Direction.combine([facing.leftOf, facing.leftOf, facing.leftOf,facing.leftOf])),
+            vantage.translate(Direction.combine([facing.leftOf, facing.leftOf, facing.leftOf])),
+            vantage.translate(Direction.combine([facing.leftOf, facing.leftOf])),
+            vantage.translate(Direction.combine([facing.leftOf])),
+            vantage.translate(Direction.combine([])),
+            vantage.translate(Direction.combine([facing.rightOf])),
+            vantage.translate(Direction.combine([facing.rightOf, facing.rightOf])),
+            vantage.translate(Direction.combine([facing.rightOf, facing.rightOf, facing.rightOf])),
+            vantage.translate(Direction.combine([facing.rightOf, facing.rightOf, facing.rightOf, facing.rightOf])),
         ]
+        const row1Forward = row0Forward.map(position => position.translate(facing))
+        const row2Forward = row1Forward.map(position => position.translate(facing))
+        const row3Forward = row2Forward.map(position => position.translate(facing))
+        const row4Forward = row3Forward.map(position => position.translate(facing))
 
-        const width = .2, midLine = .5;
-        let leftEdge = 0;
-        const xStart = 0
-        let wallToDraw: Wall | undefined;
+        const drawForwardWallRow = (row: Position[], distance: number, fillstyle:string): void => {
 
-        for (let index = 0; index < row1Forward.length; index++) {
+            const width = .8 / (2**distance)
 
-            wallToDraw = this.data.walls.find(wall => {
+            const midLine = .5;
+            const xStart = -((row.length * width)-1) / 2;
 
-                const placeOnOtherSide = row1Forward[index].translate(facing)
+            let wallToDraw: Wall | undefined;
+            let leftEdge = 0;
 
-                return (wall.data.x === row1Forward[index].data.x
-                    && wall.data.y === row1Forward[index].data.y
-                    && wall.data.place.name === facing.name) 
-                || (wall.data.x === placeOnOtherSide.data.x
-                    && wall.data.y === placeOnOtherSide.data.y
-                    && wall.data.place.name === facing.behind.name)
-            })
+            for (let index = 0; index < row.length; index++) {
 
-            if (wallToDraw) {
-                leftEdge = (index * width) + xStart
-                ctx.fillStyle = 'grey';
-                pgon([[leftEdge, midLine - width / 2], [leftEdge + width, midLine - width / 2], [leftEdge + width, midLine + width / 2], [leftEdge, midLine + width / 2]])
-                ctx.fill()
-                ctx.stroke()
+                wallToDraw = this.data.walls.find(wall => {
+
+                    const placeOnOtherSide = row[index].translate(facing)
+
+                    return (wall.data.x === row[index].data.x
+                        && wall.data.y === row[index].data.y
+                        && wall.data.place.name === facing.name)
+                        || (wall.data.x === placeOnOtherSide.data.x
+                            && wall.data.y === placeOnOtherSide.data.y
+                            && wall.data.place.name === facing.behind.name)
+                })
+
+                if (wallToDraw) {
+                    leftEdge = (index * width) + xStart
+                    ctx.fillStyle = fillstyle;
+                    pgon([[leftEdge, midLine - width / 2], [leftEdge + width, midLine - width / 2], [leftEdge + width, midLine + width / 2], [leftEdge, midLine + width / 2]])
+                    ctx.fill()
+                    ctx.stroke()
+                }
             }
+
         }
 
-
+        drawForwardWallRow(row4Forward, 4, 'rgba(200,100,100,.7)');
+        drawForwardWallRow(row3Forward, 3, 'rgba(200,100,100,.7)');
+        drawForwardWallRow(row2Forward, 2, 'rgba(200,100,100,.7)');
+        drawForwardWallRow(row1Forward, 1, 'rgba(200,100,100,.7)');
+        drawForwardWallRow(row0Forward, 0, 'rgba(200,100,100,.7)');
 
         function pgon(shape: [number, number][]): void {
+            ctx.beginPath()
             ctx.moveTo(...p(...shape[0]));
             for (let index = 1; index < shape.length; index++) {
                 ctx.lineTo(...p(...shape[index]))
