@@ -13,11 +13,11 @@ class Position {
         this.data = config
     }
 
-    translate(vector:PositionConfig) {
+    translate(vector: PositionConfig):Position {
         return new Position({ x: this.data.x + vector.x, y: this.data.y + vector.y });
     }
 
-    moveAbsolute(direction: Direction, state: typeof store.state) {
+    moveAbsolute(direction: Direction, state: typeof store.state):void {
 
         const targetX = this.data.x + direction.x;
         const targetY = this.data.y + direction.y;
@@ -28,7 +28,11 @@ class Position {
         this.data.y = targetY
     }
 
-    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number) {
+    isSamePlaceAs(otherPosition: Position):boolean {
+        return this.data.x === otherPosition.data.x && this.data.y === otherPosition.data.y
+    }
+
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number):void {
         const { x, y } = this.data;
         const crossCenterX = (x + .5) * gridSize
         const crossCenterY = (y + .5) * gridSize

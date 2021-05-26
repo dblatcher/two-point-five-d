@@ -1,4 +1,5 @@
 import { Direction } from "./Direction";
+import { Position } from "./Position";
 
 interface WallConfig {
     x: number
@@ -6,14 +7,19 @@ interface WallConfig {
     place: Direction
 }
 
-class Wall {
+class Wall extends Position {
     data: WallConfig
 
     constructor(config: WallConfig) {
+        super(config)
         this.data = config
     }
 
-    drawInMap(ctx:CanvasRenderingContext2D, gridSize:number) {
+    isFacing(direction:Direction):boolean {
+        return this.data.place.x === direction.x && this.data.place.y === direction.y
+    }
+
+    drawInMap(ctx:CanvasRenderingContext2D, gridSize:number):void {
         let startX: number, startY: number, endX: number, endY: number;
 
         startX = endX = this.data.x * gridSize;

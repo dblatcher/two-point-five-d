@@ -29,12 +29,12 @@ class Vantage extends Position {
         }
     }
 
-    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", state: typeof store.state) {
+    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", state: typeof store.state):void {
         const direction = this.getAbsoluteDirection(relativeDirection);
         this.moveAbsolute(direction, state)
     }
 
-    turn(direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") {
+    turn(direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK"):void {
         switch (direction) {
             case "LEFT":
                 this.data.direction = this.data.direction.leftOf;
@@ -48,7 +48,7 @@ class Vantage extends Position {
         }
     }
 
-    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number) {
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number):void {
         const { x, y, direction: d } = this.data;
         const arrowCenterX = (x + .5) * gridSize
         const arrowCenterY = (y + .5) * gridSize
