@@ -6,7 +6,7 @@ import { Wall } from "@/game-classes/Wall";
 
 
 
-const position = new Vantage({ x: 7, y: 7, direction: Direction.west });
+const position = new Vantage({ x: 8, y: 0, direction: Direction.west });
 
 const floor = new Floor({
     height: 8, width: 10, walls: [

@@ -112,6 +112,8 @@ class Floor {
 
             let points: { x: number, y: number }[] = []
 
+            // TO DO - delegate this to Wall.drawInSight so it can have irregular shapes
+            // can pass the mapPoint function as a argument to the method
             switch (relativeDirection) {
                 case "LEFT":
                     points = [
@@ -169,7 +171,7 @@ class Floor {
         })
 
         wallsToPlot.forEach(item => {
-            item.wall.drawInSight(ctx, toCanvasCoords, item.points)
+            item.wall.drawInSight(ctx, toCanvasCoords, item.points, item.place.forward)
         })
 
     }
