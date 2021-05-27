@@ -1,10 +1,11 @@
-import { getPlacesInSight, getViewportMapFunction, mapPointOnCeiling, mapPointOnFloor, maxViewDistance, plotPolygon, wall0Height } from "@/canvas-utility";
-import { Direction } from "./Direction";
+import { getPlacesInSight, getViewportMapFunction, mapPointOnCeiling, mapPointOnFloor, maxViewDistance, wall0Height } from "@/canvas-utility";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
 interface Point { x: number, y: number }
+
+interface PlotPlace { points: Point[], wall: Wall, place: { position: Position, forward: number, right: number }, relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
 interface FloorConfig {
     width: number
@@ -91,13 +92,13 @@ class Floor {
         ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5 - smallestWallHeight / 2 }))
         ctx.fillStyle = 'grey';
         ctx.beginPath()
-        ctx.fillRect(...toCanvasCoords({ x: 0, y: .5 + smallestWallHeight/2 }), ...toCanvasCoords({ x: 1, y: 1 }))
+        ctx.fillRect(...toCanvasCoords({ x: 0, y: .5 + smallestWallHeight / 2 }), ...toCanvasCoords({ x: 1, y: 1 }))
 
 
         const placesInSight = getPlacesInSight(vantage);
         ctx.fillStyle = 'yellow';
 
-        const wallsToPlot: { points: Point[], wall: Wall, place: { position: Position, forward: number, right: number }, relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }[] = [];
+        const wallsToPlot: PlotPlace[] = [];
 
         this.data.walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isSamePlaceAs(wall))
@@ -156,19 +157,19 @@ class Floor {
                 return itemB.place.forward - itemA.place.forward
             }
 
-            const directionRatingA = itemA.relativeDirection === "FORWARD"
-                ? 3
-                : itemA.relativeDirection === "BACK"
-                    ? 1 : 2
-            const directionRatingB = itemB.relativeDirection === "FORWARD"
-                ? 3
-                : itemB.relativeDirection === "BACK"
-                    ? 1 : 2
-            return directionRatingB - directionRatingA
+            function rateDirection(item: PlotPlace): number {
+                if (item.relativeDirection === "FORWARD") { return 4 }
+                if (item.relativeDirection === "BACK") { return 1 }
+                if (item.relativeDirection == 'LEFT' && item.place.right <= 0) { return 2 }
+                if (item.relativeDirection == 'RIGHT' && item.place.right >= 0) { return 2 }
+                return 3
+            }
+
+            return rateDirection(itemB) - rateDirection(itemA)
         })
 
         wallsToPlot.forEach(item => {
-            plotPolygon(ctx, toCanvasCoords, item.points)
+            item.wall.drawInSight(ctx, toCanvasCoords, item.points)
         })
 
     }

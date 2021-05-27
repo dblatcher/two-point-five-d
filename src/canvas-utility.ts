@@ -46,8 +46,6 @@ function getViewportMapFunction(viewWidth: number, viewHeight: number): ConvertF
 }
 
 
-
-
 function getPlacesInSight(vantage: Vantage): { position: Position, forward: number, right: number }[] {
     const zeroZero = new Position(vantage.data)
     const facing = vantage.data.direction;
@@ -90,4 +88,8 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
     return matrix.flat()
 }
 
-export { mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, maxViewDistance, wall0Height }
+export { 
+    ConvertFunction, Point,
+    mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, 
+    maxViewDistance, wall0Height 
+}

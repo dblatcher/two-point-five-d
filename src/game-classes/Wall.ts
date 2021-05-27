@@ -1,3 +1,5 @@
+import { plotPolygon, ConvertFunction, Point } from "@/canvas-utility";
+import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
 
@@ -5,6 +7,7 @@ interface WallConfig {
     x: number
     y: number
     place: Direction
+    color?: Color
 }
 
 class Wall extends Position {
@@ -15,11 +18,16 @@ class Wall extends Position {
         this.data = config
     }
 
-    isFacing(direction:Direction):boolean {
+    isFacing(direction: Direction): boolean {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
     }
 
-    drawInMap(ctx:CanvasRenderingContext2D, gridSize:number):void {
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[]): void {
+        ctx.fillStyle = this.data.color ? this.data.color.css : Wall.defaultColor.css
+        plotPolygon(ctx, convertFunction, points)
+    }
+
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
         let startX: number, startY: number, endX: number, endY: number;
 
         startX = endX = this.data.x * gridSize;
@@ -48,6 +56,8 @@ class Wall extends Position {
         ctx.lineTo(endX, endY);
         ctx.stroke();
     }
+
+    static get defaultColor() { return new Color(100, 100, 100, 1) }
 }
 
 
