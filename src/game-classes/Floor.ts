@@ -81,7 +81,7 @@ class Floor {
         const facing = vantage.data.direction;
 
         const row0Forward = [
-            vantage.translate(Direction.combine([facing.leftOf,facing.leftOf, facing.leftOf, facing.leftOf, facing.leftOf])),
+            vantage.translate(Direction.combine([facing.leftOf, facing.leftOf, facing.leftOf, facing.leftOf, facing.leftOf])),
             vantage.translate(Direction.combine([facing.leftOf, facing.leftOf, facing.leftOf, facing.leftOf])),
             vantage.translate(Direction.combine([facing.leftOf, facing.leftOf, facing.leftOf])),
             vantage.translate(Direction.combine([facing.leftOf, facing.leftOf])),
@@ -91,7 +91,7 @@ class Floor {
             vantage.translate(Direction.combine([facing.rightOf, facing.rightOf])),
             vantage.translate(Direction.combine([facing.rightOf, facing.rightOf, facing.rightOf])),
             vantage.translate(Direction.combine([facing.rightOf, facing.rightOf, facing.rightOf, facing.rightOf])),
-            vantage.translate(Direction.combine([facing.rightOf,facing.rightOf, facing.rightOf, facing.rightOf, facing.rightOf])),
+            vantage.translate(Direction.combine([facing.rightOf, facing.rightOf, facing.rightOf, facing.rightOf, facing.rightOf])),
         ]
 
 
@@ -106,6 +106,19 @@ class Floor {
 
         const midLine = .5;
 
+        ctx.fillStyle = 'brown';
+        ctx.beginPath()
+        pgon([
+            [0, 0],
+            [1, 0],
+            [1, .49],
+            [0, .49],
+        ])
+        ctx.fill()
+        ctx.stroke()
+        ctx.beginPath()
+
+
         rowsAhead.forEach((row, index) => {
             const distance = rowsAhead.length - index - 1
 
@@ -115,29 +128,28 @@ class Floor {
 
             const drawFarSideWallIfPresent = (place: Position, index: number): void => {
                 const onLeft = index <= row.length / 2
-                const wallToDraw = onLeft
-                    ? this.data.walls.find(wall => {
-                        return (wall.isSamePlaceAs(place) && wall.isFacing(facing.leftOf))
-                            || (wall.isSamePlaceAs(place.translate(facing.leftOf)) && wall.isFacing(facing.rightOf))
-                    })
-                    : this.data.walls.find(wall => {
-                        return (wall.isSamePlaceAs(place) && wall.isFacing(facing.rightOf))
-                            // || (wall.isSamePlaceAs(place.translate(facing.rightOf)) && wall.isFacing(facing.leftOf))
-                    })
+                const leftWallToDraw = this.data.walls.find(wall => {
+                    return (wall.isSamePlaceAs(place) && wall.isFacing(facing.leftOf))
+                        || (wall.isSamePlaceAs(place.translate(facing.leftOf)) && wall.isFacing(facing.rightOf))
+                });
+                const rightWallToDraw = this.data.walls.find(wall => {
+                    return (wall.isSamePlaceAs(place) && wall.isFacing(facing.rightOf))
+                        || (wall.isSamePlaceAs(place.translate(facing.rightOf)) && wall.isFacing(facing.leftOf))
+                })
 
-                if (!wallToDraw) {return}
+                if (!leftWallToDraw) { return }
 
-                let shape:[number,number][] = [];
+                let shape: [number, number][] = [];
                 if (onLeft) {
                     const rightEdge = (index * farWidth) + farXStart - (.5 * farWidth)
                     const leftEdge = (index * farWidth) + farXStart
 
-                    const d = (leftEdge - rightEdge) / 2
+                    const d = (leftEdge - rightEdge)
                     shape = [
-                        [leftEdge, midLine - d * 2],
-                        [rightEdge, midLine - (farWidth)],
-                        [rightEdge, midLine + (farWidth)],
-                        [leftEdge, midLine + d * 2]
+                        [leftEdge, midLine - d],
+                        [rightEdge, midLine - farWidth],
+                        [rightEdge, midLine + farWidth],
+                        [leftEdge, midLine + d]
                     ]
 
 
@@ -145,49 +157,151 @@ class Floor {
                     const rightEdge = (index * farWidth) + farXStart + (.5 * farWidth)
                     const leftEdge = (index * farWidth) + farXStart
 
-                    const d = (leftEdge - rightEdge) / 2
+                    const d = (leftEdge - rightEdge)
 
                     shape = [
-                        [rightEdge, midLine - (farWidth)],
-                        [leftEdge,midLine + (d*2) ],
-                        [leftEdge, midLine - (d*2)],
-                        [rightEdge, midLine + (farWidth)],
+                        [rightEdge, midLine - farWidth],
+                        [leftEdge, midLine + d],
+                        [leftEdge, midLine - d],
+                        [rightEdge, midLine + farWidth],
                     ]
                 }
 
-                ctx.fillStyle = onLeft ?  fillstyle: 'rgba(100,0,250,.4)'
+                ctx.fillStyle = fillstyle
                 ctx.beginPath()
                 pgon(shape)
                 ctx.fill()
                 ctx.stroke()
- 
+
             }
 
-
-            const drawFrontWallIfPresent = (place: Position, index: number): void => {
-                const leftEdge = (index * farWidth) + farXStart
-                const wallToDraw = this.data.walls.find(wall => {
-                    const placeOnOtherSide = place.translate(facing)
-                    return (wall.isSamePlaceAs(place) && wall.isFacing(facing))
-                        || (wall.isSamePlaceAs(placeOnOtherSide) && wall.isFacing(facing.behind))
-                })
-
-                if (wallToDraw) {
-                    ctx.fillStyle = fillstyle;
-                    ctx.beginPath()
-                    pgon([[leftEdge, midLine - farWidth / 2], [leftEdge + farWidth, midLine - farWidth / 2], [leftEdge + farWidth, midLine + farWidth / 2], [leftEdge, midLine + farWidth / 2]])
-                    ctx.fill()
-                    ctx.stroke()
-                }
-            }
 
 
             row.forEach((place, index) => {
-                drawFarSideWallIfPresent(place, index)
-                drawFrontWallIfPresent(place, index)
+                const backWall = this.data.walls.find(wall => place.isSamePlaceAs(wall)&&wall.isFacing(vantage.data.direction) )
+                if (backWall) {
+                    plotBackWall(index,row.length, distance, backWall);
+                }
             })
 
+            row.forEach((place, index) => {
+                //check - right wall will always be overleft? need to reverse order after half way?
+                const leftWall = this.data.walls.find(wall => place.isSamePlaceAs(wall)&&wall.isFacing(vantage.data.direction.leftOf) )
+                if (leftWall) {
+                    plotLeftWall(index,row.length, distance, leftWall);
+                }
+
+                const rightWall = this.data.walls.find(wall => place.isSamePlaceAs(wall)&&wall.isFacing(vantage.data.direction.rightOf) )
+                if (rightWall) {
+                    plotRightWall(index,row.length, distance, rightWall);
+                }
+            })
+
+            row.forEach((place, index) => {
+                const frontWall = distance > 0 && this.data.walls.find(wall => place.isSamePlaceAs(wall)&&wall.isFacing(vantage.data.direction.behind) )
+                if (frontWall ) {
+                    plotFrontWall(index,row.length, distance, frontWall);
+                }
+ 
+            })
+
+
         })
+
+        function plotBackWall (index:number, rowLength:number, distance:number, wall:Wall) {
+            const width = .8 / (2 ** distance)
+            const xStart = -((rowLength * width) - 1) / 2;
+            const leftEdge = (index * width) + xStart
+            ctx.fillStyle = 'rgba(0,0,250,.5)';
+            ctx.beginPath()
+            pgon([[leftEdge, midLine - width / 2], [leftEdge + width, midLine - width / 2], [leftEdge + width, midLine + width / 2], [leftEdge, midLine + width / 2]])
+            ctx.fill()
+            ctx.stroke()
+        }
+
+        function plotLeftWall (index:number, rowLength:number, distance:number, wall:Wall) {
+            const width = .8 / (2 ** distance)
+            const xStart = -((rowLength * width) - 1) / 2;
+            const rightEdge = (index * width) + xStart
+
+            const shortHeight = .8 / (2 ** distance)
+            const tallHeight = .8 / (2 ** (distance-1))
+
+            const leftEdge = (index * width) + xStart -( width/2)
+
+            const isLeftOfVantage = index < rowLength/2
+
+            ctx.fillStyle = 'yellow';
+            ctx.beginPath()
+
+            if (isLeftOfVantage) {
+                pgon([
+                    [leftEdge, midLine - tallHeight / 2], 
+                    [rightEdge, midLine - shortHeight / 2], 
+                    [rightEdge, midLine + shortHeight / 2], 
+                    [leftEdge, midLine + tallHeight / 2]
+                ])
+            } else {
+                pgon([
+                    [leftEdge, midLine - shortHeight / 2], 
+                    [rightEdge, midLine - tallHeight / 2], 
+                    [rightEdge, midLine + tallHeight / 2], 
+                    [leftEdge, midLine + shortHeight / 2]
+                ])
+            }
+            ctx.fill()
+            ctx.stroke()
+        }
+
+        function plotRightWall (index:number, rowLength:number, distance:number, wall:Wall) {
+            const width = .8 / (2 ** distance)
+            const xStart = -((rowLength * width) - 1) / 2;
+            const leftEdge = ((index+1.5) * width) + xStart
+
+            const shortHeight = .8 / (2 ** distance)
+            const tallHeight = .8 / (2 ** (distance-1))
+
+            const rightEdge = leftEdge - ( width/2)
+
+            const isRightOfVantage = index > rowLength/2
+
+            ctx.fillStyle = 'rgba(40,200,30,.5)';
+            ctx.beginPath()
+
+            if (isRightOfVantage) {
+
+                pgon([
+                    [leftEdge, midLine - shortHeight / 2], 
+                    [rightEdge, midLine - tallHeight / 2], 
+                    [rightEdge, midLine + tallHeight / 2], 
+                    [leftEdge, midLine + shortHeight / 2]
+                ])
+            } else {
+                pgon([
+                    [leftEdge, midLine - tallHeight / 2], 
+                    [rightEdge, midLine - shortHeight / 2], 
+                    [rightEdge, midLine + shortHeight / 2], 
+                    [leftEdge, midLine + tallHeight / 2]
+                ])
+            }
+            ctx.fill()
+            ctx.stroke()
+        }
+
+        function plotFrontWall (index:number, rowLength:number, distance:number, wall:Wall) {
+
+            const width = .8 / (2 ** (distance-1))
+            const xStart = -((rowLength * width) - 1) / 2;
+
+            const leftEdge = (index * width) + xStart
+
+            ctx.fillStyle = 'blue';
+            ctx.beginPath()
+            pgon([[leftEdge, midLine - width / 2], [leftEdge + width, midLine - width / 2], [leftEdge + width, midLine + width / 2], [leftEdge, midLine + width / 2]])
+            ctx.fill()
+            ctx.stroke()
+
+        }
 
         function pgon(shape: [number, number][]): void {
             ctx.moveTo(...p(...shape[0]));
