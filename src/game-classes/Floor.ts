@@ -1,4 +1,4 @@
-import { getPlacesInSight, getViewportMapFunction, mapPointOnCeiling, mapPointOnFloor, plotPolygon } from "@/canvas-utility";
+import { getPlacesInSight, getViewportMapFunction, mapPointOnCeiling, mapPointOnFloor, maxViewDistance, plotPolygon, wall0Height } from "@/canvas-utility";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
@@ -81,19 +81,23 @@ class Floor {
 
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
+        const smallestWallHeight = wall0Height / (Math.SQRT2 ** maxViewDistance)
+
         ctx.beginPath()
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: 1 }))
-        ctx.fillStyle = 'brown';
+        ctx.fillStyle = 'grey';
         ctx.beginPath()
-        ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5 }))
+        ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5 - smallestWallHeight / 2 }))
+        ctx.fillStyle = 'grey';
+        ctx.beginPath()
+        ctx.fillRect(...toCanvasCoords({ x: 0, y: .5 + smallestWallHeight/2 }), ...toCanvasCoords({ x: 1, y: 1 }))
 
 
         const placesInSight = getPlacesInSight(vantage);
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = 'yellow';
 
         const wallsToPlot: { points: Point[], wall: Wall, place: { position: Position, forward: number, right: number }, relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }[] = [];
-
 
         this.data.walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isSamePlaceAs(wall))

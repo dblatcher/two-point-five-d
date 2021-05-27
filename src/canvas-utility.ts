@@ -7,20 +7,20 @@ interface ConvertFunction { (point: Point): [number, number] }
 
 const wall0Height = .8
 const wall0Width = .8
-const maxViewDistance = 6
+const maxViewDistance = 7
 
 
 function mapPointOnFloor(forwardDistance: number, rightDistance: number): Point {
-    const wallHeightAtDistance = wall0Height / (2 ** forwardDistance);
-    const wallWidthAtDistance = wall0Width / (2 ** forwardDistance);
+    const wallHeightAtDistance = wall0Height / (Math.SQRT2 ** forwardDistance);
+    const wallWidthAtDistance = wall0Width / (Math.SQRT2 ** forwardDistance);
     const y = .5 + (wallHeightAtDistance / 2)
     const x = .5 + (rightDistance * wallWidthAtDistance)
     return { x, y }
 }
 
 function mapPointOnCeiling(forwardDistance: number, rightDistance: number): Point {
-    const wallHeightAtDistance = wall0Height / (2 ** forwardDistance);
-    const wallWidthAtDistance = wall0Width / (2 ** forwardDistance);
+    const wallHeightAtDistance = wall0Height / (Math.SQRT2 ** forwardDistance);
+    const wallWidthAtDistance = wall0Width / (Math.SQRT2 ** forwardDistance);
     const y = .5 - (wallHeightAtDistance / 2)
     const x = .5 + (rightDistance * wallWidthAtDistance)
     return { x, y }
@@ -90,4 +90,4 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
     return matrix.flat()
 }
 
-export { mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, maxViewDistance }
+export { mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, maxViewDistance, wall0Height }
