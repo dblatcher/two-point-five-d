@@ -4,7 +4,7 @@ import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-
+interface Point { x: number, y: number }
 
 interface FloorConfig {
     width: number
@@ -90,70 +90,82 @@ class Floor {
 
 
         const placesInSight = getPlacesInSight(vantage);
-
         ctx.fillStyle = 'red';
-        //ORDERING!! can't plot in wall order, need to collect points then sort by forward distance descending
-        this.data.walls.forEach(wall => {
-            const placeInSight = placesInSight.find(place => place.position.isSamePlaceAs(wall))
 
-            if (!placeInSight) { return }
+        const wallsToPlot: { points: Point[], wall: Wall, place: { position: Position, forward: number, right: number }, relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }[] = [];
+
+
+        this.data.walls.forEach(wall => {
+            const place = placesInSight.find(place => place.position.isSamePlaceAs(wall))
+
+            if (!place) { return }
 
             const relativeDirection = wall.data.place.relativeDirection(vantage.data.direction);
 
-            if (relativeDirection == "BACK" && placeInSight.forward == 0) {
-                console.log('not plotting the wall behind me')
-                return
-            }
-
-            console.log(`need to draw a wall facing ${relativeDirection}, ${placeInSight.forward} square forward and ${placeInSight.right} square right`)
-
+            // the back wall of row 0 is 'behind the camera'
+            if (relativeDirection == "BACK" && place.forward == 0) { return }
 
             let points: { x: number, y: number }[] = []
 
             switch (relativeDirection) {
                 case "LEFT":
                     points = [
-                        mapPointOnCeiling(placeInSight.forward - 1, placeInSight.right - .5),
-                        mapPointOnCeiling(placeInSight.forward, placeInSight.right - .5),
-                        mapPointOnFloor(placeInSight.forward, placeInSight.right - .5),
-                        mapPointOnFloor(placeInSight.forward - 1, placeInSight.right - .5),
+                        mapPointOnCeiling(place.forward - 1, place.right - .5),
+                        mapPointOnCeiling(place.forward, place.right - .5),
+                        mapPointOnFloor(place.forward, place.right - .5),
+                        mapPointOnFloor(place.forward - 1, place.right - .5),
                     ]
                     break;
                 case "RIGHT":
                     points = [
-                        mapPointOnCeiling(placeInSight.forward - 1, placeInSight.right + .5),
-                        mapPointOnCeiling(placeInSight.forward, placeInSight.right + .5),
-                        mapPointOnFloor(placeInSight.forward, placeInSight.right + .5),
-                        mapPointOnFloor(placeInSight.forward - 1, placeInSight.right + .5),
+                        mapPointOnCeiling(place.forward - 1, place.right + .5),
+                        mapPointOnCeiling(place.forward, place.right + .5),
+                        mapPointOnFloor(place.forward, place.right + .5),
+                        mapPointOnFloor(place.forward - 1, place.right + .5),
                     ]
                     break;
                 case "FORWARD":
                     points = [
-                        mapPointOnCeiling(placeInSight.forward, placeInSight.right - .5),
-                        mapPointOnCeiling(placeInSight.forward, placeInSight.right + .5),
-                        mapPointOnFloor(placeInSight.forward, placeInSight.right + .5),
-                        mapPointOnFloor(placeInSight.forward, placeInSight.right - .5),
+                        mapPointOnCeiling(place.forward, place.right - .5),
+                        mapPointOnCeiling(place.forward, place.right + .5),
+                        mapPointOnFloor(place.forward, place.right + .5),
+                        mapPointOnFloor(place.forward, place.right - .5),
                     ]
                     break;
                 case "BACK":
                     points = [
-                        mapPointOnCeiling(placeInSight.forward - 1, placeInSight.right - .5),
-                        mapPointOnCeiling(placeInSight.forward - 1, placeInSight.right + .5),
-                        mapPointOnFloor(placeInSight.forward - 1, placeInSight.right + .5),
-                        mapPointOnFloor(placeInSight.forward - 1, placeInSight.right - .5),
+                        mapPointOnCeiling(place.forward - 1, place.right - .5),
+                        mapPointOnCeiling(place.forward - 1, place.right + .5),
+                        mapPointOnFloor(place.forward - 1, place.right + .5),
+                        mapPointOnFloor(place.forward - 1, place.right - .5),
                     ]
                     break;
             }
 
-            //ORDERING!! can't plot in wall order, need to collect points then sort by forward distance descending
             if (points.length) {
-                plotPolygon(ctx, toCanvasCoords, points)
+                wallsToPlot.push({ points, wall, place, relativeDirection })
             }
-
         })
 
+        wallsToPlot.sort((itemA, itemB) => {
+            if (itemB.place.forward !== itemA.place.forward) {
+                return itemB.place.forward - itemA.place.forward
+            }
 
+            const directionRatingA = itemA.relativeDirection === "FORWARD"
+                ? 3
+                : itemA.relativeDirection === "BACK"
+                    ? 1 : 2
+            const directionRatingB = itemB.relativeDirection === "FORWARD"
+                ? 3
+                : itemB.relativeDirection === "BACK"
+                    ? 1 : 2
+            return directionRatingB - directionRatingA
+        })
 
+        wallsToPlot.forEach(item => {
+            plotPolygon(ctx, toCanvasCoords, item.points)
+        })
 
     }
 }
