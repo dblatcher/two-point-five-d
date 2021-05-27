@@ -7,7 +7,7 @@ interface ConvertFunction { (point: Point): [number, number] }
 
 const wall0Height = .8
 const wall0Width = .8
-const maxViewDistance = 5
+const maxViewDistance = 6
 
 
 function mapPointOnFloor(forwardDistance: number, rightDistance: number): Point {
@@ -52,24 +52,42 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
     const zeroZero = new Position(vantage.data)
     const facing = vantage.data.direction;
 
-    const results = [
-        { forward: 0, right: -1, position: zeroZero.translate(Direction.combine([facing.leftOf])), },
-        { forward: 0, right: 0, position: zeroZero.translate(Direction.combine([])) },
-        { forward: 0, right: 1, position: zeroZero.translate(Direction.combine([facing.rightOf])), },
-
-
-        { forward: 1, right: -1, position: zeroZero.translate(Direction.combine([facing, facing.leftOf])), },
-        { forward: 1, right: 0, position: zeroZero.translate(Direction.combine([facing])), },
-        { forward: 1, right: 1, position: zeroZero.translate(Direction.combine([facing, facing.rightOf])), },
-        
-        
-        { forward: 2, right: -1, position: zeroZero.translate(Direction.combine([facing, facing, facing.leftOf])), },
-        { forward: 2, right: 0, position: zeroZero.translate(Direction.combine([facing, facing])), },
-        { forward: 2, right: 1, position: zeroZero.translate(Direction.combine([facing, facing, facing.rightOf])), },
-
+    const matrix = [
+        [
+            { forward: 0, right: -1, position: zeroZero.translate(Direction.combine([facing.leftOf])), },
+            { forward: 0, right: 0, position: zeroZero.translate(Direction.combine([])) },
+            { forward: 0, right: 1, position: zeroZero.translate(Direction.combine([facing.rightOf])), },
+        ]
     ]
 
-    return results
+    for (let index = 0; index < maxViewDistance; index++) {
+        matrix.push(matrix[matrix.length - 1].map(item => {
+            return {
+                forward: item.forward + 1,
+                right: item.right,
+                position: item.position.translate(facing)
+            }
+        }))
+
+        const newRow = matrix[matrix.length - 1]
+        const leftItem = newRow[0]
+
+
+        newRow.unshift({
+            forward: leftItem.forward,
+            right: leftItem.right -1,
+            position: leftItem.position.translate(facing.leftOf)
+        })
+
+        const rightItem = newRow[newRow.length-1]
+        newRow.push({
+            forward: rightItem.forward,
+            right: rightItem.right +1,
+            position: rightItem.position.translate(facing.rightOf)
+        })
+    }
+
+    return matrix.flat()
 }
 
 export { mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, maxViewDistance }
