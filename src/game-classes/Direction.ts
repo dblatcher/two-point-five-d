@@ -40,6 +40,14 @@ class Direction {
         return answer || null;
     }
 
+    relativeDirection(relativeToDirection:Direction): "LEFT" | "RIGHT" | "FORWARD" | "BACK" {
+
+        if (relativeToDirection.leftOf == this) {return "LEFT"}
+        if (relativeToDirection.rightOf == this) {return "RIGHT"}
+        if (relativeToDirection.behind == this) {return "BACK"}
+        return "FORWARD"
+    }
+
     static combine(directions: Direction[]) {
         let x = 0, y = 0;
         directions.forEach(direction => {
