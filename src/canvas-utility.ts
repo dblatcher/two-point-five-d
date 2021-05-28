@@ -1,9 +1,12 @@
 import { Direction } from "./game-classes/Direction";
 import { Position } from "./game-classes/Position";
 import { Vantage } from "./game-classes/Vantage";
+import { Wall } from "./game-classes/Wall";
 
 interface Point { x: number, y: number }
 interface ConvertFunction { (point: Point): [number, number] }
+interface PlotPlace { points: Point[], wall: Wall, place: { position: Position, forward: number, right: number }, relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
+
 
 const wall0Height = .8
 const wall0Width = .8
@@ -89,7 +92,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
 }
 
 export { 
-    ConvertFunction, Point,
+    ConvertFunction, Point, PlotPlace,
     mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, 
     maxViewDistance, wall0Height 
 }

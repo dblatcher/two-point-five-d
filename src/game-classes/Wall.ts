@@ -1,7 +1,9 @@
-import { plotPolygon, ConvertFunction, Point } from "@/canvas-utility";
+import { PlotPlace, ConvertFunction, plotPolygon } from "@/canvas-utility";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
+
+
 
 interface WallConfig {
     x: number
@@ -22,8 +24,21 @@ class Wall extends Position {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[]): void {
-        ctx.fillStyle = this.data.color ? this.data.color.css : Wall.defaultColor.css
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace): void {
+
+        const { points, place, relativeDirection } = plotPlace
+        const { forward, right } = place
+
+        const baseColor = this.data.color || Wall.defaultColor
+
+        if (relativeDirection === 'FORWARD') {
+            ctx.fillStyle = baseColor.darker(12 * (forward + 1)).css
+        } else if (relativeDirection === 'BACK') {
+            ctx.fillStyle = baseColor.darker(12 * forward).css
+        } else {
+            ctx.fillStyle = baseColor.darker(12 * (forward+.5)).css
+        }
+
         plotPolygon(ctx, convertFunction, points)
     }
 
@@ -57,7 +72,7 @@ class Wall extends Position {
         ctx.stroke();
     }
 
-    static get defaultColor() { return new Color(100, 100, 100, 1) }
+    static get defaultColor() { return new Color(250, 250, 250, 1) }
 }
 
 

@@ -1,11 +1,8 @@
-import { getPlacesInSight, getViewportMapFunction, mapPointOnCeiling, mapPointOnFloor, maxViewDistance, wall0Height } from "@/canvas-utility";
-import { Position } from "./Position";
+import { getPlacesInSight, getViewportMapFunction, mapPointOnCeiling, mapPointOnFloor, maxViewDistance, PlotPlace, wall0Height } from "@/canvas-utility";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-interface Point { x: number, y: number }
 
-interface PlotPlace { points: Point[], wall: Wall, place: { position: Position, forward: number, right: number }, relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
 interface FloorConfig {
     width: number
@@ -171,7 +168,7 @@ class Floor {
         })
 
         wallsToPlot.forEach(item => {
-            item.wall.drawInSight(ctx, toCanvasCoords, item.points, item.place.forward)
+            item.wall.drawInSight(ctx, toCanvasCoords, item)
         })
 
     }
