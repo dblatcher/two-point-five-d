@@ -1,15 +1,17 @@
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
 import { Level } from "@/game-classes/Level";
+import { Position } from "@/game-classes/Position";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 
 
 
-const position = new Vantage({ x: 8, y: 0, direction: Direction.west });
+const position = new Vantage({ x: 2, y: 3, direction: Direction.east });
 
 const floor = new Level({
-    height: 8, width: 10, walls: [
+    height: 8, width: 10,
+    walls: [
         new Wall({ x: 1, y: 3, place: Direction.north }),
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0) }),
         new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
@@ -31,7 +33,10 @@ const floor = new Level({
         new Wall({ x: 8, y: 0, place: Direction.north }),
         new Wall({ x: 9, y: 0, place: Direction.north }),
         new Wall({ x: 9, y: 0, place: Direction.east }),
-
+    ],
+    contents: [
+        new Position({ x: 6, y: 1 }),
+        new Position({ x: 3, y: 3 }),
     ]
 })
 

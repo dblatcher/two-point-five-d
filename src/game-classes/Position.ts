@@ -1,5 +1,6 @@
 import { Direction } from './Direction'
 import store from '@/store'
+import { ConvertFunction, mapPointOnFloor, PlotPlace, plotPolygon, Point } from '@/canvas-utility';
 
 interface PositionConfig {
     x: number
@@ -13,11 +14,11 @@ class Position {
         this.data = config
     }
 
-    translate(vector: PositionConfig):Position {
+    translate(vector: PositionConfig): Position {
         return new Position({ x: this.data.x + vector.x, y: this.data.y + vector.y });
     }
 
-    moveAbsolute(direction: Direction, state: typeof store.state):void {
+    moveAbsolute(direction: Direction, state: typeof store.state): void {
 
         const targetX = this.data.x + direction.x;
         const targetY = this.data.y + direction.y;
@@ -28,11 +29,28 @@ class Position {
         this.data.y = targetY
     }
 
-    isSamePlaceAs(otherPosition: Position):boolean {
+    isSamePlaceAs(otherPosition: Position): boolean {
         return this.data.x === otherPosition.data.x && this.data.y === otherPosition.data.y
     }
 
-    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number):void {
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace): void {
+        const { place } = plotPlace
+        const outDistance = .2;
+        const points: Point[] = [
+            mapPointOnFloor(place.forward - .5 + outDistance, place.right - outDistance),
+            mapPointOnFloor(place.forward - .5 + outDistance, place.right + outDistance),
+            mapPointOnFloor(place.forward - .5 - outDistance, place.right + outDistance),
+            mapPointOnFloor(place.forward - .5 - outDistance, place.right - outDistance),
+        ]
+        ctx.beginPath();
+        ctx.moveTo(...convertFunction(points[0]));
+        ctx.lineTo(...convertFunction(points[2]));
+        ctx.moveTo(...convertFunction(points[1]));
+        ctx.lineTo(...convertFunction(points[3]));
+        ctx.stroke();
+    }
+
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
         const { x, y } = this.data;
         const crossCenterX = (x + .5) * gridSize
         const crossCenterY = (y + .5) * gridSize

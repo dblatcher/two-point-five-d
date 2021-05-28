@@ -1,4 +1,4 @@
-import { PlotPlace, ConvertFunction, plotPolygon, mapPointOnCeiling, mapPointOnFloor } from "@/canvas-utility";
+import { PlotPlace, ConvertFunction, plotPolygon, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas-utility";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -30,7 +30,7 @@ class Wall extends Position {
 
         const baseColor = this.data.color || Wall.defaultColor
 
-        let points: { x: number, y: number }[] = []
+        let points: Point[] = []
         switch (relativeDirection) {
             case "LEFT":
                 ctx.fillStyle = baseColor.darker(12 * (place.forward+.5)).css

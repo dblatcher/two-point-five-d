@@ -5,7 +5,12 @@ import { Wall } from "./game-classes/Wall";
 
 interface Point { x: number, y: number }
 interface ConvertFunction { (point: Point): [number, number] }
-interface PlotPlace { wall: Wall, place: { position: Position, forward: number, right: number }, relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
+interface PlotPlace { 
+    thing?:Position, 
+    wall?: Wall, 
+    place: { position: Position, forward: number, right: number }, 
+    relativeDirection?: "FORWARD" | "LEFT" | "RIGHT" | "BACK" 
+}
 
 
 const wall0Height = .8

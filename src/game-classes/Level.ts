@@ -1,4 +1,5 @@
 import { getPlacesInSight, getViewportMapFunction, maxViewDistance, PlotPlace, wall0Height } from "@/canvas-utility";
+import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
@@ -8,6 +9,7 @@ interface LevelConfig {
     width: number
     height: number
     walls: Wall[]
+    contents: Position[]
 }
 
 class Level {
@@ -65,6 +67,7 @@ class Level {
 
         ctx.setLineDash([]);
         this.data.walls.forEach((wall) => { wall.drawInMap(ctx, gridSize) });
+        this.data.contents.forEach(thing => { thing.drawInMap(ctx, gridSize) })
 
         if (vantage) {
             vantage.drawInMap(ctx, gridSize);
@@ -92,23 +95,30 @@ class Level {
 
         const placesInSight = getPlacesInSight(vantage);
 
-        const wallsToPlot: PlotPlace[] = [];
+        const plotPlaces: PlotPlace[] = [];
 
         this.data.walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isSamePlaceAs(wall))
             if (!place) { return }
             const relativeDirection = wall.data.place.relativeDirection(vantage.data.direction);
             if (relativeDirection == "BACK" && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
-            wallsToPlot.push({ wall, place, relativeDirection })
+            plotPlaces.push({ wall, place, relativeDirection })
         })
 
-        wallsToPlot.sort((itemA, itemB) => {
+        this.data.contents.forEach(thing => {
+            const place = placesInSight.find(place => place.position.isSamePlaceAs(thing))
+            if (!place) { return }
+            plotPlaces.push({ thing, place })
+        })
+
+        plotPlaces.sort((itemA, itemB) => {
             if (itemB.place.forward !== itemA.place.forward) {
                 return itemB.place.forward - itemA.place.forward
             }
 
             function rateDirection(item: PlotPlace): number {
-                if (item.relativeDirection === "FORWARD") { return 4 }
+                if (!item.relativeDirection)  { return 5 }
+
                 if (item.relativeDirection === "BACK") { return 1 }
                 if (item.relativeDirection == 'LEFT' && item.place.right <= 0) { return 2 }
                 if (item.relativeDirection == 'RIGHT' && item.place.right >= 0) { return 2 }
@@ -118,8 +128,13 @@ class Level {
             return rateDirection(itemB) - rateDirection(itemA)
         })
 
-        wallsToPlot.forEach(item => {
-            item.wall.drawInSight(ctx, toCanvasCoords, item)
+        plotPlaces.forEach(item => {
+            if (item.wall) {
+                item.wall.drawInSight(ctx, toCanvasCoords, item)
+            }
+            if (item.thing) {
+                item.thing.drawInSight(ctx, toCanvasCoords, item)
+            }
         })
 
     }
