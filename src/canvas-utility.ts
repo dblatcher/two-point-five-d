@@ -29,7 +29,7 @@ function mapPointOnCeiling(forwardDistance: number, rightDistance: number): Poin
 }
 
 
-function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[]) {
+function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[]):void {
     ctx.beginPath()
     ctx.moveTo(...convertFunction(points[0]))
     for (let index = 1; index < points.length; index++) {

@@ -1,4 +1,4 @@
-import { PlotPlace, ConvertFunction, plotPolygon, mapPointOnCeiling, mapPointOnFloor, mapPointInSight } from "@/canvas-utility";
+import { PlotPlace, ConvertFunction, plotPolygon, mapPointOnCeiling, mapPointOnFloor } from "@/canvas-utility";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -103,7 +103,7 @@ class Wall extends Position {
         ctx.stroke();
     }
 
-    static get defaultColor() { return new Color(250, 250, 250, 1) }
+    static get defaultColor():Color { return new Color(250, 250, 250, 1) }
 }
 
 

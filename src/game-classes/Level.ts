@@ -1,19 +1,19 @@
-import { getPlacesInSight, getViewportMapFunction, mapPointOnCeiling, mapPointOnFloor, maxViewDistance, PlotPlace, wall0Height } from "@/canvas-utility";
+import { getPlacesInSight, getViewportMapFunction, maxViewDistance, PlotPlace, wall0Height } from "@/canvas-utility";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
 
 
-interface FloorConfig {
+interface LevelConfig {
     width: number
     height: number
     walls: Wall[]
 }
 
-class Floor {
-    data: FloorConfig
+class Level {
+    data: LevelConfig
 
-    constructor(config: FloorConfig) {
+    constructor(config: LevelConfig) {
         this.data = config
     }
 
@@ -126,4 +126,4 @@ class Floor {
 }
 
 
-export { Floor, FloorConfig }
+export { Level, LevelConfig }

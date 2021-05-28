@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { floor, position } from './floors'
+import { floor, position } from './levels'
 
 
 

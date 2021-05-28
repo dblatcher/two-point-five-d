@@ -1,6 +1,6 @@
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
-import { Floor } from "@/game-classes/Floor";
+import { Level } from "@/game-classes/Level";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 
@@ -8,7 +8,7 @@ import { Wall } from "@/game-classes/Wall";
 
 const position = new Vantage({ x: 8, y: 0, direction: Direction.west });
 
-const floor = new Floor({
+const floor = new Level({
     height: 8, width: 10, walls: [
         new Wall({ x: 1, y: 3, place: Direction.north }),
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0) }),
