@@ -1,4 +1,4 @@
-import { PlotPlace, ConvertFunction, plotPolygon } from "@/canvas-utility";
+import { PlotPlace, ConvertFunction, plotPolygon, mapPointOnCeiling, mapPointOnFloor, mapPointInSight } from "@/canvas-utility";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -26,17 +26,48 @@ class Wall extends Position {
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace): void {
 
-        const { points, place, relativeDirection } = plotPlace
-        const { forward, right } = place
+        const { place, relativeDirection } = plotPlace
 
         const baseColor = this.data.color || Wall.defaultColor
 
-        if (relativeDirection === 'FORWARD') {
-            ctx.fillStyle = baseColor.darker(12 * (forward + 1)).css
-        } else if (relativeDirection === 'BACK') {
-            ctx.fillStyle = baseColor.darker(12 * forward).css
-        } else {
-            ctx.fillStyle = baseColor.darker(12 * (forward+.5)).css
+        let points: { x: number, y: number }[] = []
+        switch (relativeDirection) {
+            case "LEFT":
+                ctx.fillStyle = baseColor.darker(12 * (place.forward+.5)).css
+                points = [
+                    mapPointOnCeiling(place.forward - 1, place.right - .5),
+                    mapPointOnCeiling(place.forward, place.right - .5),
+                    mapPointOnFloor(place.forward, place.right - .5),
+                    mapPointOnFloor(place.forward - 1, place.right - .5),
+                ]
+                break;
+            case "RIGHT":
+                ctx.fillStyle = baseColor.darker(12 * (place.forward+.5)).css
+                points = [
+                    mapPointOnCeiling(place.forward - 1, place.right + .5),
+                    mapPointOnCeiling(place.forward, place.right + .5),
+                    mapPointOnFloor(place.forward, place.right + .5),
+                    mapPointOnFloor(place.forward - 1, place.right + .5),
+                ]
+                break;
+            case "FORWARD":
+                ctx.fillStyle = baseColor.darker(12 * (place.forward + 1)).css
+                points = [
+                    mapPointOnCeiling(place.forward, place.right - .5),
+                    mapPointOnCeiling(place.forward, place.right + .5),
+                    mapPointOnFloor(place.forward, place.right + .5),
+                    mapPointOnFloor(place.forward, place.right - .5),
+                ]
+                break;
+            case "BACK":
+                ctx.fillStyle = baseColor.darker(12 * place.forward).css
+                points = [
+                    mapPointOnCeiling(place.forward - 1, place.right - .5),
+                    mapPointOnCeiling(place.forward - 1, place.right + .5),
+                    mapPointOnFloor(place.forward - 1, place.right + .5),
+                    mapPointOnFloor(place.forward - 1, place.right - .5),
+                ]
+                break;
         }
 
         plotPolygon(ctx, convertFunction, points)

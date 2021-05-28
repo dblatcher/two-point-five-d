@@ -74,11 +74,9 @@ class Floor {
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 400, viewHeight = viewWidth): void {
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
-
         const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
 
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-
         const smallestWallHeight = wall0Height / (Math.SQRT2 ** maxViewDistance)
 
         ctx.beginPath()
@@ -93,62 +91,15 @@ class Floor {
 
 
         const placesInSight = getPlacesInSight(vantage);
-        ctx.fillStyle = 'yellow';
 
         const wallsToPlot: PlotPlace[] = [];
 
         this.data.walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isSamePlaceAs(wall))
-
             if (!place) { return }
-
             const relativeDirection = wall.data.place.relativeDirection(vantage.data.direction);
-
-            // the back wall of row 0 is 'behind the camera'
-            if (relativeDirection == "BACK" && place.forward == 0) { return }
-
-            let points: { x: number, y: number }[] = []
-
-            // TO DO - delegate this to Wall.drawInSight so it can have irregular shapes
-            // can pass the mapPoint function as a argument to the method
-            switch (relativeDirection) {
-                case "LEFT":
-                    points = [
-                        mapPointOnCeiling(place.forward - 1, place.right - .5),
-                        mapPointOnCeiling(place.forward, place.right - .5),
-                        mapPointOnFloor(place.forward, place.right - .5),
-                        mapPointOnFloor(place.forward - 1, place.right - .5),
-                    ]
-                    break;
-                case "RIGHT":
-                    points = [
-                        mapPointOnCeiling(place.forward - 1, place.right + .5),
-                        mapPointOnCeiling(place.forward, place.right + .5),
-                        mapPointOnFloor(place.forward, place.right + .5),
-                        mapPointOnFloor(place.forward - 1, place.right + .5),
-                    ]
-                    break;
-                case "FORWARD":
-                    points = [
-                        mapPointOnCeiling(place.forward, place.right - .5),
-                        mapPointOnCeiling(place.forward, place.right + .5),
-                        mapPointOnFloor(place.forward, place.right + .5),
-                        mapPointOnFloor(place.forward, place.right - .5),
-                    ]
-                    break;
-                case "BACK":
-                    points = [
-                        mapPointOnCeiling(place.forward - 1, place.right - .5),
-                        mapPointOnCeiling(place.forward - 1, place.right + .5),
-                        mapPointOnFloor(place.forward - 1, place.right + .5),
-                        mapPointOnFloor(place.forward - 1, place.right - .5),
-                    ]
-                    break;
-            }
-
-            if (points.length) {
-                wallsToPlot.push({ points, wall, place, relativeDirection })
-            }
+            if (relativeDirection == "BACK" && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
+            wallsToPlot.push({ wall, place, relativeDirection })
         })
 
         wallsToPlot.sort((itemA, itemB) => {
