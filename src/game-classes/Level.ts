@@ -123,7 +123,7 @@ class Level {
             }
 
             function rateDirection(item: PlotPlace): number {
-                if (!item.relativeDirection || item.thing) { return 5 }
+                if (!item.relativeDirection || item.thing) { return 1.5 }
 
                 if (item.relativeDirection === "BACK") { return 1 }
                 if (item.relativeDirection === "FORWARD") { return 4 }

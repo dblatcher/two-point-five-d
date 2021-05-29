@@ -16,7 +16,7 @@ function flipImage(source: HTMLImageElement): CanvasImageSource {
 class Duck extends Vantage {
 
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace): void {
+    drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, plotPlace: PlotPlace): void {
         const { place } = plotPlace
 
         const duckHeight = .3
@@ -29,19 +29,27 @@ class Duck extends Vantage {
             x: duckWidthAtDistance, y: duckHeightAtDistance
         }
 
+        const shadowSize:Point = {
+            x: duckWidthAtDistance/3, y: duckHeightAtDistance/12
+        }
+
+        const center = mapPointInSight(place.forward - .5, place.right,0)
         const topLeft = mapPointInSight(place.forward - .5, place.right - duckWidth / 2, duckHeight)
 
 
+        ctx.beginPath()
+        ctx.fillStyle="black"
+        ctx.ellipse(...convert(center),...convert(shadowSize),0,0,Math.PI*2)
+        ctx.fill()
 
         ctx.drawImage(
             this.getSprite(plotPlace),
-            ...convertFunction(topLeft),
-            ...convertFunction(relativeDimensions)
+            ...convert(topLeft),
+            ...convert(relativeDimensions)
         );
     }
 
     getSprite(plotPlace: PlotPlace): CanvasImageSource {
-
         switch (plotPlace.relativeDirection) {
             case 'BACK': return document.images[2]
             case 'LEFT': return flipImage(document.images[1])
@@ -49,10 +57,7 @@ class Duck extends Vantage {
             default:
             case 'FORWARD': return document.images[0]
         }
-
-
     }
-
 }
 
 export { Duck }
