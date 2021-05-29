@@ -1,6 +1,7 @@
 import { Point } from "@/canvas-utility";
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
+import { Duck } from "@/game-classes/Duck";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
 import { Vantage } from "@/game-classes/Vantage";
@@ -20,9 +21,9 @@ const lowWall: Point[] = [
     { x: 1, y: 0 },
 ]
 
-const position = new Vantage({ x: 2, y: 3, direction: Direction.east });
+const position = new Vantage({ x: 6, y: 0, direction: Direction.south });
 
-const floor = new Level({
+const floor:Level = new Level({
     height: 8, width: 10,
     walls: [
         new Wall({ x: 1, y: 3, place: Direction.north }),
@@ -48,7 +49,7 @@ const floor = new Level({
         new Wall({ x: 9, y: 0, place: Direction.east }),
     ],
     contents: [
-        new Position({ x: 6, y: 1 }),
+        new Duck({ x: 6, y: 1, direction: Direction.west }),
         new Position({ x: 3, y: 3 }),
     ]
 })

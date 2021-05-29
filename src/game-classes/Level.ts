@@ -9,7 +9,7 @@ interface LevelConfig {
     width: number
     height: number
     walls: Wall[]
-    contents: Position[]
+    contents: Array<Vantage | Position>
 }
 
 class Level {
@@ -108,7 +108,13 @@ class Level {
         this.data.contents.forEach(thing => {
             const place = placesInSight.find(place => place.position.isSamePlaceAs(thing))
             if (!place) { return }
-            plotPlaces.push({ thing, place })
+
+                let relativeDirection;
+                if (Object.keys(thing.data).includes('direction')) {
+                    relativeDirection = (thing as Vantage).data.direction.behind.relativeDirection(vantage.data.direction)
+                }
+
+                plotPlaces.push({ thing, place, relativeDirection})
         })
 
         plotPlaces.sort((itemA, itemB) => {
@@ -117,7 +123,7 @@ class Level {
             }
 
             function rateDirection(item: PlotPlace): number {
-                if (!item.relativeDirection)  { return 5 }
+                if (!item.relativeDirection || item.thing) { return 5 }
 
                 if (item.relativeDirection === "BACK") { return 1 }
                 if (item.relativeDirection === "FORWARD") { return 4 }

@@ -54,5 +54,6 @@ export default class SightCanvas extends Vue {
 <style scoped lang="scss">
 figure {
   background-color: turquoise;
+  display: inline-block ;
 }
 </style>

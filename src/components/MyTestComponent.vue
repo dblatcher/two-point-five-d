@@ -1,9 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>static: {{ staticTest }}</p>
-    <p>store: {{ $store.state.test }}</p>
-    <button @click="testMethod()">click</button>
 
     <map-canvas
       caption="Map"
@@ -12,6 +9,11 @@
     <sight-canvas
       caption="view"
     />
+
+    <img src="../assets/sprites/duck-front.png"/>
+    <img src="../assets/sprites/duck-side.png"/>
+    <img src="../assets/sprites/duck-back.png"/>
+    
   </div>
 </template>
 
@@ -21,6 +23,10 @@ import store from "@/store";
 import MapCanvas from "./MapCanvas.vue";
 import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
+
+// import image from "../assets/sprites/duck-front.png";
+
+// console.log(image)
 
 interface MyTestComponentData {
   staticTest: string;

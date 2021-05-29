@@ -5,11 +5,11 @@ import { Wall } from "./game-classes/Wall";
 
 interface Point { x: number, y: number }
 interface ConvertFunction { (point: Point): [number, number] }
-interface PlotPlace { 
-    thing?:Position, 
-    wall?: Wall, 
-    place: { position: Position, forward: number, right: number }, 
-    relativeDirection?: "FORWARD" | "LEFT" | "RIGHT" | "BACK" 
+interface PlotPlace {
+    thing?: Position | Vantage,
+    wall?: Wall,
+    place: { position: Position, forward: number, right: number },
+    relativeDirection?: "FORWARD" | "LEFT" | "RIGHT" | "BACK"
 }
 
 
@@ -34,7 +34,7 @@ function mapPointOnCeiling(forwardDistance: number, rightDistance: number): Poin
 }
 
 
-function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[]):void {
+function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[]): void {
     ctx.beginPath()
     ctx.moveTo(...convertFunction(points[0]))
     for (let index = 1; index < points.length; index++) {
