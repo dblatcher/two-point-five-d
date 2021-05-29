@@ -1,6 +1,6 @@
 import { Direction } from './Direction'
 import store from '@/store'
-import { ConvertFunction, mapPointOnFloor, PlotPlace, plotPolygon, Point } from '@/canvas-utility';
+import { ConvertFunction, mapPointOnFloor, PlotPlace, Point } from '@/canvas-utility';
 
 interface PositionConfig {
     x: number

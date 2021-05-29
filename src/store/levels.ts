@@ -1,3 +1,4 @@
+import { Point } from "@/canvas-utility";
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
 import { Level } from "@/game-classes/Level";
@@ -6,6 +7,18 @@ import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 
 
+const lowWall: Point[] = [
+    { x: 0, y: 0 },
+    { x: 0, y: .5 },
+    { x: .25, y: .5 },
+    { x: .35, y: .5 },
+    { x: .35, y: .25 },
+    { x: .65, y: .25 },
+    { x: .65, y: .5 },
+    { x: .75, y: .5 },
+    { x: 1, y: .5 },
+    { x: 1, y: 0 },
+]
 
 const position = new Vantage({ x: 2, y: 3, direction: Direction.east });
 
@@ -15,10 +28,10 @@ const floor = new Level({
         new Wall({ x: 1, y: 3, place: Direction.north }),
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0) }),
         new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
-        new Wall({ x: 3, y: 3, place: Direction.east }),
-        new Wall({ x: 3, y: 3, place: Direction.north }),
-        new Wall({ x: 3, y: 3, place: Direction.south }),
-        new Wall({ x: 4, y: 3, place: Direction.south }),
+        new Wall({ x: 3, y: 3, place: Direction.east, shape: lowWall }),
+        new Wall({ x: 3, y: 3, place: Direction.north, shape: lowWall }),
+        new Wall({ x: 3, y: 3, place: Direction.south, shape: lowWall }),
+        new Wall({ x: 4, y: 3, place: Direction.south, shape: lowWall }),
         new Wall({ x: 5, y: 3, place: Direction.south }),
 
         new Wall({ x: 0, y: 0, place: Direction.west }),

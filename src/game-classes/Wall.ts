@@ -1,4 +1,4 @@
-import { PlotPlace, ConvertFunction, plotPolygon, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas-utility";
+import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas-utility";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -10,6 +10,7 @@ interface WallConfig {
     y: number
     place: Direction
     color?: Color
+    shape?: Point[]
 }
 
 class Wall extends Position {
@@ -27,46 +28,34 @@ class Wall extends Position {
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace): void {
 
         const { place, relativeDirection } = plotPlace
-
         const baseColor = this.data.color || Wall.defaultColor
+        const shape = this.data.shape || Wall.defaultShape
 
         let points: Point[] = []
         switch (relativeDirection) {
             case "LEFT":
-                ctx.fillStyle = baseColor.darker(12 * (place.forward+.5)).css
-                points = [
-                    mapPointOnCeiling(place.forward - 1, place.right - .5),
-                    mapPointOnCeiling(place.forward, place.right - .5),
-                    mapPointOnFloor(place.forward, place.right - .5),
-                    mapPointOnFloor(place.forward - 1, place.right - .5),
-                ]
+                ctx.fillStyle = baseColor.darker(12 * (place.forward + .5)).css
+                points = shape.map(point => {
+                    return mapPointInSight(place.forward - point.x, place.right - .5, point.y)
+                })
                 break;
             case "RIGHT":
-                ctx.fillStyle = baseColor.darker(12 * (place.forward+.5)).css
-                points = [
-                    mapPointOnCeiling(place.forward - 1, place.right + .5),
-                    mapPointOnCeiling(place.forward, place.right + .5),
-                    mapPointOnFloor(place.forward, place.right + .5),
-                    mapPointOnFloor(place.forward - 1, place.right + .5),
-                ]
+                ctx.fillStyle = baseColor.darker(12 * (place.forward + .5)).css
+                points = shape.map(point => {
+                    return mapPointInSight(place.forward - point.x, place.right + .5, point.y)
+                })
                 break;
             case "FORWARD":
                 ctx.fillStyle = baseColor.darker(12 * (place.forward + 1)).css
-                points = [
-                    mapPointOnCeiling(place.forward, place.right - .5),
-                    mapPointOnCeiling(place.forward, place.right + .5),
-                    mapPointOnFloor(place.forward, place.right + .5),
-                    mapPointOnFloor(place.forward, place.right - .5),
-                ]
+                points = shape.map(point => {
+                    return mapPointInSight(place.forward, place.right - .5 + point.x, point.y)
+                })
                 break;
             case "BACK":
                 ctx.fillStyle = baseColor.darker(12 * place.forward).css
-                points = [
-                    mapPointOnCeiling(place.forward - 1, place.right - .5),
-                    mapPointOnCeiling(place.forward - 1, place.right + .5),
-                    mapPointOnFloor(place.forward - 1, place.right + .5),
-                    mapPointOnFloor(place.forward - 1, place.right - .5),
-                ]
+                points = shape.map(point => {
+                    return mapPointInSight(place.forward - 1, place.right - .5 + point.x, point.y)
+                })
                 break;
         }
 
@@ -103,7 +92,16 @@ class Wall extends Position {
         ctx.stroke();
     }
 
-    static get defaultColor():Color { return new Color(250, 250, 250, 1) }
+    static get defaultColor(): Color { return new Color(250, 250, 250, 1) }
+
+    static get defaultShape(): Point[] {
+        return [
+            { x: 0, y: 1 },
+            { x: 1, y: 1 },
+            { x: 1, y: 0 },
+            { x: 0, y: 0 },
+        ]
+    }
 }
 
 
