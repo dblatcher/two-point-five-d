@@ -120,11 +120,11 @@ class Level {
                 if (!item.relativeDirection)  { return 5 }
 
                 if (item.relativeDirection === "BACK") { return 1 }
+                if (item.relativeDirection === "FORWARD") { return 4 }
                 if (item.relativeDirection == 'LEFT' && item.place.right <= 0) { return 2 }
                 if (item.relativeDirection == 'RIGHT' && item.place.right >= 0) { return 2 }
                 return 3
             }
-
             return rateDirection(itemB) - rateDirection(itemA)
         })
 
