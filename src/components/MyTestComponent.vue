@@ -10,9 +10,7 @@
       caption="view"
     />
 
-    <img src="../assets/sprites/duck-front.png"/>
-    <img src="../assets/sprites/duck-side.png"/>
-    <img src="../assets/sprites/duck-back.png"/>
+  <sprite-loader/>
     
   </div>
 </template>
@@ -23,10 +21,7 @@ import store from "@/store";
 import MapCanvas from "./MapCanvas.vue";
 import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
-
-// import image from "../assets/sprites/duck-front.png";
-
-// console.log(image)
+import SpriteLoader from "./SpriteLoader.vue";
 
 interface MyTestComponentData {
   staticTest: string;
@@ -37,7 +32,7 @@ interface MyTestComponentData {
     msg: String,
   },
   components: {
-    MapCanvas, Controls, SightCanvas
+    MapCanvas, Controls, SightCanvas, SpriteLoader
   },
 })
 export default class MyTestComponent extends Vue {

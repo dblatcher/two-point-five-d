@@ -50,7 +50,7 @@ const floor:Level = new Level({
     ],
     contents: [
         new Duck({ x: 6, y: 1, direction: Direction.west }),
-        new Duck({ x: 5, y: 3, direction: Direction.north }),
+        new Duck({ x: 5, y: 1, direction: Direction.east }),
         new Position({ x: 3, y: 3 }),
     ]
 })
