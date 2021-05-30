@@ -26,7 +26,7 @@ interface Frame {
     sheet: SpriteSheet
     row?: number
     col?: number
-    transforms?: string[]
+    transforms?: Array<"FLIP_H">
 }
 
 class Sprite {
