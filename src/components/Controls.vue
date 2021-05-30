@@ -35,4 +35,8 @@ nav {
   padding: 1rem;
   border: 3px dotted dodgerblue;
 }
+
+button {
+  font-size: 3rem;
+}
 </style>
