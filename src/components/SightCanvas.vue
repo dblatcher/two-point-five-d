@@ -14,6 +14,8 @@ import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 
 import gameStore from "@/store";
+import { Vantage } from "@/game-classes/Vantage";
+import { Level } from "@/game-classes/Level";
 
 @Options({
   props: {
@@ -25,21 +27,21 @@ export default class SightCanvas extends Vue {
   $store!: typeof gameStore;
   $refs!: { canvas: HTMLCanvasElement };
 
-  get vantage() {
+  get vantage():Vantage {
     const store = useStore() as typeof gameStore;
     return store.state.vantage;
   }
 
-  get floor() {
+  get floor():Level {
     const store = useStore() as typeof gameStore;
     return store.state.floor;
   }
 
-  mounted() {
+  mounted():void {
     this.draw();
   }
 
-  updated() {
+  updated():void {
     this.draw();
   }
 

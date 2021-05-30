@@ -14,16 +14,16 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { Vue } from "vue-class-component";
 import store from "@/store";
 
 export default class Controls extends Vue {
   $store!: typeof store;
 
-  move(direction: string) {
+  move(direction: string):void {
     this.$store.commit("movePlayer", { action: "MOVE", direction: direction });
   }
-  turn(direction: string) {
+  turn(direction: string):void {
     this.$store.commit("movePlayer", { action: "TURN", direction: direction });
   }
 }
