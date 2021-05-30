@@ -49,8 +49,8 @@ const floor:Level = new Level({
         new Wall({ x: 9, y: 0, place: Direction.east }),
     ],
     contents: [
-        new Duck({ x: 6, y: 1, direction: Direction.west }),
-        new Duck({ x: 5, y: 1, direction: Direction.east }),
+        new Duck({ x: 6, y: 1, direction: Direction.east }),
+        new Duck({ x: 5, y: 1, direction: Direction.west }),
         new Position({ x: 3, y: 3 }),
     ]
 })

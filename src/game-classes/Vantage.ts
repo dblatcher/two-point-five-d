@@ -60,16 +60,16 @@ class Vantage extends Position {
             arrowRightX = arrowCenterX,
             arrowRightY = arrowCenterY;
 
-        arrowEndX += gridSize * .45 * d.x
-        arrowEndY += gridSize * .45 * d.y
-        arrowLeftX += gridSize * .35 * d.x
-        arrowLeftY += gridSize * .35 * d.y
+        arrowEndX += gridSize * .4 * d.x
+        arrowEndY += gridSize * .4 * d.y
+        arrowLeftX += gridSize * .3 * d.x
+        arrowLeftY += gridSize * .3 * d.y
         arrowLeftX += gridSize * .15 * d.leftOf.x
         arrowLeftY += gridSize * .15 * d.leftOf.y
-        arrowRightX += gridSize * .35 * d.x
-        arrowRightY += gridSize * .35 * d.y
-        arrowRightX += gridSize * .15 * d.rightOf.x
-        arrowRightY += gridSize * .15 * d.rightOf.y
+        arrowRightX += gridSize * .3 * d.x
+        arrowRightY += gridSize * .3 * d.y
+        arrowRightX += gridSize * .1 * d.rightOf.x
+        arrowRightY += gridSize * .1 * d.rightOf.y
 
         ctx.beginPath();
         ctx.moveTo(arrowCenterX, arrowCenterY);

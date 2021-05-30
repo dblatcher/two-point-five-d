@@ -102,6 +102,14 @@ class Wall extends Position {
             { x: 0, y: 0 },
         ]
     }
+
+    static get baseHeight(): number {
+        return .8
+    }
+
+    static get baseWidth(): number {
+        return .8
+    }
 }
 
 

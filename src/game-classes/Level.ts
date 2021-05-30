@@ -1,4 +1,4 @@
-import { getPlacesInSight, getViewportMapFunction, maxViewDistance, PlotPlace, wall0Height } from "@/canvas-utility";
+import { getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, PlotPlace, VANISH_RATE } from "@/canvas-utility";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
@@ -80,7 +80,7 @@ class Level {
         const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
 
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-        const smallestWallHeight = wall0Height / (Math.SQRT2 ** maxViewDistance)
+        const smallestWallHeight = Wall.baseHeight / (VANISH_RATE ** MAX_VIEW_DISTANCE)
 
         ctx.beginPath()
         ctx.fillStyle = 'black';

@@ -4,6 +4,7 @@ import { Vantage } from "./game-classes/Vantage";
 import { Wall } from "./game-classes/Wall";
 
 interface Point { x: number, y: number }
+interface Dimensions { x: number, y: number }
 interface ConvertFunction { (point: Point): [number, number] }
 interface PlotPlace {
     thing?: Position | Vantage,
@@ -13,13 +14,12 @@ interface PlotPlace {
 }
 
 
-const wall0Height = .8
-const wall0Width = .8
-const maxViewDistance = 7
+const MAX_VIEW_DISTANCE = 7;
+const VANISH_RATE = Math.SQRT2;
 
 function mapPointInSight(forwardDistance: number, rightDistance: number, upDistance: number): Point {
-    const wallHeightAtDistance = wall0Height / (Math.SQRT2 ** forwardDistance);
-    const wallWidthAtDistance = wall0Width / (Math.SQRT2 ** forwardDistance);
+    const wallHeightAtDistance = Wall.baseHeight / (VANISH_RATE ** forwardDistance);
+    const wallWidthAtDistance = Wall.baseWidth / (VANISH_RATE ** forwardDistance);
     const y = .5 + (wallHeightAtDistance / 2) - (upDistance * wallHeightAtDistance)
     const x = .5 + (rightDistance * wallWidthAtDistance)
     return { x, y }
@@ -65,7 +65,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
         ]
     ]
 
-    for (let index = 0; index < maxViewDistance; index++) {
+    for (let index = 0; index < MAX_VIEW_DISTANCE; index++) {
         matrix.push(matrix[matrix.length - 1].map(item => {
             return {
                 forward: item.forward + 1,
@@ -95,8 +95,19 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
     return matrix.flat()
 }
 
+function flipImage(source: HTMLImageElement): CanvasImageSource {
+    if (!source.width || !source.height) { return source }
+    const board = document.createElement('canvas')
+    board.setAttribute('height', source.height.toString())
+    board.setAttribute('width', source.width.toString())
+    const ctx = board.getContext('2d') as CanvasRenderingContext2D
+    ctx.scale(-1, 1);
+    ctx.drawImage(source, -source.width, 0)
+    return board
+}
+
 export {
-    ConvertFunction, Point, PlotPlace,
-    mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, mapPointInSight,
-    maxViewDistance, wall0Height
+    ConvertFunction, Point, PlotPlace, Dimensions,
+    mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, mapPointInSight, flipImage,
+    MAX_VIEW_DISTANCE, VANISH_RATE
 }
