@@ -95,7 +95,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
     return matrix.flat()
 }
 
-function flipImage(source: HTMLImageElement): CanvasImageSource {
+function flipImage(source: CanvasImageSource): CanvasImageSource {
     if (!source.width || !source.height) { return source }
     const board = document.createElement('canvas')
     board.setAttribute('height', source.height.toString())

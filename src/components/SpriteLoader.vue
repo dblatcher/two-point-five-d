@@ -1,18 +1,11 @@
 <template>
   <div data-role="sprite-loader">
-    <section
-      v-for="sprite in $store.state.spriteData"
-      v-bind:key="sprite.name"
-      :data-name="sprite.name"
-    >
-      <img
-        v-for="image in sprite.frames"
-        :key="image.key"
-        :src="image.src"
-        :frame="image.key"
-        :sheet="sprite.name"
-      />
-    </section>
+    <img
+      v-for="spriteSheet in $store.state.spriteSheets"
+      :key="spriteSheet.id"
+      :sheet-id="spriteSheet.id"
+      :src="spriteSheet.src"
+    />
   </div>
 </template>
 

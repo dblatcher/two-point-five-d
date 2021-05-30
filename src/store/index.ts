@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import { floor, position } from './levels'
-import { spriteData } from './sprites'
+import { spriteSheets } from './sprites'
 
 
 export default createStore({
@@ -9,7 +9,7 @@ export default createStore({
     vantage: position,
     floor: floor,
     timestamp: Date.now(),
-    spriteData
+    spriteSheets,
   },
   mutations: {
     changeTestValue(state, n) {

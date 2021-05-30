@@ -111,7 +111,7 @@ class Level {
 
                 let relativeDirection;
                 if (Object.keys(thing.data).includes('direction')) {
-                    relativeDirection = (thing as Vantage).data.direction.behind.relativeDirection(vantage.data.direction)
+                    relativeDirection = (thing as Vantage).data.direction.relativeDirection(vantage.data.direction)
                 }
 
                 plotPlaces.push({ thing, place, relativeDirection})
