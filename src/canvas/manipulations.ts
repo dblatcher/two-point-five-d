@@ -1,4 +1,4 @@
-import { ConvertFunction, Dimensions, Point } from "./canvas-utility"
+import { ConvertFunction, Point, VANISH_RATE } from "./canvas-utility"
 
 function flipImage(source: CanvasImageSource): HTMLCanvasElement {
     const board = document.createElement('canvas')
@@ -27,24 +27,17 @@ function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: numb
     return board
 }
 
-function scaleTo(source: CanvasImageSource, points: Point[], convertFunction: ConvertFunction): HTMLCanvasElement {
+function scaleTo(source: CanvasImageSource, width:number, height:number): HTMLCanvasElement {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
 
     const ctx = board.getContext('2d') as CanvasRenderingContext2D
-    const xValues = points.map(point => point.x);
-    const yValues = points.map(point => point.y);
 
-    const convertedDimensions = convertFunction({
-        x: Math.max(...xValues) - Math.min(...xValues),
-        y: Math.max(...yValues) - Math.min(...yValues),
-    })
+    board.setAttribute('width', width.toString())
+    board.setAttribute('height', height.toString())
 
-    board.setAttribute('width', convertedDimensions[0].toString())
-    board.setAttribute('height', convertedDimensions[1].toString())
-
-    ctx.drawImage(source, 0, 0, source.width, source.height, 0, 0, ...convertedDimensions)
+    ctx.drawImage(source, 0, 0, source.width, source.height, 0, 0, width, height)
 
     return board
 }
@@ -55,10 +48,47 @@ function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, right: bo
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
 
     const ctx = board.getContext('2d') as CanvasRenderingContext2D
+    board.setAttribute('width', (source.width/VANISH_RATE/2).toString())
+    board.setAttribute('height', source.height.toString())
     //TO DO - reshape to left or right wall
 
-    ctx.drawImage(source, 0, 0, source.width, source.height, 0, 0, source.width, source.height)
-    return source
+    if (right) {
+        const aspect = VANISH_RATE/2
+
+        for (let i = 0; i < source.height / 2; i++) {
+            ctx.setTransform(1, -aspect * i / source.height,
+                0, 1, 0, 0)
+            ctx.drawImage(source,
+                0, source.height / 2 - i, source.width, 2,
+                0, source.height / 2 - i, source.width / VANISH_RATE/2, 2)
+
+            ctx.setTransform(1, aspect * i / source.height,
+                0, 1, 0, 0)
+            ctx.drawImage(source,
+                0, source.height / 2 + i, source.width, 2,
+                0, source.height / 2 + i, source.width / VANISH_RATE/2,2)
+        }
+    } else {
+        const aspect = VANISH_RATE/2
+
+        for (let i = 0; i < source.height / 2; i++) {
+            ctx.setTransform(1, aspect * i / source.height,
+                0, 1, 0, 0)
+            ctx.drawImage(source,
+                0, source.height / 2 - i, source.width, 2,
+                0, source.height / 2 - i, source.width / VANISH_RATE/2, 2)
+
+            ctx.setTransform(1, -aspect * i / source.height,
+                0, 1, 0, 0)
+            ctx.drawImage(source,
+                0, source.height / 2 + i, source.width, 2,
+                0, source.height / 2 + i, source.width / VANISH_RATE/2,2)
+        }
+    }
+
+
+    
+    return board
 }
 
 export {

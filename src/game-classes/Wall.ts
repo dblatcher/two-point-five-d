@@ -32,46 +32,45 @@ class Wall extends Position {
 
         const { place, relativeDirection } = plotPlace
         const baseColor = this.data.color || Wall.defaultColor
-        const shape = this.data.shape || Wall.defaultShape
+        const points: Point[] = relativeDirection ? getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place) : [];
 
-        let points: Point[] = []
         switch (relativeDirection) {
             case "LEFT":
-                ctx.fillStyle = baseColor.darker(12 * (place.forward + .5)).css
-                points = shape.map(point => {
-                    return mapPointInSight(place.forward - point.x, place.right - .5, point.y)
-                })
-                break;
             case "RIGHT":
                 ctx.fillStyle = baseColor.darker(12 * (place.forward + .5)).css
-                points = shape.map(point => {
-                    return mapPointInSight(place.forward - point.x, place.right + .5, point.y)
-                })
                 break;
             case "FORWARD":
                 ctx.fillStyle = baseColor.darker(12 * (place.forward + 1)).css
-                points = shape.map(point => {
-                    return mapPointInSight(place.forward, place.right - .5 + point.x, point.y)
-                })
                 break;
             case "BACK":
                 ctx.fillStyle = baseColor.darker(12 * place.forward).css
-                points = shape.map(point => {
-                    return mapPointInSight(place.forward - 1, place.right - .5 + point.x, point.y)
-                })
                 break;
         }
 
         if (this.data.sprite && relativeDirection) {
 
-            const xValues = points.map(point => point.x);
-            const yValues = points.map(point => point.y);
-            const topLeft = convertFunction({x:Math.min(...xValues), y:Math.min(...yValues)})
+            const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
+            const xValues = fullWallPoints.map(point => point.x);
+            const yValues = fullWallPoints.map(point => point.y);
+
+            const topLeft = convertFunction({ x: Math.min(...xValues), y: Math.min(...yValues) })
+            const convertedDimensions = convertFunction({
+                x: Math.max(...xValues) - Math.min(...xValues),
+                y: Math.max(...yValues) - Math.min(...yValues),
+            })
 
             try {
-                let image = this.data.sprite.provideImage(relativeDirection)
-                image = scaleTo(image, points, convertFunction);
-                const pattern = ctx.createPattern(image, null)
+                const frameKey = relativeDirection == 'BACK' || relativeDirection == 'FORWARD'
+                    ? 'FORWARD'
+                    : place.right > 0 
+                        ? "RIGHT"
+                        : place.right < 0
+                            ? "LEFT"
+                            : relativeDirection; 
+
+                let image = this.data.sprite.provideImage(frameKey)
+                image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
+                const pattern = ctx.createPattern(image, "repeat")
 
                 if (self.DOMMatrix && pattern) {
                     const matrix = new DOMMatrix();
@@ -87,6 +86,27 @@ class Wall extends Position {
 
 
         plotPolygon(ctx, convertFunction, points)
+
+        function getMappedPoints(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK", shape: Point[], place: { forward: number, right: number }) {
+            switch (relativeDirection) {
+                case "LEFT":
+                    return shape.map(point => {
+                        return mapPointInSight(place.forward - point.x, place.right - .5, point.y)
+                    })
+                case "RIGHT":
+                    return shape.map(point => {
+                        return mapPointInSight(place.forward - point.x, place.right + .5, point.y)
+                    })
+                case "FORWARD":
+                    return shape.map(point => {
+                        return mapPointInSight(place.forward, place.right - .5 + point.x, point.y)
+                    })
+                case "BACK":
+                    return shape.map(point => {
+                        return mapPointInSight(place.forward - 1, place.right - .5 + point.x, point.y)
+                    })
+            }
+        }
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {

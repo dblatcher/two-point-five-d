@@ -23,10 +23,10 @@ const lowWall: Point[] = [
     { x: 1, y: 0 },
 ]
 
-const position = new Vantage({ x: 6, y: 0, direction: Direction.east });
+const position = new Vantage({ x: 12, y: 5, direction: Direction.west });
 
 const floor:Level = new Level({
-    height: 8, width: 10,
+    height: 8, width: 15,
     walls: [
         new Wall({ x: 1, y: 3, place: Direction.north }),
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0), sprite:brickWall }),
@@ -35,7 +35,11 @@ const floor:Level = new Level({
         new Wall({ x: 3, y: 3, place: Direction.north, shape: lowWall }),
         new Wall({ x: 3, y: 3, place: Direction.south, shape: lowWall }),
         new Wall({ x: 4, y: 3, place: Direction.south, shape: lowWall }),
-        new Wall({ x: 5, y: 3, place: Direction.south, sprite: brickWall }),
+        new Wall({ x: 5, y: 3, place: Direction.south, sprite: brickWall, shape:lowWall }),
+
+        new Wall({ x: 9, y: 2, place: Direction.south, sprite: brickWall }),
+        new Wall({ x: 9, y: 3, place: Direction.south, sprite: brickWall }),
+        new Wall({ x: 9, y: 4, place: Direction.south, sprite: brickWall }),
 
         new Wall({ x: 0, y: 0, place: Direction.west, sprite:brickWall }),
         new Wall({ x: 0, y: 0, place: Direction.north, color: new Color(200, 100, 90, 1) }),
