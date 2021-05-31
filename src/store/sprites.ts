@@ -10,6 +10,10 @@ const duck_back = new SpriteSheet("duck-back", require("../assets/sprites/duck-b
 //https://opengameart.org/content/dinosaur-0
 const dinosaur = new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 })
 
+//https://opengameart.org/content/old-school-dungeon-crawler-pack
+const bricks = new SpriteSheet("bricks", require("../assets/sprites/brick.png"), spriteSheets)
+
+
 const duckSprite = new Sprite("DUCK", [
     { key: "BACK", sheet: duck_front },
     { key: "LEFT", sheet: duck_side },
@@ -18,6 +22,13 @@ const duckSprite = new Sprite("DUCK", [
 ],{
     shadow: { x: 1 / 3, y: 1 / 12 },
 })
+
+const brickWall =new Sprite("BRICK_WALL", [
+    { key: "FORWARD", sheet: bricks },
+    { key: "BACK", sheet: bricks },
+    { key: "LEFT", sheet: bricks, transforms: ["SKEW_LEFT"] },
+    { key: "RIGHT", sheet: bricks, transforms: ["SKEW_RIGHT"] },
+])
 
 const dinoSprite = new Sprite("DINOSAUR", [
     { key: "BACK", sheet: dinosaur, col: 0, row: 0 },
@@ -29,4 +40,4 @@ const dinoSprite = new Sprite("DINOSAUR", [
     shadow: { x: 1 / 3, y: 1 / 12 }
 })
 
-export { duckSprite, dinoSprite, spriteSheets }
+export { duckSprite, dinoSprite, spriteSheets, brickWall }

@@ -1,4 +1,6 @@
 import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
+import { scaleTo } from "@/canvas/manipulations";
+import { Sprite } from "@/canvas/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -10,6 +12,7 @@ interface WallConfig {
     y: number
     place: Direction
     color?: Color
+    sprite?: Sprite
     shape?: Point[]
 }
 
@@ -58,6 +61,30 @@ class Wall extends Position {
                 })
                 break;
         }
+
+        if (this.data.sprite && relativeDirection) {
+
+            const xValues = points.map(point => point.x);
+            const yValues = points.map(point => point.y);
+            const topLeft = convertFunction({x:Math.min(...xValues), y:Math.min(...yValues)})
+
+            try {
+                let image = this.data.sprite.provideImage(relativeDirection)
+                image = scaleTo(image, points, convertFunction);
+                const pattern = ctx.createPattern(image, null)
+
+                if (self.DOMMatrix && pattern) {
+                    const matrix = new DOMMatrix();
+                    matrix.translateSelf(...topLeft)
+                    pattern.setTransform(matrix)
+                }
+                ctx.fillStyle = pattern || ctx.fillStyle
+
+            } catch (error) {
+                console.warn(error.message)
+            }
+        }
+
 
         plotPolygon(ctx, convertFunction, points)
     }

@@ -1,4 +1,4 @@
-import { cutFrameFromGridSheet, flipImage } from "@/canvas/manipulations"
+import { cutFrameFromGridSheet, flipImage, perspectiveSkew } from "@/canvas/manipulations"
 import { Dimensions } from "./canvas-utility"
 
 interface SpriteSheetConfig {
@@ -28,7 +28,7 @@ interface Frame {
     sheet: SpriteSheet
     row?: number
     col?: number
-    transforms?: Array<"FLIP_H">
+    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT">
 }
 
 class Sprite {
@@ -79,7 +79,7 @@ class Sprite {
             throw new Error(`sprite image[${this.name}, ${key}] not loaded yet`);
         }
 
-        let result: CanvasImageSource = source;
+        let result: HTMLImageElement | HTMLCanvasElement = source;
 
         if (frame.sheet.config.pattern === 'GRID') {
             result = cutFrameFromGridSheet(source, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
@@ -90,6 +90,12 @@ class Sprite {
                 switch (transform) {
                     case "FLIP_H":
                         result = flipImage(result)
+                        break;
+                    case "SKEW_LEFT":
+                        result = perspectiveSkew(result, false)
+                        break;
+                    case "SKEW_RIGHT":
+                        result = perspectiveSkew(result, true)
                         break;
                 }
             })
