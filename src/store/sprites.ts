@@ -1,4 +1,4 @@
-import { Sprite, SpriteSheet } from "@/game-classes/Sprite"
+import { Sprite, SpriteSheet } from "@/canvas/Sprite"
 
 
 const spriteSheets: SpriteSheet[] = []

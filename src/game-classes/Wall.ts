@@ -1,4 +1,4 @@
-import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas-utility";
+import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";

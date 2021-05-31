@@ -1,4 +1,4 @@
-import { cutFrameFromGridSheet, flipImage } from "@/canvas-utility"
+import { cutFrameFromGridSheet, flipImage } from "@/canvas/manipulations"
 
 interface SpriteSheetConfig {
     pattern: "SINGLE" | "GRID"
@@ -105,7 +105,7 @@ class Sprite {
      * clear the loaded frames - may be needed for memory saving
      * if a sprite has loaded, but won't be required again
      */
-    clearLoadedFrames() {
+    clearLoadedFrames():void {
         this.loadedFrames.clear()
     }
 }

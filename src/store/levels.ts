@@ -1,4 +1,4 @@
-import { Point } from "@/canvas-utility";
+import { Point } from "@/canvas/canvas-utility";
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
 import { Figure } from "@/game-classes/Figure";

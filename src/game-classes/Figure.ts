@@ -1,7 +1,7 @@
-import { ConvertFunction, Dimensions, mapPointInSight, PlotPlace, VANISH_RATE } from "@/canvas-utility";
+import { ConvertFunction, Dimensions, mapPointInSight, PlotPlace, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Vantage } from "./Vantage";
 
-import { Sprite } from './Sprite'
+import { Sprite } from '../canvas/Sprite'
 import { Direction } from "./Direction";
 
 interface FigureConfig {
@@ -64,4 +64,4 @@ class Figure extends Vantage {
     }
 }
 
-export { Figure }
+export { Figure, FigureConfig }

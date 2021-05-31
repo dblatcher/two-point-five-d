@@ -1,4 +1,4 @@
-import { getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, PlotPlace, VANISH_RATE } from "@/canvas-utility";
+import { getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, PlotPlace, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
