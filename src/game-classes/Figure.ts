@@ -23,7 +23,7 @@ class Figure extends Vantage {
 
     drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, plotPlace: PlotPlace): void {
         const { place } = plotPlace
-        const { height = 1, width = 1 } = this.data
+        const { height = 1, width = 1, sprite } = this.data
 
         const heightAtDistance = height / (VANISH_RATE ** place.forward);
         const widthAtDistance = width / (VANISH_RATE ** place.forward);
@@ -32,27 +32,27 @@ class Figure extends Vantage {
             x: widthAtDistance, y: heightAtDistance
         }
 
-        const shadowSize: Dimensions = {
-            x: widthAtDistance / 3, y: heightAtDistance / 12
+        const center = mapPointInSight(place.forward - .5, place.right, 0)
+        const topLeft = mapPointInSight(place.forward - .5, place.right - width / 2, height - sprite.baseline)
+
+        if (sprite.shadow) {
+            const shadowSize: Dimensions = {
+                x: widthAtDistance * sprite.shadow.x, y: heightAtDistance * sprite.shadow.y
+            }
+            ctx.beginPath()
+            ctx.fillStyle = "black"
+            ctx.ellipse(...convert(center), ...convert(shadowSize), 0, 0, Math.PI * 2)
+            ctx.fill()
         }
 
-        const center = mapPointInSight(place.forward - .5, place.right, 0)
-        const topLeft = mapPointInSight(place.forward - .5, place.right - width / 2, height)
-
-
-        ctx.beginPath()
-        ctx.fillStyle = "black"
-        ctx.ellipse(...convert(center), ...convert(shadowSize), 0, 0, Math.PI * 2)
-        ctx.fill()
-
         ctx.drawImage(
-            this.getSprite(plotPlace),
+            this.getSpriteImage(plotPlace),
             ...convert(topLeft),
             ...convert(relativeDimensions)
         );
     }
 
-    getSprite(plotPlace: PlotPlace): CanvasImageSource {
+    getSpriteImage(plotPlace: PlotPlace): CanvasImageSource {
         const key = plotPlace.relativeDirection as string
 
         try {

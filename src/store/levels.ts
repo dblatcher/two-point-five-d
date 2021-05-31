@@ -1,6 +1,7 @@
 import { Point } from "@/canvas/canvas-utility";
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
+import { Duck } from "@/game-classes/Duck";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
@@ -50,7 +51,7 @@ const floor:Level = new Level({
         new Wall({ x: 9, y: 0, place: Direction.east }),
     ],
     contents: [
-        new Figure({ x: 6, y: 1, direction: Direction.east, sprite:duckSprite, height:.5, width:.5 }),
+        new Duck({ x: 6, y: 1, direction: Direction.east}),
         new Figure({ x: 5, y: 1, direction: Direction.west, sprite:duckSprite }),
         new Figure({ x: 2, y: 3, direction: Direction.west, sprite:dinoSprite, height:.25, width:.25 }),
         new Position({ x: 3, y: 3 }),

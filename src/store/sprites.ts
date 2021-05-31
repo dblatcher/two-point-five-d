@@ -15,13 +15,18 @@ const duckSprite = new Sprite("DUCK", [
     { key: "LEFT", sheet: duck_side },
     { key: "RIGHT", sheet: duck_side, transforms: ["FLIP_H"] },
     { key: "FORWARD", sheet: duck_back },
-])
+],{
+    shadow: { x: 1 / 3, y: 1 / 12 },
+})
 
 const dinoSprite = new Sprite("DINOSAUR", [
     { key: "BACK", sheet: dinosaur, col: 0, row: 0 },
     { key: "LEFT", sheet: dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
     { key: "RIGHT", sheet: dinosaur, col: 1, row: 0 },
     { key: "FORWARD", sheet: dinosaur, col: 2, row: 0 },
-])
+], {
+    baseline: .05,
+    shadow: { x: 1 / 3, y: 1 / 12 }
+})
 
 export { duckSprite, dinoSprite, spriteSheets }

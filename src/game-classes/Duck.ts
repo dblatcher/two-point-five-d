@@ -15,7 +15,7 @@ class Duck extends Figure {
         const figureConfig = Object.assign(config, {
             sprite: duckSprite,
             height: .5,
-            width: .5
+            width: .5,
         })
         super(figureConfig);
     }

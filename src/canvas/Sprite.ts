@@ -1,4 +1,5 @@
 import { cutFrameFromGridSheet, flipImage } from "@/canvas/manipulations"
+import { Dimensions } from "./canvas-utility"
 
 interface SpriteSheetConfig {
     pattern: "SINGLE" | "GRID"
@@ -34,11 +35,18 @@ class Sprite {
     name: string
     frames: Frame[]
     loadedFrames: Map<string, CanvasImageSource>
+    baseline: number
+    shadow?: Dimensions
 
-    constructor(name: string, frames: Frame[]) {
+    constructor(name: string, frames: Frame[], config: {
+        baseline?: number
+        shadow?: Dimensions
+    } = {}) {
         this.name = name
         this.frames = frames
         this.loadedFrames = new Map();
+        this.baseline = config.baseline || 0
+        this.shadow = config.shadow
     }
 
     /**
@@ -52,7 +60,7 @@ class Sprite {
      * @throws an Error is the image is not loaded on not found in the Dom
      * @returns the CanvasImageSource of the sprite frame
      */
-    provideImage(key:string):CanvasImageSource {
+    provideImage(key: string): CanvasImageSource {
 
         if (this.loadedFrames.has(key)) {
             return this.loadedFrames.get(key) as CanvasImageSource;
@@ -97,7 +105,7 @@ class Sprite {
 
     getFrameSelector(key: string): string | undefined {
         const frame = this.getFrame(key)
-        if (!frame) {return undefined}
+        if (!frame) { return undefined }
         return `img[sheet-id=${frame.sheet.id}]`
     }
 
@@ -105,7 +113,7 @@ class Sprite {
      * clear the loaded frames - may be needed for memory saving
      * if a sprite has loaded, but won't be required again
      */
-    clearLoadedFrames():void {
+    clearLoadedFrames(): void {
         this.loadedFrames.clear()
     }
 }
