@@ -1,4 +1,5 @@
 import { getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, PlotPlace, VANISH_RATE } from "@/canvas/canvas-utility";
+import { Sprite } from "@/canvas/Sprite";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"

@@ -1,4 +1,4 @@
-import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
+import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight, VANISH_RATE, Dimensions } from "@/canvas/canvas-utility";
 import { scaleTo } from "@/canvas/manipulations";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "./Color";
@@ -12,7 +12,8 @@ interface WallConfig {
     y: number
     place: Direction
     color?: Color
-    sprite?: Sprite
+    patternSprite?: Sprite
+    featureSprites?: Sprite[]
     shape?: Point[]
 }
 
@@ -31,63 +32,26 @@ class Wall extends Position {
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace): void {
 
         const { place, relativeDirection } = plotPlace
-        const baseColor = this.data.color || Wall.defaultColor
+        const { patternSprite, featureSprites = [] } = this.data
         const points: Point[] = relativeDirection ? getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place) : [];
+        const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
 
-        switch (relativeDirection) {
-            case "LEFT":
-            case "RIGHT":
-                ctx.fillStyle = baseColor.darker(12 * (place.forward + .5)).css
-                break;
-            case "FORWARD":
-                ctx.fillStyle = baseColor.darker(12 * (place.forward + 1)).css
-                break;
-            case "BACK":
-                ctx.fillStyle = baseColor.darker(12 * place.forward).css
-                break;
+        ctx.fillStyle = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
+
+        if (patternSprite) {
+            ctx.fillStyle = getPatternFill(patternSprite, fullWallPoints, relativeDirection) || ctx.fillStyle
         }
-
-        if (this.data.sprite && relativeDirection) {
-
-            const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
-            const xValues = fullWallPoints.map(point => point.x);
-            const yValues = fullWallPoints.map(point => point.y);
-
-            const topLeft = convertFunction({ x: Math.min(...xValues), y: Math.min(...yValues) })
-            const convertedDimensions = convertFunction({
-                x: Math.max(...xValues) - Math.min(...xValues),
-                y: Math.max(...yValues) - Math.min(...yValues),
-            })
-
-            try {
-                const frameKey = relativeDirection == 'BACK' || relativeDirection == 'FORWARD'
-                    ? 'FORWARD'
-                    : place.right > 0 
-                        ? "RIGHT"
-                        : place.right < 0
-                            ? "LEFT"
-                            : relativeDirection; 
-
-                let image = this.data.sprite.provideImage(frameKey)
-                image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
-                const pattern = ctx.createPattern(image, "repeat")
-
-                if (self.DOMMatrix && pattern) {
-                    const matrix = new DOMMatrix();
-                    matrix.translateSelf(...topLeft)
-                    pattern.setTransform(matrix)
-                }
-                ctx.fillStyle = pattern || ctx.fillStyle
-
-            } catch (error) {
-                console.warn(error.message)
-            }
-        }
-
-
         plotPolygon(ctx, convertFunction, points)
 
-        function getMappedPoints(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK", shape: Point[], place: { forward: number, right: number }) {
+        featureSprites.forEach(sprite => {
+            const featureImage = getPatternFill(sprite, fullWallPoints, relativeDirection);
+            if (featureImage) {
+                ctx.fillStyle = featureImage
+                plotPolygon(ctx, convertFunction, fullWallPoints)
+            }
+        })
+
+        function getMappedPoints(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK", shape: Point[], place: { forward: number, right: number }) {
             switch (relativeDirection) {
                 case "LEFT":
                     return shape.map(point => {
@@ -106,6 +70,59 @@ class Wall extends Position {
                         return mapPointInSight(place.forward - 1, place.right - .5 + point.x, point.y)
                     })
             }
+        }
+
+        function getColorFill(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK", baseColor: Color): string {
+            switch (relativeDirection) {
+                case "LEFT":
+                case "RIGHT":
+                    return baseColor.darker(12 * (place.forward + .5)).css
+                case "FORWARD":
+                    return baseColor.darker(12 * (place.forward + 1)).css
+                case "BACK":
+                    return baseColor.darker(12 * place.forward).css
+            }
+        }
+
+        function getPatternFill(sprite: Sprite, fullWallPoints: Point[], relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK"): CanvasPattern | null {
+            const xValues = fullWallPoints.map(point => point.x);
+            const yValues = fullWallPoints.map(point => point.y);
+
+            const topLeft = convertFunction({ x: Math.min(...xValues), y: Math.min(...yValues) })
+
+            const convertedDimensions = convertFunction({
+                x: Math.max(...xValues) - Math.min(...xValues),
+                y: Math.max(...yValues) - Math.min(...yValues),
+            })
+
+            try {
+                const frameKey = getFrameKey(relativeDirection);
+
+                let image = sprite.provideImage(frameKey)
+                image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
+                const pattern = ctx.createPattern(image, "no-repeat")
+
+                if (self.DOMMatrix && pattern) {
+                    const matrix = new DOMMatrix();
+                    matrix.translateSelf(...topLeft)
+                    pattern.setTransform(matrix)
+                }
+                return pattern
+
+            } catch (error) {
+                console.warn(error.message)
+                return null
+            }
+        }
+
+        function getFrameKey(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK") {
+            return relativeDirection == 'BACK' || relativeDirection == 'FORWARD'
+                ? 'FORWARD'
+                : place.right > 0
+                    ? "RIGHT"
+                    : place.right < 0
+                        ? "LEFT"
+                        : relativeDirection;
         }
     }
 

@@ -1,4 +1,4 @@
-import { ConvertFunction, Point, VANISH_RATE } from "./canvas-utility"
+import { Dimensions, VANISH_RATE } from "./canvas-utility"
 
 function flipImage(source: CanvasImageSource): HTMLCanvasElement {
     const board = document.createElement('canvas')
@@ -91,6 +91,26 @@ function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, right: bo
     return board
 }
 
+function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size:Dimensions): HTMLCanvasElement {
+    const board = document.createElement('canvas')
+    if (!source.width || !source.height) { return board }
+    if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
+
+    const ctx = board.getContext('2d') as CanvasRenderingContext2D
+
+    const expandedFrame:Dimensions = {
+        x: source.width/size.x,
+        y: source.height/size.y,
+    }
+
+    board.setAttribute('width', expandedFrame.x.toString())
+    board.setAttribute('height', expandedFrame.y.toString())
+
+    ctx.drawImage(source, 0, 0, source.width, source.height, source.width/2, source.height/2, source.width, source.height)
+
+    return board;
+}
+
 export {
-    flipImage, cutFrameFromGridSheet, scaleTo, perspectiveSkew
+    flipImage, cutFrameFromGridSheet, scaleTo, perspectiveSkew,resizeFrame
 }

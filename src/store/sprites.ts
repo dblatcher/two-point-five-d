@@ -12,23 +12,21 @@ const dinosaur = new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur
 
 //https://opengameart.org/content/old-school-dungeon-crawler-pack
 const bricks = new SpriteSheet("bricks", require("../assets/sprites/brick.png"), spriteSheets)
+const window = new SpriteSheet("window", require("../assets/sprites/open-window.png"), spriteSheets)
 
+
+const painting = new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets)
 
 const duckSprite = new Sprite("DUCK", [
     { key: "BACK", sheet: duck_front },
     { key: "LEFT", sheet: duck_side },
     { key: "RIGHT", sheet: duck_side, transforms: ["FLIP_H"] },
     { key: "FORWARD", sheet: duck_back },
-],{
+], {
     shadow: { x: 1 / 3, y: 1 / 12 },
 })
 
-const brickWall =new Sprite("BRICK_WALL", [
-    { key: "FORWARD", sheet: bricks },
-    { key: "BACK", sheet: bricks },
-    { key: "LEFT", sheet: bricks, transforms: ["SKEW_LEFT"] },
-    { key: "RIGHT", sheet: bricks, transforms: ["SKEW_RIGHT"] },
-])
+
 
 const dinoSprite = new Sprite("DINOSAUR", [
     { key: "BACK", sheet: dinosaur, col: 0, row: 0 },
@@ -40,4 +38,9 @@ const dinoSprite = new Sprite("DINOSAUR", [
     shadow: { x: 1 / 3, y: 1 / 12 }
 })
 
-export { duckSprite, dinoSprite, spriteSheets, brickWall }
+const brickPattern = Sprite.patternSprite("BRICK_WALL", bricks);
+const windowPattern = Sprite.patternSprite("WINDOW", window);
+const paintingWall = Sprite.patternSprite("painting", painting, { size: { x: .5, y: .5 }, offset:{x:.25,y:.25} });
+
+
+export { duckSprite, dinoSprite, spriteSheets, brickPattern as brickWall, windowPattern as windowWall, paintingWall }

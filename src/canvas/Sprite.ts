@@ -1,5 +1,5 @@
-import { cutFrameFromGridSheet, flipImage, perspectiveSkew } from "@/canvas/manipulations"
-import { Dimensions } from "./canvas-utility"
+import { cutFrameFromGridSheet, flipImage, perspectiveSkew, resizeFrame } from "@/canvas/manipulations"
+import { Dimensions, Point } from "./canvas-utility"
 
 interface SpriteSheetConfig {
     pattern: "SINGLE" | "GRID"
@@ -28,7 +28,14 @@ interface Frame {
     sheet: SpriteSheet
     row?: number
     col?: number
-    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT">
+    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER">
+}
+
+interface SpriteConfig {
+    baseline?: number
+    shadow?: Dimensions
+    size?: Dimensions
+    offset?: Point
 }
 
 class Sprite {
@@ -37,16 +44,17 @@ class Sprite {
     loadedFrames: Map<string, CanvasImageSource>
     baseline: number
     shadow?: Dimensions
+    size?: Dimensions
+    offset?: Point
 
-    constructor(name: string, frames: Frame[], config: {
-        baseline?: number
-        shadow?: Dimensions
-    } = {}) {
+    constructor(name: string, frames: Frame[], config: SpriteConfig = {}) {
         this.name = name
         this.frames = frames
         this.loadedFrames = new Map();
         this.baseline = config.baseline || 0
         this.shadow = config.shadow
+        this.size = config.size
+        this.offset = config.offset
     }
 
     /**
@@ -88,6 +96,11 @@ class Sprite {
         if (frame && frame.transforms) {
             frame.transforms.forEach(transform => {
                 switch (transform) {
+                    case "RESIZE_CENTER":
+                        if (this.size) {
+                            result = resizeFrame(result, this.size)
+                        }
+                    break
                     case "FLIP_H":
                         result = flipImage(result)
                         break;
@@ -121,6 +134,15 @@ class Sprite {
      */
     clearLoadedFrames(): void {
         this.loadedFrames.clear()
+    }
+
+    static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}): Sprite {
+        return new Sprite(name, [
+            { key: "FORWARD", sheet, transforms: ["RESIZE_CENTER"] },
+            { key: "BACK", sheet, transforms: ["RESIZE_CENTER"] },
+            { key: "LEFT", sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
+            { key: "RIGHT", sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"] },
+        ], config)
     }
 }
 
