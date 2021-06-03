@@ -11,6 +11,7 @@ interface LevelConfig {
     height: number
     walls: Wall[]
     contents: Array<Vantage | Position>
+    defaultWallPattern?: Sprite
 }
 
 class Level {
@@ -137,7 +138,7 @@ class Level {
 
         plotPlaces.forEach(item => {
             if (item.wall) {
-                item.wall.drawInSight(ctx, toCanvasCoords, item)
+                item.wall.drawInSight(ctx, toCanvasCoords, item, this.data.defaultWallPattern)
             }
             if (item.thing) {
                 item.thing.drawInSight(ctx, toCanvasCoords, item)

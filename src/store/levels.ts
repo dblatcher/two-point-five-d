@@ -27,6 +27,7 @@ const position = new Vantage({ x: 11, y: 0, direction: Direction.west });
 
 const floor: Level = new Level({
     height: 8, width: 15,
+    defaultWallPattern: brickWall,
     walls: [
         new Wall({ x: 1, y: 3, place: Direction.north }),
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0), patternSprite: brickWall }),
