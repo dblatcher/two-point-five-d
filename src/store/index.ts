@@ -1,13 +1,13 @@
 import { createStore } from 'vuex'
-import { floor, position } from './levels'
+import { level, playerVantage } from './levels'
 import { spriteSheets } from './sprites'
 
 
 export default createStore({
   state: {
     test: "pupper should click the button",
-    vantage: position,
-    floor: floor,
+    playerVantage: playerVantage,
+    level: level,
     timestamp: Date.now(),
     spriteSheets,
   },
@@ -19,10 +19,10 @@ export default createStore({
     movePlayer(state, payload: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
       switch (payload.action) {
         case "MOVE":
-          state.vantage.move(payload.direction, state)
+          state.playerVantage.move(payload.direction, state)
           break;
         case "TURN":
-          state.vantage.turn(payload.direction)
+          state.playerVantage.turn(payload.direction)
           break;
       }
       state.timestamp = Date.now()

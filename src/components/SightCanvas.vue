@@ -3,8 +3,8 @@
     <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
     <p>
-      {{ vantage.data.x }}, {{ vantage.data.y }}
-      {{ vantage.data.direction.name }}
+      {{ playerVantage.data.x }}, {{ playerVantage.data.y }}
+      {{ playerVantage.data.direction.name }}
     </p>
   </figure>
 </template>
@@ -27,14 +27,14 @@ export default class SightCanvas extends Vue {
   $store!: typeof gameStore;
   $refs!: { canvas: HTMLCanvasElement };
 
-  get vantage():Vantage {
+  get playerVantage():Vantage {
     const store = useStore() as typeof gameStore;
-    return store.state.vantage;
+    return store.state.playerVantage;
   }
 
-  get floor():Level {
+  get level():Level {
     const store = useStore() as typeof gameStore;
-    return store.state.floor;
+    return store.state.level;
   }
 
   mounted():void {
@@ -46,9 +46,9 @@ export default class SightCanvas extends Vue {
   }
 
   draw(): void {
-    const { vantage, floor } = this;
+    const { playerVantage, level } = this;
     const canvas = this.$refs.canvas;
-    floor.drawAsSight(canvas, vantage);
+    level.drawAsSight(canvas, playerVantage);
   }
 }
 </script>

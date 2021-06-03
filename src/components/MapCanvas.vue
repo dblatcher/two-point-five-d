@@ -3,8 +3,8 @@
     <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
     <p>
-      {{ vantage.data.x }}, {{ vantage.data.y }}
-      {{ vantage.data.direction.name }}
+      {{ playerVantage.data.x }}, {{ playerVantage.data.y }}
+      {{ playerVantage.data.direction.name }}
     </p>
   </figure>
 </template>
@@ -25,14 +25,14 @@ export default class MapCanvas extends Vue {
   $store!: typeof gameStore;
   $refs!: { canvas: HTMLCanvasElement };
 
-  get vantage() {
+  get playerVantage() {
     const store = useStore() as typeof gameStore;
-    return store.state.vantage;
+    return store.state.playerVantage;
   }
 
-  get floor() {
+  get level() {
     const store = useStore() as typeof gameStore;
-    return store.state.floor;
+    return store.state.level;
   }
 
   mounted() {
@@ -44,9 +44,9 @@ export default class MapCanvas extends Vue {
   }
 
   draw(): void {
-    const { vantage, floor } = this;
+    const { playerVantage, level } = this;
     const canvas = this.$refs.canvas;
-    floor.drawAsMap(canvas, vantage, 20 );
+    level.drawAsMap(canvas, playerVantage, 20 );
   }
 }
 </script>

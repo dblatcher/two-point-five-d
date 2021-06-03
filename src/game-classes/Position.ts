@@ -23,7 +23,7 @@ class Position {
         const targetX = this.data.x + direction.x;
         const targetY = this.data.y + direction.y;
 
-        if (state.floor.isBlocked(this.data.x, this.data.y, targetX, targetY)) { return }
+        if (state.level.isBlocked(this.data.x, this.data.y, targetX, targetY)) { return }
 
         this.data.x = targetX
         this.data.y = targetY

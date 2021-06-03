@@ -23,9 +23,9 @@ const lowWall: Point[] = [
     { x: 1, y: 0 },
 ]
 
-const position = new Vantage({ x: 11, y: 0, direction: Direction.west });
+const playerVantage = new Vantage({ x: 11, y: 0, direction: Direction.west });
 
-const floor: Level = new Level({
+const level:Level = new Level({
     height: 8, width: 15,
     defaultWallPattern: brickWall,
     walls: [
@@ -64,4 +64,4 @@ const floor: Level = new Level({
 })
 
 
-export { floor, position }
+export { level, playerVantage }
