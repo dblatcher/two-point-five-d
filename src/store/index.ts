@@ -16,6 +16,10 @@ export default createStore({
       console.log('changeTestValue committed', n)
       state.test = n.toString()
     },
+    updateTimestamp(state) {
+      state.timestamp = Date.now()
+      // console.log('timestamp', state.timestamp)
+    },
     movePlayer(state, payload: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
       switch (payload.action) {
         case "MOVE":
@@ -25,10 +29,22 @@ export default createStore({
           state.playerVantage.turn(payload.direction)
           break;
       }
-      state.timestamp = Date.now()
     },
   },
   actions: {
+    movePlayer({ state, commit }, payload: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
+
+      commit('movePlayer', payload);
+      commit('updateTimestamp');
+
+    },
+    tick({ state, commit }) {
+      commit('updateTimestamp');
+
+    },
+    startTimer({ dispatch }) {
+      setInterval(() => { dispatch('tick') }, 250)
+    }
   },
   modules: {
   }

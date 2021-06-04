@@ -1,10 +1,10 @@
 <template>
-  <figure>
+  <figure :timeStamp="timeStamp.toString()">
     <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
     <p>
-      {{ playerVantage.data.x }}, {{ playerVantage.data.y }}
-      {{ playerVantage.data.direction.name }}
+      {{ $store.state.playerVantage.data.x }}, {{ $store.state.playerVantage.data.y }}
+      {{ $store.state.playerVantage.data.direction.name }}
     </p>
   </figure>
 </template>
@@ -25,14 +25,10 @@ export default class MapCanvas extends Vue {
   $store!: typeof gameStore;
   $refs!: { canvas: HTMLCanvasElement };
 
-  get playerVantage() {
+  // maintains reactivity - change to the store value triggers updated() 
+  get timeStamp(): number {
     const store = useStore() as typeof gameStore;
-    return store.state.playerVantage;
-  }
-
-  get level() {
-    const store = useStore() as typeof gameStore;
-    return store.state.level;
+    return store.state.timestamp;
   }
 
   mounted() {
@@ -44,7 +40,7 @@ export default class MapCanvas extends Vue {
   }
 
   draw(): void {
-    const { playerVantage, level } = this;
+    const { playerVantage, level } = this.$store.state;
     const canvas = this.$refs.canvas;
     level.drawAsMap(canvas, playerVantage, 20 );
   }

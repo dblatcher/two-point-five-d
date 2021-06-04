@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import store from "@/store";
+import gameStore from "@/store";
 import MapCanvas from "./MapCanvas.vue";
 import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
@@ -37,7 +37,7 @@ interface MyTestComponentData {
 })
 export default class MyTestComponent extends Vue {
   msg!: string;
-  $store!: typeof store;
+  $store!: typeof gameStore;
 
   data(): MyTestComponentData {
     return {
@@ -53,8 +53,9 @@ export default class MyTestComponent extends Vue {
     );
   }
 
-  turnRight(): void {
-    this.$store.commit("turnRight");
+  mounted() {
+    console.log('APP MOUNTED, starting timer')
+    this.$store.dispatch("startTimer")
   }
 }
 </script>

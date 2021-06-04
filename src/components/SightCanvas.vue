@@ -1,10 +1,10 @@
 <template>
-  <figure>
+  <figure :timeStamp="timeStamp.toString()">
     <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
     <p>
-      {{ playerVantage.data.x }}, {{ playerVantage.data.y }}
-      {{ playerVantage.data.direction.name }}
+      {{ $store.state.playerVantage.data.x }}, {{ $store.state.playerVantage.data.y }}
+      {{ $store.state.playerVantage.data.direction.name }}
     </p>
   </figure>
 </template>
@@ -14,8 +14,6 @@ import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 
 import gameStore from "@/store";
-import { Vantage } from "@/game-classes/Vantage";
-import { Level } from "@/game-classes/Level";
 
 @Options({
   props: {
@@ -27,26 +25,22 @@ export default class SightCanvas extends Vue {
   $store!: typeof gameStore;
   $refs!: { canvas: HTMLCanvasElement };
 
-  get playerVantage():Vantage {
+  // maintains reactivity - change to the store value triggers updated() 
+  get timeStamp(): number {
     const store = useStore() as typeof gameStore;
-    return store.state.playerVantage;
+    return store.state.timestamp;
   }
 
-  get level():Level {
-    const store = useStore() as typeof gameStore;
-    return store.state.level;
-  }
-
-  mounted():void {
+  mounted(): void {
     this.draw();
   }
 
-  updated():void {
+  updated(): void {
     this.draw();
   }
 
   draw(): void {
-    const { playerVantage, level } = this;
+    const { playerVantage, level } = this.$store.state;
     const canvas = this.$refs.canvas;
     level.drawAsSight(canvas, playerVantage);
   }
@@ -56,6 +50,6 @@ export default class SightCanvas extends Vue {
 <style scoped lang="scss">
 figure {
   background-color: turquoise;
-  display: inline-block ;
+  display: inline-block;
 }
 </style>
