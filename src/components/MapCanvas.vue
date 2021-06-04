@@ -3,8 +3,8 @@
     <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
     <p>
-      {{ $store.state.playerVantage.data.x }}, {{ $store.state.playerVantage.data.y }}
-      {{ $store.state.playerVantage.data.direction.name }}
+      {{ $store.state.game.data.playerVantage.data.x }}, {{ $store.state.game.data.playerVantage.data.y }}
+      {{ $store.state.game.data.playerVantage.data.direction.name }}
     </p>
   </figure>
 </template>
@@ -23,7 +23,7 @@ import gameStore from "@/store";
 export default class MapCanvas extends Vue {
   caption!: string;
   $store!: typeof gameStore;
-  $refs!: { canvas: HTMLCanvasElement };
+  declare $refs: { canvas: HTMLCanvasElement };
 
   // maintains reactivity - change to the store value triggers updated() 
   get timeStamp(): number {
@@ -40,7 +40,7 @@ export default class MapCanvas extends Vue {
   }
 
   draw(): void {
-    const { playerVantage, level } = this.$store.state;
+    const { playerVantage, level } = this.$store.state.game.data;
     const canvas = this.$refs.canvas;
     level.drawAsMap(canvas, playerVantage, 20 );
   }

@@ -1,6 +1,7 @@
 import { Direction } from './Direction'
 import store from '@/store'
 import { Position } from './Position'
+import { Game } from './Game'
 
 interface VantageConfig {
     x: number
@@ -29,9 +30,9 @@ class Vantage extends Position {
         }
     }
 
-    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", state: typeof store.state):void {
+    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", game: Game):void {
         const direction = this.getAbsoluteDirection(relativeDirection);
-        this.moveAbsolute(direction, state)
+        this.moveAbsolute(direction, game)
     }
 
     turn(direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK"):void {

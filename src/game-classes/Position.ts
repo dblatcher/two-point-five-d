@@ -1,6 +1,7 @@
 import { Direction } from './Direction'
 import store from '@/store'
 import { ConvertFunction, mapPointOnFloor, PlotPlace, Point } from '@/canvas/canvas-utility';
+import { Game } from './Game';
 
 interface PositionConfig {
     x: number
@@ -18,12 +19,12 @@ class Position {
         return new Position({ x: this.data.x + vector.x, y: this.data.y + vector.y });
     }
 
-    moveAbsolute(direction: Direction, state: typeof store.state): void {
+    moveAbsolute(direction: Direction, game: Game): void {
 
         const targetX = this.data.x + direction.x;
         const targetY = this.data.y + direction.y;
 
-        if (state.level.isBlocked(this.data.x, this.data.y, targetX, targetY)) { return }
+        if (game.data.level.isBlocked(this.data.x, this.data.y, targetX, targetY)) { return }
 
         this.data.x = targetX
         this.data.y = targetY

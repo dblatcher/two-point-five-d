@@ -45,14 +45,6 @@ export default class MyTestComponent extends Vue {
     };
   }
 
-  testMethod(): void {
-    const now = new Date();
-    this.$store.commit(
-      "changeTestValue",
-      `pupper did a click at ${now.getHours()}.${now.getMinutes()}:${now.getSeconds()}`
-    );
-  }
-
   mounted() {
     console.log('APP MOUNTED, starting timer')
     this.$store.dispatch("startTimer")
