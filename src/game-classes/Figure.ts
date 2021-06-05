@@ -3,6 +3,7 @@ import { Vantage } from "./Vantage";
 
 import { Sprite } from '../canvas/Sprite'
 import { Direction } from "./Direction";
+import { Behaviour } from "./Behaviour";
 
 interface FigureConfig {
     x: number
@@ -11,6 +12,8 @@ interface FigureConfig {
     sprite: Sprite
     height?: number
     width?: number
+
+    behaviour?: Behaviour
 }
 
 class Figure extends Vantage {

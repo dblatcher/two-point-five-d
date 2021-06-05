@@ -1,13 +1,14 @@
 import { Point } from "@/canvas/canvas-utility";
+import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
-import { Duck } from "@/game-classes/Duck";
+import { duck } from "@/game-classes/duck";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { brickWall, dinoSprite, duckSprite, paintingWall, windowWall } from "./sprites";
+import { brickWall, dinoSprite, paintingWall, windowWall } from "./sprites";
 
 
 const lowWall: Point[] = [
@@ -25,7 +26,7 @@ const lowWall: Point[] = [
 
 const playerVantage = new Vantage({ x: 11, y: 0, direction: Direction.west });
 
-const level:Level = new Level({
+const level: Level = new Level({
     height: 8, width: 15,
     defaultWallPattern: brickWall,
     walls: [
@@ -56,8 +57,8 @@ const level:Level = new Level({
         new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: brickWall, featureSprites: [paintingWall] }),
     ],
     contents: [
-        new Duck({ x: 6, y: 1, direction: Direction.east }),
-        new Figure({ x: 5, y: 1, direction: Direction.west, sprite: duckSprite }),
+        duck({ x: 6, y: 1, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
+        duck({ x: 5, y: 0, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
         new Figure({ x: 2, y: 3, direction: Direction.west, sprite: dinoSprite, height: .25, width: .25 }),
         new Position({ x: 3, y: 3 }),
     ]

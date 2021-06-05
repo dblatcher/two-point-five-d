@@ -1,5 +1,4 @@
 import { Direction } from './Direction'
-import store from '@/store'
 import { ConvertFunction, mapPointOnFloor, PlotPlace, Point } from '@/canvas/canvas-utility';
 import { Game } from './Game';
 
@@ -13,6 +12,10 @@ class Position {
 
     constructor(config: PositionConfig) {
         this.data = config
+    }
+
+    get coords(): [number, number] {
+        return [this.data.x, this.data.y]
     }
 
     translate(vector: PositionConfig): Position {

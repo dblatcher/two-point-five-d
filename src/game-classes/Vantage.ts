@@ -1,6 +1,7 @@
 import { Direction } from './Direction'
 import { Position } from './Position'
 import { Game } from './Game'
+import { Action } from './Behaviour';
 
 interface VantageConfig {
     x: number
@@ -26,6 +27,13 @@ class Vantage extends Position {
                 return this.data.direction.leftOf
             case "RIGHT":
                 return this.data.direction.rightOf
+        }
+    }
+
+    performAction(action:Action, game:Game):void {
+        switch(action.action) {
+            case "MOVE": return this.move(action.direction, game);
+            case "TURN": return this.turn(action.direction);
         }
     }
 
