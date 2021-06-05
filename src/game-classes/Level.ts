@@ -76,7 +76,7 @@ class Level {
         }
     }
 
-    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 400, viewHeight = viewWidth): void {
+    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth*(2/3)): void {
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
         const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);

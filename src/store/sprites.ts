@@ -14,7 +14,7 @@ const dinosaur = new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur
 const bricks = new SpriteSheet("bricks", require("../assets/sprites/brick.png"), spriteSheets)
 const window = new SpriteSheet("window", require("../assets/sprites/open-window.png"), spriteSheets)
 
-
+const testCard = new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets)
 const painting = new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets)
 
 const duckSprite = new Sprite("DUCK", [
@@ -34,13 +34,23 @@ const dinoSprite = new Sprite("DINOSAUR", [
     { key: "RIGHT", sheet: dinosaur, col: 1, row: 0 },
     { key: "FORWARD", sheet: dinosaur, col: 2, row: 0 },
 ], {
-    baseline: .05,
+    baseline: 0.05,
+    shadow: { x: 1 / 3, y: 1 / 12 }
+})
+
+const testSprite = new Sprite("TEST_CARD", [
+    { key: "BACK", sheet: testCard },
+    { key: "LEFT", sheet: testCard },
+    { key: "RIGHT", sheet: testCard },
+    { key: "FORWARD", sheet: testCard },
+], {
+    baseline: 0,
     shadow: { x: 1 / 3, y: 1 / 12 }
 })
 
 const brickPattern = Sprite.patternSprite("BRICK_WALL", bricks);
 const windowPattern = Sprite.patternSprite("WINDOW", window);
-const paintingWall = Sprite.patternSprite("painting", painting, { size: { x: .5, y: .5 }, offset:{x:.25,y:.25} });
+const paintingWall = Sprite.patternSprite("painting", painting, { size: { x: .5, y: .5 }, offset: { x: .25, y: .25 } });
 
 
-export { duckSprite, dinoSprite, spriteSheets, brickPattern as brickWall, windowPattern as windowWall, paintingWall }
+export { duckSprite, dinoSprite, testSprite, spriteSheets, brickPattern as brickWall, windowPattern as windowWall, paintingWall }

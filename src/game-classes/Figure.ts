@@ -4,6 +4,7 @@ import { Vantage } from "./Vantage";
 import { Sprite } from '../canvas/Sprite'
 import { Direction } from "./Direction";
 import { Behaviour } from "./Behaviour";
+import { Wall } from "./Wall";
 
 interface FigureConfig {
     x: number
@@ -28,15 +29,17 @@ class Figure extends Vantage {
         const { place } = plotPlace
         const { height = 1, width = 1, sprite } = this.data
 
-        const heightAtDistance = height / (VANISH_RATE ** place.forward);
-        const widthAtDistance = width / (VANISH_RATE ** place.forward);
+        const aspect = (Wall.baseWidth / Wall.baseHeight)
+
+        const heightAtDistance = (height) / (VANISH_RATE ** place.forward);
+        const widthAtDistance = (width * aspect) / (VANISH_RATE ** place.forward);
 
         const relativeDimensions: Dimensions = {
-            x: widthAtDistance, y: heightAtDistance
+            x: widthAtDistance, y: heightAtDistance 
         }
 
         const center = mapPointInSight(place.forward - .5, place.right, 0)
-        const topLeft = mapPointInSight(place.forward - .5, place.right - width / 2, height - sprite.baseline)
+        const topLeft = mapPointInSight(place.forward - .5, place.right - width / 2, height - (sprite.baseline*4))
 
         if (sprite.shadow) {
             const shadowSize: Dimensions = {

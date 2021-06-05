@@ -172,7 +172,7 @@ class Wall extends Position {
     }
 
     static get baseWidth(): number {
-        return .8
+        return .6
     }
 }
 
