@@ -21,10 +21,10 @@ export default class Controls extends Vue {
   $store!: typeof store;
 
   move(direction: string):void {
-    this.$store.dispatch("movePlayer", { action: "MOVE", direction: direction });
+    this.$store.dispatch("sendPlayerMovement", { action: "MOVE", direction: direction });
   }
   turn(direction: string):void {
-    this.$store.dispatch("movePlayer", { action: "TURN", direction: direction });
+    this.$store.dispatch("sendPlayerMovement", { action: "TURN", direction: direction });
   }
 }
 </script>

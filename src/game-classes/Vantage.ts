@@ -1,5 +1,4 @@
 import { Direction } from './Direction'
-import store from '@/store'
 import { Position } from './Position'
 import { Game } from './Game'
 

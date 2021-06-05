@@ -16,15 +16,15 @@ export default createStore({
     },
   },
   actions: {
-    movePlayer({ state }, payload: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
-      state.game.movePlayer(payload)
+    sendPlayerMovement({ state }, movement: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
+      state.game.queuePlayerAction(movement)
     },
     tick({ state, commit }) {
       state.game.tick();
       commit('updateTimestamp');
     },
     startTimer({ dispatch }) {
-      setInterval(() => { dispatch('tick') }, 250)
+      setInterval(() => { dispatch('tick') }, 200)
     }
   },
   modules: {
