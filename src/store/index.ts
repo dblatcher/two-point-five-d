@@ -9,6 +9,10 @@ export default createStore({
     game,
     timestamp: Date.now(),
     spriteSheets,
+    timer: 0,
+  },
+  getters: {
+    gameIsPaused: state => state.timer == 0
   },
   mutations: {
     updateTimestamp(state) {
@@ -17,15 +21,23 @@ export default createStore({
   },
   actions: {
     sendPlayerMovement({ state }, movement: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
-      state.game.queuePlayerAction(movement)
+      if (!this.getters.gameIsPaused) {
+        state.game.queuePlayerAction(movement)
+      }
     },
     tick({ state, commit }) {
       state.game.tick();
       commit('updateTimestamp');
     },
-    startTimer({ dispatch }) {
-      setInterval(() => { dispatch('tick') }, 200)
-    }
+    startTimer({ state, dispatch }) {
+      if (state.timer !== 0) { return }
+      state.timer = setInterval(() => { dispatch('tick') }, 200)
+    },
+    stopTimer({ state }) {
+      if (state.timer == 0) {return}
+      clearInterval(state.timer);
+      state.timer = 0;
+    },
   },
   modules: {
   }

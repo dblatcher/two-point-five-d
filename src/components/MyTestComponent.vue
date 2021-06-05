@@ -6,6 +6,7 @@
       caption="Map"
     />
     <controls/>
+    <pause-button/>
     <sight-canvas
       caption="view"
     />
@@ -22,6 +23,7 @@ import MapCanvas from "./MapCanvas.vue";
 import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
 import SpriteLoader from "./SpriteLoader.vue";
+import PauseButton from "./PauseButton.vue";
 
 interface MyTestComponentData {
   staticTest: string;
@@ -32,7 +34,7 @@ interface MyTestComponentData {
     msg: String,
   },
   components: {
-    MapCanvas, Controls, SightCanvas, SpriteLoader
+    MapCanvas, Controls, SightCanvas, SpriteLoader, PauseButton
   },
 })
 export default class MyTestComponent extends Vue {
