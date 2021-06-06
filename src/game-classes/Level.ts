@@ -16,9 +16,11 @@ interface LevelConfig {
 
 class Level {
     data: LevelConfig
+    tickCount: number
 
     constructor(config: LevelConfig) {
         this.data = config
+        this.tickCount = 0
     }
 
     isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
@@ -136,12 +138,12 @@ class Level {
             return rateDirection(itemB) - rateDirection(itemA)
         })
 
-        plotPlaces.forEach(item => {
-            if (item.wall) {
-                item.wall.drawInSight(ctx, toCanvasCoords, item, this.data.defaultWallPattern)
+        plotPlaces.forEach(plotPlace => {
+            if (plotPlace.wall) {
+                plotPlace.wall.drawInSight(ctx, toCanvasCoords, plotPlace, this.tickCount, this.data.defaultWallPattern)
             }
-            if (item.thing) {
-                item.thing.drawInSight(ctx, toCanvasCoords, item)
+            if (plotPlace.thing) {
+                plotPlace.thing.drawInSight(ctx, toCanvasCoords, plotPlace, this.tickCount)
             }
         })
 

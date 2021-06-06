@@ -1,6 +1,6 @@
 import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
 import { scaleTo } from "@/canvas/manipulations";
-import { Sprite } from "@/canvas/Sprite";
+import { Frame, Sprite } from "@/canvas/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -29,7 +29,7 @@ class Wall extends Position {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, defaultSprite?: Sprite): void {
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace,tickCount:number, defaultSprite?: Sprite): void {
 
         const { place, relativeDirection } = plotPlace
         const { patternSprite = defaultSprite, featureSprites = [] } = this.data
@@ -96,9 +96,9 @@ class Wall extends Position {
             })
 
             try {
-                const frameKey = getFrameKey(relativeDirection);
+                const key = getFrameKey(relativeDirection);
 
-                let image = sprite.provideImage(frameKey)
+                let image = sprite.provideImage(sprite.getFrame(key) as Frame)
                 image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
                 const pattern = ctx.createPattern(image, "no-repeat")
 

@@ -37,7 +37,7 @@ class Position {
         return this.data.x === otherPosition.data.x && this.data.y === otherPosition.data.y
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace): void {
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount:number): void {
         const { place } = plotPlace
         const outDistance = .2;
         const points: Point[] = [

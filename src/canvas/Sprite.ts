@@ -36,11 +36,13 @@ interface SpriteConfig {
     shadow?: Dimensions
     size?: Dimensions
     offset?: Point
+    animations?: Map<string, Frame[]>
 }
 
 class Sprite {
     name: string
     frames: Frame[]
+    animations: Map<string, Frame[]>
     loadedFrames: Map<string, CanvasImageSource>
     baseline: number
     shadow?: Dimensions
@@ -50,6 +52,9 @@ class Sprite {
     constructor(name: string, frames: Frame[], config: SpriteConfig = {}) {
         this.name = name
         this.frames = frames
+
+        this.animations = config.animations || new Map();
+
         this.loadedFrames = new Map();
         this.baseline = config.baseline || 0
         this.shadow = config.shadow
@@ -59,23 +64,24 @@ class Sprite {
 
     /**
      * Get the CanvasImageSource for a frame of the sprite.
-     * When called for the first time for a give frame,
+     * When called for the first time for a given frame,
      * image is loaded from the DOM, manipulated as required ,
      * then saved in the sprite's loadedFrames map property for
      * subsequent calls (only reads the DOM once).
      * 
-     * @param key the identifier of the sprite frame to load the image for
+     * @param frame sprite frame to load the image for
      * @throws an Error is the image is not loaded on not found in the Dom
      * @returns the CanvasImageSource of the sprite frame
      */
-    provideImage(key: string): CanvasImageSource {
+    provideImage(frame: Frame): CanvasImageSource {
+
+        const { key } = frame;
 
         if (this.loadedFrames.has(key)) {
             return this.loadedFrames.get(key) as CanvasImageSource;
         }
 
-        const frame = this.getFrame(key);
-        const selector = this.getFrameSelector(key)
+        const selector = this.getFrameSelector(frame)
         if (!selector || !frame) {
             throw new Error(`invalid image key [${this.name}, ${key}]`);
         }
@@ -100,7 +106,7 @@ class Sprite {
                         if (this.size) {
                             result = resizeFrame(result, this.size)
                         }
-                    break
+                        break
                     case "FLIP_H":
                         result = flipImage(result)
                         break;
@@ -118,12 +124,26 @@ class Sprite {
         return result;
     }
 
+    provideAnimationImage(animationKey: string, frameIndex: number): CanvasImageSource {
+
+        if (!this.animations.has(animationKey)) {
+            throw new Error(`Invalid animation key, ${animationKey}`);
+        }
+        const animation = this.animations.get(animationKey) as Frame[];
+
+        if (animation.length < frameIndex + 1) {
+            throw new Error(`Invalid frame index for ${animationKey}, ${frameIndex}`);
+        }
+        const frame = animation[frameIndex];
+
+        return this.provideImage(frame);
+    }
+
     getFrame(key: string): Frame | undefined {
         return this.frames.find(frame => frame.key == key)
     }
 
-    getFrameSelector(key: string): string | undefined {
-        const frame = this.getFrame(key)
+    getFrameSelector(frame: Frame): string | undefined {
         if (!frame) { return undefined }
         return `img[sheet-id=${frame.sheet.id}]`
     }
@@ -147,5 +167,5 @@ class Sprite {
 }
 
 export {
-    SpriteSheet, Sprite,
+    SpriteSheet, Sprite, Frame
 }

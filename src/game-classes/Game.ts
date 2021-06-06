@@ -27,6 +27,7 @@ class Game {
 
     tick() {
         this.tickCount++;
+        this.data.level.tickCount = this.tickCount
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {

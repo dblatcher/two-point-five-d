@@ -1,4 +1,4 @@
-import { Sprite, SpriteSheet } from "@/canvas/Sprite"
+import { Frame, Sprite, SpriteSheet } from "@/canvas/Sprite"
 
 
 const spriteSheets: SpriteSheet[] = []
@@ -28,6 +28,40 @@ const duckSprite = new Sprite("DUCK", [
 
 
 
+function dinoAnimations(): Map<string, Frame[]> {
+    const map = new Map()
+
+    map.set("WALK_FORWARD", [
+        { key: "WALK_FORWARD_0", sheet: dinosaur, col: 2, row: 0 },
+        { key: "WALK_FORWARD_1", sheet: dinosaur, col: 2, row: 1 },
+        { key: "WALK_FORWARD_2", sheet: dinosaur, col: 2, row: 2 },
+        { key: "WALK_FORWARD_3", sheet: dinosaur, col: 2, row: 3 },
+    ])
+
+    map.set("WALK_BACK", [
+        { key: "WALK_BACK_0", sheet: dinosaur, col: 0, row: 0 },
+        { key: "WALK_BACK_1", sheet: dinosaur, col: 0, row: 1 },
+        { key: "WALK_BACK_2", sheet: dinosaur, col: 0, row: 2 },
+        { key: "WALK_BACK_3", sheet: dinosaur, col: 0, row: 3 },
+    ])
+
+    map.set("WALK_LEFT", [
+        { key: "WALK_LEFT_0", sheet: dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
+        { key: "WALK_LEFT_1", sheet: dinosaur, col: 1, row: 1, transforms: ["FLIP_H"] },
+        { key: "WALK_LEFT_2", sheet: dinosaur, col: 1, row: 2, transforms: ["FLIP_H"] },
+        { key: "WALK_LEFT_3", sheet: dinosaur, col: 1, row: 3, transforms: ["FLIP_H"] },
+    ])
+
+    map.set("WALK_RIGHT", [
+        { key: "WALK_RIGHT_0", sheet: dinosaur, col: 1, row: 0 },
+        { key: "WALK_RIGHT_1", sheet: dinosaur, col: 1, row: 1 },
+        { key: "WALK_RIGHT_2", sheet: dinosaur, col: 1, row: 2 },
+        { key: "WALK_RIGHT_3", sheet: dinosaur, col: 1, row: 3 },
+    ])
+
+    return map
+}
+
 const dinoSprite = new Sprite("DINOSAUR", [
     { key: "BACK", sheet: dinosaur, col: 0, row: 0 },
     { key: "LEFT", sheet: dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
@@ -35,7 +69,8 @@ const dinoSprite = new Sprite("DINOSAUR", [
     { key: "FORWARD", sheet: dinosaur, col: 2, row: 0 },
 ], {
     baseline: 0.05,
-    shadow: { x: 1 / 3, y: 1 / 12 }
+    shadow: { x: 1 / 3, y: 1 / 12 },
+    animations: dinoAnimations()
 })
 
 const testSprite = new Sprite("TEST_CARD", [
