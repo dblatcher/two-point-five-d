@@ -13,16 +13,20 @@ interface FigureConfig {
     sprite: Sprite
     height?: number
     width?: number
-
     behaviour?: Behaviour
+    initialAnimation?: string
 }
 
 class Figure extends Vantage {
     data: FigureConfig
+    actionName: string
+
+    static get defaultInitialAnimation(): "STAND" { return "STAND" }
 
     constructor(config: FigureConfig) {
         super(config)
         this.data = config
+        this.actionName = config.initialAnimation || Figure.defaultInitialAnimation
     }
 
     drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, plotPlace: PlotPlace, tickCount: number): void {
@@ -61,28 +65,11 @@ class Figure extends Vantage {
     getSpriteImage(plotPlace: PlotPlace, tickCount: number): CanvasImageSource {
         const { sprite } = this.data
 
-        const walkAnimationKey = `WALK_${plotPlace.relativeDirection}`
-
-        if (sprite.animations.has(walkAnimationKey)) {
-
-            const animation = sprite.animations.get(walkAnimationKey) as Frame[];
-
-            const frameIndex = tickCount % animation.length
-
-            try {
-                return sprite.provideAnimationImage(walkAnimationKey, frameIndex)
-            } catch (error) {
-                console.warn(error.message)
-            }
-        } else {
-            const key = plotPlace.relativeDirection as string
-            try {
-                return sprite.provideImage(sprite.getFrame(key) as Frame)
-            } catch (error) {
-                console.warn(error.message)
-            }
+        try {
+            return sprite.provideAnimationImage(this.actionName, plotPlace.relativeDirection || 'BACK', tickCount)
+        } catch (error) {
+            console.warn(error.message)
         }
-
         return document.createElement('img');
     }
 }

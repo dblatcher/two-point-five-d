@@ -58,8 +58,8 @@ const level: Level = new Level({
     ],
     contents: [
         duck({ x: 6, y: 1, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
-        duck({ x: 5, y: 0, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
-        new Figure({ x: 2, y: 3, direction: Direction.west, sprite: dinoSprite, height: 1, width: 1 }),
+        duck({ x: 5, y: 0, direction: Direction.west, behaviour: undefined }),
+        new Figure({ x: 2, y: 3, direction: Direction.west, sprite: dinoSprite, height: 1, width: 1, initialAnimation:"STAND" }),
         new Position({ x: 3, y: 3 }),
     ]
 })

@@ -17,70 +17,82 @@ const window = new SpriteSheet("window", require("../assets/sprites/open-window.
 const testCard = new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets)
 const painting = new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets)
 
-const duckSprite = new Sprite("DUCK", [
-    { key: "BACK", sheet: duck_front },
-    { key: "LEFT", sheet: duck_side },
-    { key: "RIGHT", sheet: duck_side, transforms: ["FLIP_H"] },
-    { key: "FORWARD", sheet: duck_back },
-], {
+const duckSprite = new Sprite("DUCK", {
     shadow: { x: 1 / 3, y: 1 / 12 },
+    animations: new Map()
+        .set("STAND_FORWARD", [
+            { key: "STAND_FORWARD_0", sheet: duck_back },
+        ])
+        .set("STAND_BACK", [
+            { key: "STAND_BACK_0", sheet: duck_front },
+        ])
+        .set("STAND_LEFT", [
+            { key: "STAND_LEFT_0", sheet: duck_side },
+        ])
+        .set("STAND_RIGHT", [
+            { key: "STAND_RIGHT_0", sheet: duck_side, transforms: ["FLIP_H"] },
+        ]),
 })
 
 
-
-function dinoAnimations(): Map<string, Frame[]> {
-    const map = new Map()
-
-    map.set("WALK_FORWARD", [
-        { key: "WALK_FORWARD_0", sheet: dinosaur, col: 2, row: 0 },
-        { key: "WALK_FORWARD_1", sheet: dinosaur, col: 2, row: 1 },
-        { key: "WALK_FORWARD_2", sheet: dinosaur, col: 2, row: 2 },
-        { key: "WALK_FORWARD_3", sheet: dinosaur, col: 2, row: 3 },
-    ])
-
-    map.set("WALK_BACK", [
-        { key: "WALK_BACK_0", sheet: dinosaur, col: 0, row: 0 },
-        { key: "WALK_BACK_1", sheet: dinosaur, col: 0, row: 1 },
-        { key: "WALK_BACK_2", sheet: dinosaur, col: 0, row: 2 },
-        { key: "WALK_BACK_3", sheet: dinosaur, col: 0, row: 3 },
-    ])
-
-    map.set("WALK_LEFT", [
-        { key: "WALK_LEFT_0", sheet: dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
-        { key: "WALK_LEFT_1", sheet: dinosaur, col: 1, row: 1, transforms: ["FLIP_H"] },
-        { key: "WALK_LEFT_2", sheet: dinosaur, col: 1, row: 2, transforms: ["FLIP_H"] },
-        { key: "WALK_LEFT_3", sheet: dinosaur, col: 1, row: 3, transforms: ["FLIP_H"] },
-    ])
-
-    map.set("WALK_RIGHT", [
-        { key: "WALK_RIGHT_0", sheet: dinosaur, col: 1, row: 0 },
-        { key: "WALK_RIGHT_1", sheet: dinosaur, col: 1, row: 1 },
-        { key: "WALK_RIGHT_2", sheet: dinosaur, col: 1, row: 2 },
-        { key: "WALK_RIGHT_3", sheet: dinosaur, col: 1, row: 3 },
-    ])
-
-    return map
-}
-
-const dinoSprite = new Sprite("DINOSAUR", [
-    { key: "BACK", sheet: dinosaur, col: 0, row: 0 },
-    { key: "LEFT", sheet: dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
-    { key: "RIGHT", sheet: dinosaur, col: 1, row: 0 },
-    { key: "FORWARD", sheet: dinosaur, col: 2, row: 0 },
-], {
+const dinoSprite = new Sprite("DINOSAUR", {
     baseline: 0.05,
     shadow: { x: 1 / 3, y: 1 / 12 },
-    animations: dinoAnimations()
+    animations: new Map()
+        .set("STAND_FORWARD", [
+            { key: "STAND_FORWARD_0", sheet: dinosaur, col: 2, row: 0 },
+        ])
+        .set("STAND_BACK", [
+            { key: "STAND_BACK_0", sheet: dinosaur, col: 0, row: 0 },
+        ])
+        .set("STAND_LEFT", [
+            { key: "STAND_LEFT_0", sheet: dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
+        ])
+        .set("STAND_RIGHT", [
+            { key: "STAND_RIGHT_0", sheet: dinosaur, col: 1, row: 0 },
+        ])
+        .set("WALK_FORWARD", [
+            { key: "WALK_FORWARD_0", sheet: dinosaur, col: 2, row: 0 },
+            { key: "WALK_FORWARD_1", sheet: dinosaur, col: 2, row: 1 },
+            { key: "WALK_FORWARD_2", sheet: dinosaur, col: 2, row: 2 },
+            { key: "WALK_FORWARD_3", sheet: dinosaur, col: 2, row: 3 },
+        ])
+        .set("WALK_BACK", [
+            { key: "WALK_BACK_0", sheet: dinosaur, col: 0, row: 0 },
+            { key: "WALK_BACK_1", sheet: dinosaur, col: 0, row: 1 },
+            { key: "WALK_BACK_2", sheet: dinosaur, col: 0, row: 2 },
+            { key: "WALK_BACK_3", sheet: dinosaur, col: 0, row: 3 },
+        ])
+        .set("WALK_LEFT", [
+            { key: "WALK_LEFT_0", sheet: dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
+            { key: "WALK_LEFT_1", sheet: dinosaur, col: 1, row: 1, transforms: ["FLIP_H"] },
+            { key: "WALK_LEFT_2", sheet: dinosaur, col: 1, row: 2, transforms: ["FLIP_H"] },
+            { key: "WALK_LEFT_3", sheet: dinosaur, col: 1, row: 3, transforms: ["FLIP_H"] },
+        ])
+        .set("WALK_RIGHT", [
+            { key: "WALK_RIGHT_0", sheet: dinosaur, col: 1, row: 0 },
+            { key: "WALK_RIGHT_1", sheet: dinosaur, col: 1, row: 1 },
+            { key: "WALK_RIGHT_2", sheet: dinosaur, col: 1, row: 2 },
+            { key: "WALK_RIGHT_3", sheet: dinosaur, col: 1, row: 3 },
+        ])
 })
 
-const testSprite = new Sprite("TEST_CARD", [
-    { key: "BACK", sheet: testCard },
-    { key: "LEFT", sheet: testCard },
-    { key: "RIGHT", sheet: testCard },
-    { key: "FORWARD", sheet: testCard },
-], {
+const testSprite = new Sprite("TEST_CARD", {
     baseline: 0,
-    shadow: { x: 1 / 3, y: 1 / 12 }
+    shadow: { x: 1 / 3, y: 1 / 12 },
+    animations: new Map()
+    .set("STAND_FORWARD", [
+        { key: "STAND_FORWARD_0", sheet: testCard },
+    ])
+    .set("STAND_BACK", [
+        { key: "STAND_BACK_0", sheet: testCard },
+    ])
+    .set("STAND_LEFT", [
+        { key: "STAND_LEFT_0", sheet: testCard },
+    ])
+    .set("STAND_RIGHT", [
+        { key: "STAND_RIGHT_0", sheet: testCard},
+    ]),
 })
 
 const brickPattern = Sprite.patternSprite("BRICK_WALL", bricks);

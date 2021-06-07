@@ -25,11 +25,13 @@ class Wall extends Position {
         this.data = config
     }
 
+    static get defaultInitialAnimation(): "STAND" { return "STAND" }
+
     isFacing(direction: Direction): boolean {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace,tickCount:number, defaultSprite?: Sprite): void {
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount: number, defaultSprite?: Sprite): void {
 
         const { place, relativeDirection } = plotPlace
         const { patternSprite = defaultSprite, featureSprites = [] } = this.data
@@ -96,9 +98,7 @@ class Wall extends Position {
             })
 
             try {
-                const key = getFrameKey(relativeDirection);
-
-                let image = sprite.provideImage(sprite.getFrame(key) as Frame)
+                let image = sprite.provideAnimationImage(Wall.defaultInitialAnimation, getWallFacingDirection(relativeDirection), tickCount)
                 image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
                 const pattern = ctx.createPattern(image, "no-repeat")
 
@@ -115,7 +115,7 @@ class Wall extends Position {
             }
         }
 
-        function getFrameKey(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK") {
+        function getWallFacingDirection(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK") {
             return relativeDirection == 'BACK' || relativeDirection == 'FORWARD'
                 ? 'FORWARD'
                 : place.right > 0

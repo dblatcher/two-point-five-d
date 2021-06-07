@@ -41,7 +41,6 @@ interface SpriteConfig {
 
 class Sprite {
     name: string
-    frames: Frame[]
     animations: Map<string, Frame[]>
     loadedFrames: Map<string, CanvasImageSource>
     baseline: number
@@ -49,9 +48,8 @@ class Sprite {
     size?: Dimensions
     offset?: Point
 
-    constructor(name: string, frames: Frame[], config: SpriteConfig = {}) {
+    constructor(name: string, config: SpriteConfig = {}) {
         this.name = name
-        this.frames = frames
 
         this.animations = config.animations || new Map();
 
@@ -124,24 +122,20 @@ class Sprite {
         return result;
     }
 
-    provideAnimationImage(animationKey: string, frameIndex: number): CanvasImageSource {
+    provideAnimationImage(actionName: string, direction: "FORWARD" | "BACK" | "LEFT" | "RIGHT", tickCount: number): CanvasImageSource {
+
+        const animationKey = `${actionName}_${direction}`
 
         if (!this.animations.has(animationKey)) {
             throw new Error(`Invalid animation key, ${animationKey}`);
         }
         const animation = this.animations.get(animationKey) as Frame[];
-
-        if (animation.length < frameIndex + 1) {
-            throw new Error(`Invalid frame index for ${animationKey}, ${frameIndex}`);
-        }
+        const frameIndex = tickCount % animation.length
         const frame = animation[frameIndex];
 
         return this.provideImage(frame);
     }
 
-    getFrame(key: string): Frame | undefined {
-        return this.frames.find(frame => frame.key == key)
-    }
 
     getFrameSelector(frame: Frame): string | undefined {
         if (!frame) { return undefined }
@@ -157,12 +151,22 @@ class Sprite {
     }
 
     static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}): Sprite {
-        return new Sprite(name, [
-            { key: "FORWARD", sheet, transforms: ["RESIZE_CENTER"] },
-            { key: "BACK", sheet, transforms: ["RESIZE_CENTER"] },
-            { key: "LEFT", sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
-            { key: "RIGHT", sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"] },
-        ], config)
+
+        config.animations = new Map()
+            .set("STAND_FORWARD", [
+                { key: "STAND_FORWARD_0", sheet, transforms: ["RESIZE_CENTER"] },
+            ])
+            .set("STAND_BACK", [
+                { key: "STAND_BACK_0", sheet, transforms: ["RESIZE_CENTER"] },
+            ])
+            .set("STAND_LEFT", [
+                { key: "STAND_LEFT_0", sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
+            ])
+            .set("STAND_RIGHT", [
+                { key: "STAND_RIGHT_0", sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"]  },
+            ]);
+
+        return new Sprite(name, config)
     }
 }
 
