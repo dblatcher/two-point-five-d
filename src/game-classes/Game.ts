@@ -52,6 +52,11 @@ class Game {
         this.queuedPlayerActions.push(new Action(movement.action, movement.direction))
     }
 
+    handleSightClick(clickInfo:{x:number, y:number}) {
+        console.log('clicked at', clickInfo)
+        //TO DO - determine 'region' clicked
+    }
+
     makePlayerAct(action: Action): void {
         this.data.playerVantage.performAction(action, this)
     }

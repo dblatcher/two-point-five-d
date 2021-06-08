@@ -25,6 +25,9 @@ export default createStore({
         state.game.queuePlayerAction(movement)
       }
     },
+    sightClick({ state }, clickInfo: { x: number, y: number }) {
+      state.game.handleSightClick(clickInfo)
+    },
     tick({ state, commit }) {
       state.game.tick();
       commit('updateTimestamp');
@@ -34,7 +37,7 @@ export default createStore({
       state.timer = setInterval(() => { dispatch('tick') }, 200)
     },
     stopTimer({ state }) {
-      if (state.timer == 0) {return}
+      if (state.timer == 0) { return }
       clearInterval(state.timer);
       state.timer = 0;
     },

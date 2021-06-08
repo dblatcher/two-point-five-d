@@ -1,7 +1,7 @@
 <template>
   <figure :timeStamp="timeStamp.toString()">
     <figcaption>{{ caption }}</figcaption>
-    <canvas ref="canvas"></canvas>
+    <canvas ref="canvas" @click="handleCanvasClick"></canvas>
   </figure>
 </template>
 
@@ -21,7 +21,7 @@ export default class SightCanvas extends Vue {
   $store!: typeof gameStore;
   declare $refs: { canvas: HTMLCanvasElement };
 
-  // maintains reactivity - change to the store value triggers updated() 
+  // maintains reactivity - change to the store value triggers updated()
   get timeStamp(): number {
     const store = useStore() as typeof gameStore;
     return store.state.timestamp;
@@ -39,6 +39,16 @@ export default class SightCanvas extends Vue {
     const { playerVantage, level } = this.$store.state.game.data;
     const canvas = this.$refs.canvas;
     level.drawAsSight(canvas, playerVantage);
+  }
+
+  handleCanvasClick(event: PointerEvent) {
+    const { canvas } = this.$refs;
+    const rect = canvas.getBoundingClientRect();
+
+    this.$store.dispatch("sightClick", {
+      x: event.offsetX / rect.width,
+      y: event.offsetY / rect.height,
+    });
   }
 }
 </script>
