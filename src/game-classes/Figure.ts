@@ -35,15 +35,15 @@ class Figure extends Vantage {
 
         const aspect = (Wall.baseWidth / Wall.baseHeight)
 
-        const heightAtDistance = (height) / (VANISH_RATE ** place.forward);
-        const widthAtDistance = (width * aspect) / (VANISH_RATE ** place.forward);
+        const heightAtDistance = (height) / (VANISH_RATE ** (place.forward-.5));
+        const widthAtDistance = (width * aspect) / (VANISH_RATE ** (place.forward-.5));
 
         const relativeDimensions: Dimensions = {
             x: widthAtDistance, y: heightAtDistance
         }
 
-        const center = mapPointInSight(place.forward - .5, place.right, 0)
-        const topLeft = mapPointInSight(place.forward - .5, place.right - width / 2, height - (sprite.baseline * 4))
+        const center = mapPointInSight(place.forward - 1, place.right, 0)
+        const topLeft = mapPointInSight(place.forward - 1, place.right - width / 2, height - (sprite.baseline * 4))
 
         if (sprite.shadow) {
             const shadowSize: Dimensions = {

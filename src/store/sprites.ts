@@ -18,7 +18,7 @@ const testCard = new SpriteSheet("testCard", require("../assets/sprites/test-car
 const painting = new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets)
 
 const duckSprite = new Sprite("DUCK", {
-    shadow: { x: 1 / 3, y: 1 / 12 },
+    shadow: { x: 1 / 3, y: 1 / 8 },
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
             { sheet: duck_back },

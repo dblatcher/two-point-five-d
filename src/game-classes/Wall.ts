@@ -53,23 +53,26 @@ class Wall extends Position {
             }
         })
 
+        // TO DO: camera is at the 'back' of 0,0 , not the middle of 0,0
+        // this is why we need to see places 'behind' us to not have gaps in the walls
+
         function getMappedPoints(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK", shape: Point[], place: { forward: number, right: number }) {
             switch (relativeDirection) {
                 case "LEFT":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward - point.x, place.right - .5, point.y)
+                        return mapPointInSight(place.forward-.5 - point.x, place.right - .5, point.y)
                     })
                 case "RIGHT":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward - point.x, place.right + .5, point.y)
+                        return mapPointInSight(place.forward-.5 - point.x, place.right + .5, point.y)
                     })
                 case "FORWARD":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward, place.right - .5 + point.x, point.y)
+                        return mapPointInSight(place.forward-.5, place.right - .5 + point.x, point.y)
                     })
                 case "BACK":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward - 1, place.right - .5 + point.x, point.y)
+                        return mapPointInSight(place.forward-.5 - 1, place.right - .5 + point.x, point.y)
                     })
             }
         }
