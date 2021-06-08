@@ -24,7 +24,6 @@ class SpriteSheet {
 }
 
 interface Frame {
-    key: string
     sheet: SpriteSheet
     row?: number
     col?: number
@@ -68,27 +67,25 @@ class Sprite {
      * subsequent calls (only reads the DOM once).
      * 
      * @param frame sprite frame to load the image for
+     * @param franimationFrameKeyame the string describing the frame's action, direction and index
      * @throws an Error is the image is not loaded on not found in the Dom
      * @returns the CanvasImageSource of the sprite frame
      */
-    provideImage(frame: Frame): CanvasImageSource {
+    provideImage(frame: Frame, animationFrameKey: string): CanvasImageSource {
 
-        const { key } = frame;
 
-        if (this.loadedFrames.has(key)) {
-            return this.loadedFrames.get(key) as CanvasImageSource;
+        if (this.loadedFrames.has(animationFrameKey)) {
+            return this.loadedFrames.get(animationFrameKey) as CanvasImageSource;
         }
 
         const selector = this.getFrameSelector(frame)
-        if (!selector || !frame) {
-            throw new Error(`invalid image key [${this.name}, ${key}]`);
-        }
+
         const source = document.querySelector(selector) as HTMLImageElement
         if (!source) {
-            throw new Error(`no image element found for [${this.name}, ${key}]`);
+            throw new Error(`no image element found for [${this.name}, ${animationFrameKey}]`);
         }
         if (!source.complete) {
-            throw new Error(`sprite image[${this.name}, ${key}] not loaded yet`);
+            throw new Error(`source image[${this.name}, ${animationFrameKey}] not loaded yet`);
         }
 
         let result: HTMLImageElement | HTMLCanvasElement = source;
@@ -97,7 +94,7 @@ class Sprite {
             result = cutFrameFromGridSheet(source, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
         }
 
-        if (frame && frame.transforms) {
+        if (frame.transforms) {
             frame.transforms.forEach(transform => {
                 switch (transform) {
                     case "RESIZE_CENTER":
@@ -118,7 +115,7 @@ class Sprite {
             })
         }
 
-        this.loadedFrames.set(key, result);
+        this.loadedFrames.set(animationFrameKey, result);
         return result;
     }
 
@@ -129,16 +126,20 @@ class Sprite {
         if (!this.animations.has(animationKey)) {
             throw new Error(`Invalid animation key, ${animationKey}`);
         }
-        const animation = this.animations.get(animationKey) as Frame[];
-        const frameIndex = tickCount % animation.length
-        const frame = animation[frameIndex];
 
-        return this.provideImage(frame);
+        const animation = this.animations.get(animationKey) as Frame[];
+        if (animation.length == 0) {
+            throw new Error(`No frames in animation ${animationKey}`);
+        }
+
+        const frameIndex = tickCount % animation.length
+        const animationFrameKey = `${actionName}_${direction}_${frameIndex.toString()}`;
+
+        return this.provideImage(animation[frameIndex], animationFrameKey);
     }
 
 
-    getFrameSelector(frame: Frame): string | undefined {
-        if (!frame) { return undefined }
+    getFrameSelector(frame: Frame): string {
         return `img[sheet-id=${frame.sheet.id}]`
     }
 
@@ -163,7 +164,7 @@ class Sprite {
                 { key: "STAND_LEFT_0", sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
             ])
             .set("STAND_RIGHT", [
-                { key: "STAND_RIGHT_0", sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"]  },
+                { key: "STAND_RIGHT_0", sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"] },
             ]);
 
         return new Sprite(name, config)
