@@ -66,7 +66,7 @@ class Figure extends Vantage {
         const { sprite } = this.data
 
         try {
-            return sprite.provideAnimationImage(this.actionName, plotPlace.relativeDirection || 'BACK', tickCount)
+            return sprite.provideImage(this.actionName, plotPlace.relativeDirection || 'BACK', tickCount)
         } catch (error) {
             console.warn(error.message)
         }

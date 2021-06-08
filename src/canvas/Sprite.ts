@@ -1,4 +1,4 @@
-import { cutFrameFromGridSheet, flipImage, perspectiveSkew, resizeFrame } from "@/canvas/manipulations"
+import { cutFrameFromGridSheet, transformSpriteImage } from "@/canvas/manipulations"
 import { Dimensions, Point } from "./canvas-utility"
 
 interface SpriteSheetConfig {
@@ -41,42 +41,34 @@ interface SpriteConfig {
 class Sprite {
     name: string
     animations: Map<string, Frame[]>
-    loadedFrames: Map<string, CanvasImageSource>
     baseline: number
     shadow?: Dimensions
     size?: Dimensions
     offset?: Point
+    loadedFrames: Map<string, CanvasImageSource>
 
     constructor(name: string, config: SpriteConfig = {}) {
         this.name = name
-
-        this.animations = config.animations || new Map();
-
-        this.loadedFrames = new Map();
+        this.animations = config.animations || new Map<string, Frame[]>();
         this.baseline = config.baseline || 0
         this.shadow = config.shadow
         this.size = config.size
         this.offset = config.offset
+        this.loadedFrames = new Map<string, CanvasImageSource>();
     }
 
     /**
-     * Get the CanvasImageSource for a frame of the sprite.
-     * When called for the first time for a given frame,
-     * image is loaded from the DOM, manipulated as required ,
+     * Load the CanvasImageSource for a frame of the sprite.
+     * The image is loaded from the DOM, manipulated as required,
      * then saved in the sprite's loadedFrames map property for
-     * subsequent calls (only reads the DOM once).
+     * subsequent calls to provideImage.
      * 
      * @param frame sprite frame to load the image for
      * @param franimationFrameKeyame the string describing the frame's action, direction and index
      * @throws an Error is the image is not loaded on not found in the Dom
      * @returns the CanvasImageSource of the sprite frame
      */
-    provideImage(frame: Frame, animationFrameKey: string): CanvasImageSource {
-
-
-        if (this.loadedFrames.has(animationFrameKey)) {
-            return this.loadedFrames.get(animationFrameKey) as CanvasImageSource;
-        }
+    loadImage(frame: Frame, animationFrameKey: string): CanvasImageSource {
 
         const selector = this.getFrameSelector(frame)
 
@@ -88,38 +80,29 @@ class Sprite {
             throw new Error(`source image[${this.name}, ${animationFrameKey}] not loaded yet`);
         }
 
-        let result: HTMLImageElement | HTMLCanvasElement = source;
+        let image: HTMLImageElement | HTMLCanvasElement = source;
 
         if (frame.sheet.config.pattern === 'GRID') {
-            result = cutFrameFromGridSheet(source, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
+            image = cutFrameFromGridSheet(source, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
         }
 
         if (frame.transforms) {
-            frame.transforms.forEach(transform => {
-                switch (transform) {
-                    case "RESIZE_CENTER":
-                        if (this.size) {
-                            result = resizeFrame(result, this.size)
-                        }
-                        break
-                    case "FLIP_H":
-                        result = flipImage(result)
-                        break;
-                    case "SKEW_LEFT":
-                        result = perspectiveSkew(result, false)
-                        break;
-                    case "SKEW_RIGHT":
-                        result = perspectiveSkew(result, true)
-                        break;
-                }
-            })
+            image = transformSpriteImage(image,frame.transforms,this);
         }
 
-        this.loadedFrames.set(animationFrameKey, result);
-        return result;
+        this.loadedFrames.set(animationFrameKey, image);
+        return image;
     }
 
-    provideAnimationImage(actionName: string, direction: "FORWARD" | "BACK" | "LEFT" | "RIGHT", tickCount: number): CanvasImageSource {
+    /**
+     * 
+     * @param actionName The string descibing what the sprite is doing 
+     * @param direction The relative direction the sprite facing
+     * @param tickCount the game's current tick count
+     * @throws an error is there is no animation for the action and direction, or if that animation is empty
+     * @returns the image to draw
+     */
+    provideImage(actionName: string, direction: "FORWARD" | "BACK" | "LEFT" | "RIGHT", tickCount: number): CanvasImageSource {
 
         const animationKey = `${actionName}_${direction}`
 
@@ -135,7 +118,11 @@ class Sprite {
         const frameIndex = tickCount % animation.length
         const animationFrameKey = `${actionName}_${direction}_${frameIndex.toString()}`;
 
-        return this.provideImage(animation[frameIndex], animationFrameKey);
+        if (this.loadedFrames.has(animationFrameKey)) {
+            return this.loadedFrames.get(animationFrameKey) as CanvasImageSource;
+        }
+
+        return this.loadImage(animation[frameIndex], animationFrameKey);
     }
 
 
@@ -153,18 +140,18 @@ class Sprite {
 
     static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}): Sprite {
 
-        config.animations = new Map()
+        config.animations = new Map<string, Frame[]>()
             .set("STAND_FORWARD", [
-                { key: "STAND_FORWARD_0", sheet, transforms: ["RESIZE_CENTER"] },
+                { sheet:sheet, transforms: ["RESIZE_CENTER"] },
             ])
             .set("STAND_BACK", [
-                { key: "STAND_BACK_0", sheet, transforms: ["RESIZE_CENTER"] },
+                { sheet, transforms: ["RESIZE_CENTER"] },
             ])
             .set("STAND_LEFT", [
-                { key: "STAND_LEFT_0", sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
+                { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
             ])
             .set("STAND_RIGHT", [
-                { key: "STAND_RIGHT_0", sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"] },
+                { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"] },
             ]);
 
         return new Sprite(name, config)

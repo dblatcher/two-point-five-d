@@ -1,6 +1,6 @@
 import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
 import { scaleTo } from "@/canvas/manipulations";
-import { Frame, Sprite } from "@/canvas/Sprite";
+import { Sprite } from "@/canvas/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -98,7 +98,7 @@ class Wall extends Position {
             })
 
             try {
-                let image = sprite.provideAnimationImage(Wall.defaultInitialAnimation, getWallFacingDirection(relativeDirection), tickCount)
+                let image = sprite.provideImage(Wall.defaultInitialAnimation, getWallFacingDirection(relativeDirection), tickCount)
                 image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
                 const pattern = ctx.createPattern(image, "no-repeat")
 

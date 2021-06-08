@@ -1,4 +1,4 @@
-import { Sprite, SpriteSheet } from "@/canvas/Sprite"
+import { Frame, Sprite, SpriteSheet } from "@/canvas/Sprite"
 
 
 const spriteSheets: SpriteSheet[] = []
@@ -19,7 +19,7 @@ const painting = new SpriteSheet("painting", require("../assets/sprites/ceiling-
 
 const duckSprite = new Sprite("DUCK", {
     shadow: { x: 1 / 3, y: 1 / 12 },
-    animations: new Map()
+    animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
             { sheet: duck_back },
         ])
@@ -38,7 +38,7 @@ const duckSprite = new Sprite("DUCK", {
 const dinoSprite = new Sprite("DINOSAUR", {
     baseline: 0.05,
     shadow: { x: 1 / 3, y: 1 / 12 },
-    animations: new Map()
+    animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
             { sheet: dinosaur, col: 2, row: 0 },
         ])
@@ -80,7 +80,7 @@ const dinoSprite = new Sprite("DINOSAUR", {
 const testSprite = new Sprite("TEST_CARD", {
     baseline: 0,
     shadow: { x: 1 / 3, y: 1 / 12 },
-    animations: new Map()
+    animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
             { sheet: testCard },
         ])

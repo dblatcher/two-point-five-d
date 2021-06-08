@@ -24,7 +24,7 @@ const lowWall: Point[] = [
     { x: 1, y: 0 },
 ]
 
-const playerVantage = new Vantage({ x: 1, y: 3, direction: Direction.east });
+const playerVantage = new Vantage({ x: 6, y: 1, direction: Direction.east });
 
 const level: Level = new Level({
     height: 8, width: 15,

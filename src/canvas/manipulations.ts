@@ -1,4 +1,5 @@
 import { Dimensions, VANISH_RATE } from "./canvas-utility"
+import { Sprite } from "./Sprite"
 
 function flipImage(source: CanvasImageSource): HTMLCanvasElement {
     const board = document.createElement('canvas')
@@ -27,7 +28,7 @@ function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: numb
     return board
 }
 
-function scaleTo(source: CanvasImageSource, width:number, height:number): HTMLCanvasElement {
+function scaleTo(source: CanvasImageSource, width: number, height: number): HTMLCanvasElement {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -48,69 +49,93 @@ function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, right: bo
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
 
     const ctx = board.getContext('2d') as CanvasRenderingContext2D
-    board.setAttribute('width', (source.width/VANISH_RATE/2).toString())
+    board.setAttribute('width', (source.width / VANISH_RATE / 2).toString())
     board.setAttribute('height', source.height.toString())
     //TO DO - reshape to left or right wall
 
     if (right) {
-        const aspect = VANISH_RATE/2
+        const aspect = VANISH_RATE / 2
 
         for (let i = 0; i < source.height / 2; i++) {
             ctx.setTransform(1, -aspect * i / source.height,
                 0, 1, 0, 0)
             ctx.drawImage(source,
                 0, source.height / 2 - i, source.width, 2,
-                0, source.height / 2 - i, source.width / VANISH_RATE/2, 2)
+                0, source.height / 2 - i, source.width / VANISH_RATE / 2, 2)
 
             ctx.setTransform(1, aspect * i / source.height,
                 0, 1, 0, 0)
             ctx.drawImage(source,
                 0, source.height / 2 + i, source.width, 2,
-                0, source.height / 2 + i, source.width / VANISH_RATE/2,2)
+                0, source.height / 2 + i, source.width / VANISH_RATE / 2, 2)
         }
     } else {
-        const aspect = VANISH_RATE/2
+        const aspect = VANISH_RATE / 2
 
         for (let i = 0; i < source.height / 2; i++) {
             ctx.setTransform(1, aspect * i / source.height,
                 0, 1, 0, 0)
             ctx.drawImage(source,
                 0, source.height / 2 - i, source.width, 2,
-                0, source.height / 2 - i, source.width / VANISH_RATE/2, 2)
+                0, source.height / 2 - i, source.width / VANISH_RATE / 2, 2)
 
             ctx.setTransform(1, -aspect * i / source.height,
                 0, 1, 0, 0)
             ctx.drawImage(source,
                 0, source.height / 2 + i, source.width, 2,
-                0, source.height / 2 + i, source.width / VANISH_RATE/2,2)
+                0, source.height / 2 + i, source.width / VANISH_RATE / 2, 2)
         }
     }
 
 
-    
+
     return board
 }
 
-function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size:Dimensions): HTMLCanvasElement {
+function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size: Dimensions): HTMLCanvasElement {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
 
     const ctx = board.getContext('2d') as CanvasRenderingContext2D
 
-    const expandedFrame:Dimensions = {
-        x: source.width/size.x,
-        y: source.height/size.y,
+    const expandedFrame: Dimensions = {
+        x: source.width / size.x,
+        y: source.height / size.y,
     }
 
     board.setAttribute('width', expandedFrame.x.toString())
     board.setAttribute('height', expandedFrame.y.toString())
 
-    ctx.drawImage(source, 0, 0, source.width, source.height, source.width/2, source.height/2, source.width, source.height)
+    ctx.drawImage(source, 0, 0, source.width, source.height, (expandedFrame.x - source.width )/ 2, (expandedFrame.y-source.height) / 2, source.width, source.height)
 
     return board;
 }
 
+function transformSpriteImage(image: HTMLImageElement | HTMLCanvasElement, transforms: string[], sprite: Sprite): HTMLImageElement | HTMLCanvasElement {
+
+    transforms.forEach(transform => {
+        switch (transform) {
+            case "RESIZE_CENTER":
+                if (sprite.size) {
+                    image = resizeFrame(image, sprite.size)
+                }
+                break
+            case "FLIP_H":
+                image = flipImage(image)
+                break;
+            case "SKEW_LEFT":
+                image = perspectiveSkew(image, false)
+                break;
+            case "SKEW_RIGHT":
+                image = perspectiveSkew(image, true)
+                break;
+        }
+    })
+
+    return image
+}
+
 export {
-    flipImage, cutFrameFromGridSheet, scaleTo, perspectiveSkew,resizeFrame
+    flipImage, cutFrameFromGridSheet, scaleTo, perspectiveSkew,resizeFrame, transformSpriteImage
 }
