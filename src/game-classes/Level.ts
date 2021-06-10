@@ -1,11 +1,11 @@
-import { getPlacesInSight, getViewportMapFunction, mapPointInSight, MAX_VIEW_DISTANCE, PlotPlace, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
+import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointInSight, MAX_VIEW_DISTANCE, PlotPlace, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "./Color";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-
+const renderingZoneFrames = false;
 
 interface LevelConfig {
     width: number
@@ -154,6 +154,13 @@ class Level {
             }
         })
 
+        if (renderingZoneFrames) {
+            this.renderZoneFrames(ctx,vantage,toCanvasCoords);
+        }
+
+    }
+
+    renderZoneFrames(ctx:CanvasRenderingContext2D, vantage:Vantage, toCanvasCoords:ConvertFunction):void {
         if (this.hasWallInFace(vantage)) {
             //frontwall
             ctx.fillStyle = new Color(100, 255, 100, .125).css

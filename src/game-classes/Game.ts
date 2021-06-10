@@ -1,9 +1,11 @@
 import { Vantage } from './Vantage'
 import { Level } from './Level'
-import { Action, Behaviour } from './Behaviour'
+import { Action } from './Behaviour'
 import { Figure } from './Figure'
-import { mapPointInSight } from '@/canvas/canvas-utility'
 import { PointerLocator } from './PointerLocator'
+import { duckPattern } from '@/store/sprites'
+import { Sprite } from '@/canvas/Sprite'
+import { Position } from './Position'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -29,7 +31,7 @@ class Game {
     }
 
 
-    tick() {
+    tick(): void {
         this.tickCount++;
         this.data.level.tickCount = this.tickCount
 
@@ -56,9 +58,29 @@ class Game {
         this.queuedPlayerActions.push(new Action(movement.action, movement.direction))
     }
 
-    handleSightClick(clickInfo: { x: number, y: number }) {
-        const location = this.pointerLocator.locate(clickInfo, this.data.level.hasWallInFace(this.data.playerVantage))
+    handleSightClick(clickInfo: { x: number, y: number }):void {
+        const { level, playerVantage } = this.data
+        const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
         console.log(location)
+
+        if (!location) { return }
+
+        if (location.zone == "FRONT_WALL") {
+            const wallClicked =
+                level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
+                level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
+
+            if (wallClicked) {
+                if (wallClicked.data.featureSprites && wallClicked.data.featureSprites.length == 0) {
+                    wallClicked.data.featureSprites.push(duckPattern)
+                }
+            }
+        }
+
+        if (location.zone == "FLOOR") {
+            level.data.contents.push(new Position({ x: playerVantage.data.x, y: playerVantage.data.y }))
+        }
+
     }
 
     makePlayerAct(action: Action): void {

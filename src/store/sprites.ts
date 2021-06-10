@@ -96,8 +96,9 @@ const testSprite = new Sprite("TEST_CARD", {
 })
 
 const brickPattern = Sprite.patternSprite("BRICK_WALL", bricks);
+const duckPattern = Sprite.patternSprite("DUCK_PATTERN", duck_side);
 const windowPattern = Sprite.patternSprite("WINDOW", window);
 const paintingWall = Sprite.patternSprite("painting", painting, { size: { x: .5, y: .5 }, offset: { x: .25, y: .25 } });
 
 
-export { duckSprite, dinoSprite, testSprite, spriteSheets, brickPattern as brickWall, windowPattern as windowWall, paintingWall }
+export { duckSprite, dinoSprite, testSprite, spriteSheets, brickPattern as brickWall, windowPattern as windowWall, paintingWall, duckPattern }

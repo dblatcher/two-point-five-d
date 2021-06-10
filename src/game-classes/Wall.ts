@@ -23,6 +23,7 @@ class Wall extends Position {
     constructor(config: WallConfig) {
         super(config)
         this.data = config
+        this.data.featureSprites = this.data.featureSprites || [];
     }
 
     static get defaultInitialAnimation(): "STAND" { return "STAND" }
