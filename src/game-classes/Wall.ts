@@ -53,9 +53,6 @@ class Wall extends Position {
             }
         })
 
-        // TO DO: camera is at the 'back' of 0,0 , not the middle of 0,0
-        // this is why we need to see places 'behind' us to not have gaps in the walls
-
         function getMappedPoints(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK", shape: Point[], place: { forward: number, right: number }) {
             switch (relativeDirection) {
                 case "LEFT":

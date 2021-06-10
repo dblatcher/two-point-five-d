@@ -1,5 +1,6 @@
-import { getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, PlotPlace, VANISH_RATE } from "@/canvas/canvas-utility";
+import { getPlacesInSight, getViewportMapFunction, mapPointInSight, MAX_VIEW_DISTANCE, PlotPlace, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Sprite } from "@/canvas/Sprite";
+import { Color } from "./Color";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
@@ -43,6 +44,12 @@ class Level {
         return false
     }
 
+    hasWallInFace(vantage: Vantage): boolean {
+        const wall1 = this.data.walls.find(wall => wall.isSamePlaceAs(vantage) && wall.isFacing(vantage.data.direction))
+        const wall2 = this.data.walls.find(wall => wall.isSamePlaceAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind))
+        return !!(wall1 || wall2)
+    }
+
     drawAsMap(canvas: HTMLCanvasElement, vantage?: Vantage, gridSize = 10): void {
 
         canvas.setAttribute('width', (gridSize * this.data.width).toString());
@@ -78,7 +85,7 @@ class Level {
         }
     }
 
-    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth*(2/3)): void {
+    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
         const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
@@ -113,12 +120,12 @@ class Level {
             const place = placesInSight.find(place => place.position.isSamePlaceAs(thing))
             if (!place) { return }
 
-                let relativeDirection;
-                if (Object.keys(thing.data).includes('direction')) {
-                    relativeDirection = (thing as Vantage).data.direction.relativeDirection(vantage.data.direction)
-                }
+            let relativeDirection;
+            if (Object.keys(thing.data).includes('direction')) {
+                relativeDirection = (thing as Vantage).data.direction.relativeDirection(vantage.data.direction)
+            }
 
-                plotPlaces.push({ thing, place, relativeDirection})
+            plotPlaces.push({ thing, place, relativeDirection })
         })
 
         plotPlaces.sort((itemA, itemB) => {
@@ -147,6 +154,43 @@ class Level {
             }
         })
 
+        if (this.hasWallInFace(vantage)) {
+            //frontwall
+            ctx.fillStyle = new Color(100, 255, 100, .125).css
+            ctx.beginPath()
+
+            plotPolygon(ctx, toCanvasCoords, [
+                mapPointInSight(-.5, -.5, 0),
+                mapPointInSight(-.5, -.5, 1),
+                mapPointInSight(-.5, .5, 1),
+                mapPointInSight(-.5, .5, 0),
+            ])
+            ctx.stroke()
+        } else {
+            //floor
+            ctx.fillStyle = new Color(255, 100, 100, .25).css
+            ctx.beginPath()
+
+            plotPolygon(ctx, toCanvasCoords, [
+                mapPointInSight(-.5, -.5, 0),
+                mapPointInSight(.5, -.5, 0),
+                mapPointInSight(.5, .5, 0),
+                mapPointInSight(-.5, .5, 0),
+            ])
+            ctx.stroke()
+
+            //backwall
+            ctx.fillStyle = new Color(100, 255, 100, .25).css
+            ctx.beginPath()
+
+            plotPolygon(ctx, toCanvasCoords, [
+                mapPointInSight(.5, -.5, 0),
+                mapPointInSight(.5, -.5, 1),
+                mapPointInSight(.5, .5, 1),
+                mapPointInSight(.5, .5, 0),
+            ])
+            ctx.stroke()
+        }
     }
 }
 

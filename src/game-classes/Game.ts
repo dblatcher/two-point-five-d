@@ -2,6 +2,8 @@ import { Vantage } from './Vantage'
 import { Level } from './Level'
 import { Action, Behaviour } from './Behaviour'
 import { Figure } from './Figure'
+import { mapPointInSight } from '@/canvas/canvas-utility'
+import { PointerLocator } from './PointerLocator'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -14,6 +16,7 @@ class Game {
     data: GameConfig
     queuedPlayerActions: Action[]
     tickCount: number
+    pointerLocator: PointerLocator
 
     static MAX_QUEUE_LENGTH: 10
 
@@ -21,6 +24,7 @@ class Game {
         this.data = config;
         this.queuedPlayerActions = []
         this.tickCount = 0
+        this.pointerLocator = new PointerLocator;
         this.tick = this.tick.bind(this)
     }
 
@@ -35,14 +39,14 @@ class Game {
         }
 
         this.data.level.data.contents
-        .filter(item => Object.getPrototypeOf(item).constructor == Figure )
-        .forEach(item => {
-            const figure = item as Figure;
+            .filter(item => Object.getPrototypeOf(item).constructor == Figure)
+            .forEach(item => {
+                const figure = item as Figure;
 
-            if (figure.data.behaviour) {
-                figure.performAction(figure.data.behaviour.decideAction(figure, this), this)
-            }
-        })
+                if (figure.data.behaviour) {
+                    figure.performAction(figure.data.behaviour.decideAction(figure, this), this)
+                }
+            })
     }
 
     queuePlayerAction(movement: Movement): void {
@@ -52,9 +56,9 @@ class Game {
         this.queuedPlayerActions.push(new Action(movement.action, movement.direction))
     }
 
-    handleSightClick(clickInfo:{x:number, y:number}) {
-        console.log('clicked at', clickInfo)
-        //TO DO - determine 'region' clicked
+    handleSightClick(clickInfo: { x: number, y: number }) {
+        const location = this.pointerLocator.locate(clickInfo, this.data.level.hasWallInFace(this.data.playerVantage))
+        console.log(location)
     }
 
     makePlayerAct(action: Action): void {
