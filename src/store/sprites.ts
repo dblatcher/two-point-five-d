@@ -16,6 +16,8 @@ const window = new SpriteSheet("window", require("../assets/sprites/open-window.
 
 const testCard = new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets)
 const painting = new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets)
+const lever = new SpriteSheet("lever", require("../assets/sprites/lever.png"), spriteSheets,{ pattern: "GRID", cols: 3, rows: 3 })
+
 
 const duckSprite = new Sprite("DUCK", {
     shadow: { x: 1 / 3, y: 1 / 8 },
@@ -95,10 +97,37 @@ const testSprite = new Sprite("TEST_CARD", {
         ]),
 })
 
+const leverSprite = new Sprite("LEVER", {
+    size: { x: .3, y: .3 },
+    animations: new Map<string, Frame[]>()
+    .set("STAND_FORWARD", [
+        { sheet: lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
+    ])
+    .set("STAND_BACK", [
+        { sheet: lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
+    ])
+    .set("STAND_LEFT", [
+        { sheet: lever, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
+    ])
+    .set("STAND_RIGHT", [
+        { sheet: lever, col: 0, row: 0, transforms: ["RESIZE_CENTER","FLIP_H"] },
+    ])
+})
+
 const brickPattern = Sprite.patternSprite("BRICK_WALL", bricks);
 const duckPattern = Sprite.patternSprite("DUCK_PATTERN", duck_side);
 const windowPattern = Sprite.patternSprite("WINDOW", window);
 const paintingWall = Sprite.patternSprite("painting", painting, { size: { x: .5, y: .5 }, offset: { x: .25, y: .25 } });
 
 
-export { duckSprite, dinoSprite, testSprite, spriteSheets, brickPattern as brickWall, windowPattern as windowWall, paintingWall, duckPattern }
+export { 
+    duckSprite, 
+    dinoSprite, 
+    testSprite, 
+    spriteSheets, 
+    brickPattern as brickWall, 
+    windowPattern as windowWall, 
+    paintingWall, 
+    duckPattern,
+    leverSprite,
+}

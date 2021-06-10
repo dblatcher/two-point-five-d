@@ -8,7 +8,7 @@ import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { brickWall, dinoSprite, paintingWall, windowWall } from "./sprites";
+import { brickWall, dinoSprite, leverSprite, paintingWall, windowWall } from "./sprites";
 
 
 const lowWall: Point[] = [
@@ -24,13 +24,13 @@ const lowWall: Point[] = [
     { x: 1, y: 0 },
 ]
 
-const playerVantage = new Vantage({ x: 4, y: 3, direction: Direction.north });
+const playerVantage = new Vantage({ x: 0, y: 3, direction: Direction.east });
 
 const level: Level = new Level({
     height: 8, width: 15,
     defaultWallPattern: brickWall,
     walls: [
-        new Wall({ x: 1, y: 3, place: Direction.north }),
+        new Wall({ x: 1, y: 3, place: Direction.north, featureSprites:[leverSprite] }),
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0), patternSprite: brickWall }),
         new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
         new Wall({ x: 3, y: 3, place: Direction.east, shape: lowWall, patternSprite: brickWall }),
