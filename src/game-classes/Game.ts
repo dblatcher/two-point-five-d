@@ -6,6 +6,7 @@ import { PointerLocator } from './PointerLocator'
 import { duckPattern } from '@/store/sprites'
 import { Sprite } from '@/canvas/Sprite'
 import { Position } from './Position'
+import { WallFeature } from './WallFeature'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -58,7 +59,7 @@ class Game {
         this.queuedPlayerActions.push(new Action(movement.action, movement.direction))
     }
 
-    handleSightClick(clickInfo: { x: number, y: number }):void {
+    handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerVantage } = this.data
         const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
         console.log(location)
@@ -71,8 +72,8 @@ class Game {
                 level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
 
             if (wallClicked) {
-                if (wallClicked.data.featureSprites && wallClicked.data.featureSprites.length == 0) {
-                    wallClicked.data.featureSprites.push(duckPattern)
+                if (wallClicked.data.features && wallClicked.data.features.length == 0) {
+                    wallClicked.data.features.push(new WallFeature({ sprite: duckPattern, animation: "STAND" }))
                 }
             }
         }

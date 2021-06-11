@@ -100,17 +100,29 @@ const testSprite = new Sprite("TEST_CARD", {
 const leverSprite = new Sprite("LEVER", {
     size: { x: .3, y: .3 },
     animations: new Map<string, Frame[]>()
-    .set("STAND_FORWARD", [
+    .set("UP_FORWARD", [
         { sheet: lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
     ])
-    .set("STAND_BACK", [
+    .set("UP_BACK", [
         { sheet: lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
     ])
-    .set("STAND_LEFT", [
+    .set("UP_LEFT", [
         { sheet: lever, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
     ])
-    .set("STAND_RIGHT", [
-        { sheet: lever, col: 0, row: 0, transforms: ["RESIZE_CENTER","FLIP_H"] },
+    .set("UP_RIGHT", [
+        { sheet: lever, col: 2, row: 0, transforms: ["RESIZE_CENTER","FLIP_H"] },
+    ])
+    .set("DOWN_FORWARD", [
+        { sheet: lever, col: 0, row: 2, transforms: ["RESIZE_CENTER"] },
+    ])
+    .set("DOWN_BACK", [
+        { sheet: lever, col: 0, row: 2, transforms: ["RESIZE_CENTER"] },
+    ])
+    .set("DOWN_LEFT", [
+        { sheet: lever, col: 2, row: 0, transforms: ["RESIZE_CENTER"] },
+    ])
+    .set("DOWN_RIGHT", [
+        { sheet: lever, col: 2, row: 0, transforms: ["RESIZE_CENTER","FLIP_H"] },
     ])
 })
 

@@ -4,6 +4,7 @@ import { Sprite } from "@/canvas/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
+import { WallFeature } from "./WallFeature";
 
 
 
@@ -13,7 +14,7 @@ interface WallConfig {
     place: Direction
     color?: Color
     patternSprite?: Sprite
-    featureSprites?: Sprite[]
+    features?: WallFeature[]
     shape?: Point[]
 }
 
@@ -23,7 +24,7 @@ class Wall extends Position {
     constructor(config: WallConfig) {
         super(config)
         this.data = config
-        this.data.featureSprites = this.data.featureSprites || [];
+        this.data.features = this.data.features || [];
     }
 
     static get defaultInitialAnimation(): "STAND" { return "STAND" }
@@ -35,19 +36,19 @@ class Wall extends Position {
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount: number, defaultSprite?: Sprite): void {
 
         const { place, relativeDirection } = plotPlace
-        const { patternSprite = defaultSprite, featureSprites = [] } = this.data
+        const { patternSprite = defaultSprite, features = [] } = this.data
         const points: Point[] = relativeDirection ? getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place) : [];
         const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
 
         ctx.fillStyle = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
 
         if (patternSprite) {
-            ctx.fillStyle = getPatternFill(patternSprite, fullWallPoints, relativeDirection) || ctx.fillStyle
+            ctx.fillStyle = getPatternFill(patternSprite, Wall.defaultInitialAnimation, fullWallPoints, relativeDirection) || ctx.fillStyle
         }
         plotPolygon(ctx, convertFunction, points)
 
-        featureSprites.forEach(sprite => {
-            const featureImage = getPatternFill(sprite, fullWallPoints, relativeDirection);
+        features.forEach(feature => {
+            const featureImage = getPatternFill(feature.data.sprite, feature.data.animation, fullWallPoints, relativeDirection);
             if (featureImage) {
                 ctx.fillStyle = featureImage
                 plotPolygon(ctx, convertFunction, fullWallPoints)
@@ -58,19 +59,19 @@ class Wall extends Position {
             switch (relativeDirection) {
                 case "LEFT":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward-.5 - point.x, place.right - .5, point.y)
+                        return mapPointInSight(place.forward - .5 - point.x, place.right - .5, point.y)
                     })
                 case "RIGHT":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward-.5 - point.x, place.right + .5, point.y)
+                        return mapPointInSight(place.forward - .5 - point.x, place.right + .5, point.y)
                     })
                 case "FORWARD":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward-.5, place.right - .5 + point.x, point.y)
+                        return mapPointInSight(place.forward - .5, place.right - .5 + point.x, point.y)
                     })
                 case "BACK":
                     return shape.map(point => {
-                        return mapPointInSight(place.forward-.5 - 1, place.right - .5 + point.x, point.y)
+                        return mapPointInSight(place.forward - .5 - 1, place.right - .5 + point.x, point.y)
                     })
             }
         }
@@ -87,7 +88,7 @@ class Wall extends Position {
             }
         }
 
-        function getPatternFill(sprite: Sprite, fullWallPoints: Point[], relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK"): CanvasPattern | null {
+        function getPatternFill(sprite: Sprite, animationName: string, fullWallPoints: Point[], relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK"): CanvasPattern | null {
             const xValues = fullWallPoints.map(point => point.x);
             const yValues = fullWallPoints.map(point => point.y);
 
@@ -99,7 +100,7 @@ class Wall extends Position {
             })
 
             try {
-                let image = sprite.provideImage(Wall.defaultInitialAnimation, getWallFacingDirection(relativeDirection), tickCount)
+                let image = sprite.provideImage(animationName, getWallFacingDirection(relativeDirection), tickCount)
                 image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
                 const pattern = ctx.createPattern(image, "no-repeat")
 
