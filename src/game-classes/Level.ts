@@ -1,5 +1,5 @@
 import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointInSight, MAX_VIEW_DISTANCE, PlotPlace, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
-import { Sprite } from "@/canvas/Sprite";
+import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";

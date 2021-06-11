@@ -6,6 +6,7 @@ import { duck } from "@/game-classes/duck";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
+import { Sprite } from "@/game-classes/Sprite";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { WallFeature } from "@/game-classes/WallFeature";
@@ -26,7 +27,7 @@ const lowWall: Point[] = [
 ]
 
 const lever1 = new WallFeature({ sprite: leverSprite, animation: "DOWN" })
-const painting1 = new WallFeature({ sprite: paintingWall, animation: "STAND" })
+const painting1 = new WallFeature({ sprite: paintingWall, animation: Sprite.defaultWallAnimation })
 
 const playerVantage = new Vantage({ x: 0, y: 3, direction: Direction.east });
 
@@ -65,7 +66,7 @@ const level: Level = new Level({
         duck({ x: 6, y: 1, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
         duck({ x: 5, y: 0, direction: Direction.west, behaviour: undefined }),
         duck({ x: 4, y: 1, direction: Direction.west, behaviour: undefined }),
-        new Figure({ x: 2, y: 3, direction: Direction.west, sprite: dinoSprite, height: 1, width: 1, initialAnimation: "STAND" }),
+        new Figure({ x: 2, y: 3, direction: Direction.west, sprite: dinoSprite, height: 1, width: 1 }),
         new Position({ x: 3, y: 3 }),
     ]
 })

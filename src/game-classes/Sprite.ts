@@ -1,5 +1,5 @@
 import { cutFrameFromGridSheet, transformSpriteImage } from "@/canvas/manipulations"
-import { Dimensions, Point } from "./canvas-utility"
+import { Dimensions, Point } from "../canvas/canvas-utility"
 
 interface SpriteSheetConfig {
     pattern: "SINGLE" | "GRID"
@@ -46,6 +46,9 @@ class Sprite {
     size?: Dimensions
     offset?: Point
     loadedFrames: Map<string, CanvasImageSource>
+
+    static get defaultWallAnimation(): "NEUTRAL" {return "NEUTRAL"}
+    static get defaultFigureAnimation(): "STAND" { return "STAND" }
 
     constructor(name: string, config: SpriteConfig = {}) {
         this.name = name
@@ -141,16 +144,16 @@ class Sprite {
     static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}): Sprite {
 
         config.animations = new Map<string, Frame[]>()
-            .set("STAND_FORWARD", [
+            .set(`${Sprite.defaultWallAnimation}_FORWARD`, [
                 { sheet:sheet, transforms: ["RESIZE_CENTER"] },
             ])
-            .set("STAND_BACK", [
+            .set(`${Sprite.defaultWallAnimation}_BACK`, [
                 { sheet, transforms: ["RESIZE_CENTER"] },
             ])
-            .set("STAND_LEFT", [
+            .set(`${Sprite.defaultWallAnimation}_LEFT`, [
                 { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
             ])
-            .set("STAND_RIGHT", [
+            .set(`${Sprite.defaultWallAnimation}_RIGHT`, [
                 { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"] },
             ]);
 

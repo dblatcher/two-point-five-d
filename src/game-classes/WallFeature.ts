@@ -1,4 +1,4 @@
-import { Sprite } from "@/canvas/Sprite"
+import { Sprite } from "@/game-classes/Sprite"
 
 interface WallFeatureConfig {
     sprite:Sprite
@@ -10,6 +10,7 @@ class WallFeature {
 
     constructor(config:WallFeatureConfig) {
         this.data = config
+        this.data.animation = this.data.animation || Sprite.defaultWallAnimation
     }
 }
 

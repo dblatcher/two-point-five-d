@@ -4,7 +4,7 @@ import { Action } from './Behaviour'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
 import { duckPattern } from '@/store/sprites'
-import { Sprite } from '@/canvas/Sprite'
+import { Sprite } from '@/game-classes/Sprite'
 import { Position } from './Position'
 import { WallFeature } from './WallFeature'
 
@@ -72,8 +72,15 @@ class Game {
                 level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
 
             if (wallClicked) {
-                if (wallClicked.data.features && wallClicked.data.features.length == 0) {
-                    wallClicked.data.features.push(new WallFeature({ sprite: duckPattern, animation: "STAND" }))
+                const { features = [] } = wallClicked.data
+                if (features.length == 0) {
+                    features.push(new WallFeature({ sprite: duckPattern, animation: Sprite.defaultFigureAnimation }))
+                } else {
+                    if (features[0].data.animation === 'UP') {
+                        features[0].data.animation = 'DOWN'
+                    } else if (features[0].data.animation === 'DOWN') {
+                        features[0].data.animation = 'UP'
+                    }
                 }
             }
         }

@@ -1,7 +1,7 @@
 import { ConvertFunction, Dimensions, mapPointInSight, PlotPlace, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Vantage } from "./Vantage";
 
-import { Frame, Sprite } from '../canvas/Sprite'
+import { Frame, Sprite } from './Sprite'
 import { Direction } from "./Direction";
 import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
@@ -21,12 +21,10 @@ class Figure extends Vantage {
     data: FigureConfig
     actionName: string
 
-    static get defaultInitialAnimation(): "STAND" { return "STAND" }
-
     constructor(config: FigureConfig) {
         super(config)
         this.data = config
-        this.actionName = config.initialAnimation || Figure.defaultInitialAnimation
+        this.actionName = config.initialAnimation || Sprite.defaultFigureAnimation
     }
 
     drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, plotPlace: PlotPlace, tickCount: number): void {

@@ -1,5 +1,5 @@
 import { Dimensions, VANISH_RATE } from "./canvas-utility"
-import { Sprite } from "./Sprite"
+import { Sprite } from "../game-classes/Sprite"
 
 function flipImage(source: CanvasImageSource): HTMLCanvasElement {
     const board = document.createElement('canvas')

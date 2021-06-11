@@ -1,6 +1,6 @@
 import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
 import { scaleTo } from "@/canvas/manipulations";
-import { Sprite } from "@/canvas/Sprite";
+import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
@@ -27,7 +27,6 @@ class Wall extends Position {
         this.data.features = this.data.features || [];
     }
 
-    static get defaultInitialAnimation(): "STAND" { return "STAND" }
 
     isFacing(direction: Direction): boolean {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
@@ -43,7 +42,7 @@ class Wall extends Position {
         ctx.fillStyle = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
 
         if (patternSprite) {
-            ctx.fillStyle = getPatternFill(patternSprite, Wall.defaultInitialAnimation, fullWallPoints, relativeDirection) || ctx.fillStyle
+            ctx.fillStyle = getPatternFill(patternSprite, Sprite.defaultWallAnimation, fullWallPoints, relativeDirection) || ctx.fillStyle
         }
         plotPolygon(ctx, convertFunction, points)
 
