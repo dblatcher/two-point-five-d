@@ -74,13 +74,9 @@ class Game {
             if (wallClicked) {
                 const { features = [] } = wallClicked.data
                 if (features.length == 0) {
-                    features.push(new WallFeature({ sprite: duckPattern, animation: Sprite.defaultFigureAnimation }))
+                    features.push(new WallFeature({ sprite: duckPattern, animation: Sprite.defaultWallAnimation }))
                 } else {
-                    if (features[0].data.animation === 'UP') {
-                        features[0].data.animation = 'DOWN'
-                    } else if (features[0].data.animation === 'DOWN') {
-                        features[0].data.animation = 'UP'
-                    }
+                    features[0].handleInteraction(this)
                 }
             }
         }

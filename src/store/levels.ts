@@ -9,8 +9,8 @@ import { Position } from "@/game-classes/Position";
 import { Sprite } from "@/game-classes/Sprite";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { WallFeature } from "@/game-classes/WallFeature";
-import { brickWall, dinoSprite, leverSprite, paintingWall, windowWall } from "./sprites";
+import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { brickWall, dinoSprite, doorSprite, leverSprite, paintingWall, testPattern, windowWall } from "./sprites";
 
 
 const lowWall: Point[] = [
@@ -26,8 +26,20 @@ const lowWall: Point[] = [
     { x: 1, y: 0 },
 ]
 
-const lever1 = new WallFeature({ sprite: leverSprite, animation: "DOWN" })
+const doorway: Point[] = [
+    { x: 0, y: 1 },
+    { x: 1, y: 1 },
+    { x: 1, y: 0 },
+    { x: .9, y: 0 },
+    { x: .9, y: .9 },
+    { x: .1, y: .9 },
+    { x: .1, y: .0 },
+    { x: 0, y: .0 },
+]
+
+const lever1 = new WallSwitch({ sprite: leverSprite, animation: "OFF" })
 const painting1 = new WallFeature({ sprite: paintingWall, animation: Sprite.defaultWallAnimation })
+const door1 = new Door({ sprite: doorSprite, animation: 'CLOSED' })
 
 const playerVantage = new Vantage({ x: 0, y: 3, direction: Direction.east });
 
@@ -38,9 +50,9 @@ const level: Level = new Level({
         new Wall({ x: 1, y: 3, place: Direction.north, features: [lever1] }),
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0), patternSprite: brickWall }),
         new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
-        new Wall({ x: 3, y: 3, place: Direction.east, shape: lowWall, patternSprite: brickWall }),
-        new Wall({ x: 3, y: 3, place: Direction.north, shape: lowWall }),
-        new Wall({ x: 3, y: 3, place: Direction.south, shape: lowWall }),
+        new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features:[door1], open: true }),
+        new Wall({ x: 3, y: 4, place: Direction.east }),
+        new Wall({ x: 3, y: 2, place: Direction.east, shape: lowWall }),
         new Wall({ x: 4, y: 3, place: Direction.south, shape: lowWall }),
         new Wall({ x: 5, y: 0, place: Direction.east, shape: lowWall }),
         new Wall({ x: 5, y: 3, place: Direction.south, patternSprite: brickWall, shape: lowWall }),
@@ -66,7 +78,7 @@ const level: Level = new Level({
         duck({ x: 6, y: 1, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
         duck({ x: 5, y: 0, direction: Direction.west, behaviour: undefined }),
         duck({ x: 4, y: 1, direction: Direction.west, behaviour: undefined }),
-        new Figure({ x: 2, y: 3, direction: Direction.west, sprite: dinoSprite, height: 1, width: 1 }),
+        new Figure({ x: 5, y: 3, direction: Direction.west, sprite: dinoSprite, height: .5, width: .5 }),
         new Position({ x: 3, y: 3 }),
     ]
 })

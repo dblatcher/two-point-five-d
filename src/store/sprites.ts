@@ -103,35 +103,67 @@ const testSprite = new Sprite("TEST_CARD", {
 const leverSprite = new Sprite("LEVER", {
     size: { x: .3, y: .3 },
     animations: new Map<string, Frame[]>()
-        .set("UP_FORWARD", [
+        .set("OFF_FORWARD", [
             { sheet: sheets.lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
-        .set("UP_BACK", [
+        .set("OFF_BACK", [
             { sheet: sheets.lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
-        .set("UP_LEFT", [
+        .set("OFF_LEFT", [
             { sheet: sheets.lever, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
-        .set("UP_RIGHT", [
+        .set("OFF_RIGHT", [
             { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
         ])
-        .set("DOWN_FORWARD", [
+        .set("ON_FORWARD", [
             { sheet: sheets.lever, col: 0, row: 2, transforms: ["RESIZE_CENTER"] },
         ])
-        .set("DOWN_BACK", [
+        .set("ON_BACK", [
             { sheet: sheets.lever, col: 0, row: 2, transforms: ["RESIZE_CENTER"] },
         ])
-        .set("DOWN_LEFT", [
+        .set("ON_LEFT", [
             { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
-        .set("DOWN_RIGHT", [
+        .set("ON_RIGHT", [
             { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
         ])
 })
 
+const doorSprite = new Sprite("DOOR", {
+    size: { x: .3, y: .3 },
+    animations: new Map<string, Frame[]>()
+        .set("CLOSED_FORWARD", [
+            { sheet: sheets.testCard},
+        ])
+        .set("CLOSED_BACK", [
+            { sheet: sheets.testCard},
+        ])
+        .set("CLOSED_LEFT", [
+            { sheet: sheets.testCard},
+        ])
+        .set("CLOSED_RIGHT", [
+            { sheet: sheets.testCard},
+        ])
+        .set("OPEN_FORWARD", [
+            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
+        ])
+        .set("OPEN_BACK", [
+            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
+        ])
+        .set("OPEN_LEFT", [
+            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
+        ])
+        .set("OPEN_RIGHT", [
+            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
+        ])
+       
+})
+
+
 const brickWall = Sprite.patternSprite("BRICK_WALL", sheets.bricks);
 const duckPattern = Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side);
 const windowWall = Sprite.patternSprite("WINDOW", sheets.window);
+const testPattern = Sprite.patternSprite("TEST", sheets.testCard);
 const paintingWall = Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .5 }, offset: { x: .25, y: .25 } });
 
 
@@ -145,4 +177,6 @@ export {
     paintingWall,
     duckPattern,
     leverSprite,
+    testPattern,
+    doorSprite,
 }

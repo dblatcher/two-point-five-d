@@ -16,6 +16,7 @@ interface WallConfig {
     patternSprite?: Sprite
     features?: WallFeature[]
     shape?: Point[]
+    open?: boolean
 }
 
 class Wall extends Position {
@@ -25,8 +26,19 @@ class Wall extends Position {
         super(config)
         this.data = config
         this.data.features = this.data.features || [];
+        this.data.open = !!this.data.open
     }
 
+
+    get isBlocking(): boolean {
+        const { open, features = [] } = this.data;
+        return !open || !!features.find(feature => feature.isBlocking);
+    }
+
+    get hasInteractableFeature():boolean {
+        const { features = [] } = this.data;
+        return !!features.find(feature => feature.canInteract);
+    }
 
     isFacing(direction: Direction): boolean {
         return this.data.place.x === direction.x && this.data.place.y === direction.y

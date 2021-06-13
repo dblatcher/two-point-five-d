@@ -5,7 +5,7 @@ import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-const renderingZoneFrames = false;
+const renderingZoneFrames = true;
 
 interface LevelConfig {
     width: number
@@ -34,19 +34,23 @@ class Level {
         const dY = targetY - startY
 
         if (this.data.walls.find(
-            wall => wall.data.x == startX && wall.data.y == startY && wall.data.place.x == dX && wall.data.place.y == dY
+            wall => wall.data.x == startX && wall.data.y == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
         )) { return true }
 
         if (this.data.walls.find(
-            wall => wall.data.x == targetX && wall.data.y == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY
+            wall => wall.data.x == targetX && wall.data.y == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY && wall.isBlocking
         )) { return true }
 
         return false
     }
 
     hasWallInFace(vantage: Vantage): boolean {
-        const wall1 = this.data.walls.find(wall => wall.isSamePlaceAs(vantage) && wall.isFacing(vantage.data.direction))
-        const wall2 = this.data.walls.find(wall => wall.isSamePlaceAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind))
+        const wall1 = this.data.walls.find(wall => 
+            wall.isSamePlaceAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasInteractableFeature)
+        )
+        const wall2 = this.data.walls.find(wall => 
+            wall.isSamePlaceAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind) && (wall.isBlocking || wall.hasInteractableFeature)
+        )
         return !!(wall1 || wall2)
     }
 
@@ -155,12 +159,12 @@ class Level {
         })
 
         if (renderingZoneFrames) {
-            this.renderZoneFrames(ctx,vantage,toCanvasCoords);
+            this.renderZoneFrames(ctx, vantage, toCanvasCoords);
         }
 
     }
 
-    renderZoneFrames(ctx:CanvasRenderingContext2D, vantage:Vantage, toCanvasCoords:ConvertFunction):void {
+    renderZoneFrames(ctx: CanvasRenderingContext2D, vantage: Vantage, toCanvasCoords: ConvertFunction): void {
         if (this.hasWallInFace(vantage)) {
             //frontwall
             ctx.fillStyle = new Color(100, 255, 100, .125).css

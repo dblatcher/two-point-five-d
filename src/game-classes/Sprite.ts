@@ -110,12 +110,13 @@ class Sprite {
         const animationKey = `${actionName}_${direction}`
 
         if (!this.animations.has(animationKey)) {
-            throw new Error(`Invalid animation key, ${animationKey}`);
+            
+            throw new Error(`Invalid animation key on ${this.name}: ${animationKey}`);
         }
 
         const animation = this.animations.get(animationKey) as Frame[];
         if (animation.length == 0) {
-            throw new Error(`No frames in animation ${animationKey}`);
+            throw new Error(`No frames in animation ${animationKey} of ${this.name}`);
         }
 
         const frameIndex = tickCount % animation.length
