@@ -5,7 +5,7 @@ import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-const renderingZoneFrames = true;
+const renderingZoneFrames = false;
 
 interface LevelConfig {
     width: number

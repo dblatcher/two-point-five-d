@@ -103,10 +103,7 @@ const testSprite = new Sprite("TEST_CARD", {
 const leverSprite = new Sprite("LEVER", {
     size: { x: .3, y: .3 },
     animations: new Map<string, Frame[]>()
-        .set("OFF_FORWARD", [
-            { sheet: sheets.lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
-        ])
-        .set("OFF_BACK", [
+        .set("OFF", [
             { sheet: sheets.lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
         .set("OFF_LEFT", [
@@ -115,12 +112,10 @@ const leverSprite = new Sprite("LEVER", {
         .set("OFF_RIGHT", [
             { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
         ])
-        .set("ON_FORWARD", [
+        .set("ON", [
             { sheet: sheets.lever, col: 0, row: 2, transforms: ["RESIZE_CENTER"] },
         ])
-        .set("ON_BACK", [
-            { sheet: sheets.lever, col: 0, row: 2, transforms: ["RESIZE_CENTER"] },
-        ])
+
         .set("ON_LEFT", [
             { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
@@ -132,31 +127,12 @@ const leverSprite = new Sprite("LEVER", {
 const doorSprite = new Sprite("DOOR", {
     size: { x: .3, y: .3 },
     animations: new Map<string, Frame[]>()
-        .set("CLOSED_FORWARD", [
+        .set("CLOSED", [
             { sheet: sheets.testCard},
         ])
-        .set("CLOSED_BACK", [
-            { sheet: sheets.testCard},
-        ])
-        .set("CLOSED_LEFT", [
-            { sheet: sheets.testCard},
-        ])
-        .set("CLOSED_RIGHT", [
-            { sheet: sheets.testCard},
-        ])
-        .set("OPEN_FORWARD", [
+        .set("OPEN", [
             { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
         ])
-        .set("OPEN_BACK", [
-            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
-        ])
-        .set("OPEN_LEFT", [
-            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
-        ])
-        .set("OPEN_RIGHT", [
-            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
-        ])
-       
 })
 
 

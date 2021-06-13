@@ -107,11 +107,16 @@ class Sprite {
      */
     provideImage(actionName: string, direction: "FORWARD" | "BACK" | "LEFT" | "RIGHT", tickCount: number): CanvasImageSource {
 
-        const animationKey = `${actionName}_${direction}`
+        const animationWithDirection = `${actionName}_${direction}`
+        const animationWithoutDirection = `${actionName}`
+        let animationKey = `${actionName}_${direction}`
 
-        if (!this.animations.has(animationKey)) {
-            
-            throw new Error(`Invalid animation key on ${this.name}: ${animationKey}`);
+        if (this.animations.has(animationWithDirection)) {
+            animationKey = animationWithDirection
+        } else if (this.animations.has(animationWithoutDirection)) {
+            animationKey = animationWithoutDirection
+        } else {
+            throw new Error(`Invalid animation key on ${this.name}: ${animationWithDirection}`);
         }
 
         const animation = this.animations.get(animationKey) as Frame[];
@@ -145,11 +150,8 @@ class Sprite {
     static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}): Sprite {
 
         config.animations = new Map<string, Frame[]>()
-            .set(`${Sprite.defaultWallAnimation}_FORWARD`, [
+            .set(`${Sprite.defaultWallAnimation}`, [
                 { sheet:sheet, transforms: ["RESIZE_CENTER"] },
-            ])
-            .set(`${Sprite.defaultWallAnimation}_BACK`, [
-                { sheet, transforms: ["RESIZE_CENTER"] },
             ])
             .set(`${Sprite.defaultWallAnimation}_LEFT`, [
                 { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },

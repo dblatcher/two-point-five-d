@@ -1,6 +1,8 @@
 import { Sprite } from "@/game-classes/Sprite"
 import { Game } from "./Game"
 
+const relativeDirections = ["FORWARD", "BACK", "LEFT", "RIGHT"]
+
 interface WallFeatureConfig {
     sprite: Sprite
     animation: string
@@ -23,10 +25,16 @@ class WallFeature {
         const missing: string[] = [];
 
         this.requiredAnimations.forEach(animationName => {
-            if (!this.data.sprite.animations.has(`${animationName}_FORWARD`)) { missing.push(`${animationName}_FORWARD`) }
-            if (!this.data.sprite.animations.has(`${animationName}_BACK`)) { missing.push(`${animationName}_BACK`) }
-            if (!this.data.sprite.animations.has(`${animationName}_LEFT`)) { missing.push(`${animationName}_LEFT`) }
-            if (!this.data.sprite.animations.has(`${animationName}_RIGHT`)) { missing.push(`${animationName}_RIGHT`) }
+
+            relativeDirections.forEach(relativeDirection => {
+                if (
+                    !this.data.sprite.animations.has(`${animationName}_${relativeDirection}`) &&
+                    !this.data.sprite.animations.has(`${animationName}`) 
+                ) { 
+                    missing.push(`${animationName}_${relativeDirection}`) 
+                }
+
+            })
         })
         return missing
     }
