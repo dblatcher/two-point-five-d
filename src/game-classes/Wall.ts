@@ -35,7 +35,7 @@ class Wall extends Position {
         return !open || !!features.find(feature => feature.isBlocking);
     }
 
-    get hasInteractableFeature():boolean {
+    get hasInteractableFeature(): boolean {
         const { features = [] } = this.data;
         return !!features.find(feature => feature.canInteract);
     }
@@ -140,33 +140,34 @@ class Wall extends Position {
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
-        let startX: number, startY: number, endX: number, endY: number;
+        const convert = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
 
-        startX = endX = this.data.x * gridSize;
-        startY = endY = this.data.y * gridSize;
-        switch (this.data.place.name) {
-            case "NORTH":
-                endX += gridSize;
-                break;
-            case "SOUTH":
-                startY += gridSize;
-                endY += gridSize;
-                endX += gridSize;
-                break;
-            case "WEST":
-                endY += gridSize
-                break;
-            case "EAST":
-                startX += gridSize
-                endX += gridSize
-                endY += gridSize
-                break;
+        const middle: Point = {
+            x: (this.data.x + .5),
+            y: (this.data.y + .5)
         }
 
+        const edge: Point = {
+            x: middle.x + (this.data.place.x * .5),
+            y: middle.y + (this.data.place.y * .5),
+        };
+
+        const leftCorner: Point = {
+            x: edge.x + (this.data.place.leftOf.x * .5),
+            y: edge.y + (this.data.place.leftOf.y * .5),
+        };
+
+        const rightCorner: Point = {
+            x: edge.x + (this.data.place.rightOf.x * .5),
+            y: edge.y + (this.data.place.rightOf.y * .5),
+        };
+
+
         ctx.beginPath();
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(endX, endY);
+        ctx.moveTo(...convert(leftCorner));
+        ctx.lineTo(...convert(rightCorner));
         ctx.stroke();
+
     }
 
     static get defaultColor(): Color { return new Color(250, 250, 250, 1) }
