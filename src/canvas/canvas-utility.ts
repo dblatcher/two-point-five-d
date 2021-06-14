@@ -34,15 +34,20 @@ function mapPointOnCeiling(forwardDistance: number, rightDistance: number): Poin
 }
 
 
-function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[]): void {
+function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[], config: {
+    noStroke?: boolean
+    noFill?: boolean
+    noClose?: boolean
+} = {}): void {
     ctx.beginPath()
     ctx.moveTo(...convertFunction(points[0]))
     for (let index = 1; index < points.length; index++) {
         ctx.lineTo(...convertFunction(points[index]))
     }
-    ctx.closePath()
-    ctx.stroke()
-    ctx.fill()
+
+    if (!config.noClose) { ctx.closePath() }
+    if (!config.noStroke) { ctx.stroke() }
+    if (!config.noFill) { ctx.fill() }
 }
 
 

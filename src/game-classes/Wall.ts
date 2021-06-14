@@ -142,31 +142,65 @@ class Wall extends Position {
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
         const convert = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
 
+        const { place, features = [] } = this.data;
+
         const middle: Point = {
             x: (this.data.x + .5),
             y: (this.data.y + .5)
         }
 
         const edge: Point = {
-            x: middle.x + (this.data.place.x * .5),
-            y: middle.y + (this.data.place.y * .5),
+            x: middle.x + (place.x * .5),
+            y: middle.y + (place.y * .5),
         };
 
         const leftCorner: Point = {
-            x: edge.x + (this.data.place.leftOf.x * .5),
-            y: edge.y + (this.data.place.leftOf.y * .5),
+            x: edge.x + (place.leftOf.x * .5),
+            y: edge.y + (place.leftOf.y * .5),
         };
 
         const rightCorner: Point = {
-            x: edge.x + (this.data.place.rightOf.x * .5),
-            y: edge.y + (this.data.place.rightOf.y * .5),
+            x: edge.x + (place.rightOf.x * .5),
+            y: edge.y + (place.rightOf.y * .5),
         };
 
+        const leftMiddle: Point = {
+            x: edge.x + (place.leftOf.x * .25),
+            y: edge.y + (place.leftOf.y * .25),
+        };
 
-        ctx.beginPath();
-        ctx.moveTo(...convert(leftCorner));
-        ctx.lineTo(...convert(rightCorner));
-        ctx.stroke();
+        const rightMiddle: Point = {
+            x: edge.x + (place.rightOf.x * .25),
+            y: edge.y + (place.rightOf.y * .25),
+        };
+
+        const leftMiddleBack: Point = {
+            x: leftMiddle.x + (place.x * .1),
+            y: leftMiddle.y + (place.y * .1),
+        };
+
+        const rightMiddleBack: Point = {
+            x: rightMiddle.x + (place.x * .1),
+            y: rightMiddle.y + (place.y * .1),
+        };
+
+        const hasBlockingFeature = !!features.find(feature => feature.requiredAnimations.find(value => value === "CLOSED"));
+
+        if (!hasBlockingFeature) {
+            if (this.isBlocking) {
+                plotPolygon(ctx, convert, [leftCorner, rightCorner], { noClose: true, noFill: true })
+            } else {
+                plotPolygon(ctx, convert, [leftCorner, leftMiddle], { noClose: true, noFill: true })
+                plotPolygon(ctx, convert, [rightCorner, rightMiddle], { noClose: true, noFill: true })
+            }
+        } else {
+            if (this.isBlocking) {
+                plotPolygon(ctx, convert, [leftCorner, leftMiddle, leftMiddleBack, rightMiddleBack, rightMiddle,rightCorner], { noClose: true, noFill: true })
+            } else {
+                plotPolygon(ctx, convert, [leftCorner, leftMiddle, leftMiddleBack], { noClose: true, noFill: true })
+                plotPolygon(ctx, convert, [rightCorner, rightMiddle, rightMiddleBack], { noClose: true, noFill: true })
+            }
+        }
 
     }
 

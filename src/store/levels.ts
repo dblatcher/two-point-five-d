@@ -39,7 +39,7 @@ const doorway: Point[] = [
 
 const lever1 = new WallSwitch({ sprite: leverSprite, animation: "OFF" })
 const painting1 = new WallFeature({ sprite: paintingWall, animation: Sprite.defaultWallAnimation })
-const door1 = new Door({ sprite: doorSprite, animation: 'CLOSED' })
+const door1 = new Door({ sprite: doorSprite, animation: 'OPEN' })
 
 const playerVantage = new Vantage({ x: 0, y: 3, direction: Direction.east });
 
@@ -51,7 +51,8 @@ const level: Level = new Level({
         new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0), patternSprite: brickWall }),
         new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
         new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features:[door1], open: true }),
-        new Wall({ x: 3, y: 4, place: Direction.east }),
+        new Wall({ x: 3, y: 4, place: Direction.east, shape: doorway, open: true }),
+
         new Wall({ x: 3, y: 2, place: Direction.east, shape: lowWall }),
         new Wall({ x: 4, y: 3, place: Direction.south, shape: lowWall }),
         new Wall({ x: 5, y: 0, place: Direction.east, shape: lowWall }),
