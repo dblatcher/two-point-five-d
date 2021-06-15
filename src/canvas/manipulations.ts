@@ -51,7 +51,6 @@ function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, right: bo
     const ctx = board.getContext('2d') as CanvasRenderingContext2D
     board.setAttribute('width', (source.width / VANISH_RATE / 2).toString())
     board.setAttribute('height', source.height.toString())
-    //TO DO - reshape to left or right wall
 
     if (right) {
         const aspect = VANISH_RATE / 2
