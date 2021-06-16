@@ -58,11 +58,13 @@ class Wall extends Position {
         }
         plotPolygon(ctx, convertFunction, points)
 
-        features.forEach(feature => {
+        features.forEach(feature => { 
+            // to do - delegate to WallFeature.drawInSight, 
+            // have feature property decide if it should be rendered over fullWallPoints or points
             const featureImage = getPatternFill(feature.data.sprite, feature.data.animation, fullWallPoints, relativeDirection);
             if (featureImage) {
                 ctx.fillStyle = featureImage
-                plotPolygon(ctx, convertFunction, fullWallPoints)
+                plotPolygon(ctx, convertFunction, fullWallPoints, { noStroke: true })
             }
         })
 
@@ -149,14 +151,12 @@ class Wall extends Position {
         }
 
         const featureToDraw = features.find(feature => feature.isDrawnInMap);
-
         if (!featureToDraw) {
-            const edge = place.translatePoint(squareCenter,.5);
-            const leftCorner = place.leftOf.translatePoint(edge,.5);
-            const rightCorner = place.rightOf.translatePoint(edge,.5);
-            const leftMiddle = place.leftOf.translatePoint(edge,.25);
-            const rightMiddle = place.rightOf.translatePoint(edge,.25);
-
+            const edge = place.translatePoint(squareCenter, .5);
+            const leftCorner = place.leftOf.translatePoint(edge, .5);
+            const rightCorner = place.rightOf.translatePoint(edge, .5);
+            const leftMiddle = place.leftOf.translatePoint(edge, .25);
+            const rightMiddle = place.rightOf.translatePoint(edge, .25);
             if (this.isBlocking) {
                 plotPolygon(ctx, convert, [leftCorner, rightCorner], { noClose: true, noFill: true })
             } else {
@@ -164,13 +164,10 @@ class Wall extends Position {
                 plotPolygon(ctx, convert, [rightCorner, rightMiddle], { noClose: true, noFill: true })
             }
         } else {
-
             featureToDraw.drawInMap(place, squareCenter).forEach(polygon => {
                 plotPolygon(ctx, convert, polygon, { noClose: true, noFill: true })
             })
-
         }
-
     }
 
     static get defaultColor(): Color { return new Color(250, 250, 250, 1) }
