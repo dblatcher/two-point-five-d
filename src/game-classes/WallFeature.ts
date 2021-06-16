@@ -2,12 +2,15 @@ import { Point } from "@/canvas/canvas-utility"
 import { Sprite } from "@/game-classes/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
+import { Trigger } from "./Trigger"
 
 const relativeDirections = ["FORWARD", "BACK", "LEFT", "RIGHT"]
 
 interface WallFeatureConfig {
     sprite: Sprite
     animation: string
+    id?: string
+    triggers?: Trigger[]
 }
 
 class WallFeature {
@@ -45,8 +48,24 @@ class WallFeature {
     get canInteract(): boolean { return false }
     get isDrawnInMap(): boolean { return false }
 
+    setStatus(animation:string) {
+        if (this.requiredAnimations.includes(animation)) {
+            this.data.animation = animation
+        } else {
+            console.warn(`invalid animation [${animation}] for wall feature`, this)
+        }
+    }
+
     handleInteraction(game: Game): void {
-        return
+        return this.fireTriggers(game)
+    }
+
+    fireTriggers(game: Game): void {
+        const { triggers = [] } = this.data
+
+        triggers.forEach(trigger => {
+            trigger.fire(this, game)
+        });
     }
 
     drawInMap(place: Direction, squareCenter: Point): Point[][] {
@@ -58,7 +77,6 @@ class WallFeature {
         return [
             [rightCorner, edgeMiddle, switchEnd, edgeMiddle, leftCorner]
         ]
-
     }
 }
 
@@ -67,30 +85,46 @@ class WallSwitch extends WallFeature {
     get requiredAnimations(): string[] { return ["OFF", "ON"] }
     get canInteract(): boolean { return true }
     get isDrawnInMap(): boolean { return true }
+
     handleInteraction(game: Game): void {
         if (this.data.animation === "OFF") {
-            this.data.animation = "ON"
+            this.setStatus("ON");
         } else {
-            this.data.animation = "OFF"
+            this.setStatus("OFF");
         }
 
+        this.fireTriggers(game)
     }
 }
 
+
+interface DoorConfig {
+    sprite: Sprite
+    animation: string
+    id?: string
+    triggers?: Trigger[]
+    canOpenDirectly?: boolean
+}
+
 class Door extends WallFeature {
+    data: DoorConfig
+
+    constructor(config: DoorConfig) {
+        super(config)
+        this.data = config
+    }
 
     get requiredAnimations(): string[] { return ["OPEN", "CLOSED"] }
 
     get isBlocking(): boolean { return this.data.animation === "CLOSED" }
-    get canInteract(): boolean { return true }
+    get canInteract(): boolean { return !!this.data.canOpenDirectly }
     get isDrawnInMap(): boolean { return true }
 
     handleInteraction(game: Game): void {
-        console.log(this.data.animation)
         if (this.data.animation === "OPEN") {
-            this.data.animation = "CLOSED"
+            this.setStatus("CLOSED");
         } else {
-            this.data.animation = "OPEN"
+            this.setStatus("OPEN");
         }
     }
 

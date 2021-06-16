@@ -7,6 +7,7 @@ import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
 import { Sprite } from "@/game-classes/Sprite";
+import { Trigger } from "@/game-classes/Trigger";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
@@ -37,9 +38,14 @@ const doorway: Point[] = [
     { x: 0, y: .0 },
 ]
 
-const lever1 = new WallSwitch({ sprite: leverSprite, animation: "OFF" })
+const leverOpensDoor = new Trigger({targetId:"door1", statusPairs:[
+    ["ON","OPEN"],
+    ["OFF","CLOSED"],
+]});
+
+const lever1 = new WallSwitch({ sprite: leverSprite, animation: "OFF", triggers:[leverOpensDoor] })
 const painting1 = new WallFeature({ sprite: paintingWall, animation: Sprite.defaultWallAnimation })
-const door1 = new Door({ sprite: doorSprite, animation: 'OPEN' })
+const door1 = new Door({ sprite: doorSprite, animation: 'CLOSED', canOpenDirectly:true, id:"door1" })
 
 const playerVantage = new Vantage({ x: 0, y: 3, direction: Direction.east });
 
@@ -47,10 +53,11 @@ const level: Level = new Level({
     height: 8, width: 15,
     defaultWallPattern: brickWall,
     walls: [
-        new Wall({ x: 1, y: 3, place: Direction.north, features: [lever1] }),
-        new Wall({ x: 1, y: 1, place: Direction.south, color: new Color(200, 255, 0), patternSprite: brickWall }),
-        new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
+        new Wall({ x: 1, y: 2, place: Direction.east, features: [lever1] }),
         new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features:[door1], open: true }),
+
+        new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: brickWall }),
+        new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
         new Wall({ x: 3, y: 4, place: Direction.east, shape: doorway, open: true }),
 
         new Wall({ x: 3, y: 2, place: Direction.east, shape: lowWall }),
