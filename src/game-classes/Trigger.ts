@@ -4,6 +4,7 @@ import { WallFeature } from "./WallFeature"
 interface TriggerConfig {
     targetId: string
     statusPairs?: [string, string][]
+    toggle?: string[]
 }
 
 class Trigger {
@@ -14,16 +15,26 @@ class Trigger {
     }
 
     fire(firingFeature: WallFeature, game: Game) {
-        const { statusPairs = [] } = this.data
+        const { statusPairs, toggle } = this.data
         const target = this.findTarget(game);
         if (!target) {
             console.warn(`trigger target with id ${this.data.targetId} not found`)
             return
         }
 
-        statusPairs.forEach(pair => {
-            if (firingFeature.data.animation == pair[0]) { target.setStatus(pair[1]) }
-        })
+        if (statusPairs) {
+            statusPairs.forEach(pair => {
+                if (firingFeature.data.animation == pair[0]) { target.setStatus(pair[1]) }
+            })
+        } else if (toggle) {
+            const indexOfCurrentStatus = toggle.indexOf(target.data.animation);
+            if (indexOfCurrentStatus !== -1) {
+                const nextStatus = toggle[indexOfCurrentStatus + 1] || toggle[0]
+                target.setStatus(nextStatus);
+            }
+        }
+
+
     }
 
     findTarget(game: Game) {

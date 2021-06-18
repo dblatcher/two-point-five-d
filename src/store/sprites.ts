@@ -132,6 +132,15 @@ const buttonSprite = new Sprite("BUTTON", {
         ])
 })
 
+const smallButtonSprite = new Sprite("BUTTON", {
+    size: { x: .25, y: .25 },
+    offset: { x: .03, y: .4 },
+    animations: new Map<string, Frame[]>()
+        .set(Sprite.defaultWallAnimation, [
+            { sheet: sheets.leverAndButton, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
+        ])
+})
+
 const doorSprite = new Sprite("DOOR", {
     size: { x: .8, y: .9 },
     offset: { x: .5, y: .55 },
@@ -160,6 +169,7 @@ const sprites = {
     leverSprite,
     doorSprite,
     buttonSprite,
+    smallButtonSprite,
 }
 
 export {

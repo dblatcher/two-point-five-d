@@ -38,27 +38,34 @@ const doorway: Point[] = [
     { x: 0, y: .0 },
 ]
 
-const leverOpensDoor = new Trigger({targetId:"door1", statusPairs:[
-    ["ON","OPEN"],
-    ["OFF","CLOSED"],
-]});
+const leverOpensDoor = new Trigger({
+    targetId: "door1", statusPairs: [
+        ["ON", "OPEN"],
+        ["OFF", "CLOSED"],
+    ]
+});
 
-const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", triggers:[leverOpensDoor] })
+const buttonOpensDoor = new Trigger({
+    targetId: "door1", toggle:['OPEN','CLOSED']
+});
+
+const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", triggers: [leverOpensDoor] })
 const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
-const door1 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly:true, id:"door1" })
+const door1 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly: true, id: "door1" })
 
-const button1 = new WallFeature ({sprite:sprites.buttonSprite, animation:Sprite.defaultWallAnimation})
+const button1 = new WallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, triggers:[buttonOpensDoor] })
+const button2 = new WallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation })
 
-const playerVantage = new Vantage({ x: 0, y: 3, direction: Direction.east });
+const playerVantage = new Vantage({ x: 1, y: 2, direction: Direction.east });
 
 const level: Level = new Level({
     height: 8, width: 15,
     defaultWallPattern: undefined,
     walls: [
-        new Wall({ x: 1, y: 2, place: Direction.east, features: [lever1] }),
-        new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features:[door1], open: true }),
+        new Wall({ x: 1, y: 2, place: Direction.east, features: [button1] }),
+        new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features: [door1, button2], open: true }),
 
-        new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: sprites.brickWall, features:[button1] }),
+        new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: sprites.brickWall, features: [lever1] }),
 
         new Wall({ x: 3, y: 4, place: Direction.east, shape: doorway, open: true }),
 
