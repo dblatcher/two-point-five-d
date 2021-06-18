@@ -1,4 +1,4 @@
-import { Dimensions, VANISH_RATE } from "./canvas-utility"
+import { Dimensions, Point, VANISH_RATE } from "./canvas-utility"
 import { Sprite } from "../game-classes/Sprite"
 
 function flipImage(source: CanvasImageSource): HTMLCanvasElement {
@@ -43,6 +43,7 @@ function scaleTo(source: CanvasImageSource, width: number, height: number): HTML
     return board
 }
 
+// NEEDS WORK!
 function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, right: boolean): HTMLCanvasElement | HTMLImageElement {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
@@ -86,12 +87,10 @@ function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, right: bo
         }
     }
 
-
-
     return board
 }
 
-function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size: Dimensions): HTMLCanvasElement {
+function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size: Dimensions, offset = { x: .5, y: .5 }): HTMLCanvasElement {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -106,7 +105,12 @@ function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size: Dimensi
     board.setAttribute('width', expandedFrame.x.toString())
     board.setAttribute('height', expandedFrame.y.toString())
 
-    ctx.drawImage(source, 0, 0, source.width, source.height, (expandedFrame.x - source.width )/ 2, (expandedFrame.y-source.height) / 2, source.width, source.height)
+    const destination: Point = {
+        x: (expandedFrame.x  * offset.x) - source.width/2,
+        y: (expandedFrame.y * offset.y) - source.height/2,
+    }
+
+    ctx.drawImage(source, 0, 0, source.width, source.height, destination.x, destination.y, source.width, source.height)
 
     return board;
 }
@@ -118,6 +122,11 @@ function transformSpriteImage(image: HTMLImageElement | HTMLCanvasElement, trans
             case "RESIZE_CENTER":
                 if (sprite.size) {
                     image = resizeFrame(image, sprite.size)
+                }
+                break
+            case "RESIZE_OFFSET":
+                if (sprite.size) {
+                    image = resizeFrame(image, sprite.size, sprite.offset)
                 }
                 break
             case "FLIP_H":
@@ -136,5 +145,5 @@ function transformSpriteImage(image: HTMLImageElement | HTMLCanvasElement, trans
 }
 
 export {
-    flipImage, cutFrameFromGridSheet, scaleTo, perspectiveSkew,resizeFrame, transformSpriteImage
+    flipImage, cutFrameFromGridSheet, scaleTo, perspectiveSkew, resizeFrame, transformSpriteImage
 }

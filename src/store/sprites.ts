@@ -18,7 +18,7 @@ const sheets = {
 
     testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets),
     painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
-    lever: new SpriteSheet("lever", require("../assets/sprites/lever.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 3 }),
+    leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 3 }),
 }
 
 
@@ -104,34 +104,43 @@ const leverSprite = new Sprite("LEVER", {
     size: { x: .3, y: .3 },
     animations: new Map<string, Frame[]>()
         .set("OFF", [
-            { sheet: sheets.lever, col: 1, row: 1, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton, col: 0, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
         .set("OFF_LEFT", [
-            { sheet: sheets.lever, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
         ])
         .set("OFF_RIGHT", [
-            { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
+            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
         .set("ON", [
-            { sheet: sheets.lever, col: 0, row: 2, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton, col: 2, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
-
         .set("ON_LEFT", [
-            { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton, col: 2, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
         .set("ON_RIGHT", [
-            { sheet: sheets.lever, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
+            { sheet: sheets.leverAndButton, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
+        ])
+})
+
+const buttonSprite = new Sprite("BUTTON", {
+    size: { x: .4, y: .4 },
+    offset: { x: .3, y: .4 },
+    animations: new Map<string, Frame[]>()
+        .set(Sprite.defaultWallAnimation, [
+            { sheet: sheets.leverAndButton, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
         ])
 })
 
 const doorSprite = new Sprite("DOOR", {
-    size: { x: .3, y: .3 },
+    size: { x: .8, y: .9 },
+    offset: { x: .5, y: .55 },
     animations: new Map<string, Frame[]>()
         .set("CLOSED", [
-            { sheet: sheets.testCard},
+            { sheet: sheets.testCard, transforms: ["RESIZE_OFFSET"] },
         ])
         .set("OPEN", [
-            { sheet: sheets.testCard, transforms:["SKEW_LEFT"]},
+            { sheet: sheets.testCard, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
         ])
 })
 
@@ -140,7 +149,7 @@ const brickWall = Sprite.patternSprite("BRICK_WALL", sheets.bricks);
 const duckPattern = Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side);
 const windowWall = Sprite.patternSprite("WINDOW", sheets.window);
 const testPattern = Sprite.patternSprite("TEST", sheets.testCard);
-const paintingWall = Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .5 }, offset: { x: .25, y: .25 } });
+const paintingWall = Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .5 } });
 
 
 export {
@@ -155,4 +164,5 @@ export {
     leverSprite,
     testPattern,
     doorSprite,
+    buttonSprite,
 }

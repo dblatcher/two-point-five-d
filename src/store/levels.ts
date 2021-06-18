@@ -11,7 +11,7 @@ import { Trigger } from "@/game-classes/Trigger";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
-import { brickWall, dinoSprite, doorSprite, leverSprite, paintingWall, testPattern, windowWall } from "./sprites";
+import { brickWall, dinoSprite, doorSprite, leverSprite, paintingWall, testPattern, windowWall, buttonSprite } from "./sprites";
 
 
 const lowWall: Point[] = [
@@ -47,17 +47,19 @@ const lever1 = new WallSwitch({ sprite: leverSprite, animation: "OFF", triggers:
 const painting1 = new WallFeature({ sprite: paintingWall, animation: Sprite.defaultWallAnimation })
 const door1 = new Door({ sprite: doorSprite, animation: 'CLOSED', canOpenDirectly:true, id:"door1" })
 
+const button1 = new WallFeature ({sprite:buttonSprite, animation:Sprite.defaultWallAnimation})
+
 const playerVantage = new Vantage({ x: 0, y: 3, direction: Direction.east });
 
 const level: Level = new Level({
     height: 8, width: 15,
-    defaultWallPattern: brickWall,
+    defaultWallPattern: undefined,
     walls: [
         new Wall({ x: 1, y: 2, place: Direction.east, features: [lever1] }),
         new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features:[door1], open: true }),
 
-        new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: brickWall }),
-        new Wall({ x: 1, y: 2, place: Direction.north, color: new Color(200, 100, 90, 1) }),
+        new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: brickWall, features:[button1] }),
+
         new Wall({ x: 3, y: 4, place: Direction.east, shape: doorway, open: true }),
 
         new Wall({ x: 3, y: 2, place: Direction.east, shape: lowWall }),

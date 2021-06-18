@@ -27,7 +27,7 @@ interface Frame {
     sheet: SpriteSheet
     row?: number
     col?: number
-    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER">
+    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET">
 }
 
 interface SpriteConfig {
