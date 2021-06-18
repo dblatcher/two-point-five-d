@@ -3,7 +3,7 @@ import { Level } from './Level'
 import { Action } from './Behaviour'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
-import { duckPattern } from '@/store/sprites'
+import { sprites } from '@/store/sprites'
 import { Sprite } from '@/game-classes/Sprite'
 import { Position } from './Position'
 import { WallFeature } from './WallFeature'
@@ -74,7 +74,7 @@ class Game {
             if (wallClicked) {
                 const { features = [] } = wallClicked.data
                 if (features.length == 0) {
-                    features.push(new WallFeature({ sprite: duckPattern, animation: Sprite.defaultWallAnimation }))
+                    features.push(new WallFeature({ sprite: sprites.duckPattern, animation: Sprite.defaultWallAnimation }))
                 } else {
                     features[0].handleInteraction(this)
                 }

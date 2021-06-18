@@ -145,24 +145,24 @@ const doorSprite = new Sprite("DOOR", {
 })
 
 
-const brickWall = Sprite.patternSprite("BRICK_WALL", sheets.bricks);
-const duckPattern = Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side);
-const windowWall = Sprite.patternSprite("WINDOW", sheets.window);
-const testPattern = Sprite.patternSprite("TEST", sheets.testCard);
-const paintingWall = Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .5 } });
 
 
-export {
-    spriteSheets,
+
+const sprites = {
+    brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks),
+    duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side),
+    windowWall: Sprite.patternSprite("WINDOW", sheets.window),
+    testPattern: Sprite.patternSprite("TEST", sheets.testCard),
+    paintingWall: Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .5 } }),
     duckSprite,
     dinoSprite,
     testSprite,
-    brickWall,
-    windowWall,
-    paintingWall,
-    duckPattern,
     leverSprite,
-    testPattern,
     doorSprite,
     buttonSprite,
+}
+
+export {
+    spriteSheets,
+    sprites,
 }

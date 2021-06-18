@@ -1,4 +1,4 @@
-import { duckSprite } from '@/store/sprites'
+import { sprites } from '@/store/sprites'
 import { Behaviour } from './Behaviour';
 import { Direction } from "./Direction";
 import { Figure } from "./Figure";
@@ -13,7 +13,7 @@ interface DuckConfig {
 
 function duck(config: DuckConfig) {
     const figureConfig = Object.assign(config, {
-        sprite: duckSprite,
+        sprite: sprites.duckSprite,
         height: .5,
         width: .5,
     })
