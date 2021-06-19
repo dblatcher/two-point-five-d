@@ -22,11 +22,13 @@ export default createStore({
   actions: {
     sendPlayerMovement({ state }, movement: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
       if (!this.getters.gameIsPaused) {
-        state.game.queuePlayerAction(movement)
+        state.game.queuePlayerMovementAction(movement)
       }
     },
     sightClick({ state }, clickInfo: { x: number, y: number }) {
-      state.game.handleSightClick(clickInfo)
+      if (!this.getters.gameIsPaused) {
+        state.game.handleSightClick(clickInfo)
+      }
     },
     tick({ state, commit }) {
       state.game.tick();

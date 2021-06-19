@@ -1,12 +1,10 @@
 import { Vantage } from './Vantage'
 import { Level } from './Level'
-import { Action } from './Behaviour'
+import { Action, MovementAction } from './Action'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
-import { sprites } from '@/store/sprites'
-import { Sprite } from '@/game-classes/Sprite'
 import { Position } from './Position'
-import { WallFeature } from './WallFeature'
+import { playerVantage } from '@/store/levels'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -38,7 +36,7 @@ class Game {
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
-            this.makePlayerAct(nextPlayerAction)
+            nextPlayerAction.perform(playerVantage,this);
         }
 
         this.data.level.data.contents
@@ -47,16 +45,16 @@ class Game {
                 const figure = item as Figure;
 
                 if (figure.data.behaviour) {
-                    figure.performAction(figure.data.behaviour.decideAction(figure, this), this)
+                    figure.data.behaviour.decideAction(figure, this).perform(figure,this)
                 }
             })
     }
 
-    queuePlayerAction(movement: Movement): void {
+    queuePlayerMovementAction(movement: Movement): void {
         if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) {
             return
         }
-        this.queuedPlayerActions.push(new Action(movement.action, movement.direction))
+        this.queuedPlayerActions.push(new MovementAction(movement.action, movement.direction))
     }
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
@@ -80,10 +78,6 @@ class Game {
             level.data.contents.push(new Position({ x: playerVantage.data.x, y: playerVantage.data.y }))
         }
 
-    }
-
-    makePlayerAct(action: Action): void {
-        this.data.playerVantage.performAction(action, this)
     }
 }
 

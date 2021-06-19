@@ -1,35 +1,27 @@
 import { Game } from './Game';
 import { Figure } from './Figure';
+import { Action, MovementAction } from './Action';
 
 
-class Action {
-    action: "TURN" | "MOVE"
-    direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK"
-
-    constructor(action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") {
-        this.action = action;
-        this.direction = direction;
-    }
-}
 
 interface DecisionFunction {
     (actor: Figure, game: Game, behaviour: Behaviour): Action
 }
 
-function moveClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
+function moveClockwise(actor: Figure, game: Game, behaviour: Behaviour): MovementAction {
     const placeAhead = actor.translate(actor.data.direction)
     if (game.data.level.isBlocked(...actor.coords, ...placeAhead.coords)) {
-        return new Action("TURN", "RIGHT")
+        return new MovementAction("TURN", "RIGHT")
     } else {
-        return new Action("MOVE", "FORWARD")
+        return new MovementAction("MOVE", "FORWARD")
     }
 }
-function moveAntiClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
+function moveAntiClockwise(actor: Figure, game: Game, behaviour: Behaviour): MovementAction {
     const placeAhead = actor.translate(actor.data.direction)
     if (game.data.level.isBlocked(...actor.coords, ...placeAhead.coords)) {
-        return new Action("TURN", "LEFT")
+        return new MovementAction("TURN", "LEFT")
     } else {
-        return new Action("MOVE", "FORWARD")
+        return new MovementAction("MOVE", "FORWARD")
     }
 }
 
@@ -50,4 +42,4 @@ class Behaviour {
 
 }
 
-export { Behaviour, Action, decisionFunctions }
+export { Behaviour, decisionFunctions }
