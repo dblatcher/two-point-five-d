@@ -39,12 +39,12 @@ class Position {
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount:number): void {
         const { place } = plotPlace
-        const outDistance = .2;
+        const outDistance = .45;
         const points: Point[] = [
-            mapPointOnFloor(place.forward - .5 + outDistance, place.right - outDistance),
-            mapPointOnFloor(place.forward - .5 + outDistance, place.right + outDistance),
-            mapPointOnFloor(place.forward - .5 - outDistance, place.right + outDistance),
-            mapPointOnFloor(place.forward - .5 - outDistance, place.right - outDistance),
+            mapPointOnFloor(place.forward - 1 + outDistance, place.right - outDistance),
+            mapPointOnFloor(place.forward - 1 + outDistance, place.right + outDistance),
+            mapPointOnFloor(place.forward - 1 - outDistance, place.right + outDistance),
+            mapPointOnFloor(place.forward - 1 - outDistance, place.right - outDistance),
         ]
         ctx.beginPath();
         ctx.moveTo(...convertFunction(points[0]));
