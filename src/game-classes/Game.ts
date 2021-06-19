@@ -62,8 +62,6 @@ class Game {
     handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerVantage } = this.data
         const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
-        console.log(location)
-
         if (!location) { return }
 
         if (location.zone == "FRONT_WALL") {
@@ -71,13 +69,10 @@ class Game {
                 level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
                 level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
 
+
             if (wallClicked) {
-                const { features = [] } = wallClicked.data
-                if (features.length == 0) {
-                    features.push(new WallFeature({ sprite: sprites.duckPattern, animation: Sprite.defaultWallAnimation }))
-                } else {
-                    features[0].handleInteraction(this)
-                }
+                const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked);
+                featureClicked?.handleInteraction(this);
             }
         }
 

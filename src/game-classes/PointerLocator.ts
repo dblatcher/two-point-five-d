@@ -1,4 +1,6 @@
 import { mapPointInSight, Point } from "@/canvas/canvas-utility";
+import { Wall } from "./Wall";
+import { WallFeature } from "./WallFeature";
 
 interface ZonePoint {
     zone: string | undefined
@@ -64,19 +66,19 @@ class PointerLocator {
         const { frontWall } = this;
 
         const withinFrontWall
-        = clickInfo.y >= frontWall.topLeft.y
-        && clickInfo.y <= frontWall.bottomLeft.y
-        && clickInfo.x >= frontWall.bottomLeft.x
-        && clickInfo.x <= frontWall.bottomRight.x;
+            = clickInfo.y >= frontWall.topLeft.y
+            && clickInfo.y <= frontWall.bottomLeft.y
+            && clickInfo.x >= frontWall.bottomLeft.x
+            && clickInfo.x <= frontWall.bottomRight.x;
 
-    if (withinFrontWall) {
-        const yInWall = (clickInfo.y - frontWall.topLeft.y) / (frontWall.bottomLeft.y - frontWall.topLeft.y);
-        const xInWall = (clickInfo.x - frontWall.topLeft.x) / (frontWall.topRight.x - frontWall.topLeft.x);
+        if (withinFrontWall) {
+            const yInWall = (clickInfo.y - frontWall.topLeft.y) / (frontWall.bottomLeft.y - frontWall.topLeft.y);
+            const xInWall = (clickInfo.x - frontWall.topLeft.x) / (frontWall.topRight.x - frontWall.topLeft.x);
 
-        return { zone: "FRONT_WALL", x: xInWall, y: yInWall }
-    }
+            return { zone: "FRONT_WALL", x: xInWall, y: yInWall }
+        }
 
-    return null
+        return null
     }
 
     locateOnBackWallOrFloor(clickInfo: Point): ZonePoint | null {
@@ -117,6 +119,15 @@ class PointerLocator {
         return null
     }
 
+    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall): WallFeature | null {
+        const { features = [] } = wall.data;
+        return features.find(feature => {
+            const { offset = { x: .5, y: .5 }, size = { x: 1, y: 1 } } = feature.data.sprite;
+            const clickIsWithinBounds = Math.abs((zonePoint.x - offset.x) / (size.x / 2)) <= 1 &&
+                Math.abs((zonePoint.y - offset.y) / (size.y / 2)) <= 1
+            return clickIsWithinBounds;
+        }) || null
+    }
 }
 
 export { PointerLocator }
