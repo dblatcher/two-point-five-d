@@ -1,10 +1,11 @@
 import { Vantage } from './Vantage'
 import { Level } from './Level'
-import { Action, MovementAction } from './Action'
+import { Action, InterAction, MovementAction } from './Action'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
 import { playerVantage } from '@/store/levels'
+import { WallFeature } from './WallFeature'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -36,7 +37,7 @@ class Game {
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
-            nextPlayerAction.perform(playerVantage,this);
+            nextPlayerAction.perform(playerVantage, this);
         }
 
         this.data.level.data.contents
@@ -45,7 +46,7 @@ class Game {
                 const figure = item as Figure;
 
                 if (figure.data.behaviour) {
-                    figure.data.behaviour.decideAction(figure, this).perform(figure,this)
+                    figure.data.behaviour.decideAction(figure, this).perform(figure, this)
                 }
             })
     }
@@ -62,6 +63,8 @@ class Game {
         const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
         if (!location) { return }
 
+        let featureClicked: WallFeature | null = null;
+
         if (location.zone == "FRONT_WALL") {
             const wallClicked =
                 level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
@@ -69,8 +72,7 @@ class Game {
 
 
             if (wallClicked) {
-                const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked);
-                featureClicked?.handleInteraction(this);
+                featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked);
             }
         }
 
@@ -78,6 +80,12 @@ class Game {
             level.data.contents.push(new Position({ x: playerVantage.data.x, y: playerVantage.data.y }))
         }
 
+        if (featureClicked) {
+            if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) {
+                return
+            }
+            this.queuedPlayerActions.push(new InterAction(featureClicked));
+        }
     }
 }
 

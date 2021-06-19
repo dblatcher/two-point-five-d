@@ -3,6 +3,7 @@ import { Sprite } from "@/game-classes/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Trigger } from "./Trigger"
+import { Vantage } from "./Vantage"
 
 const relativeDirections = ["FORWARD", "BACK", "LEFT", "RIGHT"]
 
@@ -56,7 +57,7 @@ class WallFeature {
         }
     }
 
-    handleInteraction(game: Game): void {
+    handleInteraction(actor:Vantage, game: Game): void {
         return this.fireTriggers(game)
     }
 
@@ -86,7 +87,7 @@ class WallSwitch extends WallFeature {
     get canInteract(): boolean { return true }
     get isDrawnInMap(): boolean { return true }
 
-    handleInteraction(game: Game): void {
+    handleInteraction(actor:Vantage, game: Game): void {
         if (this.data.animation === "OFF") {
             this.setStatus("ON");
         } else {
@@ -120,7 +121,7 @@ class Door extends WallFeature {
     get canInteract(): boolean { return !!this.data.canOpenDirectly }
     get isDrawnInMap(): boolean { return true }
 
-    handleInteraction(game: Game): void {
+    handleInteraction(actor:Vantage, game: Game): void {
         if (this.data.animation === "OPEN") {
             this.setStatus("CLOSED");
         } else {

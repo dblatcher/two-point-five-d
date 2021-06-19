@@ -1,5 +1,6 @@
 import { Game } from "./Game";
 import { Vantage } from "./Vantage";
+import { WallFeature } from "./WallFeature";
 
 class Action {
     action: string
@@ -9,7 +10,7 @@ class Action {
     }
 
     perform(actor: Vantage, game: Game): void {
-        console.log('AbstractAction',actor, game);
+        console.warn(`No performance class defined for Action ${this.action}`, actor);
     }
 }
 
@@ -31,4 +32,19 @@ class MovementAction extends Action {
     }
 }
 
-export { Action, MovementAction }
+class InterAction extends Action {
+    action: "INTERACT"
+    feature: WallFeature
+
+    constructor(target: WallFeature) {
+        super("INTERACT")
+        this.action = "INTERACT"
+        this.feature = target
+    }
+
+    perform(actor: Vantage, game: Game): void {
+        this.feature.handleInteraction(actor, game);
+    }
+}
+
+export { Action, MovementAction, InterAction }
