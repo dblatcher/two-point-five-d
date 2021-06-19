@@ -6,11 +6,12 @@ import { duck } from "@/game-classes/duck";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
+import { TeleportReaction } from "@/game-classes/Reaction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Trigger } from "@/game-classes/Trigger";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites } from "./sprites";
 
 
@@ -46,15 +47,17 @@ const leverOpensDoor = new Trigger({
 });
 
 const buttonOpensDoor = new Trigger({
-    targetId: "door1", toggle:['OPEN','CLOSED']
+    targetId: "door1", toggle: ['OPEN', 'CLOSED']
 });
+
+const telportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
 
 const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", triggers: [leverOpensDoor] })
 const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
-const door1 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly: true, id: "door1" })
+const door1 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly: false, id: "door1" })
 
-const button1 = new WallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, triggers:[buttonOpensDoor] })
-const button2 = new WallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation })
+const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [telportToCorner] })
+const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor] })
 
 const playerVantage = new Vantage({ x: 1, y: 2, direction: Direction.east });
 

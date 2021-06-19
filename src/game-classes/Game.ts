@@ -80,7 +80,7 @@ class Game {
             level.data.contents.push(new Position({ x: playerVantage.data.x, y: playerVantage.data.y }))
         }
 
-        if (featureClicked) {
+        if (featureClicked && featureClicked.canInteract) {
             if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) {
                 return
             }

@@ -2,6 +2,7 @@ import { Point } from "@/canvas/canvas-utility"
 import { Sprite } from "@/game-classes/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
+import { Reaction } from "./Reaction"
 import { Trigger } from "./Trigger"
 import { Vantage } from "./Vantage"
 
@@ -12,6 +13,7 @@ interface WallFeatureConfig {
     animation: string
     id?: string
     triggers?: Trigger[]
+    reactions?: Reaction[]
 }
 
 class WallFeature {
@@ -58,7 +60,8 @@ class WallFeature {
     }
 
     handleInteraction(actor:Vantage, game: Game): void {
-        return this.fireTriggers(game)
+        this.fireTriggers(game)
+        this.fireReactions(actor, game)
     }
 
     fireTriggers(game: Game): void {
@@ -67,6 +70,14 @@ class WallFeature {
         triggers.forEach(trigger => {
             trigger.fire(this, game)
         });
+    }
+
+    fireReactions(actor:Vantage, game:Game): void {
+        const { reactions = [] } = this.data
+
+        reactions.forEach(reaction => {
+            reaction.fire(actor, game)
+        })
     }
 
     drawInMap(place: Direction, squareCenter: Point): Point[][] {
@@ -79,6 +90,10 @@ class WallFeature {
             [rightCorner, edgeMiddle, switchEnd, edgeMiddle, leftCorner]
         ]
     }
+}
+
+class InteractableWallFeature extends WallFeature {
+    get canInteract(): boolean { return true }
 }
 
 class WallSwitch extends WallFeature {
@@ -94,7 +109,7 @@ class WallSwitch extends WallFeature {
             this.setStatus("OFF");
         }
 
-        this.fireTriggers(game)
+        WallFeature.prototype.handleInteraction.apply(this,[actor,game]);
     }
 }
 
@@ -153,4 +168,4 @@ class Door extends WallFeature {
 
 }
 
-export { WallFeature, WallSwitch, Door }
+export { WallFeature, InteractableWallFeature, WallSwitch, Door }
