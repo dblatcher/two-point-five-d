@@ -1,5 +1,5 @@
 import { Direction } from './Direction'
-import { ConvertFunction, mapPointOnFloor, PlotPlace, Point } from '@/canvas/canvas-utility';
+import { ConvertFunction, mapPointOnFloor, PlotPlace, plotPolygon, Point } from '@/canvas/canvas-utility';
 import { Game } from './Game';
 
 interface PositionConfig {
@@ -37,21 +37,15 @@ class Position {
         return this.data.x === otherPosition.data.x && this.data.y === otherPosition.data.y
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount:number): void {
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount: number): void {
         const { place } = plotPlace
         const outDistance = .45;
-        const points: Point[] = [
-            mapPointOnFloor(place.forward - 1 + outDistance, place.right - outDistance),
-            mapPointOnFloor(place.forward - 1 + outDistance, place.right + outDistance),
-            mapPointOnFloor(place.forward - 1 - outDistance, place.right + outDistance),
-            mapPointOnFloor(place.forward - 1 - outDistance, place.right - outDistance),
-        ]
-        ctx.beginPath();
-        ctx.moveTo(...convertFunction(points[0]));
-        ctx.lineTo(...convertFunction(points[2]));
-        ctx.moveTo(...convertFunction(points[1]));
-        ctx.lineTo(...convertFunction(points[3]));
-        ctx.stroke();
+        const foreLeft = mapPointOnFloor(place.forward - 1 + outDistance, place.right - outDistance)
+        const backLeft = mapPointOnFloor(place.forward - 1 - outDistance, place.right - outDistance)
+        const foreRight = mapPointOnFloor(place.forward - 1 + outDistance, place.right + outDistance)
+        const backRight = mapPointOnFloor(place.forward - 1 - outDistance, place.right + outDistance)
+        plotPolygon(ctx, convertFunction, [foreLeft, backRight], { noFill: false })
+        plotPolygon(ctx, convertFunction, [foreRight, backLeft], { noFill: false })
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {

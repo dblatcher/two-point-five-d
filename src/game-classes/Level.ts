@@ -5,7 +5,7 @@ import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-const renderingZoneFrames = false;
+const renderingZoneFrames = true;
 
 interface LevelConfig {
     width: number
@@ -176,7 +176,6 @@ class Level {
                 mapPointInSight(-.5, .5, 1),
                 mapPointInSight(-.5, .5, 0),
             ])
-            ctx.stroke()
         } else {
             //floor
             ctx.fillStyle = new Color(255, 100, 100, .25).css
@@ -188,7 +187,6 @@ class Level {
                 mapPointInSight(.5, .5, 0),
                 mapPointInSight(-.5, .5, 0),
             ])
-            ctx.stroke()
 
             //backwall
             ctx.fillStyle = new Color(100, 255, 100, .25).css
@@ -200,7 +198,6 @@ class Level {
                 mapPointInSight(.5, .5, 1),
                 mapPointInSight(.5, .5, 0),
             ])
-            ctx.stroke()
         }
     }
 }
