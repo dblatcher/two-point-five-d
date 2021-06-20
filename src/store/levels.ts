@@ -2,7 +2,7 @@ import { Point } from "@/canvas/canvas-utility";
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
-import { duck } from "@/game-classes/duck";
+import { duck } from "../game-classes/Duck";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
@@ -54,12 +54,12 @@ const telportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.
 
 const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", triggers: [leverOpensDoor] })
 const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
-const door1 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly: false, id: "door1" })
+const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1" })
 
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [telportToCorner] })
 const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor] })
 
-const playerVantage = new Vantage({ x: 3, y: 3, direction: Direction.north });
+const playerVantage = new Vantage({ x: 3, y: 3, direction: Direction.east });
 
 const level: Level = new Level({
     height: 8, width: 15,
@@ -98,7 +98,7 @@ const level: Level = new Level({
         duck({ x: 6, y: 1, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
         duck({ x: 5, y: 0, direction: Direction.west, behaviour: undefined }),
         duck({ x: 4, y: 1, direction: Direction.west, behaviour: undefined }),
-        new Figure({ x: 5, y: 3, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5 }),
+        new Figure({ x: 5.1, y: 3, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5 }),
         new Position({ x: 3, y: 3 }),
     ]
 })

@@ -36,11 +36,11 @@ class Level {
         const dY = targetY - startY
 
         if (this.data.walls.find(
-            wall => wall.data.x == startX && wall.data.y == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
+            wall => wall.gridX == startX && wall.gridY == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
         )) { return true }
 
         if (this.data.walls.find(
-            wall => wall.data.x == targetX && wall.data.y == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY && wall.isBlocking
+            wall => wall.gridX == targetX && wall.gridY == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY && wall.isBlocking
         )) { return true }
 
         return false
@@ -48,10 +48,10 @@ class Level {
 
     hasWallInFace(vantage: Vantage): boolean {
         const wall1 = this.data.walls.find(wall => 
-            wall.isSamePlaceAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasInteractableFeature)
+            wall.isInSameSquareAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasInteractableFeature)
         )
         const wall2 = this.data.walls.find(wall => 
-            wall.isSamePlaceAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind) && (wall.isBlocking || wall.hasInteractableFeature)
+            wall.isInSameSquareAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind) && (wall.isBlocking || wall.hasInteractableFeature)
         )
         return !!(wall1 || wall2)
     }
@@ -115,7 +115,7 @@ class Level {
         const plotPlaces: PlotPlace[] = [];
 
         this.data.walls.forEach(wall => {
-            const place = placesInSight.find(place => place.position.isSamePlaceAs(wall))
+            const place = placesInSight.find(place => place.position.isInSameSquareAs(wall))
             if (!place) { return }
             const relativeDirection = wall.data.place.relativeDirection(vantage.data.direction);
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
@@ -123,7 +123,7 @@ class Level {
         })
 
         this.data.contents.forEach(thing => {
-            const place = placesInSight.find(place => place.position.isSamePlaceAs(thing))
+            const place = placesInSight.find(place => place.position.isInSameSquareAs(thing))
             if (!place) { return }
 
             let relativeDirection;

@@ -14,8 +14,24 @@ class Position {
         this.data = config
     }
 
+    get gridX() {
+        return Math.floor(this.data.x);
+    }
+
+    get gridY() {
+        return Math.floor(this.data.y);
+    }
+
+    get squareX() {
+        return this.data.x - this.gridX
+    }
+
+    get squareY() {
+        return this.data.y - this.gridY
+    }
+
     get coords(): [number, number] {
-        return [this.data.x, this.data.y]
+        return [this.gridX, this.gridY]
     }
 
     translate(vector: PositionConfig): Position {
@@ -24,17 +40,17 @@ class Position {
 
     moveAbsolute(direction: Direction, game: Game): void {
 
-        const targetX = this.data.x + direction.x;
-        const targetY = this.data.y + direction.y;
+        const targetX = this.gridX + direction.x;
+        const targetY = this.gridY + direction.y;
 
-        if (game.data.level.isBlocked(this.data.x, this.data.y, targetX, targetY)) { return }
+        if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY)) { return }
 
         this.data.x = targetX
         this.data.y = targetY
     }
 
-    isSamePlaceAs(otherPosition: Position): boolean {
-        return this.data.x === otherPosition.data.x && this.data.y === otherPosition.data.y
+    isInSameSquareAs(otherPosition: Position): boolean {
+        return this.gridX === otherPosition.gridX && this.gridY === otherPosition.gridY
     }
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount: number): void {

@@ -3,7 +3,7 @@
     <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
     <p>
-      {{ $store.state.game.data.playerVantage.data.x }}, {{ $store.state.game.data.playerVantage.data.y }}
+      {{ $store.state.game.data.playerVantage.gridX }}, {{ $store.state.game.data.playerVantage.gridY }}
       {{ $store.state.game.data.playerVantage.data.direction.name }}
     </p>
   </figure>

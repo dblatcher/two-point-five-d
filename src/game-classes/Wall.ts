@@ -149,8 +149,8 @@ class Wall extends Position {
 
         const { place, features = [] } = this.data;
         const squareCenter: Point = {
-            x: (this.data.x + .5),
-            y: (this.data.y + .5)
+            x: (this.gridX + .5),
+            y: (this.gridY + .5)
         }
 
         const featureToDraw = features.find(feature => feature.isDrawnInMap);

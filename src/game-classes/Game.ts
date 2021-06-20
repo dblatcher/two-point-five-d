@@ -71,20 +71,20 @@ class Game {
 
         if (location.zone == "FRONT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
-                walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
+                walls.find(wall => wall.isInSameSquareAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
+                walls.find(wall => wall.isInSameSquareAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
         }
 
         if (location.zone == "RIGHT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction.rightOf)) ||
-                walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction.rightOf)) && wall.isFacing(playerVantage.data.direction.leftOf));
+                walls.find(wall => wall.isInSameSquareAs(playerVantage) && wall.isFacing(playerVantage.data.direction.rightOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(playerVantage.translate(playerVantage.data.direction.rightOf)) && wall.isFacing(playerVantage.data.direction.leftOf));
         }
 
         if (location.zone == "LEFT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction.leftOf)) ||
-                walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction.leftOf)) && wall.isFacing(playerVantage.data.direction.rightOf));
+                walls.find(wall => wall.isInSameSquareAs(playerVantage) && wall.isFacing(playerVantage.data.direction.leftOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(playerVantage.translate(playerVantage.data.direction.leftOf)) && wall.isFacing(playerVantage.data.direction.rightOf));
         }
 
         if (wallClicked) {
