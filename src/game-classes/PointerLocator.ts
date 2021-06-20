@@ -1,4 +1,4 @@
-import { mapPointInSight, Point } from "@/canvas/canvas-utility";
+import { mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas/canvas-utility";
 import { Wall } from "./Wall";
 import { WallFeature } from "./WallFeature";
 
@@ -30,6 +30,20 @@ class PointerLocator {
         bottomRight: Point
     }
 
+    leftWall: {
+        backTop: Point
+        forwardTop: Point
+        forwardBottom: Point
+        backBottom: Point
+    }
+
+    rightWall: {
+        backTop: Point
+        forwardTop: Point
+        forwardBottom: Point
+        backBottom: Point
+    }
+
     constructor() {
         this.floor = {
             backLeft: mapPointInSight(-.5, -.5, 0),
@@ -51,13 +65,27 @@ class PointerLocator {
             topRight: mapPointInSight(-.5, .5, 1),
             bottomRight: mapPointInSight(-.5, .5, 0),
         }
+
+        this.leftWall = {
+            forwardTop: this.frontWall.topLeft,
+            backTop: mapPointInSight(-1.5, -.5, 1),
+            backBottom: mapPointInSight(-1.5, -.5, 0),
+            forwardBottom: this.frontWall.bottomLeft,
+        }
+
+        this.rightWall = {
+            forwardTop: this.frontWall.topRight,
+            backTop: mapPointInSight(-1.5, .5, 1),
+            backBottom: mapPointInSight(-1.5, .5, 0),
+            forwardBottom: this.frontWall.bottomRight,
+        }
     }
 
     locate(clickInfo: Point, isWallInFace: boolean): ZonePoint | null {
         if (!isWallInFace) {
-            return this.locateOnBackWallOrFloor(clickInfo);
+            return this.locateOnSideWalls(clickInfo) || this.locateOnBackWallOrFloor(clickInfo);
         } else {
-            return this.locateOnFrontWall(clickInfo);
+            return this.locateOnSideWalls(clickInfo) || this.locateOnFrontWall(clickInfo);
         }
 
     }
@@ -91,8 +119,8 @@ class PointerLocator {
             const clickDepthOnFloor = 1 - (yInFloor / (this.floor.backLeft.y - this.floor.forwardLeft.y))
 
             const floorEdgesAtDepth = {
-                left: mapPointInSight(-.5 + clickDepthOnFloor, -.5, 0),
-                right: mapPointInSight(-.5 + clickDepthOnFloor, .5, 0)
+                left: mapPointOnFloor(-.5 + clickDepthOnFloor, -.5),
+                right: mapPointOnFloor(-.5 + clickDepthOnFloor, .5)
             }
 
             const xInfloor = clickInfo.x - floorEdgesAtDepth.left.x;
@@ -114,6 +142,46 @@ class PointerLocator {
             const xInWall = (clickInfo.x - backWall.topLeft.x) / (backWall.topRight.x - backWall.topLeft.x);
 
             return { zone: "BACK_WALL", x: xInWall, y: yInWall }
+        }
+
+        return null
+    }
+
+    locateOnSideWalls(clickInfo: Point): ZonePoint | null {
+        const { leftWall, rightWall } = this;
+
+        if (clickInfo.x <= leftWall.forwardTop.x) {
+            const xInWall = clickInfo.x - leftWall.forwardTop.x
+            const clickDepthOnWall = (xInWall / (this.leftWall.forwardTop.x - leftWall.backTop.x)) + 1
+
+            const wallEdgesAtDepth = {
+                top: mapPointOnCeiling(-1.5 + clickDepthOnWall, -.5),
+                bottom: mapPointOnFloor(-1.5 + clickDepthOnWall, -.5),
+            }
+
+            const yInfloor = clickInfo.y - wallEdgesAtDepth.top.y;
+            const clickHeightOnWall = yInfloor / (wallEdgesAtDepth.bottom.y - wallEdgesAtDepth.top.y)
+
+            if (clickHeightOnWall <= 1 && clickHeightOnWall >= 0 && clickDepthOnWall <= 1 && clickDepthOnWall >= 0) {
+                return { zone: "LEFT_WALL", x: clickDepthOnWall, y: clickHeightOnWall }
+            }
+        }
+
+        if (clickInfo.x >= rightWall.forwardTop.x) {
+            const xInWall = clickInfo.x - rightWall.forwardTop.x
+            const clickDepthOnWall = -(xInWall / (this.rightWall.forwardTop.x - rightWall.backTop.x))
+
+            const wallEdgesAtDepth = {
+                top: mapPointOnCeiling(-.5 - clickDepthOnWall, .5),
+                bottom: mapPointOnFloor(-.5 - clickDepthOnWall, .5),
+            }
+
+            const yInfloor = clickInfo.y - wallEdgesAtDepth.top.y;
+            const clickHeightOnWall = yInfloor / (wallEdgesAtDepth.bottom.y - wallEdgesAtDepth.top.y)
+
+            if (clickHeightOnWall <= 1 && clickHeightOnWall >= 0 && clickDepthOnWall <= 1 && clickDepthOnWall >= 0) {
+                return { zone: "RIGHT_WALL", x: clickDepthOnWall, y: clickHeightOnWall }
+            }
         }
 
         return null

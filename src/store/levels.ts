@@ -59,7 +59,7 @@ const door1 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpe
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [telportToCorner] })
 const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor] })
 
-const playerVantage = new Vantage({ x: 1, y: 2, direction: Direction.east });
+const playerVantage = new Vantage({ x: 3, y: 3, direction: Direction.north });
 
 const level: Level = new Level({
     height: 8, width: 15,
@@ -77,7 +77,7 @@ const level: Level = new Level({
         new Wall({ x: 5, y: 0, place: Direction.east, shape: lowWall }),
         new Wall({ x: 5, y: 3, place: Direction.south, patternSprite: sprites.brickWall, shape: lowWall }),
 
-        new Wall({ x: 9, y: 2, place: Direction.south, patternSprite: sprites.brickWall }),
+        new Wall({ x: 9, y: 2, place: Direction.south, color:new Color(120,40,20)  }),
         new Wall({ x: 9, y: 3, place: Direction.south, patternSprite: sprites.windowWall }),
         new Wall({ x: 9, y: 4, place: Direction.south, patternSprite: sprites.brickWall }),
 
@@ -86,7 +86,7 @@ const level: Level = new Level({
         new Wall({ x: 1, y: 0, place: Direction.north, color: new Color(20, 250, 190) }),
         new Wall({ x: 2, y: 0, place: Direction.north }),
         new Wall({ x: 3, y: 0, place: Direction.north, patternSprite: sprites.windowWall }),
-        new Wall({ x: 4, y: 0, place: Direction.north, patternSprite: sprites.brickWall }),
+        new Wall({ x: 4, y: 0, place: Direction.north}),
         new Wall({ x: 5, y: 0, place: Direction.north, patternSprite: sprites.windowWall }),
         new Wall({ x: 6, y: 0, place: Direction.north, patternSprite: sprites.brickWall }),
         new Wall({ x: 7, y: 0, place: Direction.north }),

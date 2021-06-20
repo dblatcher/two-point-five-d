@@ -6,6 +6,7 @@ import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
 import { playerVantage } from '@/store/levels'
 import { WallFeature } from './WallFeature'
+import { Wall } from './Wall'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -60,24 +61,33 @@ class Game {
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerVantage } = this.data
+        const { walls } = level.data
         const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
         if (!location) { return }
 
+        let wallClicked: Wall | undefined = undefined;
         let featureClicked: WallFeature | null = null;
 
         if (location.zone == "FRONT_WALL") {
-            const wallClicked =
-                level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
-                level.data.walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
-
-
-            if (wallClicked) {
-                featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked);
-            }
+            wallClicked =
+                walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
+                walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
         }
 
-        if (location.zone == "FLOOR") {
-            level.data.contents.push(new Position({ x: playerVantage.data.x, y: playerVantage.data.y }))
+        if (location.zone == "RIGHT_WALL") {
+            wallClicked =
+                walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction.rightOf)) ||
+                walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction.rightOf)) && wall.isFacing(playerVantage.data.direction.leftOf));
+        }
+
+        if (location.zone == "LEFT_WALL") {
+            wallClicked =
+                walls.find(wall => wall.isSamePlaceAs(playerVantage) && wall.isFacing(playerVantage.data.direction.leftOf)) ||
+                walls.find(wall => wall.isSamePlaceAs(playerVantage.translate(playerVantage.data.direction.leftOf)) && wall.isFacing(playerVantage.data.direction.rightOf));
+        }
+
+        if (wallClicked) {
+            featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked);
         }
 
         if (featureClicked && featureClicked.canInteract) {
@@ -85,6 +95,10 @@ class Game {
                 return
             }
             this.queuedPlayerActions.push(new InterAction(featureClicked));
+        }
+
+        if (location.zone == "FLOOR") {
+            level.data.contents.push(new Position({ x: playerVantage.data.x, y: playerVantage.data.y }))
         }
     }
 }

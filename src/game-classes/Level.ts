@@ -1,11 +1,12 @@
 import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointInSight, MAX_VIEW_DISTANCE, PlotPlace, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
+import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-const renderingZoneFrames = true;
+const renderingZoneFrames = false;
 
 interface LevelConfig {
     width: number
@@ -165,40 +166,49 @@ class Level {
     }
 
     renderZoneFrames(ctx: CanvasRenderingContext2D, vantage: Vantage, toCanvasCoords: ConvertFunction): void {
-        if (this.hasWallInFace(vantage)) {
-            //frontwall
-            ctx.fillStyle = new Color(100, 255, 100, .125).css
-            ctx.beginPath()
+        const locator =new PointerLocator()
 
+        if (this.hasWallInFace(vantage)) {
+            ctx.fillStyle = new Color(100, 255, 100, .125).css
             plotPolygon(ctx, toCanvasCoords, [
-                mapPointInSight(-.5, -.5, 0),
-                mapPointInSight(-.5, -.5, 1),
-                mapPointInSight(-.5, .5, 1),
-                mapPointInSight(-.5, .5, 0),
+                locator.frontWall.topLeft,
+                locator.frontWall.topRight,
+                locator.frontWall.bottomRight,
+                locator.frontWall.bottomLeft,
             ])
         } else {
-            //floor
             ctx.fillStyle = new Color(255, 100, 100, .25).css
-            ctx.beginPath()
-
             plotPolygon(ctx, toCanvasCoords, [
-                mapPointInSight(-.5, -.5, 0),
-                mapPointInSight(.5, -.5, 0),
-                mapPointInSight(.5, .5, 0),
-                mapPointInSight(-.5, .5, 0),
+                locator.floor.forwardLeft,
+                locator.floor.forwardRight,
+                locator.floor.backRight,
+                locator.floor.backLeft,
             ])
 
-            //backwall
             ctx.fillStyle = new Color(100, 255, 100, .25).css
-            ctx.beginPath()
-
             plotPolygon(ctx, toCanvasCoords, [
-                mapPointInSight(.5, -.5, 0),
-                mapPointInSight(.5, -.5, 1),
-                mapPointInSight(.5, .5, 1),
-                mapPointInSight(.5, .5, 0),
+                locator.backWall.topLeft,
+                locator.backWall.topRight,
+                locator.backWall.bottomRight,
+                locator.backWall.bottomLeft,
             ])
         }
+
+        ctx.fillStyle = new Color(255, 0, 255, .1).css
+        plotPolygon(ctx, toCanvasCoords, [
+            locator.leftWall.forwardTop,
+            locator.leftWall.backTop,
+            locator.leftWall.backBottom,
+            locator.leftWall.forwardBottom,
+        ])
+
+        ctx.fillStyle = new Color(255, 0, 255, .1).css
+        plotPolygon(ctx, toCanvasCoords, [
+            locator.rightWall.forwardTop,
+            locator.rightWall.backTop,
+            locator.rightWall.backBottom,
+            locator.rightWall.forwardBottom,
+        ])
     }
 }
 
