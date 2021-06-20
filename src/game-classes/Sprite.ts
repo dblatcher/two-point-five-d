@@ -1,5 +1,6 @@
 import { cutFrameFromGridSheet, transformSpriteImage } from "@/canvas/manipulations"
 import { Dimensions, Point } from "../canvas/canvas-utility"
+import { RelativeDirection } from "./RelativeDirection"
 
 interface SpriteSheetConfig {
     pattern: "SINGLE" | "GRID"
@@ -100,16 +101,18 @@ class Sprite {
     /**
      * 
      * @param actionName The string descibing what the sprite is doing 
-     * @param direction The relative direction the sprite facing
+     * @param direction The relative direction the sprite is facing
      * @param tickCount the game's current tick count
      * @throws an error is there is no animation for the action and direction, or if that animation is empty
      * @returns the image to draw
      */
-    provideImage(actionName: string, direction: "FORWARD" | "BACK" | "LEFT" | "RIGHT", tickCount: number): CanvasImageSource {
+    provideImage(actionName: string, direction: RelativeDirection, tickCount: number): CanvasImageSource {
 
-        const animationWithDirection = `${actionName}_${direction}`
+        const directionName = direction.name;
+
+        const animationWithDirection = `${actionName}_${directionName}`
         const animationWithoutDirection = `${actionName}`
-        let animationKey = `${actionName}_${direction}`
+        let animationKey = `${actionName}_${directionName}`
 
         if (this.animations.has(animationWithDirection)) {
             animationKey = animationWithDirection
@@ -125,7 +128,7 @@ class Sprite {
         }
 
         const frameIndex = tickCount % animation.length
-        const animationFrameKey = `${actionName}_${direction}_${frameIndex.toString()}`;
+        const animationFrameKey = `${actionName}_${directionName}_${frameIndex.toString()}`;
 
         if (this.loadedFrames.has(animationFrameKey)) {
             return this.loadedFrames.get(animationFrameKey) as CanvasImageSource;

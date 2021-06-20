@@ -7,6 +7,7 @@ import { Position } from './Position'
 import { playerVantage } from '@/store/levels'
 import { WallFeature } from './WallFeature'
 import { Wall } from './Wall'
+import { RelativeDirection } from './RelativeDirection'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -56,7 +57,7 @@ class Game {
         if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) {
             return
         }
-        this.queuedPlayerActions.push(new MovementAction(movement.action, movement.direction))
+        this.queuedPlayerActions.push(new MovementAction(movement.action, RelativeDirection[movement.direction]))
     }
 
     handleSightClick(clickInfo: { x: number, y: number }): void {

@@ -5,6 +5,7 @@ import { Frame, Sprite } from './Sprite'
 import { Direction } from "./Direction";
 import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
+import { RelativeDirection } from "./RelativeDirection";
 
 interface FigureConfig {
     x: number
@@ -64,7 +65,7 @@ class Figure extends Vantage {
         const { sprite } = this.data
 
         try {
-            return sprite.provideImage(this.actionName, plotPlace.relativeDirection || 'BACK', tickCount)
+            return sprite.provideImage(this.actionName, plotPlace.relativeDirection||RelativeDirection.BACK, tickCount)
         } catch (error) {
             console.warn(error.message)
         }

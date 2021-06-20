@@ -3,6 +3,7 @@ import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
+import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
@@ -117,7 +118,7 @@ class Level {
             const place = placesInSight.find(place => place.position.isSamePlaceAs(wall))
             if (!place) { return }
             const relativeDirection = wall.data.place.relativeDirection(vantage.data.direction);
-            if (relativeDirection == "BACK" && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
+            if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
             plotPlaces.push({ wall, place, relativeDirection })
         })
 
@@ -127,7 +128,7 @@ class Level {
 
             let relativeDirection;
             if (Object.keys(thing.data).includes('direction')) {
-                relativeDirection = (thing as Vantage).data.direction.relativeDirection(vantage.data.direction)
+                relativeDirection = (thing as Vantage).data.direction.relativeDirection(vantage.data.direction);
             }
 
             plotPlaces.push({ thing, place, relativeDirection })
@@ -141,10 +142,10 @@ class Level {
             function rateDirection(item: PlotPlace): number {
                 if (!item.relativeDirection || item.thing) { return 1.5 }
 
-                if (item.relativeDirection === "BACK") { return 1 }
-                if (item.relativeDirection === "FORWARD") { return 4 }
-                if (item.relativeDirection == 'LEFT' && item.place.right <= 0) { return 2 }
-                if (item.relativeDirection == 'RIGHT' && item.place.right >= 0) { return 2 }
+                if (item.relativeDirection.name === "BACK") { return 1 }
+                if (item.relativeDirection.name === "FORWARD") { return 4 }
+                if (item.relativeDirection.name == 'LEFT' && item.place.right <= 0) { return 2 }
+                if (item.relativeDirection.name == 'RIGHT' && item.place.right >= 0) { return 2 }
                 return 3
             }
             return rateDirection(itemB) - rateDirection(itemA)

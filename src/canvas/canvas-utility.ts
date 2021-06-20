@@ -1,3 +1,4 @@
+import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
@@ -10,7 +11,7 @@ interface PlotPlace {
     thing?: Position | Vantage,
     wall?: Wall,
     place: { position: Position, forward: number, right: number },
-    relativeDirection?: "FORWARD" | "LEFT" | "RIGHT" | "BACK"
+    relativeDirection?: RelativeDirection
 }
 
 

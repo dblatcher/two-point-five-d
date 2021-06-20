@@ -3,10 +3,9 @@ import { Sprite } from "@/game-classes/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Reaction } from "./Reaction"
+import { RelativeDirection } from "./RelativeDirection"
 import { Trigger } from "./Trigger"
 import { Vantage } from "./Vantage"
-
-const relativeDirections = ["FORWARD", "BACK", "LEFT", "RIGHT"]
 
 interface WallFeatureConfig {
     sprite: Sprite
@@ -34,7 +33,7 @@ class WallFeature {
 
         this.requiredAnimations.forEach(animationName => {
 
-            relativeDirections.forEach(relativeDirection => {
+            RelativeDirection.names.forEach(relativeDirection => {
                 if (
                     !this.data.sprite.animations.has(`${animationName}_${relativeDirection}`) &&
                     !this.data.sprite.animations.has(`${animationName}`)

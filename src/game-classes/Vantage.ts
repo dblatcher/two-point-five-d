@@ -1,6 +1,7 @@
 import { Direction } from './Direction'
 import { Position } from './Position'
 import { Game } from './Game'
+import { RelativeDirection } from './RelativeDirection'
 
 interface VantageConfig {
     x: number
@@ -16,39 +17,15 @@ class Vantage extends Position {
         this.data = config
     }
 
-    getAbsoluteDirection(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK"): Direction {
-        switch (relativeDirection) {
-            case "FORWARD":
-                return this.data.direction
-            case "BACK":
-                return this.data.direction.behind
-            case "LEFT":
-                return this.data.direction.leftOf
-            case "RIGHT":
-                return this.data.direction.rightOf
-        }
+    move(relativeDirection: RelativeDirection, game: Game): void {
+        this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
-    move(relativeDirection: "FORWARD" | "LEFT" | "RIGHT" | "BACK", game: Game):void {
-        const direction = this.getAbsoluteDirection(relativeDirection);
-        this.moveAbsolute(direction, game)
+    turn(direction: RelativeDirection): void {
+        this.data.direction = direction.getAbsoluteDirection(this.data.direction);
     }
 
-    turn(direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK"):void {
-        switch (direction) {
-            case "LEFT":
-                this.data.direction = this.data.direction.leftOf;
-                break;
-            case "RIGHT":
-                this.data.direction = this.data.direction.rightOf;
-                break;
-            case "BACK":
-                this.data.direction = this.data.direction.behind;
-                break;
-        }
-    }
-
-    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number):void {
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
         const { x, y, direction: d } = this.data;
         const arrowCenterX = (x + .5) * gridSize
         const arrowCenterY = (y + .5) * gridSize

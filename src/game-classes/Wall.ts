@@ -4,6 +4,7 @@ import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
+import { RelativeDirection } from "./RelativeDirection";
 import { WallFeature } from "./WallFeature";
 
 
@@ -46,7 +47,7 @@ class Wall extends Position {
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount: number, defaultSprite?: Sprite): void {
 
-        const { place, relativeDirection } = plotPlace
+        const { place, relativeDirection = RelativeDirection.BACK } = plotPlace
         const { patternSprite = defaultSprite, features = [] } = this.data
         const points: Point[] = relativeDirection ? getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place) : [];
         const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
@@ -58,7 +59,7 @@ class Wall extends Position {
         }
         plotPolygon(ctx, convertFunction, points)
 
-        features.forEach(feature => { 
+        features.forEach(feature => {
             // to do - delegate to WallFeature.drawInSight, 
             // have feature property decide if it should be rendered over fullWallPoints or points
             const featureImage = getPatternFill(feature.data.sprite, feature.data.animation, fullWallPoints, relativeDirection);
@@ -68,40 +69,42 @@ class Wall extends Position {
             }
         })
 
-        function getMappedPoints(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK", shape: Point[], place: { forward: number, right: number }) {
+        function getMappedPoints(relativeDirection: RelativeDirection = RelativeDirection.BACK, shape: Point[], place: { forward: number, right: number }): Point[] {
             switch (relativeDirection) {
-                case "LEFT":
+                case RelativeDirection.LEFT:
                     return shape.map(point => {
                         return mapPointInSight(place.forward - .5 - point.x, place.right - .5, point.y)
                     })
-                case "RIGHT":
+                case RelativeDirection.RIGHT:
                     return shape.map(point => {
                         return mapPointInSight(place.forward - .5 - point.x, place.right + .5, point.y)
                     })
-                case "FORWARD":
+                case RelativeDirection.FORWARD:
                     return shape.map(point => {
                         return mapPointInSight(place.forward - .5, place.right - .5 + point.x, point.y)
                     })
-                case "BACK":
+                default:
+                case RelativeDirection.BACK:
                     return shape.map(point => {
                         return mapPointInSight(place.forward - .5 - 1, place.right - .5 + point.x, point.y)
                     })
             }
         }
 
-        function getColorFill(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK", baseColor: Color): string {
+        function getColorFill(relativeDirection: RelativeDirection = RelativeDirection.BACK, baseColor: Color): string {
             switch (relativeDirection) {
-                case "LEFT":
-                case "RIGHT":
+                case RelativeDirection.LEFT:
+                case RelativeDirection.RIGHT:
                     return baseColor.darker(12 * (place.forward + .5)).css
-                case "FORWARD":
+                case RelativeDirection.FORWARD:
                     return baseColor.darker(12 * (place.forward + 1)).css
-                case "BACK":
+                default:
+                case RelativeDirection.BACK:
                     return baseColor.darker(12 * place.forward).css
             }
         }
 
-        function getPatternFill(sprite: Sprite, animationName: string, fullWallPoints: Point[], relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK"): CanvasPattern | null {
+        function getPatternFill(sprite: Sprite, animationName: string, fullWallPoints: Point[], relativeDirection: RelativeDirection = RelativeDirection.BACK): CanvasPattern | null {
             const xValues = fullWallPoints.map(point => point.x);
             const yValues = fullWallPoints.map(point => point.y);
 
@@ -130,13 +133,13 @@ class Wall extends Position {
             }
         }
 
-        function getWallFacingDirection(relativeDirection: "LEFT" | "RIGHT" | "FORWARD" | "BACK" = "BACK") {
-            return relativeDirection == 'BACK' || relativeDirection == 'FORWARD'
-                ? 'FORWARD'
+        function getWallFacingDirection(relativeDirection: RelativeDirection = RelativeDirection.BACK): RelativeDirection {
+            return relativeDirection.name == "BACK" || relativeDirection.name == "FORWARD"
+                ? RelativeDirection.FORWARD
                 : place.right > 0
-                    ? "RIGHT"
+                    ? RelativeDirection.RIGHT
                     : place.right < 0
-                        ? "LEFT"
+                        ? RelativeDirection.LEFT
                         : relativeDirection;
         }
     }

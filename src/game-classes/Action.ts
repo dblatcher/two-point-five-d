@@ -1,4 +1,5 @@
 import { Game } from "./Game";
+import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { WallFeature } from "./WallFeature";
 
@@ -16,9 +17,9 @@ class Action {
 
 class MovementAction extends Action {
     action: "TURN" | "MOVE"
-    direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK"
+    direction: RelativeDirection
 
-    constructor(action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") {
+    constructor(action: "TURN" | "MOVE", direction: RelativeDirection) {
         super(action);
         this.action = action;
         this.direction = direction;

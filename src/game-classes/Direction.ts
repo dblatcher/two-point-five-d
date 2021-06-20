@@ -1,4 +1,5 @@
 import { Point } from '../canvas/canvas-utility'
+import { RelativeDirection } from './RelativeDirection'
 
 class Direction {
     name: string
@@ -42,11 +43,11 @@ class Direction {
         return answer || null;
     }
 
-    relativeDirection(relativeToDirection: Direction): "LEFT" | "RIGHT" | "FORWARD" | "BACK" {
-        if (relativeToDirection.leftOf == this) { return "LEFT" }
-        if (relativeToDirection.rightOf == this) { return "RIGHT" }
-        if (relativeToDirection.behind == this) { return "BACK" }
-        return "FORWARD"
+    relativeDirection(relativeToDirection: Direction): RelativeDirection {
+        if (relativeToDirection.leftOf == this) { return RelativeDirection.LEFT }
+        if (relativeToDirection.rightOf == this) { return RelativeDirection.RIGHT }
+        if (relativeToDirection.behind == this) { return RelativeDirection.BACK }
+        return RelativeDirection.FORWARD
     }
 
     translatePoint(point: Point, distance: number): Point {
