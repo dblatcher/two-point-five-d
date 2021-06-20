@@ -19,6 +19,7 @@ const sheets = {
     testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets),
     painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
     leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 3 }),
+    woodenDoor: new SpriteSheet("woodenDoor", require("../assets/sprites/door.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 3 }),
 }
 
 
@@ -101,16 +102,16 @@ const testSprite = new Sprite("TEST_CARD", {
 })
 
 const leverSprite = new Sprite("LEVER", {
-    size: { x: .3, y: .3 },
+    size: { x: .5, y: .3 },
     animations: new Map<string, Frame[]>()
         .set("OFF", [
             { sheet: sheets.leverAndButton, col: 0, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
         .set("OFF_LEFT", [
-            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
+            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
         .set("OFF_RIGHT", [
-            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
         ])
         .set("ON", [
             { sheet: sheets.leverAndButton, col: 2, row: 1, transforms: ["RESIZE_CENTER"] },
@@ -146,10 +147,22 @@ const doorSprite = new Sprite("DOOR", {
     offset: { x: .5, y: .55 },
     animations: new Map<string, Frame[]>()
         .set("CLOSED", [
-            { sheet: sheets.testCard, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET"] },
+        ])
+        .set("CLOSED_LEFT", [
+            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+        ])
+        .set("CLOSED_RIGHT", [
+            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
         ])
         .set("OPEN", [
-            { sheet: sheets.testCard, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET"] },
+        ])
+        .set("OPEN_LEFT", [
+            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+        ])
+        .set("OPEN_RIGHT", [
+            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
         ])
 })
 
