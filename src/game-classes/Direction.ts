@@ -1,4 +1,5 @@
 import { Point } from '../canvas/canvas-utility'
+import { Position } from './Position'
 import { RelativeDirection } from './RelativeDirection'
 
 class Direction {
@@ -54,6 +55,38 @@ class Direction {
         return {
             x: point.x + (this.x * distance),
             y: point.y + (this.y * distance)
+        }
+    }
+
+    rotateSquarePosition(position: Position): Point {
+        const { squareX, squareY } = position;
+        switch (this.name) {
+            case "NORTH":
+                return { x: 1 - squareY, y: squareX }
+            case "EAST":
+                return { x: squareX, y: squareY, }
+            case "SOUTH":
+                return { x: squareY, y: 1 - squareX, }
+            case "WEST":
+                return { x: 1 - squareX, y: 1 - squareY, }
+            default:
+                return { x: 0.5, y: 0.5 }
+        }
+    }
+
+    getRelativeSquarePosition(position: Position): {forward:number,right:number} {
+        const { squareX, squareY } = position;
+        switch (this.name) {
+            case "NORTH":
+                return { forward: 1 - squareY, right: squareX }
+            case "EAST":
+                return { forward: squareX, right: squareY, }
+            case "SOUTH":
+                return { forward: squareY, right: 1 - squareX, }
+            case "WEST":
+                return { forward: 1 - squareX, right: 1 - squareY, }
+            default:
+                return { forward: 0.5, right: 0.5 }
         }
     }
 

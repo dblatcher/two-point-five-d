@@ -1,11 +1,12 @@
-import { ConvertFunction, Dimensions, mapPointInSight, PlotPlace, VANISH_RATE } from "@/canvas/canvas-utility";
+import { ConvertFunction, Dimensions, mapPointInSight, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Vantage } from "./Vantage";
 
-import { Frame, Sprite } from './Sprite'
+import { Sprite } from './Sprite'
 import { Direction } from "./Direction";
 import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
 import { RelativeDirection } from "./RelativeDirection";
+import { RenderInstruction } from "@/canvas/RenderInstruction";
 
 interface FigureConfig {
     x: number
@@ -28,21 +29,24 @@ class Figure extends Vantage {
         this.actionName = config.initialAnimation || Sprite.defaultFigureAnimation
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, plotPlace: PlotPlace, tickCount: number): void {
-        const { place } = plotPlace
+    drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        const { place,viewedFrom } = renderInstruction
         const { height = 1, width = 1, sprite } = this.data
-
         const aspect = (Wall.baseWidth / Wall.baseHeight)
 
-        const heightAtDistance = (height) / (VANISH_RATE ** (place.forward-.5));
-        const widthAtDistance = (width * aspect) / (VANISH_RATE ** (place.forward-.5));
 
-        const relativeDimensions: Dimensions = {
-            x: widthAtDistance, y: heightAtDistance
+        const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
+        const exactPlace = {
+            x: place.forward - 1.5 + rotatedSquarePosition.x,
+            y: place.right - .5 + rotatedSquarePosition.y
         }
 
-        const center = mapPointInSight(place.forward - 1, place.right, 0)
-        const topLeft = mapPointInSight(place.forward - 1, place.right - width / 2, height - (sprite.baseline * 4))
+        const heightAtDistance = (height) / (VANISH_RATE ** (exactPlace.x));
+        const widthAtDistance = (width * aspect) / (VANISH_RATE ** (exactPlace.x));
+
+        const center = mapPointInSight(exactPlace.x, exactPlace.y, 0)
+        const topLeft = mapPointInSight(exactPlace.x, exactPlace.y - width / 2, height - (sprite.baseline * 4))
+        const topRight = mapPointInSight(exactPlace.x, exactPlace.y + width / 2, height - (sprite.baseline * 4))
 
         if (sprite.shadow) {
             const shadowSize: Dimensions = {
@@ -54,18 +58,24 @@ class Figure extends Vantage {
             ctx.fill()
         }
 
+        const relativeDimensions: Dimensions = {
+            x: topRight.x - topLeft.x, 
+            y: center.y - topLeft.y
+        }
+
         ctx.drawImage(
-            this.getSpriteImage(plotPlace, tickCount),
+            this.getSpriteImage(renderInstruction, tickCount),
             ...convert(topLeft),
             ...convert(relativeDimensions)
         );
+
     }
 
-    getSpriteImage(plotPlace: PlotPlace, tickCount: number): CanvasImageSource {
+    getSpriteImage(renderInstruction: RenderInstruction, tickCount: number): CanvasImageSource {
         const { sprite } = this.data
 
         try {
-            return sprite.provideImage(this.actionName, plotPlace.relativeDirection||RelativeDirection.BACK, tickCount)
+            return sprite.provideImage(this.actionName, renderInstruction.relativeDirection||RelativeDirection.BACK, tickCount)
         } catch (error) {
             console.warn(error.message)
         }

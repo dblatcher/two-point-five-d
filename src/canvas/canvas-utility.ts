@@ -1,4 +1,3 @@
-import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
@@ -7,15 +6,8 @@ import { Wall } from "../game-classes/Wall";
 interface Point { x: number, y: number }
 interface Dimensions { x: number, y: number }
 interface ConvertFunction { (point: Point): [number, number] }
-interface PlotPlace {
-    thing?: Position | Vantage,
-    wall?: Wall,
-    place: { position: Position, forward: number, right: number },
-    relativeDirection?: RelativeDirection
-}
 
-
-const MAX_VIEW_DISTANCE = 7;
+const MAX_VIEW_DISTANCE = 8;
 const VANISH_RATE = Math.SQRT2;
 
 function mapPointInSight(forwardDistance: number, rightDistance: number, upDistance: number): Point {
@@ -104,7 +96,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
 
 
 export {
-    ConvertFunction, Point, PlotPlace, Dimensions,
+    ConvertFunction, Point, Dimensions,
     mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, mapPointInSight,
     MAX_VIEW_DISTANCE, VANISH_RATE
 }

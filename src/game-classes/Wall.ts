@@ -1,5 +1,6 @@
-import { PlotPlace, ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
+import { ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
 import { scaleTo } from "@/canvas/manipulations";
+import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
@@ -45,9 +46,9 @@ class Wall extends Position {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount: number, defaultSprite?: Sprite): void {
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, defaultSprite?: Sprite): void {
 
-        const { place, relativeDirection = RelativeDirection.BACK } = plotPlace
+        const { place, relativeDirection = RelativeDirection.BACK } = renderInstruction
         const { patternSprite = defaultSprite, features = [] } = this.data
         const points: Point[] = relativeDirection ? getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place) : [];
         const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)

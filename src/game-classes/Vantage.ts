@@ -26,9 +26,10 @@ class Vantage extends Position {
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
-        const { x, y, direction: d } = this.data;
-        const arrowCenterX = (x + .5) * gridSize
-        const arrowCenterY = (y + .5) * gridSize
+        const { direction: d } = this.data;
+        const { gridX, gridY } = this;
+        const arrowCenterX = (gridX + .5) * gridSize
+        const arrowCenterY = (gridY + .5) * gridSize
 
         let arrowEndX = arrowCenterX,
             arrowEndY = arrowCenterY,

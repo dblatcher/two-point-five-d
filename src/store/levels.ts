@@ -59,7 +59,7 @@ const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenD
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [telportToCorner] })
 const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor] })
 
-const playerVantage = new Vantage({ x: 3, y: 3, direction: Direction.east });
+const playerVantage = new Vantage({ x: 4, y: 1, direction: Direction.east });
 
 const level: Level = new Level({
     height: 8, width: 15,
@@ -95,11 +95,14 @@ const level: Level = new Level({
         new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: sprites.brickWall, features: [painting1] }),
     ],
     contents: [
-        duck({ x: 6, y: 1, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
-        duck({ x: 5, y: 0, direction: Direction.west, behaviour: undefined }),
-        duck({ x: 4, y: 1, direction: Direction.west, behaviour: undefined }),
-        new Figure({ x: 5.1, y: 3, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5 }),
-        new Position({ x: 3, y: 3 }),
+        duck({ x: 6.5, y: 1.5, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
+        // duck({ x: 5.25, y: 0.25, direction: Direction.west, behaviour: undefined }),
+        duck({ x: 9.2, y: 3.5, direction: Direction.west, behaviour: undefined }),
+        duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
+        // new Figure({ x: 5.1, y: 3, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5 }),
+
+        // new Position({ x: 1, y: 3 }),
+        // new Position({ x: 3.25, y: 3.4 }),
     ]
 })
 

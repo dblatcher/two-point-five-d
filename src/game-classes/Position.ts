@@ -1,6 +1,8 @@
 import { Direction } from './Direction'
-import { ConvertFunction, mapPointOnFloor, PlotPlace, plotPolygon, Point } from '@/canvas/canvas-utility';
+import { ConvertFunction, mapPointOnFloor, plotPolygon, Point } from '@/canvas/canvas-utility';
 import { Game } from './Game';
+import { RenderInstruction } from '@/canvas/RenderInstruction';
+
 
 interface PositionConfig {
     x: number
@@ -40,8 +42,8 @@ class Position {
 
     moveAbsolute(direction: Direction, game: Game): void {
 
-        const targetX = this.gridX + direction.x;
-        const targetY = this.gridY + direction.y;
+        const targetX = this.gridX + (direction.x);
+        const targetY = this.gridY + (direction.y);
 
         if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY)) { return }
 
@@ -53,21 +55,29 @@ class Position {
         return this.gridX === otherPosition.gridX && this.gridY === otherPosition.gridY
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, plotPlace: PlotPlace, tickCount: number): void {
-        const { place } = plotPlace
-        const outDistance = .45;
-        const foreLeft = mapPointOnFloor(place.forward - 1 + outDistance, place.right - outDistance)
-        const backLeft = mapPointOnFloor(place.forward - 1 - outDistance, place.right - outDistance)
-        const foreRight = mapPointOnFloor(place.forward - 1 + outDistance, place.right + outDistance)
-        const backRight = mapPointOnFloor(place.forward - 1 - outDistance, place.right + outDistance)
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        const { place, viewedFrom } = renderInstruction
+
+        const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
+        const exactPlace = {
+            x: place.forward - 1.5 + rotatedSquarePosition.x,
+            y: place.right - .5 + rotatedSquarePosition.y
+        }
+
+        const outDistance = .15;
+
+        const foreLeft = mapPointOnFloor(exactPlace.x + outDistance, exactPlace.y - outDistance)
+        const backLeft = mapPointOnFloor(exactPlace.x - outDistance, exactPlace.y - outDistance)
+        const foreRight = mapPointOnFloor(exactPlace.x + outDistance, exactPlace.y + outDistance)
+        const backRight = mapPointOnFloor(exactPlace.x - outDistance, exactPlace.y + outDistance)
         plotPolygon(ctx, convertFunction, [foreLeft, backRight], { noFill: false })
         plotPolygon(ctx, convertFunction, [foreRight, backLeft], { noFill: false })
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
-        const { x, y } = this.data;
-        const crossCenterX = (x + .5) * gridSize
-        const crossCenterY = (y + .5) * gridSize
+        const { gridX, gridY } = this;
+        const crossCenterX = (gridX + .5) * gridSize
+        const crossCenterY = (gridY + .5) * gridSize
 
         const crossArmLength = gridSize * (1 / 3)
 

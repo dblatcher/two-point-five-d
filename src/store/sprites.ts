@@ -24,7 +24,7 @@ const sheets = {
 
 
 const duckSprite = new Sprite("DUCK", {
-    shadow: { x: 1 / 3, y: 1 / 8 },
+    shadow: { x: 1 / 4, y: 1 / 12 },
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
             { sheet: sheets.duck_back },

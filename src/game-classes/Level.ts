@@ -1,5 +1,7 @@
-import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointInSight, MAX_VIEW_DISTANCE, PlotPlace, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
+import { ConvertFunction, getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
+import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
+import { playerVantage } from "@/store/levels";
 import { Color } from "./Color";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
@@ -7,7 +9,7 @@ import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-const renderingZoneFrames = false;
+const renderingZoneFrames = true;
 
 interface LevelConfig {
     width: number
@@ -47,10 +49,10 @@ class Level {
     }
 
     hasWallInFace(vantage: Vantage): boolean {
-        const wall1 = this.data.walls.find(wall => 
+        const wall1 = this.data.walls.find(wall =>
             wall.isInSameSquareAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasInteractableFeature)
         )
-        const wall2 = this.data.walls.find(wall => 
+        const wall2 = this.data.walls.find(wall =>
             wall.isInSameSquareAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind) && (wall.isBlocking || wall.hasInteractableFeature)
         )
         return !!(wall1 || wall2)
@@ -112,14 +114,17 @@ class Level {
 
         const placesInSight = getPlacesInSight(vantage);
 
-        const plotPlaces: PlotPlace[] = [];
+        const renderInstructions: RenderInstruction[] = [];
 
         this.data.walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isInSameSquareAs(wall))
             if (!place) { return }
             const relativeDirection = wall.data.place.relativeDirection(vantage.data.direction);
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
-            plotPlaces.push({ wall, place, relativeDirection })
+
+            renderInstructions.push(new RenderInstruction({
+                place, viewedFrom: vantage.data.direction, subject:wall, relativeDirection
+            }))
         })
 
         this.data.contents.forEach(thing => {
@@ -131,32 +136,19 @@ class Level {
                 relativeDirection = (thing as Vantage).data.direction.relativeDirection(vantage.data.direction);
             }
 
-            plotPlaces.push({ thing, place, relativeDirection })
+            renderInstructions.push(new RenderInstruction({
+                place, viewedFrom: vantage.data.direction, subject:thing, relativeDirection
+            }))
         })
 
-        plotPlaces.sort((itemA, itemB) => {
-            if (itemB.place.forward !== itemA.place.forward) {
-                return itemB.place.forward - itemA.place.forward
-            }
+        renderInstructions.sort(RenderInstruction.sortFunction)
 
-            function rateDirection(item: PlotPlace): number {
-                if (!item.relativeDirection || item.thing) { return 1.5 }
-
-                if (item.relativeDirection.name === "BACK") { return 1 }
-                if (item.relativeDirection.name === "FORWARD") { return 4 }
-                if (item.relativeDirection.name == 'LEFT' && item.place.right <= 0) { return 2 }
-                if (item.relativeDirection.name == 'RIGHT' && item.place.right >= 0) { return 2 }
-                return 3
+        renderInstructions.forEach(renderInstruction => {
+            if (renderInstruction.wall) {
+                renderInstruction.wall.drawInSight(ctx, toCanvasCoords, renderInstruction, this.tickCount, this.data.defaultWallPattern)
             }
-            return rateDirection(itemB) - rateDirection(itemA)
-        })
-
-        plotPlaces.forEach(plotPlace => {
-            if (plotPlace.wall) {
-                plotPlace.wall.drawInSight(ctx, toCanvasCoords, plotPlace, this.tickCount, this.data.defaultWallPattern)
-            }
-            if (plotPlace.thing) {
-                plotPlace.thing.drawInSight(ctx, toCanvasCoords, plotPlace, this.tickCount)
+            if (renderInstruction.thing) {
+                renderInstruction.thing.drawInSight(ctx, toCanvasCoords, renderInstruction, this.tickCount)
             }
         })
 
@@ -167,7 +159,7 @@ class Level {
     }
 
     renderZoneFrames(ctx: CanvasRenderingContext2D, vantage: Vantage, toCanvasCoords: ConvertFunction): void {
-        const locator =new PointerLocator()
+        const locator = new PointerLocator()
 
         if (this.hasWallInFace(vantage)) {
             ctx.fillStyle = new Color(100, 255, 100, .125).css
