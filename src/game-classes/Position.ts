@@ -1,5 +1,5 @@
 import { Direction } from './Direction'
-import { ConvertFunction, mapPointOnFloor, plotPolygon, Point } from '@/canvas/canvas-utility';
+import { ConvertFunction, mapPointOnFloor, plotPolygon } from '@/canvas/canvas-utility';
 import { Game } from './Game';
 import { RenderInstruction } from '@/canvas/RenderInstruction';
 
@@ -16,19 +16,19 @@ class Position {
         this.data = config
     }
 
-    get gridX() {
+    get gridX():number {
         return Math.floor(this.data.x);
     }
 
-    get gridY() {
+    get gridY():number {
         return Math.floor(this.data.y);
     }
 
-    get squareX() {
+    get squareX():number {
         return this.data.x - this.gridX
     }
 
-    get squareY() {
+    get squareY():number {
         return this.data.y - this.gridY
     }
 
@@ -55,6 +55,7 @@ class Position {
         return this.gridX === otherPosition.gridX && this.gridY === otherPosition.gridY
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { place, viewedFrom } = renderInstruction
 

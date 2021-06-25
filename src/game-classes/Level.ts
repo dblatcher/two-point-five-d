@@ -1,7 +1,6 @@
 import { ConvertFunction, getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
-import { playerVantage } from "@/store/levels";
 import { Color } from "./Color";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
