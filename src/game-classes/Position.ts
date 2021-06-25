@@ -16,6 +16,8 @@ class Position {
         this.data = config
     }
 
+    get isVantage():boolean { return false }
+
     get gridX():number {
         return Math.floor(this.data.x);
     }
@@ -47,8 +49,8 @@ class Position {
 
         if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY)) { return }
 
-        this.data.x = targetX
-        this.data.y = targetY
+        this.data.x = targetX + this.squareX
+        this.data.y = targetY + this.squareX
     }
 
     isInSameSquareAs(otherPosition: Position): boolean {

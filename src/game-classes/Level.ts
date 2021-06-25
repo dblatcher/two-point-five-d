@@ -8,7 +8,7 @@ import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
-const renderingZoneFrames = true;
+const renderingZoneFrames = false;
 
 interface LevelConfig {
     width: number
@@ -113,7 +113,7 @@ class Level {
 
         const placesInSight = getPlacesInSight(vantage);
 
-        const renderInstructions: RenderInstruction[] = [];
+        let renderInstructions: RenderInstruction[] = [];
 
         this.data.walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isInSameSquareAs(wall))
@@ -122,7 +122,7 @@ class Level {
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
 
             renderInstructions.push(new RenderInstruction({
-                place, viewedFrom: vantage.data.direction, subject:wall, relativeDirection
+                place, viewedFrom: vantage.data.direction, subject:wall
             }))
         })
 
@@ -130,17 +130,13 @@ class Level {
             const place = placesInSight.find(place => place.position.isInSameSquareAs(thing))
             if (!place) { return }
 
-            let relativeDirection;
-            if (Object.keys(thing.data).includes('direction')) {
-                relativeDirection = (thing as Vantage).data.direction.relativeDirection(vantage.data.direction);
-            }
-
             renderInstructions.push(new RenderInstruction({
-                place, viewedFrom: vantage.data.direction, subject:thing, relativeDirection
+                place, viewedFrom: vantage.data.direction, subject:thing
             }))
         })
 
-        renderInstructions.sort(RenderInstruction.sortFunction)
+
+       renderInstructions = RenderInstruction.putInOrder(renderInstructions);
 
         renderInstructions.forEach(renderInstruction => {
             if (renderInstruction.wall) {

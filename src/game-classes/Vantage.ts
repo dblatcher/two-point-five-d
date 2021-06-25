@@ -17,6 +17,8 @@ class Vantage extends Position {
         this.data = config
     }
 
+    get isVantage():boolean { return true }
+
     move(relativeDirection: RelativeDirection, game: Game): void {
         this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
