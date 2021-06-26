@@ -99,7 +99,14 @@ class Game {
         }
 
         if (location.zone == "FLOOR") {
-            level.data.contents.push(new Position({ x: playerVantage.data.x, y: playerVantage.data.y }))
+            const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerVantage.data.direction);
+
+            const crossOnFloor = new Position({
+                x: playerVantage.data.x + rotatedLocation.x,
+                y: playerVantage.data.y + rotatedLocation.y
+            }).translate(playerVantage.data.direction)
+
+            level.data.contents.push(crossOnFloor)
         }
     }
 }

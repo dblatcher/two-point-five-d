@@ -1,4 +1,5 @@
 import { mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas/canvas-utility";
+import { Direction } from "./Direction";
 import { Wall } from "./Wall";
 import { WallFeature } from "./WallFeature";
 
@@ -195,6 +196,27 @@ class PointerLocator {
                 Math.abs((zonePoint.y - offset.y) / (size.y / 2)) <= 1
             return clickIsWithinBounds;
         }) || null
+    }
+
+    identifyPointOnFloorSquare(zonePoint: ZonePoint, facingDirection: Direction): Point {
+
+        let x = .5
+        let y = .5;
+        if (facingDirection.name === 'NORTH') {
+            x = zonePoint.x;
+            y = 1 - zonePoint.y;
+        } else if (facingDirection.name === 'WEST') {
+            x = 1 - zonePoint.y;
+            y = 1 - zonePoint.x;
+        } else if (facingDirection.name === 'EAST') {
+            x = zonePoint.y;
+            y = zonePoint.x;
+        } else if (facingDirection.name === 'SOUTH') {
+            x = 1 - zonePoint.x;
+            y = zonePoint.y;
+        }
+
+        return { x, y }
     }
 }
 
