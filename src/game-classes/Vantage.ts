@@ -23,6 +23,10 @@ class Vantage extends Position {
         this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
+    moveBy(distance:number, relativeDirection: RelativeDirection, game: Game): void {
+        this.moveAbsoluteBy(distance, relativeDirection.getAbsoluteDirection(this.data.direction), game)
+    }
+
     turn(direction: RelativeDirection): void {
         this.data.direction = direction.getAbsoluteDirection(this.data.direction);
     }

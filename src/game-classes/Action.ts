@@ -1,3 +1,4 @@
+import { Point } from "@/canvas/canvas-utility";
 import { Game } from "./Game";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
@@ -33,6 +34,39 @@ class MovementAction extends Action {
     }
 }
 
+class MovementByAction extends Action {
+    action: "MOVEBY"
+    direction: RelativeDirection
+    distance: number
+
+    constructor(distance: number, direction: RelativeDirection) {
+        super("MOVEBY");
+        this.action = "MOVEBY";
+        this.distance = distance;
+        this.direction = direction;
+    }
+
+    perform(actor: Vantage, game: Game): void {
+        return actor.moveBy(this.distance, this.direction, game);
+    }
+}
+
+class ShiftAction extends Action {
+    action: "SHIFT"
+    position: Point
+
+    constructor(position: Point) {
+        super("SHIFT")
+        this.action = "SHIFT"
+        this.position = position;
+    }
+
+    perform(actor: Vantage, game: Game): void {
+        actor.shiftWithinSquare(this.position, game)
+    }
+
+}
+
 class InterAction extends Action {
     action: "INTERACT"
     feature: WallFeature
@@ -48,4 +82,4 @@ class InterAction extends Action {
     }
 }
 
-export { Action, MovementAction, InterAction }
+export { Action, MovementAction, InterAction, ShiftAction, MovementByAction }

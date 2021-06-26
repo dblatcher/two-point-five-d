@@ -1,5 +1,5 @@
 import { Direction } from './Direction'
-import { ConvertFunction, mapPointOnFloor, plotPolygon } from '@/canvas/canvas-utility';
+import { ConvertFunction, mapPointOnFloor, plotPolygon, Point } from '@/canvas/canvas-utility';
 import { Game } from './Game';
 import { RenderInstruction } from '@/canvas/RenderInstruction';
 
@@ -16,21 +16,21 @@ class Position {
         this.data = config
     }
 
-    get isVantage():boolean { return false }
+    get isVantage(): boolean { return false }
 
-    get gridX():number {
+    get gridX(): number {
         return Math.floor(this.data.x);
     }
 
-    get gridY():number {
+    get gridY(): number {
         return Math.floor(this.data.y);
     }
 
-    get squareX():number {
+    get squareX(): number {
         return this.data.x - this.gridX
     }
 
-    get squareY():number {
+    get squareY(): number {
         return this.data.y - this.gridY
     }
 
@@ -42,15 +42,51 @@ class Position {
         return new Position({ x: this.data.x + vector.x, y: this.data.y + vector.y });
     }
 
-    moveAbsolute(direction: Direction, game: Game): void {
+    moveAbsolute(direction: Direction, game: Game, ignoreWalls = false): void {
 
         const targetX = this.gridX + (direction.x);
         const targetY = this.gridY + (direction.y);
 
-        if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY)) { return }
+        if (!ignoreWalls) {
+            if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY)) { return }
+        }
 
         this.data.x = targetX + this.squareX
         this.data.y = targetY + this.squareX
+    }
+
+    moveAbsoluteBy(distance: number, direction: Direction, game: Game, ignoreWalls = false): void {
+        const target = new Position({
+            x: this.data.x + distance * direction.x,
+            y: this.data.y + distance * direction.y
+        })
+
+        if (!ignoreWalls && !target.isInSameSquareAs(this)) {
+            let nextPositionInPath: Position = new Position(this.data);
+            const squaresCovered: Position[] = [nextPositionInPath];
+            do {
+                nextPositionInPath = nextPositionInPath.translate(direction)
+                squaresCovered.push(nextPositionInPath)
+            } while (!nextPositionInPath.isInSameSquareAs(target));
+
+            let i = 0;
+            for (i = 0; i < squaresCovered.length - 1; i++) {
+                if (game.data.level.isBlocked(
+                    squaresCovered[i].gridX, squaresCovered[i].gridY,
+                    squaresCovered[i + 1].gridX, squaresCovered[i + 1].gridY,
+                )) { return }
+            }
+        }
+
+        this.data.x = target.data.x
+        this.data.y = target.data.y
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    shiftWithinSquare(point: Point, game: Game): void {
+        function bind(n: number) { return Math.max(0, Math.min(n, .99)) }
+        this.data.x = this.gridX + bind(point.x)
+        this.data.y = this.gridY + bind(point.y)
     }
 
     isInSameSquareAs(otherPosition: Position): boolean {

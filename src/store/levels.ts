@@ -96,7 +96,7 @@ const busyLevel: Level = new Level({
     ],
     contents: [
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise) }),
-        // duck({ x: 5.25, y: 0.25, direction: Direction.west, behaviour: undefined }),
+        duck({ x: 4.25, y: 5.25, direction: Direction.north, behaviour: new Behaviour(decisionFunctions.wanderForward) }),
         duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
         // duck({ x: 9.9, y: 2.75, direction: Direction.west, behaviour: undefined }),
         // duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),

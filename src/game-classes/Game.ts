@@ -48,7 +48,7 @@ class Game {
                 const figure = item as Figure;
 
                 if (figure.data.behaviour) {
-                    figure.data.behaviour.decideAction(figure, this).perform(figure, this)
+                    figure.data.behaviour.decideAction(figure, this)?.perform(figure, this)
                 }
             })
     }
