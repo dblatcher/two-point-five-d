@@ -100,7 +100,7 @@ const busyLevel: Level = new Level({
         duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
         // duck({ x: 9.9, y: 2.75, direction: Direction.west, behaviour: undefined }),
         // duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
-        new Figure({ x: 5.1, y: 3, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5 }),
+        new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation:"WALK",behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
 
         new Position({ x: 1, y: 3 }),
         new Position({ x: 3.25, y: 3.4 }),
@@ -124,6 +124,6 @@ const simpleLevel: Level = new Level({
     ],
 })
 
-const playerVantage = new Vantage({ x: 6, y: 5, direction: Direction.west });
+const playerVantage = new Vantage({ x: 8, y: 2, direction: Direction.west });
 
 export { busyLevel as level, playerVantage }

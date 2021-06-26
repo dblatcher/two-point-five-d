@@ -30,7 +30,7 @@ class Figure extends Vantage {
     }
 
     drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
-        const { place,viewedFrom } = renderInstruction
+        const { place, viewedFrom } = renderInstruction
         const { height = 1, width = 1, sprite } = this.data
         const aspect = (Wall.baseWidth / Wall.baseHeight)
 
@@ -45,8 +45,8 @@ class Figure extends Vantage {
         const widthAtDistance = (width * aspect) / (VANISH_RATE ** (exactPlace.x));
 
         const center = mapPointInSight(exactPlace.x, exactPlace.y, 0)
-        const topLeft = mapPointInSight(exactPlace.x, exactPlace.y - width / 2, height - (sprite.baseline * 4))
-        const topRight = mapPointInSight(exactPlace.x, exactPlace.y + width / 2, height - (sprite.baseline * 4))
+        const topLeft = mapPointInSight(exactPlace.x, exactPlace.y - width / 2, height)
+        const topRight = mapPointInSight(exactPlace.x, exactPlace.y + width / 2, height)
 
         if (sprite.shadow) {
             const shadowSize: Dimensions = {
@@ -59,9 +59,11 @@ class Figure extends Vantage {
         }
 
         const relativeDimensions: Dimensions = {
-            x: topRight.x - topLeft.x, 
+            x: topRight.x - topLeft.x,
             y: center.y - topLeft.y
         }
+
+        // topLeft.y += sprite.baseline * height
 
         ctx.drawImage(
             this.getSpriteImage(renderInstruction, tickCount),
@@ -75,7 +77,7 @@ class Figure extends Vantage {
         const { sprite } = this.data
 
         try {
-            return sprite.provideImage(this.actionName, renderInstruction.relativeDirection||RelativeDirection.BACK, tickCount)
+            return sprite.provideImage(this.actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount)
         } catch (error) {
             console.warn(error.message)
         }

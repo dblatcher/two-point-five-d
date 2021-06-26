@@ -42,8 +42,9 @@ const duckSprite = new Sprite("DUCK", {
 
 
 const dinoSprite = new Sprite("DINOSAUR", {
-    baseline: 0.05,
-    shadow: { x: 1 / 3, y: 1 / 12 },
+    baseline: .25,
+    shadow: { x: 1 / 6, y: 1 / 24 },
+    transforms:["CROP_BASE"],
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
             { sheet: sheets.dinosaur, col: 2, row: 0 },

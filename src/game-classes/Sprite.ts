@@ -28,7 +28,7 @@ interface Frame {
     sheet: SpriteSheet
     row?: number
     col?: number
-    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET">
+    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
 }
 
 interface SpriteConfig {
@@ -37,6 +37,7 @@ interface SpriteConfig {
     size?: Dimensions
     offset?: Point
     animations?: Map<string, Frame[]>
+    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
 }
 
 class Sprite {
@@ -46,9 +47,10 @@ class Sprite {
     shadow?: Dimensions
     size?: Dimensions
     offset?: Point
+    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
     loadedFrames: Map<string, CanvasImageSource>
 
-    static get defaultWallAnimation(): "NEUTRAL" {return "NEUTRAL"}
+    static get defaultWallAnimation(): "NEUTRAL" { return "NEUTRAL" }
     static get defaultFigureAnimation(): "STAND" { return "STAND" }
 
     constructor(name: string, config: SpriteConfig = {}) {
@@ -58,6 +60,7 @@ class Sprite {
         this.shadow = config.shadow
         this.size = config.size
         this.offset = config.offset
+        this.transforms = config.transforms
         this.loadedFrames = new Map<string, CanvasImageSource>();
     }
 
@@ -90,8 +93,12 @@ class Sprite {
             image = cutFrameFromGridSheet(source, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
         }
 
-        if (frame.transforms) {
-            image = transformSpriteImage(image,frame.transforms,this);
+        if (frame.transforms || this.transforms) {
+            const transforms = [
+                ...(this.transforms || []),
+                ...(frame.transforms || []),
+            ]
+            image = transformSpriteImage(image, transforms, this);
         }
 
         this.loadedFrames.set(animationFrameKey, image);
@@ -154,7 +161,7 @@ class Sprite {
 
         config.animations = new Map<string, Frame[]>()
             .set(`${Sprite.defaultWallAnimation}`, [
-                { sheet:sheet, transforms: ["RESIZE_CENTER"] },
+                { sheet: sheet, transforms: ["RESIZE_CENTER"] },
             ])
             .set(`${Sprite.defaultWallAnimation}_LEFT`, [
                 { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },

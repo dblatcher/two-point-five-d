@@ -106,12 +106,29 @@ function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size: Dimensi
     board.setAttribute('height', expandedFrame.y.toString())
 
     const destination: Point = {
-        x: (expandedFrame.x  * offset.x) - source.width/2,
-        y: (expandedFrame.y * offset.y) - source.height/2,
+        x: (expandedFrame.x * offset.x) - source.width / 2,
+        y: (expandedFrame.y * offset.y) - source.height / 2,
     }
 
     ctx.drawImage(source, 0, 0, source.width, source.height, destination.x, destination.y, source.width, source.height)
 
+    return board;
+}
+
+function cropBase(source: HTMLCanvasElement | HTMLImageElement, baseline: number): HTMLCanvasElement | HTMLImageElement {
+    const board = document.createElement('canvas')
+    if (!source.width || !source.height) { return board }
+    if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
+    const ctx = board.getContext('2d') as CanvasRenderingContext2D
+
+    const croppedFrame: Dimensions = {
+        x: source.width,
+        y: source.height * (1 - baseline),
+    }
+
+    board.setAttribute('width', croppedFrame.x.toString())
+    board.setAttribute('height', croppedFrame.y.toString())
+    ctx.drawImage(source, 0, 0, source.width, croppedFrame.y, 0, 0, source.width, croppedFrame.y)
     return board;
 }
 
@@ -137,6 +154,9 @@ function transformSpriteImage(image: HTMLImageElement | HTMLCanvasElement, trans
                 break;
             case "SKEW_RIGHT":
                 image = perspectiveSkew(image, true)
+                break;
+            case "CROP_BASE":
+                image = cropBase(image, sprite.baseline)
                 break;
         }
     })
