@@ -8,12 +8,14 @@ import { playerVantage } from '@/store/levels'
 import { WallFeature } from './WallFeature'
 import { Wall } from './Wall'
 import { RelativeDirection } from './RelativeDirection'
+import { Item } from './Item'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
 interface GameConfig {
     playerVantage: Vantage,
     level: Level
+    itemInHand?: Item
 }
 
 class Game {
@@ -61,7 +63,7 @@ class Game {
     }
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
-        const { level, playerVantage } = this.data
+        const { level, playerVantage, itemInHand } = this.data
         const { walls, items } = level.data
         const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
         if (!location) { return }
@@ -116,7 +118,11 @@ class Game {
                 y: playerVantage.data.y + rotatedLocation.y
             }).translate(playerVantage.data.direction)
 
-            level.data.contents.push(positionClicked)
+            if (itemInHand) {
+                itemInHand.placeAt(positionClicked, this.data.playerVantage.data.direction, this);
+                this.data.itemInHand = undefined;
+            }
+
         }
     }
 }

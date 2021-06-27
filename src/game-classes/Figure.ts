@@ -7,7 +7,6 @@ import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
 import { RelativeDirection } from "./RelativeDirection";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
-import { Position } from "./Position";
 
 interface FigureConfig {
     x: number

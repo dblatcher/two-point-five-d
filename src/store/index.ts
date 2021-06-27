@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import { spriteSheets } from './sprites'
 
 import { game } from './game'
+import { markRaw, toRaw } from 'vue'
 
 
 export default createStore({
@@ -22,16 +23,16 @@ export default createStore({
   actions: {
     sendPlayerMovement({ state }, movement: { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }) {
       if (!this.getters.gameIsPaused) {
-        state.game.queuePlayerMovementAction(movement)
+        toRaw(state.game).queuePlayerMovementAction(movement)
       }
     },
     sightClick({ state }, clickInfo: { x: number, y: number }) {
       if (!this.getters.gameIsPaused) {
-        state.game.handleSightClick(clickInfo)
+        toRaw(state.game).handleSightClick(clickInfo)
       }
     },
     tick({ state, commit }) {
-      state.game.tick();
+      toRaw(state.game).tick();
       commit('updateTimestamp');
     },
     startTimer({ state, dispatch }) {

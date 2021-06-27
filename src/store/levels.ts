@@ -106,7 +106,9 @@ const busyLevel: Level = new Level({
         new Position({ x: 1, y: 3 }),
         new Position({ x: 3.25, y: 3.4 }),
     ],
-    items:[]
+    items: [
+        new Item({ type: { description: "apple" }, sprite: sprites.apple, figureDimensions: { height: .2, width: .2 }, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+    ]
 })
 
 const simpleLevel: Level = new Level({
@@ -125,12 +127,12 @@ const simpleLevel: Level = new Level({
         // duck({ x: 4.1, y: 7.9, direction: Direction.east }),
     ],
     items: [
-        new Item({ sprite: sprites.apple, figureDimensions:{height:.2,width:.2}, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
-        new Item({ sprite: sprites.bean, figureDimensions:{height:.2,width:.2}, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
+        new Item({ type: { description: "apple" }, sprite: sprites.apple, figureDimensions: { height: .2, width: .2 }, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+        new Item({ type: { description: "bean" }, sprite: sprites.bean, figureDimensions: { height: .2, width: .2 }, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
     ]
 })
 
-const playerVantage = new Vantage({ x: 5, y: 4  , direction: Direction.west });
+const playerVantage = new Vantage({ x: 5, y: 4, direction: Direction.west });
 
 
 
