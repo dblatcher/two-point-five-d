@@ -172,6 +172,16 @@ class Sprite {
 
         return new Sprite(name, config)
     }
+
+    static itemSprite(name: string, frame: Frame, config: SpriteConfig = {}):Sprite {
+
+        config.animations= new Map<string, Frame[]>()
+        .set(Sprite.defaultFigureAnimation, [
+           frame
+        ])
+
+        return new Sprite(name, config)
+    }
 }
 
 export {

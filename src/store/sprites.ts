@@ -16,6 +16,9 @@ const sheets = {
     bricks: new SpriteSheet("bricks", require("../assets/sprites/brick.png"), spriteSheets),
     window: new SpriteSheet("window", require("../assets/sprites/open-window.png"), spriteSheets),
 
+    //https://opengameart.org/content/weird-fruits-16x16
+    fruits: new SpriteSheet("fruit", require("../assets/sprites/fruit.png"), spriteSheets, { pattern: "GRID", cols: 4, rows: 4 }),
+
     testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets),
     painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
     leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 3 }),
@@ -44,7 +47,7 @@ const duckSprite = new Sprite("DUCK", {
 const dinoSprite = new Sprite("DINOSAUR", {
     baseline: .25,
     shadow: { x: 1 / 6, y: 1 / 24 },
-    transforms:["CROP_BASE"],
+    transforms: ["CROP_BASE"],
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
             { sheet: sheets.dinosaur, col: 2, row: 0 },
@@ -184,6 +187,8 @@ const sprites = {
     doorSprite,
     buttonSprite,
     smallButtonSprite,
+    apple: Sprite.itemSprite("bean", { sheet: sheets.fruits, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
+    bean: Sprite.itemSprite("bean", { sheet: sheets.fruits, col: 1, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
 }
 
 export {

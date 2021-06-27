@@ -13,6 +13,7 @@ import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites } from "./sprites";
+import { Item } from "@/game-classes/Item";
 
 
 const lowWall: Point[] = [
@@ -100,11 +101,12 @@ const busyLevel: Level = new Level({
         duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
         // duck({ x: 9.9, y: 2.75, direction: Direction.west, behaviour: undefined }),
         // duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
-        new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation:"WALK",behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
+        new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
 
         new Position({ x: 1, y: 3 }),
         new Position({ x: 3.25, y: 3.4 }),
-    ]
+    ],
+    items:[]
 })
 
 const simpleLevel: Level = new Level({
@@ -122,8 +124,14 @@ const simpleLevel: Level = new Level({
         // duck({ x: 4.5, y: 1.9, direction: Direction.east }),
         // duck({ x: 4.1, y: 7.9, direction: Direction.east }),
     ],
+    items: [
+        new Item({ sprite: sprites.apple, figureDimensions:{height:.2,width:.2}, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+        new Item({ sprite: sprites.bean, figureDimensions:{height:.2,width:.2}, vantage: new Vantage({ x: 4.25, y: 4.8, direction: Direction.north }) })
+    ]
 })
 
-const playerVantage = new Vantage({ x: 8, y: 2, direction: Direction.west });
+const playerVantage = new Vantage({ x: 5, y: 4  , direction: Direction.west });
 
-export { busyLevel as level, playerVantage }
+
+
+export { simpleLevel as level, playerVantage }

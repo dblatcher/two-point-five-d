@@ -2,6 +2,7 @@ import { ConvertFunction, getPlacesInSight, getViewportMapFunction, MAX_VIEW_DIS
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
+import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
@@ -16,6 +17,7 @@ interface LevelConfig {
     walls: Wall[]
     contents: Array<Vantage | Position>
     defaultWallPattern?: Sprite
+    items: Item[]
 }
 
 class Level {
@@ -122,7 +124,7 @@ class Level {
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
 
             renderInstructions.push(new RenderInstruction({
-                place, viewedFrom: vantage.data.direction, subject:wall
+                place, viewedFrom: vantage.data.direction, subject: wall
             }))
         })
 
@@ -131,12 +133,23 @@ class Level {
             if (!place) { return }
 
             renderInstructions.push(new RenderInstruction({
-                place, viewedFrom: vantage.data.direction, subject:thing
+                place, viewedFrom: vantage.data.direction, subject: thing
             }))
         })
 
+        this.data.items.
+        forEach(item => {
+            const {figure:itemFigure} = item
+            if (itemFigure) {
+                const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
+                if (!place) { return }
+                renderInstructions.push( new RenderInstruction({
+                    place, viewedFrom: vantage.data.direction, subject: itemFigure
+                }))
+            }
+        })
 
-       renderInstructions = RenderInstruction.putInOrder(renderInstructions);
+        renderInstructions = RenderInstruction.putInOrder(renderInstructions);
 
         renderInstructions.forEach(renderInstruction => {
             if (renderInstruction.wall) {

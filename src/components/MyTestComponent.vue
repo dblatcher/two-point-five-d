@@ -1,16 +1,13 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-
+    <sight-canvas
+      caption="view"
+    />
     <map-canvas
       caption="Map"
     />
     <controls/>
     <pause-button/>
-    <sight-canvas
-      caption="view"
-    />
-
   <sprite-loader/>
     
   </div>
