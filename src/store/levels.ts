@@ -126,7 +126,7 @@ const simpleLevel: Level = new Level({
     ],
     items: [
         new Item({ sprite: sprites.apple, figureDimensions:{height:.2,width:.2}, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
-        new Item({ sprite: sprites.bean, figureDimensions:{height:.2,width:.2}, vantage: new Vantage({ x: 4.25, y: 4.8, direction: Direction.north }) })
+        new Item({ sprite: sprites.bean, figureDimensions:{height:.2,width:.2}, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
     ]
 })
 

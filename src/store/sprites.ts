@@ -187,7 +187,7 @@ const sprites = {
     doorSprite,
     buttonSprite,
     smallButtonSprite,
-    apple: Sprite.itemSprite("bean", { sheet: sheets.fruits, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
+    apple: Sprite.itemSprite("apple", { sheet: sheets.fruits, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
     bean: Sprite.itemSprite("bean", { sheet: sheets.fruits, col: 1, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
 }
 

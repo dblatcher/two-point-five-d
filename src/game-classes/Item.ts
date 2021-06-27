@@ -1,4 +1,5 @@
 import { Figure } from "./Figure";
+import { Game } from "./Game";
 import { Sprite } from "./Sprite";
 import { Vantage } from "./Vantage";
 
@@ -25,6 +26,10 @@ class Item {
         }
 
         return null
+    }
+
+    handleInteraction(actor:Vantage, game: Game): void {
+        console.log('interacted with',this,game,actor)
     }
 }
 

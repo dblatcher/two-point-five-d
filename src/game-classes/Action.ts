@@ -1,5 +1,6 @@
 import { Point } from "@/canvas/canvas-utility";
 import { Game } from "./Game";
+import { Item } from "./Item";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { WallFeature } from "./WallFeature";
@@ -69,9 +70,9 @@ class ShiftAction extends Action {
 
 class InterAction extends Action {
     action: "INTERACT"
-    feature: WallFeature
+    feature: WallFeature | Item
 
-    constructor(target: WallFeature) {
+    constructor(target: WallFeature|Item) {
         super("INTERACT")
         this.action = "INTERACT"
         this.feature = target

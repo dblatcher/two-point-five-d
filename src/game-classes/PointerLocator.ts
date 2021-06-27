@@ -1,5 +1,8 @@
 import { mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas/canvas-utility";
 import { Direction } from "./Direction";
+import { Item } from "./Item";
+import { Position } from "./Position";
+import { Vantage } from "./Vantage";
 import { Wall } from "./Wall";
 import { WallFeature } from "./WallFeature";
 
@@ -199,7 +202,6 @@ class PointerLocator {
     }
 
     identifyPointOnFloorSquare(zonePoint: ZonePoint, facingDirection: Direction): Point {
-
         let x = .5
         let y = .5;
         if (facingDirection.name === 'NORTH') {
@@ -218,6 +220,28 @@ class PointerLocator {
 
         return { x, y }
     }
+
+    identifyClickedItemOnFloor(playerVantage: Vantage, items: Item[], clickInfo: Point): Item | null {
+        const squareIn = new Position(playerVantage.data);
+        const itemsInSquareIn = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareIn))
+        const squareAhead = squareIn.translate(playerVantage.data.direction)
+        const itemsInSquareAhead = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareAhead))
+
+        return identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareIn, clickInfo, 0) ||
+            identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareAhead, clickInfo, 1)
+
+        function identifyClickedItemInSquare(viewedFrom: Direction, items: Item[], clickInfo: Point, forward = 0): Item | null {
+            return items.find(item => {
+                const { figure } = item
+                if (!figure) { return false }
+                const renderParams = figure.getRenderParams(viewedFrom, forward, 0)
+                const inBoundX = clickInfo.x >= renderParams.topLeft.x && clickInfo.x <= renderParams.topRight.x;
+                const inBoundY = clickInfo.y >= renderParams.topLeft.y && clickInfo.y <= renderParams.centerOnFloor.y;
+                return inBoundX && inBoundY
+            }) || null
+        }
+    }
+
 }
 
 export { PointerLocator }

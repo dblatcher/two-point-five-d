@@ -62,7 +62,7 @@ class Game {
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerVantage } = this.data
-        const { walls } = level.data
+        const { walls, items } = level.data
         const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
         if (!location) { return }
 
@@ -98,15 +98,25 @@ class Game {
             this.queuedPlayerActions.push(new InterAction(featureClicked));
         }
 
-        if (location.zone == "FLOOR") {
+        const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerVantage, items, clickInfo)
+
+
+        if (itemClicked) {
+            if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) {
+                return
+            }
+            this.queuedPlayerActions.push(new InterAction(itemClicked));
+        }
+
+        if (location.zone == "FLOOR" && !itemClicked) {
             const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerVantage.data.direction);
 
-            const crossOnFloor = new Position({
+            const positionClicked = new Position({
                 x: playerVantage.data.x + rotatedLocation.x,
                 y: playerVantage.data.y + rotatedLocation.y
             }).translate(playerVantage.data.direction)
 
-            level.data.contents.push(crossOnFloor)
+            level.data.contents.push(positionClicked)
         }
     }
 }
