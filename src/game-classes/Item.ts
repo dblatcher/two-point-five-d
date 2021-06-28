@@ -42,11 +42,15 @@ class Item {
         }
     }
 
-    takeIntoHand(items: Item[], game: Game): void {
+    takeIntoHand(items: Array<Item | null>, game: Game, swapNull = false): void {
 
         const index = items.indexOf(this);
         if (index !== -1) {
-            items.splice(index, 1);
+            if (swapNull) {
+                items.splice(index, 1, null);
+            } else {
+                items.splice(index, 1);
+            }
         }
 
         this.data.vantage = undefined;

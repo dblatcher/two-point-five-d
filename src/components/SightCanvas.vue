@@ -48,9 +48,9 @@ export default class SightCanvas extends Vue {
   }
 
   draw(): void {
-    const { playerVantage, level,itemInHand } = this.$store.state.game.data;
+    const { playerCharacter, level,itemInHand } = this.$store.state.game.data;
     const canvas = this.$refs.canvas;
-    level.drawAsSight(canvas, playerVantage);
+    level.drawAsSight(canvas, playerCharacter);
 
     this.$data.itemName = itemInHand ? itemInHand.data.type.description : "";
   }

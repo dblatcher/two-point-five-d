@@ -14,6 +14,7 @@ import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites } from "./sprites";
 import { Item } from "@/game-classes/Item";
+import { Character } from "@/game-classes/Character";
 
 
 const lowWall: Point[] = [
@@ -132,8 +133,14 @@ const simpleLevel: Level = new Level({
     ]
 })
 
-const playerVantage = new Vantage({ x: 5, y: 4, direction: Direction.west });
+const playerCharacter = new Character({ x: 5, y: 4, direction: Direction.west, inventory:[
+    new Item({ type: { description: "bean" }, sprite: sprites.bean, figureDimensions: { height: .2, width: .2 } }),
+    null,
+    new Item({ type: { description: "bean" }, sprite: sprites.bean, figureDimensions: { height: .2, width: .2 } }),
+    null,
+    null,
+] });
 
 
 
-export { simpleLevel as level, playerVantage }
+export { simpleLevel as level, playerCharacter }

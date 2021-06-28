@@ -3,6 +3,7 @@ import { spriteSheets } from './sprites'
 
 import { game } from './game'
 import { markRaw, toRaw } from 'vue'
+import { Item } from '@/game-classes/Item'
 
 
 export default createStore({
@@ -29,6 +30,11 @@ export default createStore({
     sightClick({ state }, clickInfo: { x: number, y: number }) {
       if (!this.getters.gameIsPaused) {
         toRaw(state.game).handleSightClick(clickInfo)
+      }
+    },
+    inventoryClick({ state }, clickInfo:{item: Item, index:number}) {
+      if (!this.getters.gameIsPaused) {
+        toRaw(state.game).handleInventoryClick(toRaw(clickInfo.item), clickInfo.index)
       }
     },
     tick({ state, commit }) {

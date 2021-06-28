@@ -1,19 +1,19 @@
-import { Vantage } from './Vantage'
 import { Level } from './Level'
 import { Action, InterAction, MovementAction } from './Action'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
-import { playerVantage } from '@/store/levels'
+import { playerCharacter } from '@/store/levels'
 import { WallFeature } from './WallFeature'
 import { Wall } from './Wall'
 import { RelativeDirection } from './RelativeDirection'
 import { Item } from './Item'
+import { Character } from './Character'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
 interface GameConfig {
-    playerVantage: Vantage,
+    playerCharacter: Character,
     level: Level
     itemInHand?: Item
 }
@@ -41,7 +41,7 @@ class Game {
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
-            nextPlayerAction.perform(playerVantage, this);
+            nextPlayerAction.perform(playerCharacter, this);
         }
 
         this.data.level.data.contents
@@ -63,9 +63,9 @@ class Game {
     }
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
-        const { level, playerVantage, itemInHand } = this.data
+        const { level, playerCharacter, itemInHand } = this.data
         const { walls, items } = level.data
-        const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerVantage))
+        const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerCharacter))
         if (!location) { return }
 
         let wallClicked: Wall | undefined = undefined;
@@ -73,20 +73,20 @@ class Game {
 
         if (location.zone == "FRONT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(playerVantage) && wall.isFacing(playerVantage.data.direction)) ||
-                walls.find(wall => wall.isInSameSquareAs(playerVantage.translate(playerVantage.data.direction)) && wall.isFacing(playerVantage.data.direction.behind));
+                walls.find(wall => wall.isInSameSquareAs(playerCharacter) && wall.isFacing(playerCharacter.data.direction)) ||
+                walls.find(wall => wall.isInSameSquareAs(playerCharacter.translate(playerCharacter.data.direction)) && wall.isFacing(playerCharacter.data.direction.behind));
         }
 
         if (location.zone == "RIGHT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(playerVantage) && wall.isFacing(playerVantage.data.direction.rightOf)) ||
-                walls.find(wall => wall.isInSameSquareAs(playerVantage.translate(playerVantage.data.direction.rightOf)) && wall.isFacing(playerVantage.data.direction.leftOf));
+                walls.find(wall => wall.isInSameSquareAs(playerCharacter) && wall.isFacing(playerCharacter.data.direction.rightOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(playerCharacter.translate(playerCharacter.data.direction.rightOf)) && wall.isFacing(playerCharacter.data.direction.leftOf));
         }
 
         if (location.zone == "LEFT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(playerVantage) && wall.isFacing(playerVantage.data.direction.leftOf)) ||
-                walls.find(wall => wall.isInSameSquareAs(playerVantage.translate(playerVantage.data.direction.leftOf)) && wall.isFacing(playerVantage.data.direction.rightOf));
+                walls.find(wall => wall.isInSameSquareAs(playerCharacter) && wall.isFacing(playerCharacter.data.direction.leftOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(playerCharacter.translate(playerCharacter.data.direction.leftOf)) && wall.isFacing(playerCharacter.data.direction.rightOf));
         }
 
         if (wallClicked) {
@@ -100,7 +100,7 @@ class Game {
             this.queuedPlayerActions.push(new InterAction(featureClicked));
         }
 
-        const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerVantage, items, clickInfo)
+        const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerCharacter, items, clickInfo)
 
 
         if (itemClicked) {
@@ -111,19 +111,37 @@ class Game {
         }
 
         if (location.zone == "FLOOR" && !itemClicked) {
-            const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerVantage.data.direction);
+            const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerCharacter.data.direction);
 
             const positionClicked = new Position({
-                x: playerVantage.data.x + rotatedLocation.x,
-                y: playerVantage.data.y + rotatedLocation.y
-            }).translate(playerVantage.data.direction)
+                x: playerCharacter.data.x + rotatedLocation.x,
+                y: playerCharacter.data.y + rotatedLocation.y
+            }).translate(playerCharacter.data.direction)
 
             if (itemInHand) {
-                itemInHand.placeAt(positionClicked, this.data.playerVantage.data.direction, this);
+                itemInHand.placeAt(positionClicked, this.data.playerCharacter.data.direction, this);
                 this.data.itemInHand = undefined;
             }
 
         }
+    }
+
+    handleInventoryClick(item:Item, index:number):void {
+        const {inventory} = this.data.playerCharacter.data
+        const {itemInHand} = this.data
+
+        if (item) {
+            if (!itemInHand) {
+                item.takeIntoHand(inventory,this,true)
+            }
+        }
+        else {
+            if (itemInHand) {
+                inventory.splice(index,1,itemInHand)
+                this.data.itemInHand = undefined
+            }
+        }
+
     }
 }
 

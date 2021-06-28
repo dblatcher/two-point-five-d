@@ -7,6 +7,7 @@
       caption="Map"
     />
     <controls/>
+    <inventory-window/>
     <pause-button/>
   <sprite-loader/>
     
@@ -21,6 +22,7 @@ import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
 import SpriteLoader from "./SpriteLoader.vue";
 import PauseButton from "./PauseButton.vue";
+import InventoryWindow from './InventoryWindow.vue';
 
 interface MyTestComponentData {
   staticTest: string;
@@ -31,7 +33,7 @@ interface MyTestComponentData {
     msg: String,
   },
   components: {
-    MapCanvas, Controls, SightCanvas, SpriteLoader, PauseButton
+    MapCanvas, Controls, SightCanvas, SpriteLoader, PauseButton, InventoryWindow
   },
 })
 export default class MyTestComponent extends Vue {
@@ -44,7 +46,7 @@ export default class MyTestComponent extends Vue {
     };
   }
 
-  mounted() {
+  mounted():void {
     console.log('APP MOUNTED, starting timer')
     this.$store.dispatch("startTimer")
   }

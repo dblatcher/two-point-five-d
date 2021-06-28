@@ -1,9 +1,9 @@
-import { level, playerVantage } from './levels'
+import { level, playerCharacter } from './levels'
 
 import { Game } from '../game-classes/Game'
 
 const game = new Game({
-    level, playerVantage,
+    level, playerCharacter,
 })
 
 export { game }
