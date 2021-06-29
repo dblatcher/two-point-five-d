@@ -21,6 +21,7 @@ import InventorySlot from "./InventorySlot.vue";
 
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
+import { toRaw } from "vue";
 
 @Options({
   components: {
@@ -39,7 +40,8 @@ export default class InventoryWindow extends Vue {
 
   get inventory(): Array<Item | null> {
     const store = useStore() as typeof gameStore;
-    return store.state.game.data.playerCharacter.data.inventory;
+
+    return toRaw(store.state.game.data.playerCharacter.data.inventory);
   }
 
   handleInventoryClick(item: Item, index: number): void {
@@ -56,6 +58,12 @@ section {
 
   h2 {
     margin: 0;
+  }
+
+  div {
+    display: flex;
+    max-width: 20em;
+    flex-wrap: wrap;
   }
 }
 </style>

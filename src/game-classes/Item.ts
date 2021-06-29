@@ -2,6 +2,7 @@ import { Direction } from "./Direction";
 import { Figure } from "./Figure";
 import { Game } from "./Game";
 import { Position } from "./Position";
+import { RelativeDirection } from "./RelativeDirection";
 import { Sprite } from "./Sprite";
 import { Vantage } from "./Vantage";
 
@@ -33,6 +34,34 @@ class Item {
         }
 
         return null
+    }
+
+    get icon(): CanvasImageSource {
+        try {
+            return this.data.sprite.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
+        } catch (error) {
+            console.warn(error.message)
+        }
+        return document.createElement('img');
+    }
+
+    drawAsIcon(canvas: HTMLCanvasElement): void {
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {return}
+        const height = Number(canvas.getAttribute('height') || "100");
+        const width = Number(canvas.getAttribute('width') || "100");
+        const { icon } = this
+        ctx.fillStyle = "brown"
+        ctx.fillRect(0, 0, width, height)
+        ctx.drawImage(icon, 0, 0, width, height)
+    }
+
+    static clearIcon(canvas: HTMLCanvasElement): void {
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {return}
+        const height = Number(canvas.getAttribute('height') || "100");
+        const width = Number(canvas.getAttribute('width') || "100");
+        ctx.clearRect(0, 0, width, height)
     }
 
     handleInteraction(actor: Vantage, game: Game): void {

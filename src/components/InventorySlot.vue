@@ -1,8 +1,7 @@
 <template>
-    <figure>
-        <canvas></canvas>
-        <figcaption>{{ item?.data.type.description }}</figcaption>
-    </figure>
+  <figure :title="item?.data.type.description">
+    <canvas ref="canvas" height="200" width="200"></canvas>
+  </figure>
 </template>
 
 <script lang="ts">
@@ -10,6 +9,11 @@ import { useStore } from "vuex";
 import gameStore from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { Item } from "@/game-classes/Item";
+import { toRaw } from "vue";
+
+interface InventorySlotData {
+  oldItem: Item | null;
+}
 
 @Options({
   props: {
@@ -17,25 +21,52 @@ import { Item } from "@/game-classes/Item";
   },
 })
 export default class InventorySlot extends Vue {
+  item!: Item;
+  oldItem!: Item;
+  declare $refs: { canvas: HTMLCanvasElement };
 
+  data(): InventorySlotData {
+    return {
+      oldItem: this.item,
+    };
+  }
 
+  mounted(): void {
+    this.draw();
+  }
+
+  updated(): void {
+    const { item } = this;
+    const oldItem = toRaw(this.oldItem);
+
+    if (item !== oldItem) {
+      this.oldItem = item;
+      this.draw();
+    }
+  }
+
+  draw(): void {
+    const { item } = this;
+    const canvas = this.$refs.canvas;
+
+    if (item) {
+      item.drawAsIcon(canvas);
+    } else {
+      Item.clearIcon(canvas);
+    }
+  }
 }
-
 </script>
 
 <style scoped lang="scss">
-
 figure {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    min-width: 100px;
+  margin: 0;
 
-    canvas {
-        height: 30px;
-        width: 30px;
-        border: 3px double black;
-    }
+  canvas {
+    height: 5em;
+    width: 5em;
+    border: 1px dotted black;
+    box-sizing: border-box;
+  }
 }
-
 </style>

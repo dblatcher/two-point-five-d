@@ -139,6 +139,9 @@ const playerCharacter = new Character({ x: 5, y: 4, direction: Direction.west, i
     new Item({ type: { description: "bean" }, sprite: sprites.bean, figureDimensions: { height: .2, width: .2 } }),
     null,
     null,
+    null,
+    null,
+    null,
 ] });
 
 
