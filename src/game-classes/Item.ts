@@ -51,6 +51,7 @@ class Item {
         const height = Number(canvas.getAttribute('height') || "100");
         const width = Number(canvas.getAttribute('width') || "100");
         const { icon } = this
+        ctx.clearRect(0, 0, width, height)
         ctx.fillStyle = "brown"
         ctx.fillRect(0, 0, width, height)
         ctx.drawImage(icon, 0, 0, width, height)

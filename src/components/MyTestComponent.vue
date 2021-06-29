@@ -1,17 +1,15 @@
 <template>
-  <div class="hello">
-    <sight-canvas
-      caption="view"
-    />
-    <map-canvas
-      caption="Map"
-    />
-    <controls/>
-    <inventory-window/>
-    <pause-button/>
-  <sprite-loader/>
-    
-  </div>
+  <main>
+    <div class="hello" v-if="spritesLoaded">
+      <sight-canvas caption="view" />
+      <map-canvas caption="Map" />
+      <controls />
+      <inventory-window />
+      <pause-button />
+    </div>
+    <p v-if="!spritesLoaded">loading...</p>
+    <sprite-loader @all-sprite-sheets-loaded="handleAllSpriteSheetsLoaded" />
+  </main>
 </template>
 
 <script lang="ts">
@@ -22,10 +20,11 @@ import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
 import SpriteLoader from "./SpriteLoader.vue";
 import PauseButton from "./PauseButton.vue";
-import InventoryWindow from './InventoryWindow.vue';
+import InventoryWindow from "./InventoryWindow.vue";
 
 interface MyTestComponentData {
   staticTest: string;
+  spritesLoaded: boolean;
 }
 
 @Options({
@@ -33,22 +32,34 @@ interface MyTestComponentData {
     msg: String,
   },
   components: {
-    MapCanvas, Controls, SightCanvas, SpriteLoader, PauseButton, InventoryWindow
+    MapCanvas,
+    Controls,
+    SightCanvas,
+    SpriteLoader,
+    PauseButton,
+    InventoryWindow,
   },
 })
 export default class MyTestComponent extends Vue {
   msg!: string;
   $store!: typeof gameStore;
+  spritesLoaded!: boolean;
 
   data(): MyTestComponentData {
     return {
       staticTest: "static test",
+      spritesLoaded: false,
     };
   }
 
-  mounted():void {
-    console.log('APP MOUNTED, starting timer')
-    this.$store.dispatch("startTimer")
+  mounted(): void {
+    console.log("APP MOUNTED");
+  }
+
+  handleAllSpriteSheetsLoaded(): void {
+    console.log("all sprites loaded, starting timer");
+    this.$store.dispatch("startTimer");
+    this.spritesLoaded = true;
   }
 }
 </script>

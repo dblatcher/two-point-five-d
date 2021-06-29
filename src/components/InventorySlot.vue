@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts">
-import { useStore } from "vuex";
-import gameStore from "@/store";
 import { Options, Vue } from "vue-class-component";
 import { Item } from "@/game-classes/Item";
 import { toRaw } from "vue";
