@@ -116,7 +116,7 @@ const simpleLevel: Level = new Level({
     height: 10, width: 10,
     defaultWallPattern: undefined,
     walls: [
-        new Wall({ x: 3, y: 4, place: Direction.east }),
+        new Wall({ x: 3, y: 4, place: Direction.east, color: new Color(250,200,250,.5) }),
         new Wall({ x: 3, y: 4, place: Direction.south }),
         new Wall({ x: 4, y: 5, place: Direction.west }),
         // new Wall({ x: 4, y: 4, place: Direction.south, shape:lowWall }),

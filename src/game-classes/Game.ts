@@ -65,7 +65,8 @@ class Game {
     handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerCharacter, itemInHand } = this.data
         const { walls, items } = level.data
-        const location = this.pointerLocator.locate(clickInfo, level.hasWallInFace(playerCharacter))
+        const playerHasWallInFace = level.hasWallInFace(playerCharacter)
+        const location = this.pointerLocator.locate(clickInfo, playerHasWallInFace)
         if (!location) { return }
 
         let wallClicked: Wall | undefined = undefined;
@@ -100,7 +101,7 @@ class Game {
             this.queuedPlayerActions.push(new InterAction(featureClicked));
         }
 
-        const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerCharacter, items, clickInfo)
+        const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerCharacter, items, clickInfo, !playerHasWallInFace)
 
 
         if (itemClicked) {

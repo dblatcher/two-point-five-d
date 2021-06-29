@@ -221,11 +221,15 @@ class PointerLocator {
         return { x, y }
     }
 
-    identifyClickedItemOnFloor(playerCharacter: Vantage, items: Item[], clickInfo: Point): Item | null {
+    identifyClickedItemOnFloor(playerCharacter: Vantage, items: Item[], clickInfo: Point, canReachSquareAhead = false): Item | null {
         const squareIn = new Position(playerCharacter.data);
         const itemsInSquareIn = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareIn))
         const squareAhead = squareIn.translate(playerCharacter.data.direction)
         const itemsInSquareAhead = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareAhead))
+
+        if (!canReachSquareAhead) {
+            return identifyClickedItemInSquare(playerCharacter.data.direction, itemsInSquareIn, clickInfo, 0)
+        }
 
         return identifyClickedItemInSquare(playerCharacter.data.direction, itemsInSquareIn, clickInfo, 0) ||
             identifyClickedItemInSquare(playerCharacter.data.direction, itemsInSquareAhead, clickInfo, 1)
