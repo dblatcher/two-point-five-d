@@ -122,12 +122,13 @@ const simpleLevel: Level = new Level({
     walls: [
         new Wall({ x: 3, y: 4, place: Direction.east, color: new Color(250, 200, 250, .5) }),
         new Wall({ x: 3, y: 4, place: Direction.south }),
-        new Wall({ x: 4, y: 5, place: Direction.west }),
+        new Wall({ x: 8, y: 2, place: Direction.south }),
+        new Wall({ x: 8, y: 3, place: Direction.north, shape:lowWall }),
         // new Wall({ x: 4, y: 4, place: Direction.south, shape:lowWall }),
         // new Wall({ x: 4, y: 5, place: Direction.north, shape:lowWall }),
     ],
     contents: [
-        duck({ x: 3.5, y: 4.5, direction: Direction.east }),
+        duck({ x: 8.5, y: 3.15, direction: Direction.north }),
         // duck({ x: 4.5, y: 1.9, direction: Direction.east }),
         // duck({ x: 4.1, y: 7.9, direction: Direction.east }),
     ],
@@ -138,7 +139,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 8, y: 2, direction: Direction.east, inventory: [
+    x: 6, y: 2, direction: Direction.east, inventory: [
         new Item({ type: keyType, }),
         null,
         new Item({ type: beanType }),

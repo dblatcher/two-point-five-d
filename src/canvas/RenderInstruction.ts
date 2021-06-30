@@ -4,6 +4,8 @@ import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
 
+const LOG_RENDER_ORDER = false;
+
 class RenderInstruction {
     place: { position: Position, forward: number, right: number }
     viewedFrom: Direction
@@ -91,6 +93,14 @@ class RenderInstruction {
 
     static sortFunction = (itemA: RenderInstruction, itemB: RenderInstruction): number => {
 
+        if ((itemA.subjectClass === Wall) !== (itemB.subjectClass === Wall)) {
+            if (itemA.isReverseOfWall || itemB.isReverseOfWall) {
+                const itemAForward = itemA.isReverseOfWall ? itemA.place.forward - 1 : itemA.place.forward;
+                const itemBForward = itemB.isReverseOfWall ? itemB.place.forward - 1 : itemB.place.forward;
+                return itemBForward - itemAForward
+            }
+        }
+
         if (itemA.exactPlace.forward !== itemB.exactPlace.forward) {
             return itemB.exactPlace.forward - itemA.exactPlace.forward
         }
@@ -119,32 +129,18 @@ class RenderInstruction {
 
         const sortedList = list.sort(RenderInstruction.sortFunction);
 
-        // const facingWalls = list.filter(
-        //     instruction => instruction.subjectClass === Wall &&
-        //         instruction.relativeDirection == RelativeDirection.BACK || instruction.relativeDirection == RelativeDirection.FORWARD)
-
-        // const sideWalls = list.filter(
-        //     instruction => instruction.subjectClass === Wall &&
-        //         instruction.relativeDirection == RelativeDirection.LEFT || instruction.relativeDirection == RelativeDirection.RIGHT)
-
-        // const figures = list.filter(
-        //     instruction => instruction.subjectClass === Vantage)
-
-        // //        console.log('FACING', facingWalls.map(instruction => instruction.exactPlace))
-        // //      console.log('SIDE', sideWalls.map(instruction => instruction.exactPlace))
-        // // console.log('figures',figures.map(instruction => 
-        // //     `${instruction.exactPlace.forward}F , ${instruction.exactPlace.right}R [${instruction.thing?.data.x},${instruction.thing?.data.y}]`))
-
-        // console.log("***")
-        // sortedList
-        //     .forEach(item => {
-        //         if (item.subjectClass == Wall) {
-        //             console.log('WALL',item.exactPlace, item.relativeDirection?.r !==0 ?'side facing,':'head on,', item.isReverseOfWall ? 'reverse face' : 'front face')
-        //         }
-        //         if (item.subjectClass == Vantage) {
-        //             console.log('FIGURE', item.exactPlace)
-        //         }
-        //     })
+        if (LOG_RENDER_ORDER) {
+            console.log("***")
+            sortedList
+                .forEach(item => {
+                    if (item.subjectClass == Wall) {
+                        console.log('WALL', item.exactPlace, item.relativeDirection?.r !== 0 ? 'side facing,' : 'head on,', item.isReverseOfWall ? 'reverse face' : 'front face')
+                    }
+                    if (item.subjectClass == Vantage) {
+                        console.log('FIGURE', item.exactPlace)
+                    }
+                })
+        }
 
         return sortedList
     }
