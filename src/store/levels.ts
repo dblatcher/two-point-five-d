@@ -13,7 +13,7 @@ import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites } from "./sprites";
-import { Item } from "@/game-classes/Item";
+import { Item, ItemType } from "@/game-classes/Item";
 import { Character } from "@/game-classes/Character";
 
 
@@ -62,6 +62,10 @@ const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, anim
 const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor] })
 
 
+const appleType: ItemType = { description: "apple", sprite: sprites.apple, figureDimensions: { height: .2, width: .2 } };
+const beanType: ItemType = { description: "bean", sprite: sprites.bean, figureDimensions: { height: .2, width: .2 } };
+const keyType: ItemType = { description: "key", sprite: sprites.key, figureDimensions: { height: .2, width: .2 } };
+
 
 const busyLevel: Level = new Level({
     height: 8, width: 15,
@@ -76,7 +80,7 @@ const busyLevel: Level = new Level({
         new Wall({ x: 5, y: 0, place: Direction.east, shape: lowWall }),
         new Wall({ x: 5, y: 3, place: Direction.south, patternSprite: sprites.brickWall, shape: lowWall }),
 
-        new Wall({ x: 9, y: 2, place: Direction.south, color: new Color(120, 40, 20) }),
+        new Wall({ x: 9, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [painting1] }),
         //new Wall({ x: 9, y: 3, place: Direction.north, color:new Color(120,140,20)  }),
 
 
@@ -108,7 +112,7 @@ const busyLevel: Level = new Level({
         new Position({ x: 3.25, y: 3.4 }),
     ],
     items: [
-        new Item({ type: { description: "apple" }, sprite: sprites.apple, figureDimensions: { height: .2, width: .2 }, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+        new Item({ type: appleType, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
     ]
 })
 
@@ -116,7 +120,7 @@ const simpleLevel: Level = new Level({
     height: 10, width: 10,
     defaultWallPattern: undefined,
     walls: [
-        new Wall({ x: 3, y: 4, place: Direction.east, color: new Color(250,200,250,.5) }),
+        new Wall({ x: 3, y: 4, place: Direction.east, color: new Color(250, 200, 250, .5) }),
         new Wall({ x: 3, y: 4, place: Direction.south }),
         new Wall({ x: 4, y: 5, place: Direction.west }),
         // new Wall({ x: 4, y: 4, place: Direction.south, shape:lowWall }),
@@ -128,21 +132,23 @@ const simpleLevel: Level = new Level({
         // duck({ x: 4.1, y: 7.9, direction: Direction.east }),
     ],
     items: [
-        new Item({ type: { description: "apple" }, sprite: sprites.apple, figureDimensions: { height: .2, width: .2 }, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
-        new Item({ type: { description: "bean" }, sprite: sprites.bean, figureDimensions: { height: .2, width: .2 }, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
+        new Item({ type: appleType, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+        new Item({ type: beanType, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
     ]
 })
 
-const playerCharacter = new Character({ x: 5, y: 4, direction: Direction.west, inventory:[
-    new Item({ type: { description: "bean" }, sprite: sprites.bean, figureDimensions: { height: .2, width: .2 } }),
-    null,
-    new Item({ type: { description: "bean" }, sprite: sprites.bean, figureDimensions: { height: .2, width: .2 } }),
-    null,
-    null,
-    null,
-    null,
-    null,
-] });
+const playerCharacter = new Character({
+    x: 8, y: 2, direction: Direction.east, inventory: [
+        new Item({ type: keyType, }),
+        null,
+        new Item({ type: beanType }),
+        null,
+        null,
+        null,
+        null,
+        null,
+    ]
+});
 
 
 

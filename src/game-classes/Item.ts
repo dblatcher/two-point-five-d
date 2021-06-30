@@ -8,12 +8,13 @@ import { Vantage } from "./Vantage";
 
 interface ItemType {
     description: string
+    figureDimensions?: { width: number, height: number }
+    sprite: Sprite
 }
 
 interface ItemConfig {
     vantage?: Vantage
-    sprite: Sprite
-    figureDimensions?: { width: number, height: number }
+
     type: ItemType
 }
 
@@ -24,7 +25,8 @@ class Item {
     }
 
     get figure(): Figure | null {
-        const { vantage, sprite, figureDimensions = { width: .2, height: .2 } } = this.data
+        const { vantage } = this.data
+        const { figureDimensions = { width: .2, height: .2 }, sprite } = this.data.type
         if (vantage) {
             return new Figure({
                 sprite,
@@ -38,7 +40,7 @@ class Item {
 
     get icon(): CanvasImageSource {
         try {
-            return this.data.sprite.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
+            return this.data.type.sprite.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
         } catch (error) {
             console.warn(error.message)
         }
@@ -96,4 +98,4 @@ class Item {
 }
 
 
-export { Item, ItemConfig }
+export { Item, ItemConfig, ItemType }
