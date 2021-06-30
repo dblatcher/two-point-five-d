@@ -28,7 +28,7 @@ class WallFeature {
 
     get requiredAnimations(): string[] { return [Sprite.defaultWallAnimation] }
 
-    get missingAnimations() {
+    get missingAnimations(): string[] {
         const missing: string[] = [];
 
         this.requiredAnimations.forEach(animationName => {
@@ -50,7 +50,7 @@ class WallFeature {
     get canInteract(): boolean { return false }
     get isDrawnInMap(): boolean { return false }
 
-    setStatus(animation:string) {
+    setStatus(animation: string): void {
         if (this.requiredAnimations.includes(animation)) {
             this.data.animation = animation
         } else {
@@ -58,7 +58,7 @@ class WallFeature {
         }
     }
 
-    handleInteraction(actor:Vantage, game: Game): void {
+    handleInteraction(actor: Vantage, game: Game): void {
         this.fireTriggers(game)
         this.fireReactions(actor, game)
     }
@@ -71,7 +71,7 @@ class WallFeature {
         });
     }
 
-    fireReactions(actor:Vantage, game:Game): void {
+    fireReactions(actor: Vantage, game: Game): void {
         const { reactions = [] } = this.data
 
         reactions.forEach(reaction => {
@@ -95,20 +95,19 @@ class InteractableWallFeature extends WallFeature {
     get canInteract(): boolean { return true }
 }
 
-class WallSwitch extends WallFeature {
+class WallSwitch extends InteractableWallFeature {
 
     get requiredAnimations(): string[] { return ["OFF", "ON"] }
-    get canInteract(): boolean { return true }
     get isDrawnInMap(): boolean { return true }
 
-    handleInteraction(actor:Vantage, game: Game): void {
+    handleInteraction(actor: Vantage, game: Game): void {
         if (this.data.animation === "OFF") {
             this.setStatus("ON");
         } else {
             this.setStatus("OFF");
         }
 
-        WallFeature.prototype.handleInteraction.apply(this,[actor,game]);
+        WallFeature.prototype.handleInteraction.apply(this, [actor, game]);
     }
 }
 
@@ -121,7 +120,7 @@ interface DoorConfig {
     canOpenDirectly?: boolean
 }
 
-class Door extends WallFeature {
+class Door extends InteractableWallFeature {
     data: DoorConfig
 
     constructor(config: DoorConfig) {
@@ -132,15 +131,18 @@ class Door extends WallFeature {
     get requiredAnimations(): string[] { return ["OPEN", "CLOSED"] }
 
     get isBlocking(): boolean { return this.data.animation === "CLOSED" }
-    get canInteract(): boolean { return !!this.data.canOpenDirectly }
     get isDrawnInMap(): boolean { return true }
 
-    handleInteraction(actor:Vantage, game: Game): void {
-        if (this.data.animation === "OPEN") {
-            this.setStatus("CLOSED");
-        } else {
-            this.setStatus("OPEN");
+    handleInteraction(actor: Vantage, game: Game): void {
+
+        if (this.data.canOpenDirectly) {
+            if (this.data.animation === "OPEN") {
+                this.setStatus("CLOSED");
+            } else {
+                this.setStatus("OPEN");
+            }
         }
+        WallFeature.prototype.handleInteraction.apply(this, [actor, game]);
     }
 
     drawInMap(place: Direction, squareCenter: Point): Point[][] {

@@ -146,4 +146,4 @@ const playerCharacter = new Character({ x: 5, y: 4, direction: Direction.west, i
 
 
 
-export { simpleLevel as level, playerCharacter }
+export { busyLevel as level, playerCharacter }
