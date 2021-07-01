@@ -1,70 +1,20 @@
-import { Point } from "@/canvas/canvas-utility";
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
-import { duck } from "../game-classes/Duck";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
 import { Position } from "@/game-classes/Position";
-import { TeleportReaction } from "@/game-classes/Reaction";
-import { Sprite } from "@/game-classes/Sprite";
-import { Trigger } from "@/game-classes/Trigger";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
-import { sprites } from "./sprites";
-import { Item, ItemType } from "@/game-classes/Item";
+import { Item } from "@/game-classes/Item";
 import { Character } from "@/game-classes/Character";
 
+import { duck } from "@/instances/figureFactory";
+import { sprites } from "@/instances/sprites";
+import { itemTypes } from "@/instances/itemTypes"
+import { lever1, painting1, door1, button1, button2 } from "@/instances/features"
+import { lowWall, doorway } from "@/instances/wallShapes"
 
-const lowWall: Point[] = [
-    { x: 0, y: 0 },
-    { x: 0, y: .5 },
-    { x: .25, y: .5 },
-    { x: .35, y: .5 },
-    { x: .35, y: .25 },
-    { x: .65, y: .25 },
-    { x: .65, y: .5 },
-    { x: .75, y: .5 },
-    { x: 1, y: .5 },
-    { x: 1, y: 0 },
-]
-
-const doorway: Point[] = [
-    { x: 0, y: 1 },
-    { x: 1, y: 1 },
-    { x: 1, y: 0 },
-    { x: .9, y: 0 },
-    { x: .9, y: .9 },
-    { x: .1, y: .9 },
-    { x: .1, y: .0 },
-    { x: 0, y: .0 },
-]
-
-const leverOpensDoor = new Trigger({
-    targetId: "door1", statusPairs: [
-        ["ON", "OPEN"],
-        ["OFF", "CLOSED"],
-    ]
-});
-
-const buttonOpensDoor = new Trigger({
-    targetId: "door1", toggle: ['OPEN', 'CLOSED']
-});
-
-const telportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
-
-const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", triggers: [leverOpensDoor] })
-const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
-const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1" })
-
-const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [telportToCorner] })
-const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor] })
-
-
-const appleType: ItemType = { description: "apple", sprite: sprites.apple, figureDimensions: { height: .2, width: .2 } };
-const beanType: ItemType = { description: "bean", sprite: sprites.bean, figureDimensions: { height: .2, width: .2 } };
-const keyType: ItemType = { description: "key", sprite: sprites.key, figureDimensions: { height: .2, width: .2 } };
 
 
 const busyLevel: Level = new Level({
@@ -112,7 +62,7 @@ const busyLevel: Level = new Level({
         new Position({ x: 3.25, y: 3.4 }),
     ],
     items: [
-        new Item({ type: appleType, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+        new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
     ]
 })
 
@@ -123,7 +73,7 @@ const simpleLevel: Level = new Level({
         new Wall({ x: 3, y: 4, place: Direction.east, color: new Color(250, 200, 250, .5) }),
         new Wall({ x: 3, y: 4, place: Direction.south }),
         new Wall({ x: 8, y: 2, place: Direction.south }),
-        new Wall({ x: 8, y: 3, place: Direction.north, shape:lowWall }),
+        new Wall({ x: 8, y: 3, place: Direction.north, shape: lowWall }),
         // new Wall({ x: 4, y: 4, place: Direction.south, shape:lowWall }),
         // new Wall({ x: 4, y: 5, place: Direction.north, shape:lowWall }),
     ],
@@ -133,16 +83,16 @@ const simpleLevel: Level = new Level({
         // duck({ x: 4.1, y: 7.9, direction: Direction.east }),
     ],
     items: [
-        new Item({ type: appleType, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
-        new Item({ type: beanType, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
+        new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+        new Item({ type: itemTypes.bean, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
     ]
 })
 
 const playerCharacter = new Character({
     x: 6, y: 2, direction: Direction.east, inventory: [
-        new Item({ type: keyType, }),
+        new Item({ type: itemTypes.key, }),
         null,
-        new Item({ type: beanType }),
+        new Item({ type: itemTypes.bean }),
         null,
         null,
         null,
@@ -153,4 +103,4 @@ const playerCharacter = new Character({
 
 
 
-export { busyLevel as level, playerCharacter }
+export { simpleLevel, busyLevel as level, playerCharacter }

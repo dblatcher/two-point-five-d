@@ -1,7 +1,7 @@
-import { sprites } from '@/store/sprites'
-import { Behaviour } from './Behaviour';
-import { Direction } from "./Direction";
-import { Figure } from "./Figure";
+import { sprites } from '@/instances/sprites'
+import { Behaviour } from '../game-classes/Behaviour';
+import { Direction } from "../game-classes/Direction";
+import { Figure } from "../game-classes/Figure";
 
 
 interface DuckConfig {
@@ -11,7 +11,7 @@ interface DuckConfig {
     behaviour?: Behaviour
 }
 
-function duck(config: DuckConfig) {
+function duck(config: DuckConfig): Figure {
     const figureConfig = Object.assign(config, {
         sprite: sprites.duckSprite,
         height: .5,

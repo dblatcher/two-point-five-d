@@ -1,10 +1,13 @@
 import { Game } from "./Game"
+import { ItemType } from "./Item"
 import { WallFeature } from "./WallFeature"
 
 interface TriggerConfig {
     targetId: string
     statusPairs?: [string, string][]
     toggle?: string[]
+    requiresItem?: ItemType
+    consumesItem?: boolean
 }
 
 class Trigger {
@@ -14,7 +17,7 @@ class Trigger {
         this.data = config
     }
 
-    fire(firingFeature: WallFeature, game: Game) {
+    fire(firingFeature: WallFeature, game: Game):void {
         const { statusPairs, toggle } = this.data
         const target = this.findTarget(game);
         if (!target) {

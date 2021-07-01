@@ -3,7 +3,6 @@ import { Action, InterAction, MovementAction } from './Action'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
-import { playerCharacter } from '@/store/levels'
 import { WallFeature } from './WallFeature'
 import { Wall } from './Wall'
 import { RelativeDirection } from './RelativeDirection'
@@ -41,7 +40,7 @@ class Game {
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
-            nextPlayerAction.perform(playerCharacter, this);
+            nextPlayerAction.perform(this.data.playerCharacter, this);
         }
 
         this.data.level.data.contents

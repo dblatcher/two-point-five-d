@@ -1,8 +1,8 @@
+import { toRaw } from 'vue'
 import { createStore } from 'vuex'
-import { spriteSheets } from './sprites'
 
-import { game } from './game'
-import { markRaw, toRaw } from 'vue'
+import { spriteSheets } from '@/instances/sprites'
+import { game } from '@/instances/game'
 import { Item } from '@/game-classes/Item'
 
 
