@@ -4,6 +4,7 @@ import { Direction } from "@/game-classes/Direction";
 import { TeleportReaction } from "@/game-classes/Reaction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Trigger } from "@/game-classes/Trigger";
+import { itemTypes } from "@/instances/itemTypes";
 
 const leverOpensDoor = new Trigger({
     targetId: "door1", statusPairs: [
@@ -13,7 +14,7 @@ const leverOpensDoor = new Trigger({
 });
 
 const buttonOpensDoor = new Trigger({
-    targetId: "door1", toggle: ['OPEN', 'CLOSED']
+    targetId: "door1", toggle: ['OPEN', 'CLOSED'], requiresItem: itemTypes.key, consumesItem: false
 });
 
 const telportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
@@ -27,5 +28,5 @@ const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite,
 
 
 export {
-    lever1, painting1,door1,button1,button2
+    lever1, painting1, door1, button1, button2
 }

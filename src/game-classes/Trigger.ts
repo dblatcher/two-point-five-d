@@ -17,8 +17,21 @@ class Trigger {
         this.data = config
     }
 
-    fire(firingFeature: WallFeature, game: Game):void {
-        const { statusPairs, toggle } = this.data
+    fire(firingFeature: WallFeature, game: Game): void {
+        const { statusPairs, toggle, requiresItem, consumesItem } = this.data
+        const { itemInHand } = game.data;
+
+        if (requiresItem) {
+            if (requiresItem !== itemInHand?.data.type) {
+                console.log(`Do not have ${requiresItem.description}.`)
+                return
+            }
+            if (consumesItem) {
+                console.log(`Used up ${requiresItem.description}.`)
+                game.data.itemInHand = undefined;
+            }
+        }
+
         const target = this.findTarget(game);
         if (!target) {
             console.warn(`trigger target with id ${this.data.targetId} not found`)
@@ -36,18 +49,13 @@ class Trigger {
                 target.setStatus(nextStatus);
             }
         }
-
-
     }
 
-    findTarget(game: Game) {
-
+    findTarget(game: Game): WallFeature | undefined {
         const allFeatures: WallFeature[] = [];
-
         game.data.level.data.walls.forEach(wall => {
             if (wall.data.features) { allFeatures.push(...wall.data.features) }
         })
-
         return allFeatures.find(feature => feature.data.id == this.data.targetId)
     }
 }
