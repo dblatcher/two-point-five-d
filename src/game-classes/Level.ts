@@ -2,6 +2,7 @@ import { ConvertFunction, getPlacesInSight, getViewportMapFunction, MAX_VIEW_DIS
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
+import { Direction } from "./Direction";
 import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
@@ -138,16 +139,16 @@ class Level {
         })
 
         this.data.items.
-        forEach(item => {
-            const {figure:itemFigure} = item
-            if (itemFigure) {
-                const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
-                if (!place) { return }
-                renderInstructions.push( new RenderInstruction({
-                    place, viewedFrom: vantage.data.direction, subject: itemFigure
-                }))
-            }
-        })
+            forEach(item => {
+                const { figure: itemFigure } = item
+                if (itemFigure) {
+                    const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
+                    if (!place) { return }
+                    renderInstructions.push(new RenderInstruction({
+                        place, viewedFrom: vantage.data.direction, subject: itemFigure
+                    }))
+                }
+            })
 
         renderInstructions = RenderInstruction.putInOrder(renderInstructions);
 
@@ -210,6 +211,35 @@ class Level {
             locator.rightWall.backBottom,
             locator.rightWall.forwardBottom,
         ])
+    }
+
+    withWallsAround(): Level {
+        const { walls, width, height } = this.data;
+        let x = 0, y = 0;
+        for (x = 0; x < width; x++) {
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.north)) {
+                walls.push(new Wall({ x, y, place: Direction.north }))
+            }
+        }
+        x = 0;
+        for (y = 0; y < height; y++) {
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.west)) {
+                walls.push(new Wall({ x, y, place: Direction.west }))
+            }
+        }
+        y = height - 1;
+        for (x = 0; x < width; x++) {
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.south)) {
+                walls.push(new Wall({ x, y, place: Direction.south }))
+            }
+        }
+        x = width - 1;
+        for (y = 0; y < height; y++) {
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.east)) {
+                walls.push(new Wall({ x, y, place: Direction.east }))
+            }
+        }
+        return this
     }
 }
 

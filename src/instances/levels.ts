@@ -64,7 +64,7 @@ const busyLevel: Level = new Level({
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
     ]
-})
+}).withWallsAround()
 
 const simpleLevel: Level = new Level({
     height: 10, width: 10,
