@@ -6,6 +6,7 @@ import { Color } from "./Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
+import { Vantage } from "./Vantage";
 import { WallFeature } from "./WallFeature";
 
 
@@ -46,12 +47,33 @@ class Wall extends Position {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
     }
 
+    reverseSideShowingfrom(vantage: Vantage): boolean {
+
+        const relativeDirection = this.data.place.relativeDirection(vantage.data.direction)
+        // wall relative direction is which edge of the square it makes up, not the direction it faces
+
+        const rightOfVantage = vantage.data.direction.rightOf;
+
+        const stepsRight = rightOfVantage.y
+            ? (this.gridY - vantage.gridY) * rightOfVantage.y
+            : (this.gridX - vantage.gridX) * rightOfVantage.x
+
+        if (relativeDirection.r == 0) {
+            return this.data.place.name != vantage.data.direction.name
+        } else {
+            if (relativeDirection.r == 1 && stepsRight >= 0) { return false }
+            else if (relativeDirection.r == -1 && stepsRight <= 0) { return false }
+            else { return true }
+        }
+    }
+
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, defaultSprite?: Sprite): void {
 
-        const { place, relativeDirection = RelativeDirection.BACK } = renderInstruction
+        const { place, relativeDirection = RelativeDirection.BACK, isReverseOfWall } = renderInstruction
         const { patternSprite = defaultSprite, features = [] } = this.data
         const points: Point[] = relativeDirection ? getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place) : [];
         const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
+
 
         ctx.fillStyle = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
 
@@ -61,6 +83,7 @@ class Wall extends Position {
         plotPolygon(ctx, convertFunction, points)
 
         features.forEach(feature => {
+            if (isReverseOfWall && !feature.data.onBothSides) {return}
             // to do - delegate to WallFeature.drawInSight, 
             // have feature property decide if it should be rendered over fullWallPoints or points
             const featureImage = getPatternFill(feature.data.sprite, feature.data.animation, fullWallPoints, relativeDirection);
@@ -69,6 +92,7 @@ class Wall extends Position {
                 plotPolygon(ctx, convertFunction, fullWallPoints, { noStroke: true })
             }
         })
+        
 
         function getMappedPoints(relativeDirection: RelativeDirection = RelativeDirection.BACK, shape: Point[], place: { forward: number, right: number }): Point[] {
             switch (relativeDirection) {

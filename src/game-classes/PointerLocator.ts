@@ -191,9 +191,10 @@ class PointerLocator {
         return null
     }
 
-    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall): WallFeature | null {
+    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall:boolean): WallFeature | null {
         const { features = [] } = wall.data;
         return features.find(feature => {
+            if (isReverseOfWall && !feature.data.onBothSides) {return false}
             const { offset = { x: .5, y: .5 }, size = { x: 1, y: 1 } } = feature.data.sprite;
             const clickIsWithinBounds = Math.abs((zonePoint.x - offset.x) / (size.x / 2)) <= 1 &&
                 Math.abs((zonePoint.y - offset.y) / (size.y / 2)) <= 1

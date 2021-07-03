@@ -8,7 +8,7 @@ const LOG_RENDER_ORDER = false;
 
 class RenderInstruction {
     place: { position: Position, forward: number, right: number }
-    viewedFrom: Direction
+    observer: Vantage
     thing?: Position | Vantage
     wall?: Wall
     relativeDirection?: RelativeDirection
@@ -18,13 +18,13 @@ class RenderInstruction {
 
     constructor(config: {
         place: { position: Position, forward: number, right: number },
-        viewedFrom: Direction,
+        observer: Vantage,
         subject: Position | Vantage | Wall,
     }
     ) {
-        const { place, viewedFrom, subject } = config
+        const { place, observer, subject } = config
         this.place = place
-        this.viewedFrom = viewedFrom
+        this.observer = observer
 
         if (Object.getPrototypeOf(subject).constructor === Wall) {
             this.subjectClass = Wall
@@ -38,19 +38,12 @@ class RenderInstruction {
 
         if (this.subjectClass === Wall) {
             this.wall = subject as Wall;
-            // to do - calculate and use!
-
-            this.relativeDirection = this.wall.data.place.relativeDirection(viewedFrom)
+            
+            // to do - use Wall method
+            this.relativeDirection = this.wall.data.place.relativeDirection(observer.data.direction)
             // wall relative direction is which edge of the square it makes up, not the direction it faces
 
-            if (this.relativeDirection.r == 0) {
-                this.isReverseOfWall = this.wall.data.place.name != viewedFrom.name
-            } else {
-
-                if (this.relativeDirection.r == 1 && this.place.right >= 0) { this.isReverseOfWall = true }
-                else if (this.relativeDirection.r == -1 && this.place.right <= 0) { this.isReverseOfWall = true }
-                else { this.isReverseOfWall = false }
-            }
+            this.isReverseOfWall = this.wall.reverseSideShowingfrom(observer);
 
             switch (this.relativeDirection.name) {
                 case "BACK":
@@ -70,18 +63,22 @@ class RenderInstruction {
         } else if (this.subjectClass === Vantage) {
             this.thing = subject;
             this.isReverseOfWall = false
-            this.relativePositionInSquare = viewedFrom.getRelativeSquarePosition(this.thing);
+            this.relativePositionInSquare = observer.data.direction.getRelativeSquarePosition(this.thing);
             this.relativePositionInSquare.forward -= .5;
             this.relativePositionInSquare.right -= .5;
-            this.relativeDirection = (this.thing as Vantage).data.direction.relativeDirection(this.viewedFrom);
+            this.relativeDirection = (this.thing as Vantage).data.direction.relativeDirection(this.observer.data.direction);
         } else {
             this.thing = subject;
             this.isReverseOfWall = false
-            this.relativePositionInSquare = viewedFrom.getRelativeSquarePosition(this.thing);
+            this.relativePositionInSquare = observer.data.direction.getRelativeSquarePosition(this.thing);
             this.relativePositionInSquare.forward -= .5;
             this.relativePositionInSquare.right -= .5;
         }
 
+    }
+
+    get viewedFrom():Direction {
+        return this.observer.data.direction
     }
 
     get exactPlace(): { forward: number, right: number } {

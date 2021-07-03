@@ -65,14 +65,11 @@ const simpleLevel: Level = new Level({
     height: 10, width: 15,
     defaultWallPattern: undefined,
     walls: [
-        new Wall({ x: 9, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [painting1] }),
-        //new Wall({ x: 9, y: 3, place: Direction.north, color:new Color(120,140,20)  }),
-        // new Wall({ x: 9, y: 3, place: Direction.south, patternSprite: sprites.windowWall }),
-        new Wall({ x: 9, y: 4, place: Direction.north, patternSprite: sprites.brickWall }),
-        new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: sprites.brickWall, features: [painting1] }),
+        new Wall({ x: 9, y: 2, place: Direction.west, color: new Color(120, 40, 20), features: [painting1] }),
+        new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
+
     ],
     contents: [
-        duck({ x: 9.2, y: 3.25, direction: Direction.west, behaviour: undefined }),
         duck({ x: 9.2, y: 2.75, direction: Direction.west, behaviour: undefined }),
     ],
     items: [
@@ -81,7 +78,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 14, y: 5, direction: Direction.west, inventory: [
+    x: 9, y: 5, direction: Direction.north, inventory: [
         new Item({ type: itemTypes.key, }),
         null,
         new Item({ type: itemTypes.bean }),
@@ -95,4 +92,4 @@ const playerCharacter = new Character({
 
 
 
-export { simpleLevel as level, busyLevel as level2, playerCharacter }
+export { simpleLevel as level2, busyLevel as level, playerCharacter }

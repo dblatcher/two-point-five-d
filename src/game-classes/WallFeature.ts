@@ -13,6 +13,7 @@ interface WallFeatureConfig {
     id?: string
     triggers?: Trigger[]
     reactions?: Reaction[]
+    onBothSides?: boolean
 }
 
 class WallFeature {
@@ -21,6 +22,7 @@ class WallFeature {
     constructor(config: WallFeatureConfig) {
         this.data = config
         this.data.animation = this.data.animation || Sprite.defaultWallAnimation
+        this.data.onBothSides == !!config.onBothSides
 
         const { missingAnimations } = this
         if (missingAnimations.length > 0) { console.warn('Missing animations on WallFeature', this, missingAnimations) }
@@ -118,6 +120,7 @@ interface DoorConfig {
     id?: string
     triggers?: Trigger[]
     canOpenDirectly?: boolean
+    onBothSides?: boolean
 }
 
 class Door extends InteractableWallFeature {
@@ -126,6 +129,7 @@ class Door extends InteractableWallFeature {
     constructor(config: DoorConfig) {
         super(config)
         this.data = config
+        if (typeof config.onBothSides == 'undefined') { this.data.onBothSides = true }
     }
 
     get requiredAnimations(): string[] { return ["OPEN", "CLOSED"] }

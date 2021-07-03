@@ -90,7 +90,8 @@ class Game {
         }
 
         if (wallClicked) {
-            featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked);
+            const isReverseOfWall = wallClicked.reverseSideShowingfrom(this.data.playerCharacter)
+            featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall);
         }
 
         if (featureClicked && featureClicked.canInteract) {

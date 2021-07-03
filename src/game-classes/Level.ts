@@ -125,7 +125,7 @@ class Level {
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
 
             renderInstructions.push(new RenderInstruction({
-                place, viewedFrom: vantage.data.direction, subject: wall
+                place, observer: vantage, subject: wall
             }))
         })
 
@@ -134,7 +134,7 @@ class Level {
             if (!place) { return }
 
             renderInstructions.push(new RenderInstruction({
-                place, viewedFrom: vantage.data.direction, subject: thing
+                place, observer: vantage, subject: thing
             }))
         })
 
@@ -145,7 +145,7 @@ class Level {
                     const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
                     if (!place) { return }
                     renderInstructions.push(new RenderInstruction({
-                        place, viewedFrom: vantage.data.direction, subject: itemFigure
+                        place, observer: vantage, subject: itemFigure
                     }))
                 }
             })
