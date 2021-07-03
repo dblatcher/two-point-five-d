@@ -40,14 +40,9 @@ const busyLevel: Level = new Level({
         new Wall({ x: 0, y: 0, place: Direction.west, patternSprite: sprites.brickWall }),
         new Wall({ x: 0, y: 0, place: Direction.north, color: new Color(200, 100, 90, 1) }),
         new Wall({ x: 1, y: 0, place: Direction.north, color: new Color(20, 250, 190) }),
-        new Wall({ x: 2, y: 0, place: Direction.north }),
         new Wall({ x: 3, y: 0, place: Direction.north, patternSprite: sprites.windowWall }),
-        new Wall({ x: 4, y: 0, place: Direction.north }),
         new Wall({ x: 5, y: 0, place: Direction.north, patternSprite: sprites.windowWall }),
         new Wall({ x: 6, y: 0, place: Direction.north, patternSprite: sprites.brickWall }),
-        new Wall({ x: 7, y: 0, place: Direction.north }),
-        new Wall({ x: 8, y: 0, place: Direction.north }),
-        new Wall({ x: 9, y: 0, place: Direction.north }),
         new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: sprites.brickWall, features: [painting1] }),
     ],
     contents: [
@@ -67,29 +62,26 @@ const busyLevel: Level = new Level({
 }).withWallsAround()
 
 const simpleLevel: Level = new Level({
-    height: 10, width: 10,
+    height: 10, width: 15,
     defaultWallPattern: undefined,
     walls: [
-        new Wall({ x: 3, y: 4, place: Direction.east, color: new Color(250, 200, 250, .5) }),
-        new Wall({ x: 3, y: 4, place: Direction.south }),
-        new Wall({ x: 8, y: 2, place: Direction.south }),
-        new Wall({ x: 8, y: 3, place: Direction.north, shape: lowWall }),
-        // new Wall({ x: 4, y: 4, place: Direction.south, shape:lowWall }),
-        // new Wall({ x: 4, y: 5, place: Direction.north, shape:lowWall }),
+        new Wall({ x: 9, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [painting1] }),
+        //new Wall({ x: 9, y: 3, place: Direction.north, color:new Color(120,140,20)  }),
+        // new Wall({ x: 9, y: 3, place: Direction.south, patternSprite: sprites.windowWall }),
+        new Wall({ x: 9, y: 4, place: Direction.north, patternSprite: sprites.brickWall }),
+        new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: sprites.brickWall, features: [painting1] }),
     ],
     contents: [
-        duck({ x: 8.5, y: 3.15, direction: Direction.north }),
-        // duck({ x: 4.5, y: 1.9, direction: Direction.east }),
-        // duck({ x: 4.1, y: 7.9, direction: Direction.east }),
+        duck({ x: 9.2, y: 3.25, direction: Direction.west, behaviour: undefined }),
+        duck({ x: 9.2, y: 2.75, direction: Direction.west, behaviour: undefined }),
     ],
     items: [
-        new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
-        new Item({ type: itemTypes.bean, vantage: new Vantage({ x: 3.25, y: 4.8, direction: Direction.north }) })
+
     ]
 })
 
 const playerCharacter = new Character({
-    x: 6, y: 2, direction: Direction.east, inventory: [
+    x: 14, y: 5, direction: Direction.west, inventory: [
         new Item({ type: itemTypes.key, }),
         null,
         new Item({ type: itemTypes.bean }),
@@ -103,4 +95,4 @@ const playerCharacter = new Character({
 
 
 
-export { simpleLevel, busyLevel as level, playerCharacter }
+export { simpleLevel as level, busyLevel as level2, playerCharacter }

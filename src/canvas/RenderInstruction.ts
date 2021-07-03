@@ -57,10 +57,10 @@ class RenderInstruction {
                     this.relativePositionInSquare = { forward: -.5, right: 0 }
                     break
                 case "LEFT":
-                    this.relativePositionInSquare = { forward: this.place.right <= 0 ? .5 : -.5, right: -.5 }
+                    this.relativePositionInSquare = { forward: .5, right: -.5 }
                     break
                 case "RIGHT":
-                    this.relativePositionInSquare = { forward: this.place.right >= 0 ? .5 : -.5, right: .5 }
+                    this.relativePositionInSquare = { forward: .5, right: .5 }
                     break
                 case "FORWARD":
                     this.relativePositionInSquare = { forward: .5, right: 0 }
@@ -93,31 +93,42 @@ class RenderInstruction {
 
     static sortFunction = (itemA: RenderInstruction, itemB: RenderInstruction): number => {
 
-        if ((itemA.subjectClass === Wall) !== (itemB.subjectClass === Wall)) {
-            if (itemA.isReverseOfWall || itemB.isReverseOfWall) {
-                const itemAForward = itemA.isReverseOfWall ? itemA.place.forward - 1 : itemA.place.forward;
-                const itemBForward = itemB.isReverseOfWall ? itemB.place.forward - 1 : itemB.place.forward;
-                return itemBForward - itemAForward
+        //sort by grid row first
+        if (itemA.place.forward !== itemB.place.forward) {
+            return itemB.place.forward - itemA.place.forward
+        }
+
+        // if they are walls in the same exact place, render the reverse side first
+        if (itemA.subjectClass === Wall && itemB.subjectClass === Wall) {
+            if (itemA.exactPlace.right === itemB.exactPlace.right && itemA.exactPlace.forward === itemB.exactPlace.forward) {
+                if (itemA.isReverseOfWall !== itemB.isReverseOfWall) {
+                    return itemA.isReverseOfWall ? -1 : 1
+                }
             }
         }
 
+        // if one is a wall and the other isn't
+        // render a further to the side wall before a figure, but a closer to the side wall after
+        if ((itemA.subjectClass === Wall) !== (itemB.subjectClass === Wall)) {
+            const theWallIsSideFacing = (itemA.subjectClass === Wall && itemA.relativeDirection?.r != 0) || (itemB.subjectClass === Wall && itemB.relativeDirection?.r != 0)
+            if (theWallIsSideFacing) {
+                return Math.abs(itemB.exactPlace.right) - Math.abs(itemA.exactPlace.right)
+            }
+        }
+
+        //then sort by grid column, further out first, unless neither is a wall
+        if (itemA.place.right !== itemB.place.right) {
+            if ((itemA.subjectClass !== Wall) || (itemB.subjectClass === Wall)) {
+                return Math.abs(itemB.place.right) - Math.abs(itemA.place.right)
+            }
+        }
+
+        // render the further forward item first
         if (itemA.exactPlace.forward !== itemB.exactPlace.forward) {
             return itemB.exactPlace.forward - itemA.exactPlace.forward
         }
 
-        if (itemA.subjectClass === Wall && itemB.subjectClass === Wall) {
-            const itemAisHeadOn = itemA.relativeDirection?.r === 0;
-            const itemBisHeadOn = itemB.relativeDirection?.r == 0;
-
-            if (itemAisHeadOn && !itemBisHeadOn) {
-                return itemB.isReverseOfWall ? -1 : 1
-            }
-
-            if (!itemAisHeadOn && itemBisHeadOn) {
-                return itemA.isReverseOfWall ? 1 : -1
-            }
-        }
-
+        // render items further to the side first
         if (Math.sign(itemA.exactPlace.right) == Math.sign(itemB.exactPlace.right)) {
             return Math.abs(itemB.exactPlace.right) - Math.abs(itemA.exactPlace.right)
         }
@@ -134,10 +145,10 @@ class RenderInstruction {
             sortedList
                 .forEach(item => {
                     if (item.subjectClass == Wall) {
-                        console.log('WALL', item.exactPlace, item.relativeDirection?.r !== 0 ? 'side facing,' : 'head on,', item.isReverseOfWall ? 'reverse face' : 'front face')
+                        console.log('WALL', [item.place.forward, item.place.right], item.exactPlace, item.relativeDirection?.r !== 0 ? 'side facing,' : 'head on,', item.isReverseOfWall ? 'reverse face' : 'front face')
                     }
                     if (item.subjectClass == Vantage) {
-                        console.log('FIGURE', item.exactPlace)
+                        console.log('FIGURE', [item.place.forward, item.place.right], item.exactPlace)
                     }
                 })
         }
