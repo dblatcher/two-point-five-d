@@ -2,6 +2,8 @@ import { Direction } from './Direction'
 import { Position } from './Position'
 import { Game } from './Game'
 import { RelativeDirection } from './RelativeDirection'
+import { ConvertFunction, mapPointOnFloor, plotPolygon, RelativePoint } from '@/canvas/canvas-utility'
+import { RenderInstruction } from '@/canvas/RenderInstruction'
 
 interface VantageConfig {
     x: number
@@ -17,13 +19,13 @@ class Vantage extends Position {
         this.data = config
     }
 
-    get isVantage():boolean { return true }
+    get isVantage(): boolean { return true }
 
     move(relativeDirection: RelativeDirection, game: Game): void {
         this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
-    moveBy(distance:number, relativeDirection: RelativeDirection, game: Game): void {
+    moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): void {
         this.moveAbsoluteBy(distance, relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
@@ -62,6 +64,27 @@ class Vantage extends Position {
         ctx.lineTo(arrowEndX, arrowEndY);
         ctx.lineTo(arrowRightX, arrowRightY);
         ctx.stroke();
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        const { place, viewedFrom } = renderInstruction
+        const relativeDirection = renderInstruction.relativeDirection as RelativeDirection;
+        const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
+        const exactPlace: RelativePoint = {
+            f: place.forward - 1.5 + rotatedSquarePosition.x,
+            r: place.right - .5 + rotatedSquarePosition.y
+        }
+
+        const outDistance = .2;
+
+        const shapePoints = relativeDirection.rotateShape(exactPlace, [
+            [- outDistance, - outDistance],
+            [- outDistance, + outDistance],
+            [+ outDistance, 0],
+        ]).map(corner => mapPointOnFloor(corner.f, corner.r))
+
+        plotPolygon(ctx, convertFunction, shapePoints, { noFill: true })
     }
 }
 

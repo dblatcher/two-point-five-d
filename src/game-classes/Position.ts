@@ -1,5 +1,5 @@
 import { Direction } from './Direction'
-import { ConvertFunction, mapPointOnFloor, plotPolygon, Point } from '@/canvas/canvas-utility';
+import { ConvertFunction, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility';
 import { Game } from './Game';
 import { RenderInstruction } from '@/canvas/RenderInstruction';
 
@@ -17,6 +17,7 @@ class Position {
     }
 
     get isVantage(): boolean { return false }
+    get isFloorFeature(): boolean { return false }
 
     get gridX(): number {
         return Math.floor(this.data.x);
@@ -98,17 +99,17 @@ class Position {
         const { place, viewedFrom } = renderInstruction
 
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
-        const exactPlace = {
-            x: place.forward - 1.5 + rotatedSquarePosition.x,
-            y: place.right - .5 + rotatedSquarePosition.y
+        const exactPlace: RelativePoint = {
+            f: place.forward - 1.5 + rotatedSquarePosition.x,
+            r: place.right - .5 + rotatedSquarePosition.y
         }
 
         const outDistance = .15;
 
-        const foreLeft = mapPointOnFloor(exactPlace.x + outDistance, exactPlace.y - outDistance)
-        const backLeft = mapPointOnFloor(exactPlace.x - outDistance, exactPlace.y - outDistance)
-        const foreRight = mapPointOnFloor(exactPlace.x + outDistance, exactPlace.y + outDistance)
-        const backRight = mapPointOnFloor(exactPlace.x - outDistance, exactPlace.y + outDistance)
+        const foreLeft = mapPointOnFloor(exactPlace.f + outDistance, exactPlace.r - outDistance)
+        const backLeft = mapPointOnFloor(exactPlace.f - outDistance, exactPlace.r - outDistance)
+        const foreRight = mapPointOnFloor(exactPlace.f + outDistance, exactPlace.r + outDistance)
+        const backRight = mapPointOnFloor(exactPlace.f - outDistance, exactPlace.r + outDistance)
         plotPolygon(ctx, convertFunction, [foreLeft, backRight], { noFill: false })
         plotPolygon(ctx, convertFunction, [foreRight, backLeft], { noFill: false })
     }

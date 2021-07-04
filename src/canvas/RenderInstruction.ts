@@ -1,8 +1,10 @@
+import { FloorFeature } from "@/game-classes/FloorFeature";
 import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
+import {RelativePoint} from "@/canvas/canvas-utility";
 
 const LOG_RENDER_ORDER = false;
 
@@ -14,7 +16,7 @@ class RenderInstruction {
     relativeDirection?: RelativeDirection
     relativePositionInSquare: { forward: number, right: number }
     isReverseOfWall: boolean
-    subjectClass: typeof Wall | typeof Vantage | typeof Position
+    subjectClass: typeof Wall | typeof Vantage | typeof Position | typeof FloorFeature
 
     constructor(config: {
         place: { position: Position, forward: number, right: number },
@@ -29,6 +31,8 @@ class RenderInstruction {
         if (Object.getPrototypeOf(subject).constructor === Wall) {
             this.subjectClass = Wall
         }
+        else if (subject.isFloorFeature)
+            this.subjectClass = FloorFeature
         else if (subject.isVantage)
             this.subjectClass = Vantage
         else {
@@ -38,7 +42,7 @@ class RenderInstruction {
 
         if (this.subjectClass === Wall) {
             this.wall = subject as Wall;
-            
+
             // to do - use Wall method
             this.relativeDirection = this.wall.data.place.relativeDirection(observer.data.direction)
             // wall relative direction is which edge of the square it makes up, not the direction it faces
@@ -60,7 +64,7 @@ class RenderInstruction {
                     break
             }
 
-        } else if (this.subjectClass === Vantage) {
+        } else if (this.subjectClass === Vantage || this.subjectClass === FloorFeature) {
             this.thing = subject;
             this.isReverseOfWall = false
             this.relativePositionInSquare = observer.data.direction.getRelativeSquarePosition(this.thing);
@@ -77,14 +81,14 @@ class RenderInstruction {
 
     }
 
-    get viewedFrom():Direction {
+    get viewedFrom(): Direction {
         return this.observer.data.direction
     }
 
-    get exactPlace(): { forward: number, right: number } {
+    get exactPlace(): RelativePoint {
         return {
-            forward: this.place.forward + this.relativePositionInSquare.forward,
-            right: this.place.right + this.relativePositionInSquare.right,
+            f: this.place.forward + this.relativePositionInSquare.forward,
+            r: this.place.right + this.relativePositionInSquare.right,
         }
     }
 
@@ -97,11 +101,16 @@ class RenderInstruction {
 
         // if they are walls in the same exact place, render the reverse side first
         if (itemA.subjectClass === Wall && itemB.subjectClass === Wall) {
-            if (itemA.exactPlace.right === itemB.exactPlace.right && itemA.exactPlace.forward === itemB.exactPlace.forward) {
+            if (itemA.exactPlace.r === itemB.exactPlace.r && itemA.exactPlace.f === itemB.exactPlace.f) {
                 if (itemA.isReverseOfWall !== itemB.isReverseOfWall) {
                     return itemA.isReverseOfWall ? -1 : 1
                 }
             }
+        }
+
+        //render floor features before figures or walls
+        if ((itemA.subjectClass === FloorFeature) !== (itemB.subjectClass === FloorFeature)) {
+            return itemA.subjectClass === FloorFeature ? -1 : 1
         }
 
         // if one is a wall and the other isn't
@@ -109,11 +118,12 @@ class RenderInstruction {
         if ((itemA.subjectClass === Wall) !== (itemB.subjectClass === Wall)) {
             const theWallIsSideFacing = (itemA.subjectClass === Wall && itemA.relativeDirection?.r != 0) || (itemB.subjectClass === Wall && itemB.relativeDirection?.r != 0)
             if (theWallIsSideFacing) {
-                return Math.abs(itemB.exactPlace.right) - Math.abs(itemA.exactPlace.right)
+                return Math.abs(itemB.exactPlace.r) - Math.abs(itemA.exactPlace.r)
             }
         }
 
         //then sort by grid column, further out first, unless neither is a wall
+        //TO DO - fix the inner test here - looks wrong!
         if (itemA.place.right !== itemB.place.right) {
             if ((itemA.subjectClass !== Wall) || (itemB.subjectClass === Wall)) {
                 return Math.abs(itemB.place.right) - Math.abs(itemA.place.right)
@@ -121,13 +131,13 @@ class RenderInstruction {
         }
 
         // render the further forward item first
-        if (itemA.exactPlace.forward !== itemB.exactPlace.forward) {
-            return itemB.exactPlace.forward - itemA.exactPlace.forward
+        if (itemA.exactPlace.f !== itemB.exactPlace.f) {
+            return itemB.exactPlace.f - itemA.exactPlace.f
         }
 
         // render items further to the side first
-        if (Math.sign(itemA.exactPlace.right) == Math.sign(itemB.exactPlace.right)) {
-            return Math.abs(itemB.exactPlace.right) - Math.abs(itemA.exactPlace.right)
+        if (Math.sign(itemA.exactPlace.r) == Math.sign(itemB.exactPlace.r)) {
+            return Math.abs(itemB.exactPlace.r) - Math.abs(itemA.exactPlace.r)
         }
 
         return 0
@@ -146,6 +156,9 @@ class RenderInstruction {
                     }
                     if (item.subjectClass == Vantage) {
                         console.log('FIGURE', [item.place.forward, item.place.right], item.exactPlace)
+                    }
+                    if (item.subjectClass == FloorFeature) {
+                        console.log('FloorFeature', [item.place.forward, item.place.right], item.exactPlace)
                     }
                 })
         }

@@ -14,6 +14,7 @@ import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import { lever1, painting1, door1, button1, button2 } from "@/instances/features"
 import { lowWall, doorway } from "@/instances/wallShapes"
+import { FloorFeature } from "@/game-classes/FloorFeature";
 
 
 
@@ -70,7 +71,8 @@ const simpleLevel: Level = new Level({
 
     ],
     contents: [
-        duck({ x: 9.2, y: 2.75, direction: Direction.west, behaviour: undefined }),
+        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: undefined }),
+        new FloorFeature({ x: 9, y: 3, direction: Direction.east })
     ],
     items: [
 

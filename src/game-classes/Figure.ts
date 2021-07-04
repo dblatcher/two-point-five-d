@@ -1,11 +1,11 @@
-import { ConvertFunction, Dimensions, mapPointInSight, Point, VANISH_RATE } from "@/canvas/canvas-utility";
+import { ConvertFunction, Dimensions, mapPointInSight, Point, VANISH_RATE, RelativePoint } from "@/canvas/canvas-utility";
 import { Vantage } from "./Vantage";
 
 import { Sprite } from './Sprite'
 import { Direction } from "./Direction";
 import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
-import { RelativeDirection } from "./RelativeDirection";
+import { RelativeDirection  } from "./RelativeDirection";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 
 interface FigureConfig {
@@ -39,19 +39,19 @@ class Figure extends Vantage {
         const { height = 1, width = 1 } = this.data
 
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
-        const exactPlace = {
-            x: forward - 1.5 + rotatedSquarePosition.x,
-            y: right - .5 + rotatedSquarePosition.y
+        const exactPlace: RelativePoint = {
+            f: forward - 1.5 + rotatedSquarePosition.x,
+            r: right - .5 + rotatedSquarePosition.y
         }
 
         const aspect = (Wall.baseWidth / Wall.baseHeight)
-        const heightAtDistance = (height) / (VANISH_RATE ** (exactPlace.x));
-        const widthAtDistance = (width * aspect) / (VANISH_RATE ** (exactPlace.x));
+        const heightAtDistance = (height) / (VANISH_RATE ** (exactPlace.f));
+        const widthAtDistance = (width * aspect) / (VANISH_RATE ** (exactPlace.f));
 
         return {
-            centerOnFloor: mapPointInSight(exactPlace.x, exactPlace.y, 0),
-            topLeft: mapPointInSight(exactPlace.x, exactPlace.y - width / 2, height),
-            topRight: mapPointInSight(exactPlace.x, exactPlace.y + width / 2, height),
+            centerOnFloor: mapPointInSight(exactPlace.f, exactPlace.r, 0),
+            topLeft: mapPointInSight(exactPlace.f, exactPlace.r - width / 2, height),
+            topRight: mapPointInSight(exactPlace.f, exactPlace.r + width / 2, height),
             heightAtDistance, widthAtDistance,
         }
     }

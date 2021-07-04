@@ -4,6 +4,7 @@ import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
 
 interface Point { x: number, y: number }
+interface RelativePoint { f: number, r: number }
 interface Dimensions { x: number, y: number }
 interface ConvertFunction { (point: Point): [number, number] }
 
@@ -96,7 +97,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
 
 
 export {
-    ConvertFunction, Point, Dimensions,
+    ConvertFunction, Point, Dimensions, RelativePoint,
     mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, mapPointInSight,
     MAX_VIEW_DISTANCE, VANISH_RATE
 }
