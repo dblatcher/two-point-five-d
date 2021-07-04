@@ -3,7 +3,6 @@ import { Color } from "@/game-classes/Color";
 import { Direction } from "@/game-classes/Direction";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";
-import { Position } from "@/game-classes/Position";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Item } from "@/game-classes/Item";
@@ -12,7 +11,7 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, button2 } from "@/instances/features"
+import { lever1, painting1, door1, button1, button2, pitShape } from "@/instances/features"
 import { lowWall, doorway } from "@/instances/wallShapes"
 import { FloorFeature } from "@/game-classes/FloorFeature";
 
@@ -54,8 +53,7 @@ const busyLevel: Level = new Level({
         // duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
         new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
 
-        new Position({ x: 1, y: 3 }),
-        new Position({ x: 3.25, y: 3.4 }),
+        new FloorFeature({ x: 9, y: 4, direction: Direction.east, blocksByDefault: true, plotConfig:{noFill:false, fillStyle:'blue'}, shape:pitShape }),
     ],
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),

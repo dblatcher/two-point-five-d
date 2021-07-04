@@ -76,16 +76,18 @@ class Vantage extends Position {
             r: place.right - .5 + rotatedSquarePosition.y
         }
 
-        const outDistance = .2;
+        const shapePoints = relativeDirection.rotateShape(exactPlace, Vantage.defaultMarkerShape).map(corner => mapPointOnFloor(corner.f, corner.r))
 
-        const shapePoints = relativeDirection.rotateShape(exactPlace, [
-            [- outDistance, - outDistance],
-            [- outDistance, + outDistance],
-            [+ outDistance, 0],
-        ]).map(corner => mapPointOnFloor(corner.f, corner.r))
-
-        plotPolygon(ctx, convertFunction, shapePoints, { noFill: true })
+        plotPolygon(ctx, convertFunction, shapePoints, Vantage.defaultMarkerPlotConfig)
     }
+
+    static defaultMarkerSize = .2
+    static defaultMarkerShape:[number,number][] = [
+        [- Vantage.defaultMarkerSize, - Vantage.defaultMarkerSize],
+        [- Vantage.defaultMarkerSize, + Vantage.defaultMarkerSize],
+        [+ Vantage.defaultMarkerSize, 0],
+    ]
+    static defaultMarkerPlotConfig = { noFill: true }
 }
 
 

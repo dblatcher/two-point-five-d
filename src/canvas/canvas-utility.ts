@@ -7,6 +7,14 @@ interface Point { x: number, y: number }
 interface RelativePoint { f: number, r: number }
 interface Dimensions { x: number, y: number }
 interface ConvertFunction { (point: Point): [number, number] }
+interface PlotConfig {
+    noStroke?: boolean
+    noFill?: boolean
+    noClose?: boolean
+    fillStyle?: string
+    strokeStyle?: string
+}
+
 
 const MAX_VIEW_DISTANCE = 8;
 const VANISH_RATE = Math.SQRT2;
@@ -28,19 +36,18 @@ function mapPointOnCeiling(forwardDistance: number, rightDistance: number): Poin
 }
 
 
-function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[], config: {
-    noStroke?: boolean
-    noFill?: boolean
-    noClose?: boolean
-} = {}): void {
+function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, points: Point[], config: PlotConfig = {}): void {
     ctx.beginPath()
     ctx.moveTo(...convertFunction(points[0]))
     for (let index = 1; index < points.length; index++) {
         ctx.lineTo(...convertFunction(points[index]))
     }
-
     if (!config.noClose) { ctx.closePath() }
+
+
+    if (config.strokeStyle) { ctx.strokeStyle = config.strokeStyle }
     if (!config.noStroke) { ctx.stroke() }
+    if (config.fillStyle) { ctx.fillStyle = config.fillStyle }
     if (!config.noFill) { ctx.fill() }
 }
 
@@ -97,7 +104,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
 
 
 export {
-    ConvertFunction, Point, Dimensions, RelativePoint,
+    ConvertFunction, Point, Dimensions, RelativePoint, PlotConfig,
     mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, mapPointInSight,
     MAX_VIEW_DISTANCE, VANISH_RATE
 }

@@ -3,6 +3,7 @@ import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
 import { Direction } from "./Direction";
+import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
@@ -38,6 +39,10 @@ class Level {
 
         const dX = targetX - startX
         const dY = targetY - startY
+
+        if (this.data.contents.find(
+            item => item.isFloorFeature && (item as FloorFeature).isBlocking && item.gridX == targetX && item.gridY == targetY
+        )) { return true }
 
         if (this.data.walls.find(
             wall => wall.gridX == startX && wall.gridY == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
