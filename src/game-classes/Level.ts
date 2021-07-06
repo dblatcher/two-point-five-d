@@ -19,6 +19,7 @@ interface LevelConfig {
     walls: Wall[]
     contents: Array<Vantage | Position>
     defaultWallPattern?: Sprite
+    floorColor?: Color
     items: Item[]
 }
 
@@ -30,6 +31,8 @@ class Level {
         this.data = config
         this.tickCount = 0
     }
+
+    static defaultFloorColor = new Color(80, 80, 80);
 
     isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
         if (targetX < 0) { return true }
@@ -100,13 +103,9 @@ class Level {
         }
     }
 
-    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
-        canvas.setAttribute('width', viewWidth.toString());
-        canvas.setAttribute('height', viewHeight.toString());
-        const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
-
-        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    drawSightBackground(ctx: CanvasRenderingContext2D, toCanvasCoords:ConvertFunction): void {
         const smallestWallHeight = Wall.baseHeight / (VANISH_RATE ** MAX_VIEW_DISTANCE)
+        const floorColor = this.data.floorColor || Level.defaultFloorColor;
 
         ctx.beginPath()
         ctx.fillStyle = 'black';
@@ -114,13 +113,20 @@ class Level {
         ctx.fillStyle = 'grey';
         ctx.beginPath()
         ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5 - smallestWallHeight / 2 }))
-        ctx.fillStyle = 'grey';
+        ctx.fillStyle = floorColor.css;
         ctx.beginPath()
         ctx.fillRect(...toCanvasCoords({ x: 0, y: .5 + smallestWallHeight / 2 }), ...toCanvasCoords({ x: 1, y: 1 }))
+    }
 
+    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
+        canvas.setAttribute('width', viewWidth.toString());
+        canvas.setAttribute('height', viewHeight.toString());
+        const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
+        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+        this.drawSightBackground(ctx, toCanvasCoords);
 
         const placesInSight = getPlacesInSight(vantage);
-
         let renderInstructions: RenderInstruction[] = [];
 
         this.data.walls.forEach(wall => {
@@ -130,7 +136,7 @@ class Level {
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
 
             renderInstructions.push(new RenderInstruction({
-                place, observer: vantage, subject: wall
+                place, observer: vantage, subject: wall, level:this,
             }))
         })
 
@@ -139,7 +145,7 @@ class Level {
             if (!place) { return }
 
             renderInstructions.push(new RenderInstruction({
-                place, observer: vantage, subject: thing
+                place, observer: vantage, subject: thing, level:this,
             }))
         })
 
@@ -150,7 +156,7 @@ class Level {
                     const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
                     if (!place) { return }
                     renderInstructions.push(new RenderInstruction({
-                        place, observer: vantage, subject: itemFigure
+                        place, observer: vantage, subject: itemFigure, level:this,
                     }))
                 }
             })

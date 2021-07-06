@@ -4,7 +4,8 @@ import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
-import {RelativePoint} from "@/canvas/canvas-utility";
+import { RelativePoint } from "@/canvas/canvas-utility";
+import { Level } from "@/game-classes/Level";
 
 const LOG_RENDER_ORDER = false;
 
@@ -13,6 +14,7 @@ class RenderInstruction {
     observer: Vantage
     thing?: Position | Vantage
     wall?: Wall
+    level: Level
     relativeDirection?: RelativeDirection
     relativePositionInSquare: { forward: number, right: number }
     isReverseOfWall: boolean
@@ -22,11 +24,13 @@ class RenderInstruction {
         place: { position: Position, forward: number, right: number },
         observer: Vantage,
         subject: Position | Vantage | Wall,
+        level: Level,
     }
     ) {
-        const { place, observer, subject } = config
+        const { place, observer, subject, level } = config
         this.place = place
         this.observer = observer
+        this.level = level
 
         if (Object.getPrototypeOf(subject).constructor === Wall) {
             this.subjectClass = Wall

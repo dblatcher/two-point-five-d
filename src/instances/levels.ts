@@ -13,13 +13,14 @@ import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import { lever1, painting1, door1, button1, button2, pitShape } from "@/instances/features"
 import { lowWall, doorway } from "@/instances/wallShapes"
-import { FloorFeature } from "@/game-classes/FloorFeature";
+import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
 
 
 const busyLevel: Level = new Level({
     height: 8, width: 15,
     defaultWallPattern: undefined,
+    floorColor: new Color(190, 120, 80),
     walls: [
         new Wall({ x: 1, y: 2, place: Direction.east, features: [button1] }),
         new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features: [door1, button2], open: true }),
@@ -53,7 +54,8 @@ const busyLevel: Level = new Level({
         // duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
         new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
 
-        new FloorFeature({ x: 9, y: 4, direction: Direction.east, blocksByDefault: true, plotConfig:{noFill:false, fillStyle:'blue'}, shape:pitShape }),
+        new FloorFeature({ x: 9, y: 4, direction: Direction.east, blocksByDefault: true, plotConfig: { noFill: false, fillStyle: 'blue' }, shape: pitShape }),
+        new Pit({ x: 10, y: 4, direction: Direction.east, plotConfig: { noFill: false, fillStyle: 'blue' }, shape: pitShape }),
     ],
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
