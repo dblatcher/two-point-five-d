@@ -45,7 +45,7 @@ function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunc
     if (!config.noClose) { ctx.closePath() }
 
 
-    if (config.strokeStyle) { ctx.strokeStyle = config.strokeStyle }
+    ctx.strokeStyle = config.strokeStyle || 'black'
     if (!config.noStroke) { ctx.stroke() }
     if (config.fillStyle) { ctx.fillStyle = config.fillStyle }
     if (!config.noFill) { ctx.fill() }

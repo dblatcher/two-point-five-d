@@ -1,4 +1,4 @@
-import { ConvertFunction, getPlacesInSight, getViewportMapFunction, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
+import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
@@ -103,7 +103,7 @@ class Level {
         }
     }
 
-    drawSightBackground(ctx: CanvasRenderingContext2D, toCanvasCoords:ConvertFunction): void {
+    drawSightBackground(ctx: CanvasRenderingContext2D, toCanvasCoords: ConvertFunction): void {
         const smallestWallHeight = Wall.baseHeight / (VANISH_RATE ** MAX_VIEW_DISTANCE)
         const floorColor = this.data.floorColor || Level.defaultFloorColor;
 
@@ -116,6 +116,27 @@ class Level {
         ctx.fillStyle = floorColor.css;
         ctx.beginPath()
         ctx.fillRect(...toCanvasCoords({ x: 0, y: .5 + smallestWallHeight / 2 }), ...toCanvasCoords({ x: 1, y: 1 }))
+
+        function drawLineToHorizon(r: number): void {
+            plotPolygon(ctx, toCanvasCoords, [mapPointOnFloor(-1, r), mapPointOnFloor(MAX_VIEW_DISTANCE, r)], { noClose: true, noFill: true, strokeStyle:floorColor.darker(35).css })
+        }
+
+        function drawLineParellelToHorizon(f: number): void {
+            plotPolygon(ctx, toCanvasCoords, [mapPointOnFloor(f, -MAX_VIEW_DISTANCE), mapPointOnFloor(f, MAX_VIEW_DISTANCE)], { noClose: true, noFill: true, strokeStyle:floorColor.darker(35).css })
+        }
+
+        drawLineToHorizon(3.5);
+        drawLineToHorizon(2.5);
+        drawLineToHorizon(1.5);
+        drawLineToHorizon(.5);
+        drawLineToHorizon(-.5);
+        drawLineToHorizon(-1.5);
+        drawLineToHorizon(-2.5);
+        drawLineToHorizon(-3.5);
+
+        for (let f = 0; f < MAX_VIEW_DISTANCE; f++) {
+            drawLineParellelToHorizon(.5 + f)
+        }
     }
 
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
@@ -136,7 +157,7 @@ class Level {
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
 
             renderInstructions.push(new RenderInstruction({
-                place, observer: vantage, subject: wall, level:this,
+                place, observer: vantage, subject: wall, level: this,
             }))
         })
 
@@ -145,7 +166,7 @@ class Level {
             if (!place) { return }
 
             renderInstructions.push(new RenderInstruction({
-                place, observer: vantage, subject: thing, level:this,
+                place, observer: vantage, subject: thing, level: this,
             }))
         })
 
@@ -156,7 +177,7 @@ class Level {
                     const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
                     if (!place) { return }
                     renderInstructions.push(new RenderInstruction({
-                        place, observer: vantage, subject: itemFigure, level:this,
+                        place, observer: vantage, subject: itemFigure, level: this,
                     }))
                 }
             })
