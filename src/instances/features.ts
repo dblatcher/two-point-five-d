@@ -26,10 +26,12 @@ const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenD
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [telportToCorner] })
 const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor],onBothSides:true })
 
+const stairs = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation })
+
 const pitShape:[number,number][] = [
     [-.45,-.45],[.45,-.45],[.45,.45],[-.45,.45]
 ]
 
 export {
-    lever1, painting1, door1, button1, keyhole, pitShape
+    lever1, painting1, door1, button1, keyhole, pitShape, stairs
 }

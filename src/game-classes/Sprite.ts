@@ -157,28 +157,28 @@ class Sprite {
         this.loadedFrames.clear()
     }
 
-    static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}): Sprite {
+    static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}, gridCell: { row?: number, col?: number } = {}): Sprite {
 
         config.animations = new Map<string, Frame[]>()
             .set(`${Sprite.defaultWallAnimation}`, [
-                { sheet: sheet, transforms: ["RESIZE_CENTER"] },
+                { sheet, transforms: ["RESIZE_CENTER"], ...gridCell },
             ])
             .set(`${Sprite.defaultWallAnimation}_LEFT`, [
-                { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"] },
+                { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"],...gridCell },
             ])
             .set(`${Sprite.defaultWallAnimation}_RIGHT`, [
-                { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"] },
+                { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], ...gridCell },
             ]);
 
         return new Sprite(name, config)
     }
 
-    static itemSprite(name: string, frame: Frame, config: SpriteConfig = {}):Sprite {
+    static itemSprite(name: string, frame: Frame, config: SpriteConfig = {}): Sprite {
 
-        config.animations= new Map<string, Frame[]>()
-        .set(Sprite.defaultFigureAnimation, [
-           frame
-        ])
+        config.animations = new Map<string, Frame[]>()
+            .set(Sprite.defaultFigureAnimation, [
+                frame
+            ])
 
         return new Sprite(name, config)
     }

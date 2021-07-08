@@ -19,6 +19,13 @@ const sheets = {
     //https://opengameart.org/content/weird-fruits-16x16
     fruits: new SpriteSheet("fruit", require("../assets/sprites/fruit.png"), spriteSheets, { pattern: "GRID", cols: 4, rows: 4 }),
 
+
+    //https://opengameart.org/content/wooden-stairs-ns
+    stairs: new SpriteSheet("stairs", require("../assets/sprites/wooden_stairs-ns-crop.png"), spriteSheets, { pattern: "GRID", cols: 1, rows: 5 }),
+
+    //https://opengameart.org/content/brick-wall-0
+    brickWall2: new SpriteSheet("brickWall", require("../assets/sprites/brick_wall.png"), spriteSheets),
+
     testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets),
     painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
     leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
@@ -176,10 +183,12 @@ const doorSprite = new Sprite("DOOR", {
 
 const sprites = {
     brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks),
+    brickWall2: Sprite.patternSprite("BRICK_WALL", sheets.brickWall2),
     duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side),
     windowWall: Sprite.patternSprite("WINDOW", sheets.window),
     testPattern: Sprite.patternSprite("TEST", sheets.testCard),
     paintingWall: Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .5 } }),
+    stairs: Sprite.patternSprite("stairs", sheets.stairs, { size: { x: .75, y: 1 } }, {col: 0, row: 0}),
     duckSprite,
     dinoSprite,
     testSprite,
