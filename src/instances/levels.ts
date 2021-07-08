@@ -80,7 +80,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 9, y: 5, direction: Direction.north, inventory: [
+    x: 4, y: 3, direction: Direction.west, inventory: [
         new Item({ type: itemTypes.key, }),
         null,
         new Item({ type: itemTypes.bean }),

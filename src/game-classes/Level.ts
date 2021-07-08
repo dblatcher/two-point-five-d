@@ -68,6 +68,16 @@ class Level {
         return !!(wall1 || wall2)
     }
 
+    hasSquareAheadBlocked(vantage: Vantage): boolean {
+        const wall1 = this.data.walls.find(wall =>
+            wall.isInSameSquareAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasBlockingFeature)
+        )
+        const wall2 = this.data.walls.find(wall =>
+            wall.isInSameSquareAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind) && (wall.isBlocking || wall.hasBlockingFeature)
+        )
+        return !!(wall1 || wall2)
+    }
+
     drawAsMap(canvas: HTMLCanvasElement, vantage?: Vantage, gridSize = 10): void {
 
         canvas.setAttribute('width', (gridSize * this.data.width).toString());
@@ -118,22 +128,16 @@ class Level {
         ctx.fillRect(...toCanvasCoords({ x: 0, y: .5 + smallestWallHeight / 2 }), ...toCanvasCoords({ x: 1, y: 1 }))
 
         function drawLineToHorizon(r: number): void {
-            plotPolygon(ctx, toCanvasCoords, [mapPointOnFloor(-1, r), mapPointOnFloor(MAX_VIEW_DISTANCE, r)], { noClose: true, noFill: true, strokeStyle:floorColor.darker(35).css })
+            plotPolygon(ctx, toCanvasCoords, [mapPointOnFloor(-1, r), mapPointOnFloor(MAX_VIEW_DISTANCE, r)], { noClose: true, noFill: true, strokeStyle: floorColor.darker(35).css })
         }
 
         function drawLineParellelToHorizon(f: number): void {
-            plotPolygon(ctx, toCanvasCoords, [mapPointOnFloor(f, -MAX_VIEW_DISTANCE), mapPointOnFloor(f, MAX_VIEW_DISTANCE)], { noClose: true, noFill: true, strokeStyle:floorColor.darker(35).css })
+            plotPolygon(ctx, toCanvasCoords, [mapPointOnFloor(f, -MAX_VIEW_DISTANCE), mapPointOnFloor(f, MAX_VIEW_DISTANCE)], { noClose: true, noFill: true, strokeStyle: floorColor.darker(35).css })
         }
 
-        drawLineToHorizon(3.5);
-        drawLineToHorizon(2.5);
-        drawLineToHorizon(1.5);
-        drawLineToHorizon(.5);
-        drawLineToHorizon(-.5);
-        drawLineToHorizon(-1.5);
-        drawLineToHorizon(-2.5);
-        drawLineToHorizon(-3.5);
-
+        for (let r = -Math.floor(MAX_VIEW_DISTANCE / 2) - .5; r < Math.floor(MAX_VIEW_DISTANCE / 2) + .5; r++) {
+            drawLineToHorizon(r)
+        }
         for (let f = 0; f < MAX_VIEW_DISTANCE; f++) {
             drawLineParellelToHorizon(.5 + f)
         }

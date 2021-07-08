@@ -63,82 +63,84 @@ class Game {
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerCharacter, itemInHand } = this.data
+        const { pointerLocator } = this
         const { walls, items } = level.data
         const playerHasWallInFace = level.hasWallInFace(playerCharacter)
-        const location = this.pointerLocator.locate(clickInfo, playerHasWallInFace)
-        if (!location) { return }
+        const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerCharacter)
+        const locations = pointerLocator.locate(clickInfo, playerHasWallInFace)
+        if (locations.length == 0) { return }
 
-        let wallClicked: Wall | undefined = undefined;
-        let featureClicked: WallFeature | null = null;
 
-        if (location.zone == "FRONT_WALL") {
-            wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(playerCharacter) && wall.isFacing(playerCharacter.data.direction)) ||
-                walls.find(wall => wall.isInSameSquareAs(playerCharacter.translate(playerCharacter.data.direction)) && wall.isFacing(playerCharacter.data.direction.behind));
-        }
+        for (let index = 0; index < locations.length; index++) {
+            const location = locations[index];
 
-        if (location.zone == "RIGHT_WALL") {
-            wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(playerCharacter) && wall.isFacing(playerCharacter.data.direction.rightOf)) ||
-                walls.find(wall => wall.isInSameSquareAs(playerCharacter.translate(playerCharacter.data.direction.rightOf)) && wall.isFacing(playerCharacter.data.direction.leftOf));
-        }
+            if (location.type === 'WALL') {
+                const wallClicked = pointerLocator.identifyClickedWall(location, walls, playerCharacter);
+                if (!wallClicked) { continue }
+                const isReverseOfWall = wallClicked.reverseSideShowingfrom(this.data.playerCharacter)
+                const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall);
 
-        if (location.zone == "LEFT_WALL") {
-            wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(playerCharacter) && wall.isFacing(playerCharacter.data.direction.leftOf)) ||
-                walls.find(wall => wall.isInSameSquareAs(playerCharacter.translate(playerCharacter.data.direction.leftOf)) && wall.isFacing(playerCharacter.data.direction.rightOf));
-        }
-
-        if (wallClicked) {
-            const isReverseOfWall = wallClicked.reverseSideShowingfrom(this.data.playerCharacter)
-            featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall);
-        }
-
-        if (featureClicked && featureClicked.canInteract) {
-            if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) {
-                return
+                if (!featureClicked) {
+                    if (wallClicked.isBlocking) { break }
+                    if (!wallClicked.isBlocking) { continue }
+                } else if (!featureClicked.canInteract && !featureClicked.isBlocking) {
+                    continue // allow the next zonePoint to be processed
+                } else {
+                    if (featureClicked.canInteract) {
+                        if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
+                        this.queuedPlayerActions.push(new InterAction(featureClicked));
+                        break
+                    }
+                }
             }
-            this.queuedPlayerActions.push(new InterAction(featureClicked));
-        }
 
-        const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerCharacter, items, clickInfo, !playerHasWallInFace)
+            // playerHasWallInFace is true even if the wall is an open door
+            const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerCharacter, items, clickInfo, !squareAheadIsBlocked)
 
-
-        if (itemClicked) {
-            if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) {
-                return
+            if (itemClicked) {
+                if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
+                this.queuedPlayerActions.push(new InterAction(itemClicked));
+                break
             }
-            this.queuedPlayerActions.push(new InterAction(itemClicked));
-        }
 
-        if (location.zone == "FLOOR" && !itemClicked) {
-            const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerCharacter.data.direction);
 
-            const positionClicked = new Position({
-                x: playerCharacter.data.x + rotatedLocation.x,
-                y: playerCharacter.data.y + rotatedLocation.y
-            }).translate(playerCharacter.data.direction)
+            if (location.type === 'FLOOR') {
+                if (location.zone == "FLOOR") {
+                    const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerCharacter.data.direction);
+                    const withinSquareAhead = rotatedLocation.x <= 1 && rotatedLocation.y < 1 && rotatedLocation.x >= 0 && rotatedLocation.y >= 0
 
-            if (itemInHand) {
-                itemInHand.placeAt(positionClicked, this.data.playerCharacter.data.direction, this);
-                this.data.itemInHand = undefined;
+                    const positionClicked = new Position({
+                        x: playerCharacter.data.x + rotatedLocation.x,
+                        y: playerCharacter.data.y + rotatedLocation.y
+                    }).translate(playerCharacter.data.direction)
+
+                    if (itemInHand && withinSquareAhead) {
+                        itemInHand.placeAt(positionClicked, this.data.playerCharacter.data.direction, this);
+                        this.data.itemInHand = undefined;
+                    }
+
+                }
             }
 
         }
+
+
+
+
     }
 
-    handleInventoryClick(item:Item, index:number):void {
-        const {inventory} = this.data.playerCharacter.data
-        const {itemInHand} = this.data
+    handleInventoryClick(item: Item, index: number): void {
+        const { inventory } = this.data.playerCharacter.data
+        const { itemInHand } = this.data
 
         if (item) {
             if (!itemInHand) {
-                item.takeIntoHand(inventory,this,true)
+                item.takeIntoHand(inventory, this, true)
             }
         }
         else {
             if (itemInHand) {
-                inventory.splice(index,1,itemInHand)
+                inventory.splice(index, 1, itemInHand)
                 this.data.itemInHand = undefined
             }
         }

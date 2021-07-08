@@ -134,6 +134,7 @@ class Door extends InteractableWallFeature {
 
     get requiredAnimations(): string[] { return ["OPEN", "CLOSED"] }
 
+    get canInteract(): boolean { return this.data.animation === "CLOSED" }
     get isBlocking(): boolean { return this.data.animation === "CLOSED" }
     get isDrawnInMap(): boolean { return true }
 

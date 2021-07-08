@@ -10,6 +10,7 @@ interface ZonePoint {
     zone: string | undefined
     x: number
     y: number
+    type: "WALL" | "FLOOR" | "AIR"
 }
 
 class PointerLocator {
@@ -85,13 +86,21 @@ class PointerLocator {
         }
     }
 
-    locate(clickInfo: Point, isWallInFace: boolean): ZonePoint | null {
-        if (!isWallInFace) {
-            return this.locateOnSideWalls(clickInfo) || this.locateOnBackWallOrFloor(clickInfo);
-        } else {
-            return this.locateOnSideWalls(clickInfo) || this.locateOnFrontWall(clickInfo);
+    locate(clickInfo: Point, isWallInFace: boolean): ZonePoint[] {
+        const zonePoints: ZonePoint[] = [];
+
+        const pointInSideWalls = this.locateOnSideWalls(clickInfo)
+        if (pointInSideWalls) { zonePoints.push(pointInSideWalls) }
+
+        if (isWallInFace) {
+            const pointInFrontWall = this.locateOnFrontWall(clickInfo)
+            if (pointInFrontWall) { zonePoints.push(pointInFrontWall) }
         }
 
+        const pointInBackWallOrFloor = this.locateOnBackWallOrFloor(clickInfo)
+        if (pointInBackWallOrFloor) { zonePoints.push(pointInBackWallOrFloor) }
+
+        return zonePoints
     }
 
     locateOnFrontWall(clickInfo: Point): ZonePoint | null {
@@ -107,7 +116,7 @@ class PointerLocator {
             const yInWall = (clickInfo.y - frontWall.topLeft.y) / (frontWall.bottomLeft.y - frontWall.topLeft.y);
             const xInWall = (clickInfo.x - frontWall.topLeft.x) / (frontWall.topRight.x - frontWall.topLeft.x);
 
-            return { zone: "FRONT_WALL", x: xInWall, y: yInWall }
+            return { zone: "FRONT_WALL", x: xInWall, y: yInWall, type: "WALL" }
         }
 
         return null
@@ -131,7 +140,7 @@ class PointerLocator {
             const clickWidthOnFloor = xInfloor / (floorEdgesAtDepth.right.x - floorEdgesAtDepth.left.x)
 
             if (clickWidthOnFloor <= 1 || clickWidthOnFloor >= 0) {
-                return { zone: "FLOOR", x: clickWidthOnFloor, y: clickDepthOnFloor }
+                return { zone: "FLOOR", x: clickWidthOnFloor, y: clickDepthOnFloor, type: "FLOOR" }
             }
         }
 
@@ -145,7 +154,7 @@ class PointerLocator {
             const yInWall = (clickInfo.y - backWall.topLeft.y) / (backWall.bottomLeft.y - backWall.topLeft.y);
             const xInWall = (clickInfo.x - backWall.topLeft.x) / (backWall.topRight.x - backWall.topLeft.x);
 
-            return { zone: "BACK_WALL", x: xInWall, y: yInWall }
+            return { zone: "BACK_WALL", x: xInWall, y: yInWall, type: "AIR" }
         }
 
         return null
@@ -167,7 +176,7 @@ class PointerLocator {
             const clickHeightOnWall = yInfloor / (wallEdgesAtDepth.bottom.y - wallEdgesAtDepth.top.y)
 
             if (clickHeightOnWall <= 1 && clickHeightOnWall >= 0 && clickDepthOnWall <= 1 && clickDepthOnWall >= 0) {
-                return { zone: "LEFT_WALL", x: clickDepthOnWall, y: clickHeightOnWall }
+                return { zone: "LEFT_WALL", x: clickDepthOnWall, y: clickHeightOnWall, type: "WALL" }
             }
         }
 
@@ -184,17 +193,40 @@ class PointerLocator {
             const clickHeightOnWall = yInfloor / (wallEdgesAtDepth.bottom.y - wallEdgesAtDepth.top.y)
 
             if (clickHeightOnWall <= 1 && clickHeightOnWall >= 0 && clickDepthOnWall <= 1 && clickDepthOnWall >= 0) {
-                return { zone: "RIGHT_WALL", x: clickDepthOnWall, y: clickHeightOnWall }
+                return { zone: "RIGHT_WALL", x: clickDepthOnWall, y: clickHeightOnWall, type: "WALL" }
             }
         }
 
         return null
     }
 
-    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall:boolean): WallFeature | null {
+    identifyClickedWall(zonePoint: ZonePoint, walls: Wall[], observer: Vantage): Wall | undefined {
+        let wallClicked: Wall | undefined = undefined;
+        if (zonePoint.zone == "FRONT_WALL") {
+            wallClicked =
+                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.data.direction)) ||
+                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.data.direction)) && wall.isFacing(observer.data.direction.behind));
+        }
+
+        if (zonePoint.zone == "RIGHT_WALL") {
+            wallClicked =
+                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.data.direction.rightOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.data.direction.rightOf)) && wall.isFacing(observer.data.direction.leftOf));
+        }
+
+        if (zonePoint.zone == "LEFT_WALL") {
+            wallClicked =
+                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.data.direction.leftOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.data.direction.leftOf)) && wall.isFacing(observer.data.direction.rightOf));
+        }
+
+        return wallClicked;
+    }
+
+    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall: boolean): WallFeature | null {
         const { features = [] } = wall.data;
         return features.find(feature => {
-            if (isReverseOfWall && !feature.data.onBothSides) {return false}
+            if (isReverseOfWall && !feature.data.onBothSides) { return false }
             const { offset = { x: .5, y: .5 }, size = { x: 1, y: 1 } } = feature.data.sprite;
             const clickIsWithinBounds = Math.abs((zonePoint.x - offset.x) / (size.x / 2)) <= 1 &&
                 Math.abs((zonePoint.y - offset.y) / (size.y / 2)) <= 1

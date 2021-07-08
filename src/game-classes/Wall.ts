@@ -43,6 +43,11 @@ class Wall extends Position {
         return !!features.find(feature => feature.canInteract);
     }
 
+    get hasBlockingFeature(): boolean {
+        const { features = [] } = this.data;
+        return !!features.find(feature => feature.isBlocking);
+    }
+
     isFacing(direction: Direction): boolean {
         return this.data.place.x === direction.x && this.data.place.y === direction.y
     }
