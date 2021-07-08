@@ -24,12 +24,12 @@ const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Spr
 const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1"})
 
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [telportToCorner] })
-const button2 = new InteractableWallFeature({ sprite: sprites.smallButtonSprite, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor],onBothSides:true })
+const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor],onBothSides:true })
 
 const pitShape:[number,number][] = [
     [-.45,-.45],[.45,-.45],[.45,.45],[-.45,.45]
 ]
 
 export {
-    lever1, painting1, door1, button1, button2, pitShape
+    lever1, painting1, door1, button1, keyhole, pitShape
 }

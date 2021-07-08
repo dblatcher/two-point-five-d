@@ -21,7 +21,7 @@ const sheets = {
 
     testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets),
     painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
-    leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 3 }),
+    leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
     woodenDoor: new SpriteSheet("woodenDoor", require("../assets/sprites/door.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 3 }),
 }
 
@@ -187,6 +187,12 @@ const sprites = {
     doorSprite,
     buttonSprite,
     smallButtonSprite,
+    keyHole:new Sprite("KEYHOLE", {size: { x: .25, y: .25 }, offset: { x: .05, y: .4 },
+        animations: new Map<string, Frame[]>()
+            .set(Sprite.defaultWallAnimation, [
+                { sheet: sheets.leverAndButton, col: 0, row: 3, transforms: ["RESIZE_OFFSET"] },
+            ])
+    }),
     apple: Sprite.itemSprite("apple", { sheet: sheets.fruits, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
     bean: Sprite.itemSprite("bean", { sheet: sheets.fruits, col: 1, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
     key: Sprite.itemSprite("key", { sheet: sheets.fruits, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),

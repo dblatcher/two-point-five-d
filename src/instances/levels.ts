@@ -11,7 +11,7 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, button2, pitShape } from "@/instances/features"
+import { lever1, painting1, door1, button1, keyhole, pitShape } from "@/instances/features"
 import { lowWall, doorway } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
@@ -23,7 +23,7 @@ const busyLevel: Level = new Level({
     floorColor: new Color(190, 120, 80),
     walls: [
         new Wall({ x: 1, y: 2, place: Direction.east, features: [button1] }),
-        new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features: [door1, button2], open: true }),
+        new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features: [door1, keyhole], open: true }),
         new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: sprites.brickWall, features: [lever1] }),
         new Wall({ x: 3, y: 4, place: Direction.east, shape: doorway, open: true }),
         new Wall({ x: 3, y: 2, place: Direction.east, shape: lowWall }),
