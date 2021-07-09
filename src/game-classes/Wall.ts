@@ -85,7 +85,7 @@ class Wall extends Position {
         if (patternSprite) {
             ctx.fillStyle = getPatternFill(patternSprite, Sprite.defaultWallAnimation, fullWallPoints, relativeDirection) || ctx.fillStyle
         }
-        plotPolygon(ctx, convertFunction, points)
+        plotPolygon(ctx, convertFunction, points,{noStroke:!!patternSprite})
 
         features.forEach(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) {return}

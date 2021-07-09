@@ -11,7 +11,7 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, pitShape, stairs } from "@/instances/features"
+import { lever1, painting1, door1, button1, keyhole, pitShape, stairs, stairs2 } from "@/instances/features"
 import { lowWall, doorway } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
@@ -23,7 +23,7 @@ const busyLevel: Level = new Level({
     floorColor: new Color(190, 120, 80),
     walls: [
         new Wall({ x: 1, y: 2, place: Direction.east, features: [button1] }),
-        new Wall({ x: 1, y: 3, place: Direction.west, features: [stairs] }),
+        new Wall({ x: 1, y: 3, place: Direction.west, features: [stairs2] }),
         new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features: [door1, keyhole], open: true }),
         new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: sprites.brickWall, features: [lever1] }),
         new Wall({ x: 3, y: 4, place: Direction.east, shape: doorway, open: true }),
@@ -65,7 +65,7 @@ const busyLevel: Level = new Level({
 
 const simpleLevel: Level = new Level({
     height: 10, width: 15,
-    defaultWallPattern: sprites.brickWall2,
+    defaultWallPattern: sprites.brickWall,
     walls: [
         new Wall({ x: 9, y: 2, place: Direction.west, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
@@ -82,7 +82,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 4, y: 3, direction: Direction.west, inventory: [
+    x: 4, y: 3, direction: Direction.east, inventory: [
         new Item({ type: itemTypes.key, }),
         null,
         new Item({ type: itemTypes.bean }),
@@ -96,4 +96,4 @@ const playerCharacter = new Character({
 
 
 
-export { simpleLevel as level, busyLevel as level2, playerCharacter }
+export { simpleLevel as level1, busyLevel as level2, playerCharacter }

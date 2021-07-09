@@ -3,18 +3,18 @@ import { Action, InterAction, MovementAction } from './Action'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
-import { WallFeature } from './WallFeature'
-import { Wall } from './Wall'
 import { RelativeDirection } from './RelativeDirection'
 import { Item } from './Item'
 import { Character } from './Character'
+import { Vantage } from './Vantage'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
 interface GameConfig {
     playerCharacter: Character,
-    level: Level
     itemInHand?: Item
+    level: Level
+    levels: Level[]
 }
 
 class Game {
@@ -52,6 +52,19 @@ class Game {
                     figure.data.behaviour.decideAction(figure, this)?.perform(figure, this)
                 }
             })
+    }
+
+    changeLevel (levelIndex:number, vantage:Vantage):void {
+        const {levels, playerCharacter} = this.data
+        const newLevel = levels[levelIndex];
+        if (!newLevel) {
+            console.warn(`There is no level ${levelIndex}!`)
+            return
+        }
+        this.data.level = newLevel;
+        playerCharacter.data.direction = vantage.data.direction
+        playerCharacter.data.x = vantage.data.x
+        playerCharacter.data.y = vantage.data.y
     }
 
     queuePlayerMovementAction(movement: Movement): void {
