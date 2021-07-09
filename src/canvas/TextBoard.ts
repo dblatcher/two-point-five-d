@@ -1,0 +1,43 @@
+import { Dimensions } from "./canvas-utility";
+
+interface TextBoardData {
+    content: string[]
+}
+
+
+class TextBoard {
+    data: TextBoardData
+
+    constructor(config: TextBoardData) {
+        this.data = config
+    }
+
+    createCanvas(): HTMLCanvasElement {
+        const { content } = this.data
+        const resolution: Dimensions = { x: 800, y: 800 }
+
+        const canvas: HTMLCanvasElement = document.createElement("canvas");
+        canvas.setAttribute('height', resolution.y.toString())
+        canvas.setAttribute('width', resolution.x.toString())
+        const boardContext = canvas.getContext('2d');
+
+        if (boardContext) {
+            boardContext.fillRect(0, 0, resolution.x, resolution.y)
+            boardContext.textAlign = "center"
+        
+            boardContext.font = "30px arial"
+            boardContext.strokeStyle = "red"
+            boardContext.fillStyle = "white"
+
+            for (let index = 0; index < content.length; index++) {
+                boardContext.strokeText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
+                boardContext.fillText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
+            }
+            boardContext.stroke()
+        }
+
+        return canvas
+    }
+}
+
+export { TextBoard, TextBoardData }

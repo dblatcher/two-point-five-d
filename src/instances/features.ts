@@ -5,6 +5,7 @@ import { TeleportReaction, makeTunnel } from "@/game-classes/Reaction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Trigger } from "@/game-classes/Trigger";
 import { itemTypes } from "@/instances/itemTypes";
+import { TextBoard } from "@/canvas/TextBoard";
 
 const leverOpensDoor = new Trigger({
     targetId: "door1", statusPairs: [
@@ -22,7 +23,9 @@ const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction
 const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", triggers: [leverOpensDoor] })
 const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
 const paintingClipped = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation, clipToWall: true })
-const noSpriteFeature = new WallFeature({ animation: Sprite.defaultWallAnimation })
+const noSpriteFeature = new WallFeature({ animation: Sprite.defaultWallAnimation, 
+    textBoard: new TextBoard({content:["My name is Ozymandias, King of Kings", "Look on my Works, ye Mighty, and despair!"]} )
+})
 
 const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1" })
 
@@ -35,5 +38,5 @@ const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, animation:
 
 
 export {
-    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped,noSpriteFeature
+    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, noSpriteFeature
 }

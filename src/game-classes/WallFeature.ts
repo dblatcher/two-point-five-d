@@ -1,6 +1,7 @@
 import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas-utility"
-import { getPatternFill } from "@/canvas/patterns"
+import { getPatternFill, getTextImage } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
+import { TextBoard } from "@/canvas/TextBoard"
 import { Sprite } from "@/game-classes/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
@@ -11,6 +12,7 @@ import { Vantage } from "./Vantage"
 
 interface WallFeatureConfig {
     sprite?: Sprite
+    textBoard?: TextBoard
     animation: string
     id?: string
     triggers?: Trigger[]
@@ -116,8 +118,14 @@ class WallFeature {
         if (this.data.sprite) {
             const featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.data.animation, fullWallPoints);
             if (featureImage) {
-                ctx.fillStyle = featureImage
-                plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true })
+                plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle:featureImage })
+            }
+        }
+
+        if (this.data.textBoard) {
+            const textImage = getTextImage(ctx, convertFunction, renderInstruction, fullWallPoints, this.data.textBoard)
+            if (textImage) {
+                plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle:textImage })
             }
         }
     }
@@ -205,3 +213,4 @@ class Door extends InteractableWallFeature {
 }
 
 export { WallFeature, InteractableWallFeature, WallSwitch, Door }
+
