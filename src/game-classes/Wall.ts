@@ -1,5 +1,5 @@
 import { ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
-import { scaleTo } from "@/canvas/manipulations";
+import { getPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/game-classes/Sprite";
 import { Color } from "./Color";
@@ -76,28 +76,22 @@ class Wall extends Position {
 
         const { place, relativeDirection = RelativeDirection.BACK, isReverseOfWall } = renderInstruction
         const { patternSprite = defaultSprite, features = [] } = this.data
-        const points: Point[] = relativeDirection ? getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place) : [];
+        const wallShapePoints: Point[] = getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place);
         const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
 
 
-        ctx.fillStyle = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
+        let fillStyle: CanvasPattern | string = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
 
         if (patternSprite) {
-            ctx.fillStyle = getPatternFill(patternSprite, Sprite.defaultWallAnimation, fullWallPoints, relativeDirection) || ctx.fillStyle
+            fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints) || fillStyle
         }
-        plotPolygon(ctx, convertFunction, points,{noStroke:!!patternSprite})
+        plotPolygon(ctx, convertFunction, wallShapePoints, { noStroke: !!patternSprite, fillStyle })
 
         features.forEach(feature => {
-            if (isReverseOfWall && !feature.data.onBothSides) {return}
-            // to do - delegate to WallFeature.drawInSight, 
-            // have feature property decide if it should be rendered over fullWallPoints or points
-            const featureImage = getPatternFill(feature.data.sprite, feature.data.animation, fullWallPoints, relativeDirection);
-            if (featureImage) {
-                ctx.fillStyle = featureImage
-                plotPolygon(ctx, convertFunction, fullWallPoints, { noStroke: true })
-            }
+            if (isReverseOfWall && !feature.data.onBothSides) { return }
+            feature.drawInSight(ctx,convertFunction,renderInstruction,tickCount,fullWallPoints, wallShapePoints)
         })
-        
+
 
         function getMappedPoints(relativeDirection: RelativeDirection = RelativeDirection.BACK, shape: Point[], place: { forward: number, right: number }): Point[] {
             switch (relativeDirection) {
@@ -134,44 +128,6 @@ class Wall extends Position {
             }
         }
 
-        function getPatternFill(sprite: Sprite, animationName: string, fullWallPoints: Point[], relativeDirection: RelativeDirection = RelativeDirection.BACK): CanvasPattern | null {
-            const xValues = fullWallPoints.map(point => point.x);
-            const yValues = fullWallPoints.map(point => point.y);
-
-            const topLeft = convertFunction({ x: Math.min(...xValues), y: Math.min(...yValues) })
-
-            const convertedDimensions = convertFunction({
-                x: Math.max(...xValues) - Math.min(...xValues),
-                y: Math.max(...yValues) - Math.min(...yValues),
-            })
-
-            try {
-                let image = sprite.provideImage(animationName, getWallFacingDirection(relativeDirection), tickCount)
-                image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
-                const pattern = ctx.createPattern(image, "no-repeat")
-
-                if (self.DOMMatrix && pattern) {
-                    const matrix = new DOMMatrix();
-                    matrix.translateSelf(...topLeft)
-                    pattern.setTransform(matrix)
-                }
-                return pattern
-
-            } catch (error) {
-                console.warn(error.message)
-                return null
-            }
-        }
-
-        function getWallFacingDirection(relativeDirection: RelativeDirection = RelativeDirection.BACK): RelativeDirection {
-            return relativeDirection.name == "BACK" || relativeDirection.name == "FORWARD"
-                ? RelativeDirection.FORWARD
-                : place.right > 0
-                    ? RelativeDirection.RIGHT
-                    : place.right < 0
-                        ? RelativeDirection.LEFT
-                        : relativeDirection;
-        }
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {

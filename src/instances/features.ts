@@ -21,20 +21,21 @@ const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction
 
 const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", triggers: [leverOpensDoor] })
 const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
-const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1"})
+const paintingClipped = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation, clipToWall: true })
+const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1" })
 
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [teleportToCorner] })
-const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor],onBothSides:true })
+const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor], onBothSides: true })
 
 const tunnel = makeTunnel();
-const stairs = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation, reactions:[tunnel[0]] })
-const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation, reactions:[tunnel[1]] })
+const stairs = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation, reactions: [tunnel[0]] })
+const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation, reactions: [tunnel[1]] })
 
 
-const pitShape:[number,number][] = [
-    [-.45,-.45],[.45,-.45],[.45,.45],[-.45,.45]
+const pitShape: [number, number][] = [
+    [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
 ]
 
 export {
-    lever1, painting1, door1, button1, keyhole, pitShape, stairs,stairs2
+    lever1, painting1, door1, button1, keyhole, pitShape, stairs, stairs2, paintingClipped
 }

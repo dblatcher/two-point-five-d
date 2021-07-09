@@ -24,5 +24,15 @@ const doorway: Point[] = [
     { x: 0, y: .0 },
 ]
 
+const spikey: Point[] = [
+    { x: 0, y: 0 },
+    { x: 0, y: .2 },
+    { x: .2, y: .5 },
+    { x: .4, y: .2 },
+    { x: .6, y: .5 },
+    { x: .8, y: .2 },
+    { x: 1, y: .5 },
+    { x: 1, y: 0 },
+]
 
-export {lowWall, doorway}
+export { lowWall, doorway, spikey }

@@ -11,8 +11,8 @@ interface PlotConfig {
     noStroke?: boolean
     noFill?: boolean
     noClose?: boolean
-    fillStyle?: string
-    strokeStyle?: string
+    fillStyle?: string | CanvasPattern | CanvasGradient
+    strokeStyle?: string | CanvasPattern | CanvasGradient
 }
 
 

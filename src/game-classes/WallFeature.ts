@@ -1,4 +1,6 @@
-import { Point } from "@/canvas/canvas-utility"
+import { ConvertFunction, plotPolygon, Point } from "@/canvas/canvas-utility"
+import { getPatternFill } from "@/canvas/patterns"
+import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { Sprite } from "@/game-classes/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
@@ -14,6 +16,7 @@ interface WallFeatureConfig {
     triggers?: Trigger[]
     reactions?: Reaction[]
     onBothSides?: boolean
+    clipToWall?:boolean
 }
 
 class WallFeature {
@@ -90,6 +93,14 @@ class WallFeature {
         return [
             [rightCorner, edgeMiddle, switchEnd, edgeMiddle, leftCorner]
         ]
+    }
+
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints:Point[], wallShapePoints:Point[]):void {
+        const featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.data.animation, fullWallPoints);
+        if (featureImage) {
+            ctx.fillStyle = featureImage
+            plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints :fullWallPoints, { noStroke: true })
+        }
     }
 }
 

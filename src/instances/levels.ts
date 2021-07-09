@@ -11,8 +11,8 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, pitShape, stairs, stairs2 } from "@/instances/features"
-import { lowWall, doorway } from "@/instances/wallShapes"
+import { lever1, painting1, door1, button1, keyhole, pitShape, stairs, stairs2, paintingClipped } from "@/instances/features"
+import { lowWall, doorway,spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
 
@@ -67,7 +67,8 @@ const simpleLevel: Level = new Level({
     height: 10, width: 15,
     defaultWallPattern: sprites.brickWall,
     walls: [
-        new Wall({ x: 9, y: 2, place: Direction.west, color: new Color(120, 40, 20), features: [painting1] }),
+        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1], shape:spikey, patternSprite:sprites.brickWall2, }),
+        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape:spikey, patternSprite:sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
 
