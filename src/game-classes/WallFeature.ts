@@ -1,4 +1,4 @@
-import { ConvertFunction, plotPolygon, Point } from "@/canvas/canvas-utility"
+import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { getPatternFill } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { Sprite } from "@/game-classes/Sprite"
@@ -10,13 +10,13 @@ import { Trigger } from "./Trigger"
 import { Vantage } from "./Vantage"
 
 interface WallFeatureConfig {
-    sprite: Sprite
+    sprite?: Sprite
     animation: string
     id?: string
     triggers?: Trigger[]
     reactions?: Reaction[]
     onBothSides?: boolean
-    clipToWall?:boolean
+    clipToWall?: boolean
 }
 
 class WallFeature {
@@ -31,17 +31,19 @@ class WallFeature {
         if (missingAnimations.length > 0) { console.warn('Missing animations on WallFeature', this, missingAnimations) }
     }
 
-    get requiredAnimations(): string[] { return [Sprite.defaultWallAnimation] }
+    get requiredAnimations(): string[] { return this.data.sprite ? [Sprite.defaultWallAnimation] : [] }
 
     get missingAnimations(): string[] {
+        if (!this.data.sprite) { return [] }
+
+        const sprite = this.data.sprite as Sprite;
         const missing: string[] = [];
 
         this.requiredAnimations.forEach(animationName => {
-
             RelativeDirection.names.forEach(relativeDirection => {
                 if (
-                    !this.data.sprite.animations.has(`${animationName}_${relativeDirection}`) &&
-                    !this.data.sprite.animations.has(`${animationName}`)
+                    !sprite.animations.has(`${animationName}_${relativeDirection}`) &&
+                    !sprite.animations.has(`${animationName}`)
                 ) {
                     missing.push(`${animationName}_${relativeDirection}`)
                 }
@@ -54,6 +56,20 @@ class WallFeature {
     get isBlocking(): boolean { return false }
     get canInteract(): boolean { return false }
     get isDrawnInMap(): boolean { return false }
+
+    get size(): Dimensions {
+        if (this.data.sprite) {
+            return this.data.sprite.size || { x: 1, y: 1 }
+        }
+        return { x: 1, y: 1 }
+    }
+
+    get offset(): Dimensions {
+        if (this.data.sprite) {
+            return this.data.sprite.offset || { x: .5, y: .5 }
+        }
+        return { x: .5, y: .5 }
+    }
 
     setStatus(animation: string): void {
         if (this.requiredAnimations.includes(animation)) {
@@ -95,11 +111,14 @@ class WallFeature {
         ]
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints:Point[], wallShapePoints:Point[]):void {
-        const featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.data.animation, fullWallPoints);
-        if (featureImage) {
-            ctx.fillStyle = featureImage
-            plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints :fullWallPoints, { noStroke: true })
+    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints: Point[], wallShapePoints: Point[]): void {
+
+        if (this.data.sprite) {
+            const featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.data.animation, fullWallPoints);
+            if (featureImage) {
+                ctx.fillStyle = featureImage
+                plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true })
+            }
         }
     }
 }

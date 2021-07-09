@@ -11,10 +11,14 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, pitShape, stairs, stairs2, paintingClipped } from "@/instances/features"
+import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, noSpriteFeature } from "@/instances/features"
 import { lowWall, doorway,spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
+
+const bigSquareOnFloor: [number, number][] = [
+    [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
+]
 
 
 const busyLevel: Level = new Level({
@@ -55,8 +59,8 @@ const busyLevel: Level = new Level({
         // duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
         new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
 
-        new FloorFeature({ x: 9, y: 4, direction: Direction.east, blocksByDefault: true, plotConfig: { noFill: false, fillStyle: 'blue' }, shape: pitShape }),
-        new Pit({ x: 10, y: 4, direction: Direction.east, plotConfig: { noFill: false, fillStyle: 'blue' }, shape: pitShape }),
+        new FloorFeature({ x: 9, y: 4, direction: Direction.east, blocksByDefault: true, plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor }),
+        new Pit({ x: 10, y: 4, direction: Direction.east, plotConfig: { noFill: false, fillStyle: 'blue' } }),
     ],
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
@@ -67,7 +71,7 @@ const simpleLevel: Level = new Level({
     height: 10, width: 15,
     defaultWallPattern: sprites.brickWall,
     walls: [
-        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1], shape:spikey, patternSprite:sprites.brickWall2, }),
+        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [noSpriteFeature], shape:spikey, patternSprite:sprites.brickWall2, }),
         new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape:spikey, patternSprite:sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
