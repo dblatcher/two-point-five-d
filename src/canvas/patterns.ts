@@ -1,5 +1,5 @@
 import { RelativeDirection } from "@/game-classes/RelativeDirection";
-import { Sprite } from "@/game-classes/Sprite";
+import { Sprite } from "@/canvas/Sprite";
 import { Wall } from "@/game-classes/Wall";
 import { ConvertFunction, Point } from "./canvas-utility";
 import { perspectiveSkew, scaleTo } from "./manipulations";

@@ -13,7 +13,7 @@
 <script lang='ts'>
 import { Options, Vue } from "vue-class-component";
 import gameStore from "@/store";
-import { SpriteSheet } from "@/game-classes/Sprite";
+import { SpriteSheet } from "@/canvas/Sprite";
 
 @Options({
   emits: ["all-sprite-sheets-loaded", "loaded-sprite-sheet"],

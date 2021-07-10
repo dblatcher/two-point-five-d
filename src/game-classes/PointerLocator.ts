@@ -1,4 +1,4 @@
-import { Dimensions, mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas/canvas-utility";
+import { mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas/canvas-utility";
 import { Direction } from "./Direction";
 import { Item } from "./Item";
 import { Position } from "./Position";

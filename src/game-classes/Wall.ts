@@ -1,8 +1,8 @@
 import { ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
 import { getPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
-import { Sprite } from "@/game-classes/Sprite";
-import { Color } from "./Color";
+import { Sprite } from "@/canvas/Sprite";
+import { Color } from "../canvas/Color";
 import { Direction } from "./Direction";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";

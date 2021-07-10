@@ -1,5 +1,5 @@
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
-import { Color } from "@/game-classes/Color";
+import { Color } from "@/canvas/Color";
 import { Direction } from "@/game-classes/Direction";
 import { Figure } from "@/game-classes/Figure";
 import { Level } from "@/game-classes/Level";

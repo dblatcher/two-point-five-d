@@ -2,7 +2,7 @@ import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas
 import { getPatternFill, drawTextImage } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { TextBoard } from "@/canvas/TextBoard"
-import { Sprite } from "@/game-classes/Sprite"
+import { Sprite } from "@/canvas/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Reaction } from "./Reaction"

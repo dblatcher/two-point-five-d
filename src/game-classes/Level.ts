@@ -1,7 +1,7 @@
 import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
-import { Sprite } from "@/game-classes/Sprite";
-import { Color } from "./Color";
+import { Sprite } from "@/canvas/Sprite";
+import { Color } from "../canvas/Color";
 import { Direction } from "./Direction";
 import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";

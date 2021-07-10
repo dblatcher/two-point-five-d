@@ -1,7 +1,7 @@
 import { ConvertFunction, Dimensions, mapPointInSight, Point, VANISH_RATE, RelativePoint } from "@/canvas/canvas-utility";
 import { Vantage } from "./Vantage";
 
-import { Sprite } from './Sprite'
+import { Sprite } from '../canvas/Sprite'
 import { Direction } from "./Direction";
 import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";

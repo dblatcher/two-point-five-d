@@ -3,7 +3,7 @@ import { Figure } from "./Figure";
 import { Game } from "./Game";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
-import { Sprite } from "./Sprite";
+import { Sprite } from "../canvas/Sprite";
 import { Vantage } from "./Vantage";
 
 interface ItemType {

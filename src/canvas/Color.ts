@@ -11,7 +11,7 @@ class Color {
         this.a = typeof a === 'number' ? a : 1
     }
 
-    get css() {
+    get css():string {
         const { r, g, b, a } = this
         return `rgba(${r},${g},${b},${a})`
     }

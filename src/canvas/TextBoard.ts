@@ -1,8 +1,4 @@
-import { RelativeDirection } from "@/game-classes/RelativeDirection";
-import { Wall } from "@/game-classes/Wall";
-import { ConvertFunction, Dimensions } from "./canvas-utility";
-import { perspectiveSkew, scaleTo } from "./manipulations";
-import { RenderInstruction } from "./RenderInstruction";
+import { Dimensions } from "./canvas-utility";
 
 interface TextBoardData {
     content: string[]

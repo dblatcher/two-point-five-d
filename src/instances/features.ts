@@ -2,7 +2,7 @@ import { sprites } from "@/instances/sprites";
 import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { Direction } from "@/game-classes/Direction";
 import { TeleportReaction, makeTunnel } from "@/game-classes/Reaction";
-import { Sprite } from "@/game-classes/Sprite";
+import { Sprite } from "@/canvas/Sprite";
 import { Trigger } from "@/game-classes/Trigger";
 import { itemTypes } from "@/instances/itemTypes";
 import { TextBoard } from "@/canvas/TextBoard";

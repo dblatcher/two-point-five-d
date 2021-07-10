@@ -1,6 +1,6 @@
 import { cutFrameFromGridSheet, transformSpriteImage } from "@/canvas/manipulations"
-import { Dimensions, Point } from "../canvas/canvas-utility"
-import { RelativeDirection } from "./RelativeDirection"
+import { Dimensions, Point } from "./canvas-utility"
+import { RelativeDirection } from "../game-classes/RelativeDirection"
 
 interface SpriteSheetConfig {
     pattern: "SINGLE" | "GRID"
