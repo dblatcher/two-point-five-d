@@ -40,6 +40,9 @@ class Color {
         this.a = normaliseAlpha(this.a)
         return this
     }
+
+    static BLACK = new Color(0,0,0);
+    static TRANSPARENT = new Color(0,0,0,0);
 }
 
 

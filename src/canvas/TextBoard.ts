@@ -1,9 +1,13 @@
-import { Dimensions } from "./canvas-utility";
+import { Dimensions, Point } from "./canvas-utility";
+import { Color } from "./Color";
 
 interface TextBoardData {
     content: string[]
     size?: Dimensions
-    offset?: Dimensions
+    offset?: Point
+    backgroundColor?: Color
+    textColor?: Color
+    resolution?: Dimensions
 }
 
 
@@ -17,27 +21,27 @@ class TextBoard {
     }
 
     createCanvas(): HTMLCanvasElement {
-        const { content } = this.data
-        const resolution: Dimensions = { x: 800, y: 800 }
+        const { content, backgroundColor = Color.TRANSPARENT, textColor = Color.BLACK, resolution = { x: 800, y: 600 } } = this.data
 
         const canvas: HTMLCanvasElement = document.createElement("canvas");
         canvas.setAttribute('height', resolution.y.toString())
         canvas.setAttribute('width', resolution.x.toString())
-        const boardContext = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d');
 
-        if (boardContext) {
-            boardContext.fillRect(0, 0, resolution.x, resolution.y)
-            boardContext.textAlign = "center"
+        if (ctx) {
+            ctx.fillStyle = backgroundColor.css;
+            ctx.fillRect(0, 0, resolution.x, resolution.y)
+            ctx.textAlign = "center"
 
-            boardContext.font = "40px arial"
-            boardContext.strokeStyle = "red"
-            boardContext.fillStyle = "white"
+            ctx.font = "40px arial"
+            ctx.strokeStyle = textColor.css
+            ctx.fillStyle = textColor.css
 
             for (let index = 0; index < content.length; index++) {
-                boardContext.strokeText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
-                boardContext.fillText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
+                ctx.strokeText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
+                ctx.fillText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
             }
-            boardContext.stroke()
+
         }
 
         return canvas
