@@ -1,5 +1,6 @@
 import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Sprite } from "@/game-classes/Sprite";
+import { Wall } from "@/game-classes/Wall";
 import { ConvertFunction, Point } from "./canvas-utility";
 import { perspectiveSkew, scaleTo } from "./manipulations";
 import { RenderInstruction } from "./RenderInstruction";
@@ -12,8 +13,6 @@ function getPatternFill(
     sprite: Sprite, animationName: string, fullWallPoints: Point[]
 ): CanvasPattern | null {
 
-    const { place, relativeDirection = RelativeDirection.BACK } = renderInstruction
-    const facingDirection = getWallFacingDirection(place.right, relativeDirection)
     const xValues = fullWallPoints.map(point => point.x);
     const yValues = fullWallPoints.map(point => point.y);
 
@@ -25,7 +24,7 @@ function getPatternFill(
     })
 
     try {
-        let image = sprite.provideImage(animationName, facingDirection, tickCount)
+        let image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount)
         image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
         const pattern = ctx.createPattern(image, "no-repeat")
 
@@ -43,23 +42,31 @@ function getPatternFill(
 }
 
 
-function getTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, fullWallPoints: Point[], textBoard: TextBoard):CanvasPattern|null {
+function drawTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, textBoard: TextBoard): void {
 
-    const { place, relativeDirection = RelativeDirection.BACK } = renderInstruction
-    const facingDirection = getWallFacingDirection(place.right, relativeDirection)
+    const { size = { x: .5, y: .5 }, offset = { x: .25, y: .25 } } = textBoard.data
+    let image: HTMLCanvasElement | HTMLImageElement = textBoard.storedCanvas
+
+    const fullWallPoints = renderInstruction.mapWallShape(Wall.defaultShape);
+
     const xValues = fullWallPoints.map(point => point.x);
     const yValues = fullWallPoints.map(point => point.y);
 
-    const topLeft = convertFunction({ x: Math.min(...xValues), y: Math.min(...yValues) })
+    const topLeft = convertFunction({ x: Math.min(...xValues), y: Math.min(...yValues) });
 
-    const convertedDimensions = convertFunction({
+    const convertedWallDimensions = convertFunction({
         x: Math.max(...xValues) - Math.min(...xValues),
         y: Math.max(...yValues) - Math.min(...yValues),
     })
 
+    const offsetPosition: [number, number] = [
+        topLeft[0] + offset.x * convertedWallDimensions[0],
+        topLeft[1] + offset.y * convertedWallDimensions[1],
+    ]
 
-    let image: HTMLCanvasElement | HTMLImageElement = textBoard.createCanvas()
 
+
+    const facingDirection = renderInstruction.wallFacingDirection
     if (facingDirection == RelativeDirection.LEFT) {
         image = perspectiveSkew(image, false)
     }
@@ -67,26 +74,10 @@ function getTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFun
         image = perspectiveSkew(image, true)
     }
 
-    image = scaleTo(image, convertedDimensions[0], convertedDimensions[1]);
-    const pattern = ctx.createPattern(image, "no-repeat")
-
-    if (self.DOMMatrix && pattern) {
-        const matrix = new DOMMatrix();
-        matrix.translateSelf(...topLeft)
-        pattern.setTransform(matrix)
-    }
-    return pattern
+    image = scaleTo(image, convertedWallDimensions[0] * size.x, convertedWallDimensions[1] * size.y);
+    ctx.drawImage(image, ...offsetPosition)
 
 }
 
-function getWallFacingDirection(gridRight: number, relativeDirection: RelativeDirection = RelativeDirection.BACK): RelativeDirection {
-    return relativeDirection.name == "BACK" || relativeDirection.name == "FORWARD"
-        ? RelativeDirection.FORWARD
-        : gridRight > 0
-            ? RelativeDirection.RIGHT
-            : gridRight < 0
-                ? RelativeDirection.LEFT
-                : relativeDirection;
-}
 
-export { getPatternFill, getWallFacingDirection, getTextImage }
+export { getPatternFill, drawTextImage }

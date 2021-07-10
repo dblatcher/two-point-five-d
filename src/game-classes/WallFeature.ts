@@ -1,5 +1,5 @@
 import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas-utility"
-import { getPatternFill, getTextImage } from "@/canvas/patterns"
+import { getPatternFill, drawTextImage } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { TextBoard } from "@/canvas/TextBoard"
 import { Sprite } from "@/game-classes/Sprite"
@@ -123,10 +123,7 @@ class WallFeature {
         }
 
         if (this.data.textBoard) {
-            const textImage = getTextImage(ctx, convertFunction, renderInstruction, fullWallPoints, this.data.textBoard)
-            if (textImage) {
-                plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle:textImage })
-            }
+            drawTextImage(ctx, convertFunction, renderInstruction, this.data.textBoard)
         }
     }
 }

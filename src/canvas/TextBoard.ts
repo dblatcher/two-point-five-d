@@ -1,15 +1,23 @@
-import { Dimensions } from "./canvas-utility";
+import { RelativeDirection } from "@/game-classes/RelativeDirection";
+import { Wall } from "@/game-classes/Wall";
+import { ConvertFunction, Dimensions } from "./canvas-utility";
+import { perspectiveSkew, scaleTo } from "./manipulations";
+import { RenderInstruction } from "./RenderInstruction";
 
 interface TextBoardData {
     content: string[]
+    size?: Dimensions
+    offset?: Dimensions
 }
 
 
 class TextBoard {
     data: TextBoardData
+    storedCanvas: HTMLCanvasElement
 
     constructor(config: TextBoardData) {
         this.data = config
+        this.storedCanvas = this.createCanvas()
     }
 
     createCanvas(): HTMLCanvasElement {
@@ -24,8 +32,8 @@ class TextBoard {
         if (boardContext) {
             boardContext.fillRect(0, 0, resolution.x, resolution.y)
             boardContext.textAlign = "center"
-        
-            boardContext.font = "30px arial"
+
+            boardContext.font = "40px arial"
             boardContext.strokeStyle = "red"
             boardContext.fillStyle = "white"
 

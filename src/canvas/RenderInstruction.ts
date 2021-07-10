@@ -4,7 +4,7 @@ import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
-import { RelativePoint } from "@/canvas/canvas-utility";
+import { mapPointInSight, Point, RelativePoint } from "@/canvas/canvas-utility";
 import { Level } from "@/game-classes/Level";
 
 const LOG_RENDER_ORDER = false;
@@ -94,6 +94,42 @@ class RenderInstruction {
             f: this.place.forward + this.relativePositionInSquare.forward,
             r: this.place.right + this.relativePositionInSquare.right,
         }
+    }
+
+    get wallFacingDirection(): RelativeDirection {
+        const { place, relativeDirection = RelativeDirection.BACK } = this
+        return relativeDirection.name == "BACK" || relativeDirection.name == "FORWARD"
+            ? RelativeDirection.FORWARD
+            : place.right > 0
+                ? RelativeDirection.RIGHT
+                : place.right < 0
+                    ? RelativeDirection.LEFT
+                    : relativeDirection;
+    }
+
+    mapWallShape(shape: Point[]): Point[] {
+        const { relativeDirection, place } = this;
+
+        switch (relativeDirection) {
+            case RelativeDirection.LEFT:
+                return shape.map(point => {
+                    return mapPointInSight(place.forward - .5 - point.x, place.right - .5, point.y)
+                })
+            case RelativeDirection.RIGHT:
+                return shape.map(point => {
+                    return mapPointInSight(place.forward - .5 - point.x, place.right + .5, point.y)
+                })
+            case RelativeDirection.FORWARD:
+                return shape.map(point => {
+                    return mapPointInSight(place.forward - .5, place.right - .5 + point.x, point.y)
+                })
+            default:
+            case RelativeDirection.BACK:
+                return shape.map(point => {
+                    return mapPointInSight(place.forward - .5 - 1, place.right - .5 + point.x, point.y)
+                })
+        }
+
     }
 
     static sortFunction = (itemA: RenderInstruction, itemB: RenderInstruction): number => {

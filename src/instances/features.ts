@@ -24,7 +24,11 @@ const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF", t
 const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
 const paintingClipped = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation, clipToWall: true })
 const noSpriteFeature = new WallFeature({ animation: Sprite.defaultWallAnimation, 
-    textBoard: new TextBoard({content:["My name is Ozymandias, King of Kings", "Look on my Works, ye Mighty, and despair!"]} )
+    textBoard: new TextBoard({
+        content:["My name is Ozymandias, King of Kings", "Look on my Works, ye Mighty, and despair!"],
+        size:{x:.75,y:.5},
+        offset:{x:.125,y:.3}
+    } )
 })
 
 const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1" })

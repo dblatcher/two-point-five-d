@@ -72,7 +72,7 @@ const simpleLevel: Level = new Level({
     defaultWallPattern: sprites.brickWall,
     walls: [
         new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [noSpriteFeature], patternSprite:sprites.brickWall2, }),
-        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape:spikey, patternSprite:sprites.brickWall2, }),
+        new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape:spikey, patternSprite:sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
 
