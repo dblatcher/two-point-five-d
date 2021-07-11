@@ -27,6 +27,11 @@ const poemBoard = new WallFeature({
     clipToWall: true,
     textBoard: textBoards.poem,
 })
+const advertBoard = new WallFeature({
+    animation: Sprite.defaultWallAnimation,
+    clipToWall: true,
+    textBoard: textBoards.advert,
+})
 
 const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1" })
 
@@ -39,5 +44,5 @@ const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, animation:
 
 
 export {
-    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard
+    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard
 }

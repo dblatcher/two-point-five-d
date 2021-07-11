@@ -7,7 +7,9 @@ interface TextBoardData {
     offset?: Point
     backgroundColor?: Color
     textColor?: Color
-    resolution?: Dimensions
+    textScale?: number
+    resolution?: number
+    font?:string
 }
 
 
@@ -21,25 +23,27 @@ class TextBoard {
     }
 
     createCanvas(): HTMLCanvasElement {
-        const { content, backgroundColor = Color.TRANSPARENT, textColor = Color.BLACK, resolution = { x: 800, y: 600 } } = this.data
+        const { content, backgroundColor = Color.TRANSPARENT, textColor = Color.BLACK, resolution = 1, textScale = 1, font='arial' } = this.data
+
+        const dimensions: Dimensions = { x: 800 * resolution, y: 450 * resolution }
 
         const canvas: HTMLCanvasElement = document.createElement("canvas");
-        canvas.setAttribute('height', resolution.y.toString())
-        canvas.setAttribute('width', resolution.x.toString())
+        canvas.setAttribute('height', dimensions.y.toString())
+        canvas.setAttribute('width', dimensions.x.toString())
         const ctx = canvas.getContext('2d');
 
         if (ctx) {
             ctx.fillStyle = backgroundColor.css;
-            ctx.fillRect(0, 0, resolution.x, resolution.y)
+            ctx.fillRect(0, 0, dimensions.x, dimensions.y)
             ctx.textAlign = "center"
 
-            ctx.font = "40px arial"
+            ctx.font = `${resolution * textScale * 30}px ${font}`
             ctx.strokeStyle = textColor.css
             ctx.fillStyle = textColor.css
 
             for (let index = 0; index < content.length; index++) {
-                ctx.strokeText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
-                ctx.fillText(content[index], resolution.x / 2, (resolution.y / 4) + (index * 100), resolution.x)
+                ctx.strokeText(content[index], dimensions.x / 2, (dimensions.y / 4) + (index * 100), dimensions.x)
+                ctx.fillText(content[index], dimensions.x / 2, (dimensions.y / 4) + (index * 100), dimensions.x)
             }
 
         }

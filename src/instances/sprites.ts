@@ -190,7 +190,7 @@ const sprites = {
     windowWall: Sprite.patternSprite("WINDOW", sheets.window),
     testPattern: Sprite.patternSprite("TEST", sheets.testCard),
     paintingWall: Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .35 } }),
-    stairs: Sprite.patternSprite("stairs", sheets.stairs, { size: { x: .75, y: 1 } }, {col: 0, row: 0}),
+    stairs: Sprite.patternSprite("stairs", sheets.stairs, { size: { x: .75, y: 1 } }, { col: 0, row: 0 }),
     duckSprite,
     dinoSprite,
     testSprite,
@@ -198,7 +198,8 @@ const sprites = {
     doorSprite,
     buttonSprite,
     smallButtonSprite,
-    keyHole:new Sprite("KEYHOLE", {size: { x: .25, y: .25 }, offset: { x: .05, y: .4 },
+    keyHole: new Sprite("KEYHOLE", {
+        size: { x: .25, y: .25 }, offset: { x: .05, y: .4 },
         animations: new Map<string, Frame[]>()
             .set(Sprite.defaultWallAnimation, [
                 { sheet: sheets.leverAndButton, col: 0, row: 3, transforms: ["RESIZE_OFFSET"] },
@@ -213,12 +214,24 @@ const textBoards = {
 
     poem: new TextBoard({
         content: [
-            "My name is Ozymandias, King of Kings", 
+            "My name is Ozymandias, King of Kings",
             "Look on my Works, ye Mighty, and despair!"
         ],
-        size: { x: .8, y: .4 },
+        size: { x: .8, y: .5 },
+        resolution: 1,
+        font:'fantasy',
+        textScale: 1.25,
         backgroundColor: new Color(150, 120, 200)
-    })
+    }),
+    advert: new TextBoard({
+        content: [
+            "BUY",
+            "FISH",
+            "HERE",
+        ],
+        size: { x: .8, y: .5 },
+        textScale: 4.5,
+    }),
 }
 
 export {
