@@ -164,7 +164,7 @@ class Sprite {
                 { sheet, transforms: ["RESIZE_CENTER"], ...gridCell },
             ])
             .set(`${Sprite.defaultWallAnimation}_LEFT`, [
-                { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"],...gridCell },
+                { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"], ...gridCell },
             ])
             .set(`${Sprite.defaultWallAnimation}_RIGHT`, [
                 { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], ...gridCell },
@@ -182,6 +182,8 @@ class Sprite {
 
         return new Sprite(name, config)
     }
+
+    static DEFAULT_SIZE: Dimensions = { x: .5, y: .5 }
 }
 
 export {

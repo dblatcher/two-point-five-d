@@ -1,5 +1,5 @@
 import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas-utility"
-import { getPatternFill, drawTextImage } from "@/canvas/patterns"
+import { getPatternFill, getTextPatternFill } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { TextBoard } from "@/canvas/TextBoard"
 import { Sprite } from "@/canvas/Sprite"
@@ -115,15 +115,15 @@ class WallFeature {
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints: Point[], wallShapePoints: Point[]): void {
 
+        let featureImage: CanvasPattern | null = null;
         if (this.data.sprite) {
-            const featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.data.animation, fullWallPoints);
-            if (featureImage) {
-                plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle:featureImage })
-            }
+            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.data.animation, fullWallPoints);
         }
-
         if (this.data.textBoard) {
-            drawTextImage(ctx, convertFunction, renderInstruction, this.data.textBoard)
+            featureImage = getTextPatternFill(ctx, convertFunction, renderInstruction, this.data.textBoard)
+        }
+        if (featureImage) {
+            plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle: featureImage })
         }
     }
 }

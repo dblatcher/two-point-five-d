@@ -44,34 +44,50 @@ function scaleTo(source: CanvasImageSource, width: number, height: number): HTML
 }
 
 // NEEDS WORK!
-function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, right: boolean): HTMLCanvasElement | HTMLImageElement {
+function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, size: Dimensions, isOnObserversRight: boolean): HTMLCanvasElement | HTMLImageElement {
+    // return source
     const board = document.createElement('canvas')
-    if (!source.width || !source.height) { return board }
-    if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
+    if (!source.width || !source.height) { return source }
+    if (typeof source.width !== 'number' || typeof source.height != 'number') { return source }
 
     const ctx = board.getContext('2d') as CanvasRenderingContext2D
     board.setAttribute('width', (source.width / VANISH_RATE / 2).toString())
     board.setAttribute('height', source.height.toString())
 
-    if (right) {
-        const aspect = VANISH_RATE / 2
+    // will only work if the sprite is centered?
+    const aspect = VANISH_RATE * (size.x / size.y) * (1 / 3)
 
+
+    if (isOnObserversRight) {
         for (let i = 0; i < source.height / 2; i++) {
-            ctx.setTransform(1, -aspect * i / source.height,
-                0, 1, 0, 0)
-            ctx.drawImage(source,
-                0, source.height / 2 - i, source.width, 2,
-                0, source.height / 2 - i, source.width / VANISH_RATE / 2, 2)
+            const vSkew = -aspect * (source.height / 2 - i) / source.height
+            const oppositeSide = vSkew * source.width * (1 / 3);
 
-            ctx.setTransform(1, aspect * i / source.height,
+            ctx.setTransform(
+                1,  // horizontal scaling
+                vSkew, //vertical skewing
+                0, // horizontal skewing
+                1,  // vertical scaling
+                0, // horizontal translation
+                0 // vertical translation
+            )
+            ctx.drawImage(source,
+                0, i,           //sx, sy
+                source.width, 2,                    //sw, hw
+                0, i - oppositeSide,           //dx, dy
+                source.width / VANISH_RATE / 2, 2  //dw, dh
+            )
+
+            //bottom
+            ctx.setTransform(1, -vSkew,
                 0, 1, 0, 0)
             ctx.drawImage(source,
-                0, source.height / 2 + i, source.width, 2,
-                0, source.height / 2 + i, source.width / VANISH_RATE / 2, 2)
+                0, source.height - i,
+                source.width, 2,
+                0, source.height - i + oppositeSide,
+                source.width / VANISH_RATE / 2, 2)
         }
     } else {
-        const aspect = VANISH_RATE / 2
-
         for (let i = 0; i < source.height / 2; i++) {
             ctx.setTransform(1, aspect * i / source.height,
                 0, 1, 0, 0)
@@ -150,10 +166,10 @@ function transformSpriteImage(image: HTMLImageElement | HTMLCanvasElement, trans
                 image = flipImage(image)
                 break;
             case "SKEW_LEFT":
-                image = perspectiveSkew(image, false)
+                image = perspectiveSkew(image, sprite.size || Sprite.DEFAULT_SIZE, false)
                 break;
             case "SKEW_RIGHT":
-                image = perspectiveSkew(image, true)
+                image = perspectiveSkew(image, sprite.size || Sprite.DEFAULT_SIZE, true)
                 break;
             case "CROP_BASE":
                 image = cropBase(image, sprite.baseline)

@@ -1,4 +1,6 @@
+import { Color } from "@/canvas/Color"
 import { Frame, Sprite, SpriteSheet } from "@/canvas/Sprite"
+import { TextBoard } from "@/canvas/TextBoard"
 
 
 const spriteSheets: SpriteSheet[] = []
@@ -187,7 +189,7 @@ const sprites = {
     duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side),
     windowWall: Sprite.patternSprite("WINDOW", sheets.window),
     testPattern: Sprite.patternSprite("TEST", sheets.testCard),
-    paintingWall: Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .5 } }),
+    paintingWall: Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .35 } }),
     stairs: Sprite.patternSprite("stairs", sheets.stairs, { size: { x: .75, y: 1 } }, {col: 0, row: 0}),
     duckSprite,
     dinoSprite,
@@ -207,7 +209,20 @@ const sprites = {
     key: Sprite.itemSprite("key", { sheet: sheets.fruits, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),
 }
 
+const textBoards = {
+
+    poem: new TextBoard({
+        content: [
+            "My name is Ozymandias, King of Kings", 
+            "Look on my Works, ye Mighty, and despair!"
+        ],
+        size: { x: .8, y: .4 },
+        backgroundColor: new Color(150, 120, 200)
+    })
+}
+
 export {
     spriteSheets,
     sprites,
+    textBoards,
 }

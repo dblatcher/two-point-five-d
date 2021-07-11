@@ -2,7 +2,7 @@ import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Sprite } from "@/canvas/Sprite";
 import { Wall } from "@/game-classes/Wall";
 import { ConvertFunction, Point } from "./canvas-utility";
-import { perspectiveSkew, scaleTo } from "./manipulations";
+import { perspectiveSkew, resizeFrame, scaleTo } from "./manipulations";
 import { RenderInstruction } from "./RenderInstruction";
 import { TextBoard } from "./TextBoard";
 
@@ -41,10 +41,56 @@ function getPatternFill(
     }
 }
 
+function getTextPatternFill(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, textBoard: TextBoard): CanvasPattern | null {
+
+    const fullWallPoints = renderInstruction.mapWallShape(Wall.defaultShape);
+
+    const xValues = fullWallPoints.map(point => point.x);
+    const yValues = fullWallPoints.map(point => point.y);
+
+    const topLeft = convertFunction({ x: Math.min(...xValues), y: Math.min(...yValues) });
+
+    const convertedWallDimensions = convertFunction({
+        x: Math.max(...xValues) - Math.min(...xValues),
+        y: Math.max(...yValues) - Math.min(...yValues),
+    })
+
+
+    try {
+        let image: HTMLCanvasElement | HTMLImageElement = textBoard.storedCanvas
+
+        const { size = Sprite.DEFAULT_SIZE } = textBoard.data
+        image = resizeFrame(image,size)
+
+        const facingDirection = renderInstruction.wallFacingDirection
+        if (facingDirection == RelativeDirection.LEFT) {
+            image = perspectiveSkew(image,size, false)
+        }
+        if (facingDirection == RelativeDirection.RIGHT) {
+            image = perspectiveSkew(image,size, true)
+        }
+
+
+        image = scaleTo(image, convertedWallDimensions[0], convertedWallDimensions[1]);
+        const pattern = ctx.createPattern(image, "no-repeat")
+
+        if (self.DOMMatrix && pattern) {
+            const matrix = new DOMMatrix();
+            matrix.translateSelf(...topLeft)
+            pattern.setTransform(matrix)
+        }
+        return pattern
+
+    } catch (error) {
+        console.warn(error.message)
+        return null
+    }
+}
+
 
 function drawTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, textBoard: TextBoard): void {
 
-    const { size = { x: .5, y: .5 }, offset = { x: .25, y: .25 } } = textBoard.data
+    const { size = Sprite.DEFAULT_SIZE, offset = { x: .25, y: .25 } } = textBoard.data
     let image: HTMLCanvasElement | HTMLImageElement = textBoard.storedCanvas
 
     const fullWallPoints = renderInstruction.mapWallShape(Wall.defaultShape);
@@ -64,14 +110,12 @@ function drawTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFu
         topLeft[1] + offset.y * convertedWallDimensions[1],
     ]
 
-
-
     const facingDirection = renderInstruction.wallFacingDirection
     if (facingDirection == RelativeDirection.LEFT) {
-        image = perspectiveSkew(image, false)
+        image = perspectiveSkew(image,size, false)
     }
     if (facingDirection == RelativeDirection.RIGHT) {
-        image = perspectiveSkew(image, true)
+        image = perspectiveSkew(image,size, true)
     }
 
     image = scaleTo(image, convertedWallDimensions[0] * size.x, convertedWallDimensions[1] * size.y);
@@ -80,4 +124,4 @@ function drawTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFu
 }
 
 
-export { getPatternFill, drawTextImage }
+export { getPatternFill, drawTextImage,getTextPatternFill }

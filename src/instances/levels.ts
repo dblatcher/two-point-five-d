@@ -11,7 +11,7 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, noSpriteFeature } from "@/instances/features"
+import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard } from "@/instances/features"
 import { lowWall, doorway,spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
@@ -69,9 +69,14 @@ const busyLevel: Level = new Level({
 
 const simpleLevel: Level = new Level({
     height: 10, width: 15,
-    defaultWallPattern: sprites.brickWall,
     walls: [
-        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [noSpriteFeature], patternSprite:sprites.brickWall2, }),
+        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [poemBoard,painting1]  }),
+        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,painting1],shape:doorway  }),
+        new Wall({ x: 6, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [poemBoard,painting1] }),
+        new Wall({ x: 5, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,painting1]  }),
+        new Wall({ x: 5, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [poemBoard,painting1]  }),
+        
+
         new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape:spikey, patternSprite:sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
@@ -87,7 +92,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 4, y: 3, direction: Direction.east, inventory: [
+    x: 5, y: 2, direction: Direction.east, inventory: [
         new Item({ type: itemTypes.key, }),
         null,
         new Item({ type: itemTypes.bean }),
