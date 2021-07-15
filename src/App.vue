@@ -1,14 +1,14 @@
 <template>
-  <MyTestComponent msg="Welcome to Your Vue.js + TypeScript App"/>
+  <GameHolder/>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import MyTestComponent from './components/MyTestComponent.vue';
+import GameHolder from './components/GameHolder.vue';
 
 @Options({
   components: {
-    MyTestComponent,
+    GameHolder,
   },
 })
 export default class App extends Vue {}
@@ -21,6 +21,5 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

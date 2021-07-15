@@ -51,6 +51,7 @@ export default class MapCanvas extends Vue {
 figure {
   display: inline-block;
   background-color: burlywood;
+  margin: 0;
 }
 
 p {

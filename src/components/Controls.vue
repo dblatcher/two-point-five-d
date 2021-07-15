@@ -33,7 +33,7 @@ export default class Controls extends Vue {
 nav {
   display: inline-block;
   padding: 1rem;
-  border: 3px dotted dodgerblue;
+  margin:0;
 }
 
 button {

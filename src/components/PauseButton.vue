@@ -26,14 +26,11 @@ export default class PauseButton extends Vue {
 <style scoped>
 nav {
   display: inline-block;
-  position: fixed;
-  left: 0;
-  top: 0; 
-  padding: 1rem;
-  border: 3px dotted dodgerblue;
+  margin: 0;
+  height: 2.6rem;
 }
 
 button {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 </style>

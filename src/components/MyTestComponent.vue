@@ -3,6 +3,7 @@
     <div class="hello" v-if="spritesLoaded">
       <sight-canvas caption="view" />
       <map-canvas caption="Map" />
+      <self-window />
       <controls />
       <inventory-window />
       <pause-button />
@@ -21,6 +22,7 @@ import Controls from "./Controls.vue";
 import SpriteLoader from "./SpriteLoader.vue";
 import PauseButton from "./PauseButton.vue";
 import InventoryWindow from "./InventoryWindow.vue";
+import SelfWindow from "./SelfWindow.vue";
 
 interface MyTestComponentData {
   staticTest: string;
@@ -38,6 +40,7 @@ interface MyTestComponentData {
     SpriteLoader,
     PauseButton,
     InventoryWindow,
+    SelfWindow,
   },
 })
 export default class MyTestComponent extends Vue {
