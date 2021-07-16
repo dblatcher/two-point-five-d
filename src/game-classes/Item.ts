@@ -5,7 +5,6 @@ import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Sprite } from "../canvas/Sprite";
 import { Vantage } from "./Vantage";
-import { Color } from "@/canvas/Color";
 import { ItemType } from "./ItemType";
 
 
@@ -18,6 +17,10 @@ class Item {
     data: ItemConfig
     constructor(config: ItemConfig) {
         this.data = config
+    }
+
+    get propertyList():[string, string | number][] {
+        return this.data.type.propertyList
     }
 
     get figure(): Figure | null {

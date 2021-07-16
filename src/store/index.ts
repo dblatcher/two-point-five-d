@@ -40,7 +40,7 @@ export default createStore({
 
     selfClick({state}, clickInfo:{buttonName:string}) {
       if (!this.getters.gameIsPaused) {
-        toRaw(state.game).handleSelfClick(toRaw(clickInfo))
+        return toRaw(state.game).handleSelfClick(toRaw(clickInfo))
       }
     },
 

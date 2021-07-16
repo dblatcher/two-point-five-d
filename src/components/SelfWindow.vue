@@ -1,21 +1,32 @@
 <template>
-  <section>
+  <section @mouseleave="clearOutput()">
     <h2>self</h2>
 
-    <div class="control-icon" @click="lookAt()" @mouseleave="clearOutput()">
-      <figure >
+    <div class="control-icon" @click="doSelfClick('LOOK')">
+      <figure>
         <figcaption>examine</figcaption>
       </figure>
     </div>
 
-    <div class="control-icon" @click="consume()">
-      <figure >
+    <div class="control-icon" @click="doSelfClick('CONSUME')">
+      <figure>
         <figcaption>consume</figcaption>
       </figure>
     </div>
 
     <div class="output-box">
-      <span class="description">{{ descriptionText }}</span>
+      <span v-if="feedback.message" class="description">{{
+        feedback.message
+      }}</span>
+
+      <table v-if="feedback.propertyList">
+        <tbody>
+          <tr v-for="(item, index) in feedback.propertyList" :key="index">
+            <th>{{ item[0] }}</th>
+            <td>{{ item[1] }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 </template>
@@ -26,13 +37,11 @@ import InventorySlot from "./InventorySlot.vue";
 
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
-import { toRaw } from "vue";
-
+import { FeedbackToUI } from "@/game-classes/Game";
 
 interface SelfWindowData {
-  descriptionText: string
+  feedback: FeedbackToUI;
 }
-
 
 @Options({
   components: {
@@ -41,30 +50,24 @@ interface SelfWindowData {
 })
 export default class SelfWindow extends Vue {
   $store!: typeof gameStore;
-  descriptionText!: string;
+  feedback!: FeedbackToUI;
 
-  data():SelfWindowData {
+  data(): SelfWindowData {
     return {
-      descriptionText: "??"
-    }
+      feedback: FeedbackToUI.empty,
+    };
   }
 
-
-  lookAt():void {
-    const itemInHand = toRaw(this.$store.state.game.data.itemInHand);
-    if (!itemInHand) {
-      return this.clearOutput();
-    }
-    console.log(itemInHand.data.type.propertyList)
-    this.descriptionText = `This is a ${itemInHand.data.type.name}.`
+  doSelfClick(verb: string): void {
+    this.$store
+      .dispatch("selfClick", { buttonName: verb })
+      .then((feedback: FeedbackToUI) => {
+        this.feedback = feedback;
+      });
   }
 
-  consume():void {
-    this.$store.dispatch('selfClick',{buttonName:'CONSUME'})
-  }
-
-  clearOutput():void {
-    this.descriptionText = "???"
+  clearOutput(): void {
+    this.feedback = FeedbackToUI.empty;
   }
 
   handleInventoryClick(item: Item, index: number): void {
@@ -88,13 +91,12 @@ section {
   }
 
   .output-box {
-
     width: 8em;
     min-height: 5rem;
     background-color: aquamarine;
 
     p {
-      margin:0;
+      margin: 0;
     }
   }
 }

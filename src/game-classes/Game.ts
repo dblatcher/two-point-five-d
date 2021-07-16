@@ -17,6 +17,25 @@ interface GameConfig {
     levels: Level[]
 }
 
+class FeedbackToUI {
+    message?: string
+    propertyList?: [string, string | number][]
+
+    constructor(input: {
+        message?: string
+        propertyList?: [string, string | number][]
+    }) {
+        this.message = input.message
+        this.propertyList = input.propertyList
+    }
+
+    get isEmpty():boolean {
+        return !this.message && !this.propertyList
+    }
+
+    static get empty(): FeedbackToUI { return new FeedbackToUI({}) }
+}
+
 class Game {
     data: GameConfig
     queuedPlayerActions: Action[]
@@ -160,20 +179,25 @@ class Game {
 
     }
 
-    handleSelfClick(clickInfo: { buttonName: string, character?: Character }): void {
+    handleSelfClick(clickInfo: { buttonName: string, character?: Character }): FeedbackToUI {
         const character = clickInfo.character || this.data.playerCharacter;
         const { itemInHand } = this.data;
 
 
         switch (clickInfo.buttonName) {
-            case "CONSUME":
-                if (itemInHand && itemInHand.data.type.isConsumable) {
-                    this.data.itemInHand = undefined;
-                    character.consume(itemInHand, this);
+            case "LOOK":
+                if (itemInHand) {
+                    return new FeedbackToUI({ propertyList: itemInHand.propertyList })
                 }
-                break;
+                break
+            case "CONSUME":
+                if (itemInHand) {
+                    return character.consume(itemInHand, this);
+                }
+                break
         }
+        return FeedbackToUI.empty
     }
 }
 
-export { Game, GameConfig }
+export { Game, GameConfig, FeedbackToUI }
