@@ -9,7 +9,7 @@ import { Options, Vue } from "vue-class-component";
 import { Item } from "@/game-classes/Item";
 import { toRaw } from "vue";
 
-interface InventorySlotData {
+interface ItemSlotData {
   oldItem: Item | null;
 }
 
@@ -18,12 +18,12 @@ interface InventorySlotData {
     item: Item,
   },
 })
-export default class InventorySlot extends Vue {
+export default class ItemSlot extends Vue {
   item!: Item;
   oldItem!: Item;
   declare $refs: { canvas: HTMLCanvasElement };
 
-  data(): InventorySlotData {
+  data(): ItemSlotData {
     return {
       oldItem: this.item,
     };

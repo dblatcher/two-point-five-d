@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import InventorySlot from "./InventorySlot.vue";
+import ItemSlot from "./ItemSlot.vue";
 
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
@@ -45,7 +45,7 @@ interface SelfWindowData {
 
 @Options({
   components: {
-    InventorySlot,
+    ItemSlot,
   },
 })
 export default class SelfWindow extends Vue {

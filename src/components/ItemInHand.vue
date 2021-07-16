@@ -1,6 +1,6 @@
 <template>
   <figure :timeStamp="timeStamp.toString()">
-    <inventory-slot :item="item || null" />
+    <item-slot :item="item || null" />
     <figcaption>
       {{ item ? item.data.type.description : "" }}
     </figcaption>
@@ -11,7 +11,7 @@
 import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 
-import InventorySlot from "./InventorySlot.vue";
+import ItemSlot from "./ItemSlot.vue";
 
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
@@ -23,7 +23,7 @@ interface ItemInHandData {
 
 @Options({
   components: {
-    InventorySlot,
+    ItemSlot,
   },
 })
 export default class ItemInHand extends Vue {
