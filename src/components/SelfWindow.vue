@@ -27,7 +27,6 @@ import InventorySlot from "./InventorySlot.vue";
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
 import { toRaw } from "vue";
-import { Character } from "@/game-classes/Character";
 
 
 interface SelfWindowData {
@@ -56,20 +55,15 @@ export default class SelfWindow extends Vue {
     if (!itemInHand) {
       return this.clearOutput();
     }
-    this.descriptionText = `This is a ${itemInHand.data.type.description}.`
+    console.log(itemInHand.data.type.propertyList)
+    this.descriptionText = `This is a ${itemInHand.data.type.name}.`
   }
 
   consume():void {
-    const itemInHand = toRaw(this.$store.state.game.data.itemInHand);
-    console.log('consume', itemInHand)
-    if (!itemInHand) {
-      return this.clearOutput();
-    }
-    this.descriptionText = `TO DO - tell game I want to eat the ${itemInHand.data.type.description}.`
+    this.$store.dispatch('selfClick',{buttonName:'CONSUME'})
   }
 
-  clearOutput(x = ""):void {
-    console.log('CLEAR',x, Date.now())
+  clearOutput():void {
     this.descriptionText = "???"
   }
 

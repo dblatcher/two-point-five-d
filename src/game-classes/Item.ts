@@ -5,16 +5,12 @@ import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Sprite } from "../canvas/Sprite";
 import { Vantage } from "./Vantage";
+import { Color } from "@/canvas/Color";
+import { ItemType } from "./ItemType";
 
-interface ItemType {
-    description: string
-    figureDimensions?: { width: number, height: number }
-    sprite: Sprite
-}
 
 interface ItemConfig {
     vantage?: Vantage
-
     type: ItemType
 }
 
@@ -26,7 +22,7 @@ class Item {
 
     get figure(): Figure | null {
         const { vantage } = this.data
-        const { figureDimensions = { width: .2, height: .2 }, sprite } = this.data.type
+        const { figureDimensions = { width: .2, height: .2 }, sprite } = this.data.type.data
         if (vantage) {
             return new Figure({
                 sprite,
@@ -40,7 +36,7 @@ class Item {
 
     get icon(): CanvasImageSource {
         try {
-            return this.data.type.sprite.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
+            return this.data.type.data.sprite.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
         } catch (error) {
             console.warn(error.message)
         }
@@ -49,19 +45,19 @@ class Item {
 
     drawAsIcon(canvas: HTMLCanvasElement): void {
         const ctx = canvas.getContext("2d");
-        if (!ctx) {return}
+        if (!ctx) { return }
         const height = Number(canvas.getAttribute('height') || "100");
         const width = Number(canvas.getAttribute('width') || "100");
         const { icon } = this
         ctx.clearRect(0, 0, width, height)
-        ctx.fillStyle = "brown"
+        ctx.fillStyle = this.data.type.backgroundColor.css;
         ctx.fillRect(0, 0, width, height)
         ctx.drawImage(icon, 0, 0, width, height)
     }
 
     static clearIcon(canvas: HTMLCanvasElement): void {
         const ctx = canvas.getContext("2d");
-        if (!ctx) {return}
+        if (!ctx) { return }
         const height = Number(canvas.getAttribute('height') || "100");
         const width = Number(canvas.getAttribute('width') || "100");
         ctx.clearRect(0, 0, width, height)
@@ -98,4 +94,4 @@ class Item {
 }
 
 
-export { Item, ItemConfig, ItemType }
+export { Item, ItemConfig }

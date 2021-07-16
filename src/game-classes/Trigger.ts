@@ -1,5 +1,5 @@
 import { Game } from "./Game"
-import { ItemType } from "./Item"
+import { ItemType } from "./ItemType"
 import { WallFeature } from "./WallFeature"
 
 interface TriggerConfig {
@@ -23,11 +23,11 @@ class Trigger {
 
         if (requiresItem) {
             if (requiresItem !== itemInHand?.data.type) {
-                console.log(`Do not have ${requiresItem.description}.`)
+                console.log(`Do not have ${requiresItem.name}.`)
                 return
             }
             if (consumesItem) {
-                console.log(`Used up ${requiresItem.description}.`)
+                console.log(`Used up ${requiresItem.name}.`)
                 game.data.itemInHand = undefined;
             }
         }

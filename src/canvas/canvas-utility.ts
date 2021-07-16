@@ -16,7 +16,7 @@ interface PlotConfig {
 }
 
 
-const MAX_VIEW_DISTANCE = 8;
+const MAX_VIEW_DISTANCE = 12;
 const VANISH_RATE = Math.SQRT2;
 
 function mapPointInSight(forwardDistance: number, rightDistance: number, upDistance: number): Point {

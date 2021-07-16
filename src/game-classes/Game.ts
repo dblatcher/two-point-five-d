@@ -54,8 +54,8 @@ class Game {
             })
     }
 
-    changeLevel (levelIndex:number, vantage:Vantage):void {
-        const {levels, playerCharacter} = this.data
+    changeLevel(levelIndex: number, vantage: Vantage): void {
+        const { levels, playerCharacter } = this.data
         const newLevel = levels[levelIndex];
         if (!newLevel) {
             console.warn(`There is no level ${levelIndex}!`)
@@ -158,6 +158,21 @@ class Game {
             }
         }
 
+    }
+
+    handleSelfClick(clickInfo: { buttonName: string, character?: Character }): void {
+        const character = clickInfo.character || this.data.playerCharacter;
+        const { itemInHand } = this.data;
+
+
+        switch (clickInfo.buttonName) {
+            case "CONSUME":
+                if (itemInHand && itemInHand.data.type.isConsumable) {
+                    this.data.itemInHand = undefined;
+                    character.consume(itemInHand, this);
+                }
+                break;
+        }
     }
 }
 

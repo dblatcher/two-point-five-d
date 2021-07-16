@@ -37,6 +37,13 @@ export default createStore({
         toRaw(state.game).handleInventoryClick(toRaw(clickInfo.item), clickInfo.index)
       }
     },
+
+    selfClick({state}, clickInfo:{buttonName:string}) {
+      if (!this.getters.gameIsPaused) {
+        toRaw(state.game).handleSelfClick(toRaw(clickInfo))
+      }
+    },
+
     tick({ state, commit }) {
       toRaw(state.game).tick();
       commit('updateTimestamp');
