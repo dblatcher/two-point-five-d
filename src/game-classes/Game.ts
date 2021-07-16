@@ -29,7 +29,7 @@ class FeedbackToUI {
         this.propertyList = input.propertyList
     }
 
-    get isEmpty():boolean {
+    get isEmpty(): boolean {
         return !this.message && !this.propertyList
     }
 
@@ -166,7 +166,10 @@ class Game {
         const { itemInHand } = this.data
 
         if (item) {
-            if (!itemInHand) {
+            if (itemInHand) {
+                inventory.splice(index, 1, itemInHand)
+                this.data.itemInHand = item
+            } else {
                 item.takeIntoHand(inventory, this, true)
             }
         }
@@ -176,7 +179,6 @@ class Game {
                 this.data.itemInHand = undefined
             }
         }
-
     }
 
     handleSelfClick(clickInfo: { buttonName: string, character?: Character }): FeedbackToUI {
