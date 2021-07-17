@@ -28,6 +28,10 @@ const sheets = {
     //https://opengameart.org/content/brick-wall-0
     brickWall2: new SpriteSheet("brickWall", require("../assets/sprites/brick_wall.png"), spriteSheets),
 
+    //https://opengameart.org/content/helmets-64x64
+    bardHat: new SpriteSheet("bardHat", require("../assets/sprites/bard-hat.png"), spriteSheets),
+    helmet: new SpriteSheet("helmet", require("../assets/sprites/helmet.png"), spriteSheets),
+
     testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets),
     painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
     leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
@@ -208,6 +212,8 @@ const sprites = {
     apple: Sprite.itemSprite("apple", { sheet: sheets.fruits, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
     bean: Sprite.itemSprite("bean", { sheet: sheets.fruits, col: 1, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
     key: Sprite.itemSprite("key", { sheet: sheets.fruits, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),
+    bardHat: Sprite.itemSprite("bardHat", { sheet: sheets.bardHat }, { baseline: .25, transforms: ["CROP_BASE",], }),
+    helmet: Sprite.itemSprite("helmet", { sheet: sheets.helmet }, { baseline: .05, transforms: ["CROP_BASE",], }),
 }
 
 const textBoards = {

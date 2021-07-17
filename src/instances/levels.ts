@@ -71,11 +71,10 @@ const simpleLevel: Level = new Level({
     height: 10, width: 15,
     walls: [
         new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [poemBoard,]  }),
-        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,],shape:doorway  }),
+        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,]  }),
         new Wall({ x: 6, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [advertBoard] }),
         new Wall({ x: 5, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,]  }),
         new Wall({ x: 5, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [poemBoard,]  }),
-        
 
         new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape:spikey, patternSprite:sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
@@ -87,16 +86,23 @@ const simpleLevel: Level = new Level({
         new FloorFeature({ x: 9, y: 3, direction: Direction.east })
     ],
     items: [
-
+        new Item({
+            type: itemTypes.bardHat, vantage: new Vantage({ x: 4.5, y: 4.5, direction: Direction.north })
+        }),
+        new Item({
+            type: itemTypes.helmet, vantage: new Vantage({ x: 5.5, y: 4.5, direction: Direction.north })
+        }),
     ]
 })
 
 const playerCharacter = new Character({
-    x: 5, y: 2, direction: Direction.east, inventory: [
+    x: 6, y: 4, direction: Direction.west, inventory: [
+        null,
+        null,
         new Item({ type: itemTypes.key, }),
         null,
-        new Item({ type: itemTypes.bean }),
         null,
+        new Item({ type: itemTypes.bean }),
         null,
         null,
         null,

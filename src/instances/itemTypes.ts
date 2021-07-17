@@ -18,10 +18,21 @@ const bean = new ItemType({
     consumable: { nutrition: 5, remains: key }
 })
 
+const helmet = new ItemType({
+    name: "helmet", sprite: sprites.helmet, figureDimensions: { height: .225, width: .18 },
+    weight: 3,
+})
+
+const bardHat = new ItemType({
+    name: "bard's hat", sprite: sprites.bardHat, figureDimensions: { height: .2, width: .25 },
+    weight: 1,
+})
+
 const itemTypes = {
     apple,
     bean,
     key,
+    helmet, bardHat
 }
 
 export {
