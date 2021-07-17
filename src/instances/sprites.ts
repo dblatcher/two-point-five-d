@@ -10,6 +10,21 @@ const sheets = {
     duck_front: new SpriteSheet("duck-front", require("../assets/sprites/duck-front.png"), spriteSheets),
     duck_side: new SpriteSheet("duck-side", require("../assets/sprites/duck-side.png"), spriteSheets),
     duck_back: new SpriteSheet("duck-back", require("../assets/sprites/duck-back.png"), spriteSheets),
+    duck_walk_front_1:new SpriteSheet("duck-front-walk-1", require("../assets/sprites/duck/walk/front/1.png"), spriteSheets),
+    duck_walk_front_2:new SpriteSheet("duck-front-walk-2", require("../assets/sprites/duck/walk/front/2.png"), spriteSheets),
+    duck_walk_front_3:new SpriteSheet("duck-front-walk-3", require("../assets/sprites/duck/walk/front/3.png"), spriteSheets),
+    duck_walk_front_4:new SpriteSheet("duck-front-walk-4", require("../assets/sprites/duck/walk/front/4.png"), spriteSheets),
+    duck_walk_back_1:new SpriteSheet("duck-back-walk-1", require("../assets/sprites/duck/walk/back/1.png"), spriteSheets),
+    duck_walk_back_2:new SpriteSheet("duck-back-walk-2", require("../assets/sprites/duck/walk/back/2.png"), spriteSheets),
+    duck_walk_back_3:new SpriteSheet("duck-back-walk-3", require("../assets/sprites/duck/walk/back/3.png"), spriteSheets),
+    duck_walk_back_4:new SpriteSheet("duck-back-walk-4", require("../assets/sprites/duck/walk/back/4.png"), spriteSheets),
+    duck_walk_side_1:new SpriteSheet("duck-side-walk-1", require("../assets/sprites/duck/walk/side/1.png"), spriteSheets),
+    duck_walk_side_2:new SpriteSheet("duck-side-walk-2", require("../assets/sprites/duck/walk/side/2.png"), spriteSheets),
+    duck_walk_side_3:new SpriteSheet("duck-side-walk-3", require("../assets/sprites/duck/walk/side/3.png"), spriteSheets),
+    duck_walk_side_4:new SpriteSheet("duck-side-walk-4", require("../assets/sprites/duck/walk/side/4.png"), spriteSheets),
+    duck_walk_side_5:new SpriteSheet("duck-side-walk-5", require("../assets/sprites/duck/walk/side/5.png"), spriteSheets),
+    duck_walk_side_6:new SpriteSheet("duck-side-walk-6", require("../assets/sprites/duck/walk/side/6.png"), spriteSheets),
+    duck_walk_side_7:new SpriteSheet("duck-side-walk-7", require("../assets/sprites/duck/walk/side/7.png"), spriteSheets),
 
     //https://opengameart.org/content/dinosaur-0
     dinosaur: new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
@@ -53,7 +68,37 @@ const duckSprite = new Sprite("DUCK", {
         ])
         .set("STAND_RIGHT", [
             { sheet: sheets.duck_side, transforms: ["FLIP_H"] },
-        ]),
+        ])
+        .set("WALK_FORWARD",[
+            { sheet: sheets.duck_walk_back_1},
+            { sheet: sheets.duck_walk_back_2},
+            { sheet: sheets.duck_walk_back_3},
+            { sheet: sheets.duck_walk_back_4},
+        ])
+        .set("WALK_BACK",[
+            { sheet: sheets.duck_walk_front_1},
+            { sheet: sheets.duck_walk_front_2},
+            { sheet: sheets.duck_walk_front_3},
+            { sheet: sheets.duck_walk_front_4},
+        ])
+        .set("WALK_LEFT",[
+            { sheet: sheets.duck_walk_side_1},
+            { sheet: sheets.duck_walk_side_2},
+            { sheet: sheets.duck_walk_side_3},
+            { sheet: sheets.duck_walk_side_4},
+            { sheet: sheets.duck_walk_side_5},
+            { sheet: sheets.duck_walk_side_6},
+            { sheet: sheets.duck_walk_side_7},
+        ])
+        .set("WALK_RIGHT",[
+            { sheet: sheets.duck_walk_side_1, transforms:["FLIP_H"]},
+            { sheet: sheets.duck_walk_side_2, transforms:["FLIP_H"]},
+            { sheet: sheets.duck_walk_side_3, transforms:["FLIP_H"]},
+            { sheet: sheets.duck_walk_side_4, transforms:["FLIP_H"]},
+            { sheet: sheets.duck_walk_side_5, transforms:["FLIP_H"]},
+            { sheet: sheets.duck_walk_side_6, transforms:["FLIP_H"]},
+            { sheet: sheets.duck_walk_side_7, transforms:["FLIP_H"]},
+        ])
 })
 
 

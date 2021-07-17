@@ -9,6 +9,7 @@ interface DuckConfig {
     y: number
     direction: Direction
     behaviour?: Behaviour
+    initialAnimation?: string
 }
 
 function duck(config: DuckConfig): Figure {
