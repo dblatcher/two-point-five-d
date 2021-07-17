@@ -38,6 +38,12 @@ export default createStore({
       }
     },
 
+    equipSlotClick({ state }, clickInfo:{slotName:string}) {
+      if (!this.getters.gameIsPaused) {
+        return toRaw(state.game).handleEquipSlotClick(clickInfo)
+      }
+    },
+
     selfClick({state}, clickInfo:{buttonName:string}) {
       if (!this.getters.gameIsPaused) {
         return toRaw(state.game).handleSelfClick(toRaw(clickInfo))

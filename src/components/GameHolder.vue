@@ -62,7 +62,7 @@ export default class GameHolder extends Vue {
 
   data(): MyTestComponentData {
     return {
-      characterScreenOpen: false,
+      characterScreenOpen: true,
       spritesLoaded: false,
     };
   }
@@ -101,7 +101,7 @@ aside {
   bottom: 0;
   margin:0;
   box-sizing: border-box;
-  background-color: rgba($color: #fff, $alpha: 0.5);
+  background-color: rgba($color: #a44, $alpha: 0.5);
   display: flex;
 }
 

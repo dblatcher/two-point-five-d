@@ -6,13 +6,18 @@ interface ItemTypeConfig {
     figureDimensions?: { width: number, height: number }
     sprite: Sprite
     backgroundColor?: Color
-    consumable?: ConsumeableData
     weight?: number
+    consumable?: ConsumeableData
+    equipable?: EquipableData
 }
 
 interface ConsumeableData {
     nutrition: number
     remains?: ItemType
+}
+
+interface EquipableData {
+    slotName: string
 }
 
 class ItemType {
@@ -25,6 +30,7 @@ class ItemType {
     get name(): string { return this.data.name }
     get backgroundColor(): Color { return this.data.backgroundColor || Color.TRANSPARENT }
     get isConsumable(): boolean { return !!this.data.consumable }
+    get isEquipable(): boolean { return !!this.data.equipable }
 
     get propertyList(): [string, string | number][] {
         const list: [string, string | number][] = [];
@@ -34,6 +40,9 @@ class ItemType {
 
         if (this.data.consumable) {
             list.push(['consumable', this.data.consumable.nutrition]);
+        }
+        if (this.data.equipable) {
+            list.push(['equipable', this.data.equipable.slotName]);
         }
 
         return list;

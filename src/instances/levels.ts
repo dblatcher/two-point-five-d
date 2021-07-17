@@ -12,7 +12,7 @@ import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard } from "@/instances/features"
-import { lowWall, doorway,spikey } from "@/instances/wallShapes"
+import { lowWall, doorway, spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
 
@@ -70,13 +70,13 @@ const busyLevel: Level = new Level({
 const simpleLevel: Level = new Level({
     height: 10, width: 15,
     walls: [
-        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [poemBoard,]  }),
-        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,]  }),
+        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [poemBoard,] }),
+        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,] }),
         new Wall({ x: 6, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [advertBoard] }),
-        new Wall({ x: 5, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,]  }),
-        new Wall({ x: 5, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [poemBoard,]  }),
+        new Wall({ x: 5, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,] }),
+        new Wall({ x: 5, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [poemBoard,] }),
 
-        new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape:spikey, patternSprite:sprites.brickWall2, }),
+        new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape: spikey, patternSprite: sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
 
@@ -96,18 +96,18 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 6, y: 4, direction: Direction.west, inventory: [
-        null,
-        null,
-        new Item({ type: itemTypes.key, }),
-        null,
-        null,
-        new Item({ type: itemTypes.bean }),
-        null,
-        null,
-        null,
-        null,
-    ]
+    x: 6, y: 4, direction: Direction.west,
+    inventory: [
+        null, null,
+        new Item({ type: itemTypes.key, }), null,
+        null, new Item({ type: itemTypes.bean }),
+        null, null,
+        null, null,
+    ],
+    equipmentSlots: new Map<string, Item | null>()
+        .set("HEAD", new Item({ type: itemTypes.helmet }))
+        .set("TORSO", null)
+        .set("LEGS", null)
 });
 
 

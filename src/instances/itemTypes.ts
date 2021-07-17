@@ -20,11 +20,13 @@ const bean = new ItemType({
 
 const helmet = new ItemType({
     name: "helmet", sprite: sprites.helmet, figureDimensions: { height: .225, width: .18 },
+    equipable: {slotName:'HEAD'},
     weight: 3,
 })
 
 const bardHat = new ItemType({
     name: "bard's hat", sprite: sprites.bardHat, figureDimensions: { height: .2, width: .25 },
+    equipable: {slotName:'HEAD'},
     weight: 1,
 })
 

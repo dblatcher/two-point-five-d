@@ -1,6 +1,6 @@
 <template>
   <figure :timeStamp="timeStamp.toString()">
-    <item-slot :item="item || null" />
+    <item-slot :item="item || null" :size="5" />
     <figcaption>
       {{ item ? item.data.type.description : "" }}
     </figcaption>

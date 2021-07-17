@@ -20,13 +20,16 @@ interface GameConfig {
 class FeedbackToUI {
     message?: string
     propertyList?: [string, string | number][]
+    success?: boolean
 
     constructor(input: {
         message?: string
         propertyList?: [string, string | number][]
+        success?: boolean
     }) {
         this.message = input.message
         this.propertyList = input.propertyList
+        this.success = input.success
     }
 
     get isEmpty(): boolean {
@@ -34,6 +37,8 @@ class FeedbackToUI {
     }
 
     static get empty(): FeedbackToUI { return new FeedbackToUI({}) }
+    static get yes(): FeedbackToUI { return new FeedbackToUI({success:true}) }
+    static get no(): FeedbackToUI { return new FeedbackToUI({success:false}) }
 }
 
 class Game {
@@ -155,13 +160,9 @@ class Game {
             }
 
         }
-
-
-
-
     }
 
-    handleInventoryClick(item: Item, index: number): void {
+    handleInventoryClick(item: Item, index: number): FeedbackToUI {
         const { inventory } = this.data.playerCharacter.data
         const { itemInHand } = this.data
 
@@ -172,19 +173,27 @@ class Game {
             } else {
                 item.takeIntoHand(inventory, this, true)
             }
+            return FeedbackToUI.yes
         }
         else {
             if (itemInHand) {
                 inventory.splice(index, 1, itemInHand)
                 this.data.itemInHand = undefined
+                return FeedbackToUI.yes
             }
         }
+        return FeedbackToUI.empty
+    }
+
+    handleEquipSlotClick(clickInfo: { slotName: string, character?: Character }): FeedbackToUI {
+        const character = clickInfo.character || this.data.playerCharacter;
+        const { itemInHand } = this.data;
+        return character.equip(clickInfo.slotName, itemInHand, this);
     }
 
     handleSelfClick(clickInfo: { buttonName: string, character?: Character }): FeedbackToUI {
         const character = clickInfo.character || this.data.playerCharacter;
         const { itemInHand } = this.data;
-
 
         switch (clickInfo.buttonName) {
             case "LOOK":

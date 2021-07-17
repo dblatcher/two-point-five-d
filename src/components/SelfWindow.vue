@@ -1,6 +1,5 @@
 <template>
   <section @mouseleave="clearOutput()">
-    <h2>self</h2>
 
     <div class="control-icon" @click="doSelfClick('LOOK')">
       <figure>
@@ -78,22 +77,17 @@ export default class SelfWindow extends Vue {
 
 <style scoped lang="scss">
 section {
-  border: 3px dotted dodgerblue;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
-
-  h2 {
-    margin: 0;
-  }
 
   .control-icon {
     border: 1px solid black;
   }
 
   .output-box {
-    width: 8em;
     min-height: 5rem;
-    background-color: aquamarine;
+    background-color: white;
 
     p {
       margin: 0;
