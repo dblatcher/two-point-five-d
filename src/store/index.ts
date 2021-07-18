@@ -56,7 +56,7 @@ export default createStore({
     },
     startTimer({ state, dispatch }) {
       if (state.timer !== 0) { return }
-      state.timer = setInterval(() => { dispatch('tick') }, 200)
+      state.timer = setInterval(() => { dispatch('tick') }, 100)
     },
     stopTimer({ state }) {
       if (state.timer == 0) { return }

@@ -14,6 +14,8 @@ class Position {
 
     constructor(config: PositionConfig) {
         this.data = config
+        this.data.x = Position.roundCoordinate(this.data.x)
+        this.data.y = Position.roundCoordinate(this.data.y)
     }
 
     get isVantage(): boolean { return false }
@@ -52,8 +54,8 @@ class Position {
             if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY)) { return }
         }
 
-        this.data.x = targetX + this.squareX
-        this.data.y = targetY + this.squareX
+        this.data.x = Position.roundCoordinate(targetX + this.squareX)
+        this.data.y = Position.roundCoordinate(targetY + this.squareX)
     }
 
     moveAbsoluteBy(distance: number, direction: Direction, game: Game, ignoreWalls = false): void {
@@ -65,10 +67,16 @@ class Position {
         if (!ignoreWalls && !target.isInSameSquareAs(this)) {
             let nextPositionInPath: Position = new Position(this.data);
             const squaresCovered: Position[] = [nextPositionInPath];
+            let failsafe = 0
             do {
+                failsafe++
                 nextPositionInPath = nextPositionInPath.translate(direction)
                 squaresCovered.push(nextPositionInPath)
-            } while (!nextPositionInPath.isInSameSquareAs(target));
+
+                if (failsafe == 99) {
+                    console.log({ target, distance, first: squaresCovered[0] })
+                }
+            } while (!nextPositionInPath.isInSameSquareAs(target) && failsafe < 100);
 
             let i = 0;
             for (i = 0; i < squaresCovered.length - 1; i++) {
@@ -79,15 +87,15 @@ class Position {
             }
         }
 
-        this.data.x = target.data.x
-        this.data.y = target.data.y
+        this.data.x = Position.roundCoordinate(target.data.x)
+        this.data.y = Position.roundCoordinate(target.data.y)
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     shiftWithinSquare(point: Point, game: Game): void {
         function bind(n: number) { return Math.max(0, Math.min(n, .99)) }
-        this.data.x = this.gridX + bind(point.x)
-        this.data.y = this.gridY + bind(point.y)
+        this.data.x = Position.roundCoordinate(this.gridX + bind(point.x))
+        this.data.y = Position.roundCoordinate(this.gridY + bind(point.y))
     }
 
     isInSameSquareAs(otherPosition: Position): boolean {
@@ -128,6 +136,10 @@ class Position {
         ctx.lineTo(crossCenterX - crossArmLength, crossCenterY + crossArmLength);
 
         ctx.stroke();
+    }
+
+    static roundCoordinate(value: number): number {
+        return  Math.floor(value * 100) / 100
     }
 }
 

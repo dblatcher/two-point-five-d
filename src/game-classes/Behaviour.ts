@@ -10,21 +10,33 @@ interface DecisionFunction {
 }
 
 function moveClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
-    const placeAhead = actor.translate(actor.data.direction)
+    const distance = .1
+    const placeAhead = actor.translate({
+        x: actor.data.direction.x * distance,
+        y: actor.data.direction.y * distance,
+    })
+
     if (game.data.level.isBlocked(...actor.coords, ...placeAhead.coords)) {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
-        return new MovementByAction(.2,RelativeDirection.FORWARD)
+        return new MovementByAction(distance, RelativeDirection.FORWARD)
     }
 }
+
 function moveAntiClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
-    const placeAhead = actor.translate(actor.data.direction)
+    const distance = .1
+    const placeAhead = actor.translate({
+        x: actor.data.direction.x * distance,
+        y: actor.data.direction.y * distance,
+    })
+
     if (game.data.level.isBlocked(...actor.coords, ...placeAhead.coords)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
-        return new MovementByAction(.2,RelativeDirection.FORWARD)
+        return new MovementByAction(distance, RelativeDirection.FORWARD)
     }
 }
+
 function shiftAround(actor: Figure, game: Game, behaviour: Behaviour): Action | null {
     if (game.tickCount % 3 !== 0) { return null }
     return new ShiftAction({ x: Math.random(), y: Math.random() })
@@ -32,7 +44,7 @@ function shiftAround(actor: Figure, game: Game, behaviour: Behaviour): Action | 
 
 function wanderForward(actor: Figure, game: Game, behaviour: Behaviour): Action | null {
     if (game.tickCount % 2 !== 0) { return null }
-    return new MovementByAction(.2,RelativeDirection.FORWARD)
+    return new MovementByAction(.2, RelativeDirection.FORWARD)
 }
 
 const decisionFunctions = {

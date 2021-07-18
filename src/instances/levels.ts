@@ -53,7 +53,7 @@ const busyLevel: Level = new Level({
     ],
     contents: [
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise),  initialAnimation:"WALK" }),
-        duck({ x: 4.25, y: 5.25, direction: Direction.north, behaviour: new Behaviour(decisionFunctions.wanderForward) ,  initialAnimation:"WALK"}),
+        duck({ x: 4.25, y: 5.25, direction: Direction.north, behaviour: new Behaviour(decisionFunctions.shiftAround) ,  initialAnimation:"WALK"}),
         duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
 
         new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
@@ -81,7 +81,7 @@ const simpleLevel: Level = new Level({
 
     ],
     contents: [
-        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: undefined, initialAnimation:"WALK"}),
+        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveClockwise  ) , initialAnimation:"WALK"}),
         new FloorFeature({ x: 9, y: 3, direction: Direction.east })
     ],
     items: [
