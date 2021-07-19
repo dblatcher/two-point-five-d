@@ -5,6 +5,7 @@ import { TeleportReaction, makeTunnel } from "@/game-classes/Reaction";
 import { Sprite } from "@/canvas/Sprite";
 import { Trigger } from "@/game-classes/Trigger";
 import { itemTypes } from "@/instances/itemTypes";
+import { FloorFeature } from "@/game-classes/FloorFeature";
 
 const leverOpensDoor = new Trigger({
     targetId: "door1", statusPairs: [
@@ -43,6 +44,12 @@ const stairs = new InteractableWallFeature({ sprite: sprites.stairs, animation: 
 const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation, reactions: [tunnel[1]] })
 
 
+const bigSquareOnFloor: [number, number][] = [
+    [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
+]
+
+const blueSquare = new FloorFeature({ x: 9, y: 4, direction: Direction.east, blocksByDefault: false, plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor })
+
 export {
-    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard
+    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare
 }

@@ -11,14 +11,12 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard } from "@/instances/features"
+import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare } from "@/instances/features"
 import { lowWall, doorway, spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
 
-const bigSquareOnFloor: [number, number][] = [
-    [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
-]
+
 
 
 const busyLevel: Level = new Level({
@@ -57,9 +55,7 @@ const busyLevel: Level = new Level({
         duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
 
         new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
-
-        new FloorFeature({ x: 9, y: 4, direction: Direction.east, blocksByDefault: true, plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor }),
-        new Pit({ x: 10, y: 4, direction: Direction.east, plotConfig: { noFill: false, fillStyle: 'blue' } }),
+        new Pit({ x: 10, y: 4, direction: Direction.east, plotConfig: { noFill: false } }),
     ],
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
@@ -81,8 +77,8 @@ const simpleLevel: Level = new Level({
 
     ],
     contents: [
-        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveClockwise  ) , initialAnimation:"WALK"}),
-        new FloorFeature({ x: 9, y: 3, direction: Direction.east })
+        // duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveClockwise  ) , initialAnimation:"WALK"}),
+        blueSquare,
     ],
     items: [
         new Item({

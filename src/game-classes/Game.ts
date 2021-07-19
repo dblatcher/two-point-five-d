@@ -7,6 +7,7 @@ import { RelativeDirection } from './RelativeDirection'
 import { Item } from './Item'
 import { Character } from './Character'
 import { Vantage } from './Vantage'
+import { FloorFeature } from './FloorFeature'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -37,8 +38,8 @@ class FeedbackToUI {
     }
 
     static get empty(): FeedbackToUI { return new FeedbackToUI({}) }
-    static get yes(): FeedbackToUI { return new FeedbackToUI({success:true}) }
-    static get no(): FeedbackToUI { return new FeedbackToUI({success:false}) }
+    static get yes(): FeedbackToUI { return new FeedbackToUI({ success: true }) }
+    static get no(): FeedbackToUI { return new FeedbackToUI({ success: false }) }
 }
 
 class Game {
@@ -62,20 +63,34 @@ class Game {
         this.tickCount++;
         this.data.level.tickCount = this.tickCount
 
+        const figures: Figure[] = this.data.level.data.contents
+            .filter(item => Object.getPrototypeOf(item).constructor == Figure)
+            .map(item => item as Figure)
+
+        const floorFeatures: FloorFeature[] = this.data.level.data.contents
+            .filter(item => Object.getPrototypeOf(item).constructor == FloorFeature)
+            .map(item => item as FloorFeature)
+
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
             nextPlayerAction.perform(this.data.playerCharacter, this);
         }
 
-        this.data.level.data.contents
-            .filter(item => Object.getPrototypeOf(item).constructor == Figure)
-            .forEach(item => {
-                const figure = item as Figure;
+        figures.forEach(figure => {
+            if (figure.data.behaviour) {
+                figure.data.behaviour.decideAction(figure, this)?.perform(figure, this)
+            }
+        })
 
-                if (figure.data.behaviour) {
-                    figure.data.behaviour.decideAction(figure, this)?.perform(figure, this)
-                }
-            })
+        // not very efficient - every floorFeature checks its position aginst every item.vantage and vantange
+        // better: 
+        // - copy each vantage and item.vantage to an array
+        // - map the floorFeature array to array of empty arrays (or better map <FloorFeature, (Vantage|Item)[]>)
+        // - iterate over vantages, move them to the array for the floorFeature they are inSameSquare as (if any)
+        // - use the Vantage[] as the argument for checkweight
+        floorFeatures.forEach(floorFeature => {
+            floorFeature.checkWeight([...figures, this.data.playerCharacter], this.data.level.data.items)
+        })
     }
 
     changeLevel(levelIndex: number, vantage: Vantage): void {
