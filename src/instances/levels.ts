@@ -11,7 +11,7 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare } from "@/instances/features"
+import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2 } from "@/instances/features"
 import { lowWall, doorway, spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
@@ -74,6 +74,8 @@ const simpleLevel: Level = new Level({
         new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape: spikey, patternSprite: sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
+        
+        new Wall({ x: 10, y: 4, place: Direction.east, color: new Color(120, 40, 20), shape:doorway, open:true, features:[door2] }),
 
     ],
     contents: [
@@ -91,7 +93,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 7, y: 2, direction: Direction.east,
+    x: 8, y: 4, direction: Direction.east,
     inventory: [
         null, null,
         new Item({ type: itemTypes.key, }), null,

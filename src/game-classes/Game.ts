@@ -89,7 +89,12 @@ class Game {
         // - iterate over vantages, move them to the array for the floorFeature they are inSameSquare as (if any)
         // - use the Vantage[] as the argument for checkweight
         floorFeatures.forEach(floorFeature => {
-            floorFeature.checkWeight([...figures, this.data.playerCharacter], this.data.level.data.items)
+            const { triggers = [] } = floorFeature.data
+            const weightChange = floorFeature.checkWeightChange(this.data.playerCharacter, figures, this.data.level.data.items)
+
+            if (weightChange.hasWeightOnNow !== weightChange.usedToHaveWeightOn) {
+                triggers.forEach(trigger => trigger.fire(floorFeature, this))
+            }
         })
     }
 

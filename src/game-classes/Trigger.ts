@@ -1,3 +1,4 @@
+import { FloorFeature } from "./FloorFeature"
 import { Game } from "./Game"
 import { ItemType } from "./ItemType"
 import { WallFeature } from "./WallFeature"
@@ -17,7 +18,7 @@ class Trigger {
         this.data = config
     }
 
-    fire(firingFeature: WallFeature, game: Game): void {
+    fire(firingFeature: WallFeature | FloorFeature, game: Game): void {
         const { statusPairs, toggle, requiresItem, consumesItem } = this.data
         const { itemInHand } = game.data;
 
@@ -38,9 +39,9 @@ class Trigger {
             return
         }
 
-        if (statusPairs) {
+        if (statusPairs && firingFeature.isWallFeature) {
             statusPairs.forEach(pair => {
-                if (firingFeature.data.animation == pair[0]) { target.setStatus(pair[1]) }
+                if ((firingFeature as WallFeature).data.animation == pair[0]) { target.setStatus(pair[1]) }
             })
         } else if (toggle) {
             const indexOfCurrentStatus = toggle.indexOf(target.data.animation);

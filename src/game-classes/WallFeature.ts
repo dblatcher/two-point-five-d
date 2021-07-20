@@ -34,7 +34,6 @@ class WallFeature {
     }
 
     get requiredAnimations(): string[] { return this.data.sprite ? [Sprite.defaultWallAnimation] : [] }
-
     get missingAnimations(): string[] {
         if (!this.data.sprite) { return [] }
 
@@ -55,6 +54,8 @@ class WallFeature {
         return missing
     }
 
+    get isFloorFeature(): boolean { return false }
+    get isWallFeature(): boolean { return true }
     get isBlocking(): boolean { return false }
     get canInteract(): boolean { return false }
     get isDrawnInMap(): boolean { return false }
@@ -168,7 +169,6 @@ class Door extends InteractableWallFeature {
     }
 
     get requiredAnimations(): string[] { return ["OPEN", "CLOSED"] }
-
     get canInteract(): boolean { return this.data.animation === "CLOSED" }
     get isBlocking(): boolean { return this.data.animation === "CLOSED" }
     get isDrawnInMap(): boolean { return true }

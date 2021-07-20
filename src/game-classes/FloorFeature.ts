@@ -1,5 +1,7 @@
 import { ConvertFunction, mapPointOnFloor, plotPolygon, RelativePoint, PlotConfig, Point } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
+import { game } from "@/instances/game";
+import { Character } from "./Character";
 import { Direction } from "./Direction";
 import { Figure } from "./Figure";
 import { Item } from "./Item";
@@ -19,38 +21,69 @@ interface FloorFeatureConfig {
     plotConfig?: PlotConfig,
     triggers?: Trigger[]
     reactions?: Reaction[]
-    hadWeightOnItLastTick?: boolean
 }
 
 
 class FloorFeature extends Vantage {
     data: FloorFeatureConfig
+    hadWeightOnItLastTick?: boolean
+    thingsOnMeLastTick: Array<Item | Figure | Character>
 
     constructor(config: FloorFeatureConfig) {
         super(config)
         this.data = config
-        this.data.hadWeightOnItLastTick = !!config.hadWeightOnItLastTick
+        this.hadWeightOnItLastTick = false
+        this.thingsOnMeLastTick = []
     }
 
     get isFloorFeature(): boolean { return true }
+    get isWallFeature(): boolean { return false }
     get squareX(): number { return .5 }
     get squareY(): number { return .5 }
     get isBlocking(): boolean { return !!this.data.blocksByDefault }
 
-    checkWeight(vantages: Vantage[], items: Item[]): void {
+    /**
+     * Check the which of the contents are on the floorFeature's square
+     * compare the list with the version stored on the floorFeature last tick
+     * do something if there is a change?
+     * (not efficient for every floorFeature to check every item - see note in Game.tick)
+     * 
+     * @param playerCharacter 
+     * @param figures 
+     * @param items 
+     */
+    checkWeightChange(playerCharacter: Character, figures: Figure[], items: Item[]): {
+        newThings: Array<Item | Figure | Character>
+        usedToHaveWeightOn: boolean
+        hasWeightOnNow: boolean
+    } {
 
+        const thingsOnMeNow: Array<Item | Figure | Character> = []
 
-        const itemsFiguresOnFloor: Figure[] = items
-            .filter(item => item.figure != null)
-            .map(item => item.figure as Figure)
-
-
-        const hasWeightOnNow = [...vantages, ...itemsFiguresOnFloor].some(vantage => this.isInSameSquareAs(vantage));
-        if (hasWeightOnNow !== this.data.hadWeightOnItLastTick) {
-            console.log(`now I ${hasWeightOnNow ? 'do' : 'do not'} have weight on me.`)
+        if (playerCharacter.isInSameSquareAs(this)) {
+            thingsOnMeNow.push(playerCharacter)
         }
 
-        this.data.hadWeightOnItLastTick = hasWeightOnNow;
+        figures.forEach(figure => {
+            if (figure.isInSameSquareAs(this)) {
+                thingsOnMeNow.push(figure)
+            }
+        })
+
+        items.forEach(item => {
+            if (item.figure && item.figure.isInSameSquareAs(this)) {
+                thingsOnMeNow.push(item)
+            }
+        })
+
+        const hasWeightOnNow = thingsOnMeNow.length != 0
+        const newThings = thingsOnMeNow.filter(thing => !this.thingsOnMeLastTick.includes(thing))
+        const usedToHaveWeightOn = !!this.hadWeightOnItLastTick
+
+        this.hadWeightOnItLastTick = hasWeightOnNow;
+        this.thingsOnMeLastTick = thingsOnMeNow
+
+        return { newThings, usedToHaveWeightOn, hasWeightOnNow }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
