@@ -11,7 +11,7 @@ import { Character } from "@/game-classes/Character";
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2 } from "@/instances/features"
+import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2, redSquare } from "@/instances/features"
 import { lowWall, doorway, spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
@@ -81,6 +81,7 @@ const simpleLevel: Level = new Level({
     contents: [
         // duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveClockwise  ) , initialAnimation:"WALK"}),
         blueSquare,
+        redSquare
     ],
     items: [
         new Item({

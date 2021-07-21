@@ -7,6 +7,7 @@ interface TriggerConfig {
     targetId: string
     statusPairs?: [string, string][]
     toggle?: string[]
+    weightSwitch?: [string, string]
     requiresItem?: ItemType
     consumesItem?: boolean
 }
@@ -19,8 +20,10 @@ class Trigger {
     }
 
     fire(firingFeature: WallFeature | FloorFeature, game: Game): void {
-        const { statusPairs, toggle, requiresItem, consumesItem } = this.data
+        const { statusPairs, toggle, requiresItem, consumesItem, weightSwitch } = this.data
         const { itemInHand } = game.data;
+
+        const featureClass = firingFeature.isFloorFeature? FloorFeature : WallFeature;
 
         if (requiresItem) {
             if (requiresItem !== itemInHand?.data.type) {
@@ -49,6 +52,9 @@ class Trigger {
                 const nextStatus = toggle[indexOfCurrentStatus + 1] || toggle[0]
                 target.setStatus(nextStatus);
             }
+        } else if (weightSwitch && featureClass == FloorFeature) {
+            const indexOfStatus = (firingFeature as FloorFeature).hadWeightOnItLastTick ? 1 :0
+            target.setStatus(weightSwitch[indexOfStatus])
         }
     }
 

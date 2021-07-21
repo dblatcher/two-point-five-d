@@ -19,7 +19,7 @@ const buttonOpensDoor = new Trigger({
 });
 
 const plateOpensDoor = new Trigger({
-    targetId: "door2", toggle: ['OPEN', 'CLOSED']
+    targetId: "door2", weightSwitch: ['OPEN', 'CLOSED']
 });
 
 const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
@@ -39,7 +39,7 @@ const advertBoard = new WallFeature({
 })
 
 const door1 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door1" })
-const door2 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly: false, id: "door2" })
+const door2 = new Door({ sprite: sprites.doorSprite, animation: 'OPEN', canOpenDirectly: false, id: "door2" })
 
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [teleportToCorner] })
 const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, animation: Sprite.defaultWallAnimation, triggers: [buttonOpensDoor], onBothSides: true })
@@ -53,7 +53,6 @@ const bigSquareOnFloor: [number, number][] = [
     [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
 ]
 
-console.log(FloorFeature)
 
 const blueSquare = new FloorFeature({
      x: 9, y: 4, direction: Direction.east, 
@@ -61,6 +60,12 @@ const blueSquare = new FloorFeature({
      plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor 
 })
 
+const redSquare = new FloorFeature({
+     x: 10, y: 4, direction: Direction.east, 
+     blocksByDefault: false, triggers:[plateOpensDoor],
+     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor 
+})
+
 export {
-    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2
+    lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2, redSquare
 }
