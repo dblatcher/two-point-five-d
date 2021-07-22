@@ -107,11 +107,10 @@ class Game {
 
         squaresWithFeatures.forEach(square => {
             square.data.floorFeatures.forEach(floorFeature => {
-                const { triggers = [] } = floorFeature.data
                 const weightChange = floorFeature.checkWeightChange(square)
 
                 if (weightChange.hasWeightOnNow !== weightChange.usedToHaveWeightOn) {
-                    triggers.forEach(trigger => trigger.fire(floorFeature, this))
+                    floorFeature.fireTriggers(this);
                 }
             })
         })

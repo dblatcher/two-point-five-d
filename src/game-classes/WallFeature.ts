@@ -1,4 +1,4 @@
-import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas-utility"
+import { ConvertFunction, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { getPatternFill, getTextPatternFill } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { TextBoard } from "@/canvas/TextBoard"
@@ -6,25 +6,29 @@ import { Sprite } from "@/canvas/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Reaction } from "./Reaction"
-import { RelativeDirection } from "./RelativeDirection"
 import { Trigger } from "./Trigger"
 import { Vantage } from "./Vantage"
 
+import { AbstractFeature } from './AbstractFeature'
+
 interface WallFeatureConfig {
-    sprite?: Sprite
-    textBoard?: TextBoard
-    animation: string
-    id?: string
     triggers?: Trigger[]
     reactions?: Reaction[]
+    blocksByDefault?: boolean
+    sprite?: Sprite
+    animation?: string
+    id?: string
+
+    textBoard?: TextBoard
     onBothSides?: boolean
     clipToWall?: boolean
 }
 
-class WallFeature {
+class WallFeature extends AbstractFeature {
     data: WallFeatureConfig
 
     constructor(config: WallFeatureConfig) {
+        super(config)
         this.data = config
         this.data.animation = this.data.animation || Sprite.defaultWallAnimation
         this.data.onBothSides == !!config.onBothSides
@@ -34,76 +38,16 @@ class WallFeature {
     }
 
     get requiredAnimations(): string[] { return this.data.sprite ? [Sprite.defaultWallAnimation] : [] }
-    get missingAnimations(): string[] {
-        if (!this.data.sprite) { return [] }
-
-        const sprite = this.data.sprite as Sprite;
-        const missing: string[] = [];
-
-        this.requiredAnimations.forEach(animationName => {
-            RelativeDirection.names.forEach(relativeDirection => {
-                if (
-                    !sprite.animations.has(`${animationName}_${relativeDirection}`) &&
-                    !sprite.animations.has(`${animationName}`)
-                ) {
-                    missing.push(`${animationName}_${relativeDirection}`)
-                }
-
-            })
-        })
-        return missing
-    }
-
-    get isFloorFeature(): boolean { return false }
     get isWallFeature(): boolean { return true }
-    get isBlocking(): boolean { return false }
     get canInteract(): boolean { return false }
-    get isDrawnInMap(): boolean { return false }
-
-    get size(): Dimensions {
-        if (this.data.sprite) {
-            return this.data.sprite.size || { x: 1, y: 1 }
-        }
-        return { x: 1, y: 1 }
-    }
-
-    get offset(): Dimensions {
-        if (this.data.sprite) {
-            return this.data.sprite.offset || { x: .5, y: .5 }
-        }
-        return { x: .5, y: .5 }
-    }
-
-    setStatus(animation: string): void {
-        if (this.requiredAnimations.includes(animation)) {
-            this.data.animation = animation
-        } else {
-            console.warn(`invalid animation [${animation}] for wall feature`, this)
-        }
-    }
 
     handleInteraction(actor: Vantage, game: Game): void {
         this.fireTriggers(game)
         this.fireReactions(actor, game)
     }
 
-    fireTriggers(game: Game): void {
-        const { triggers = [] } = this.data
 
-        triggers.forEach(trigger => {
-            trigger.fire(this, game)
-        });
-    }
-
-    fireReactions(actor: Vantage, game: Game): void {
-        const { reactions = [] } = this.data
-
-        reactions.forEach(reaction => {
-            reaction.fire(actor, game)
-        })
-    }
-
-    drawInMap(place: Direction, squareCenter: Point): Point[][] {
+    getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {
         const edgeMiddle = place.translatePoint(squareCenter, .5);
         const leftCorner = place.leftOf.translatePoint(edgeMiddle, .5);
         const rightCorner = place.rightOf.translatePoint(edgeMiddle, .5);
@@ -118,7 +62,7 @@ class WallFeature {
 
         let featureImage: CanvasPattern | null = null;
         if (this.data.sprite) {
-            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.data.animation, fullWallPoints);
+            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.status, fullWallPoints);
         }
         if (this.data.textBoard) {
             featureImage = getTextPatternFill(ctx, convertFunction, renderInstruction, this.data.textBoard)
@@ -152,7 +96,7 @@ class WallSwitch extends InteractableWallFeature {
 
 interface DoorConfig {
     sprite: Sprite
-    animation: string
+    animation: "OPEN" | "CLOSED"
     id?: string
     triggers?: Trigger[]
     canOpenDirectly?: boolean
@@ -185,7 +129,7 @@ class Door extends InteractableWallFeature {
         WallFeature.prototype.handleInteraction.apply(this, [actor, game]);
     }
 
-    drawInMap(place: Direction, squareCenter: Point): Point[][] {
+    getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {
 
         const edge = place.translatePoint(squareCenter, .5);
         const leftCorner = place.leftOf.translatePoint(edge, .5);

@@ -4,6 +4,7 @@ import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Direction } from "./Direction";
 import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
+import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 
 
@@ -34,6 +35,16 @@ class SquareWithFeatures extends Vantage {
         this.data.floorFeatures.forEach(feature => {
             feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount)
         })
+    }
+
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
+        const { floorFeatures = [] } = this.data
+        const featureToDraw = floorFeatures.find(feature => feature.isDrawnInMap);
+
+        //TO DO - use getDrawInMapPolygons
+        if (featureToDraw) {
+            Position.prototype.drawInMap.apply(this, [ctx, gridSize])
+        }
     }
 
 }

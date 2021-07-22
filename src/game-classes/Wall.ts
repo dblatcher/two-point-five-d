@@ -153,7 +153,7 @@ class Wall extends Position {
                 plotPolygon(ctx, convert, [rightCorner, rightMiddle], { noClose: true, noFill: true })
             }
         } else {
-            featureToDraw.drawInMap(place, squareCenter).forEach(polygon => {
+            featureToDraw.getDrawInMapPolygons(place, squareCenter).forEach(polygon => {
                 plotPolygon(ctx, convert, polygon, { noClose: true, noFill: true })
             })
         }

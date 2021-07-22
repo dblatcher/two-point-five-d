@@ -9,41 +9,44 @@ import { Trigger } from "./Trigger";
 import { Vantage } from "./Vantage";
 
 
+import { AbstractFeature } from './AbstractFeature'
+import { Sprite } from "@/canvas/Sprite";
+import { Direction } from "./Direction";
+
 interface FloorFeatureConfig {
-    blocksByDefault?: boolean
-    shape?: [number, number][]
-    plotConfig?: PlotConfig,
     triggers?: Trigger[]
     reactions?: Reaction[]
+    blocksByDefault?: boolean
+    sprite?: Sprite
+    animation?: string
+    id?: string
+
+    shape?: [number, number][]
+    plotConfig?: PlotConfig,
 }
 
 
-class FloorFeature  {
+class FloorFeature extends AbstractFeature {
     data: FloorFeatureConfig
     hadWeightOnItLastTick?: boolean
-    thingsOnMeLastTick: Array<Item |Vantage>
+    thingsOnMeLastTick: Array<Item | Vantage>
 
     constructor(config: FloorFeatureConfig) {
-
+        super(config)
         this.data = config
         this.hadWeightOnItLastTick = false
         this.thingsOnMeLastTick = []
     }
 
     get isFloorFeature(): boolean { return true }
-    get isWallFeature(): boolean { return false }
-    get squareX(): number { return .5 }
-    get squareY(): number { return .5 }
-    get isBlocking(): boolean { return !!this.data.blocksByDefault }
+    get isDrawnInMap(): boolean { return true }
 
     /**
      * Check the which of the contents are on the floorFeature's square
      * compare the list with the version stored on the floorFeature last tick
      * do something if there is a change?
      * 
-     * @param playerCharacter 
-     * @param figures 
-     * @param items 
+     * @param square 
      */
     checkWeightChange(square: SquareWithFeatures): {
         newThings: Array<Item | Vantage>
@@ -80,6 +83,13 @@ class FloorFeature  {
         const shapePoints = relativeDirection.rotateShape(exactPlace, shape).map(corner => mapPointOnFloor(corner.f, corner.r))
         plotPolygon(ctx, convertFunction, shapePoints, plotConfig)
     }
+
+    getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {
+        return [
+        //TO DO - default map draing for FloorFeature    
+        ]
+    }
+
 
 }
 
@@ -129,4 +139,4 @@ class Pit extends FloorFeature {
     }
 }
 
-export { FloorFeature, Pit }
+export { FloorFeature, FloorFeatureConfig, Pit }
