@@ -14,6 +14,7 @@ import { itemTypes } from "@/instances/itemTypes"
 import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2, redSquare } from "@/instances/features"
 import { lowWall, doorway, spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
+import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 
 
 
@@ -50,12 +51,12 @@ const busyLevel: Level = new Level({
         new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: sprites.brickWall, features: [painting1] }),
     ],
     contents: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise),  initialAnimation:"WALK" }),
-        duck({ x: 4.25, y: 5.25, direction: Direction.north, behaviour: new Behaviour(decisionFunctions.shiftAround) ,  initialAnimation:"WALK"}),
+        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise), initialAnimation: "WALK" }),
+        duck({ x: 4.25, y: 5.25, direction: Direction.north, behaviour: new Behaviour(decisionFunctions.shiftAround), initialAnimation: "WALK" }),
         duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
 
         new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
-        new Pit({ x: 10, y: 4, direction: Direction.east, plotConfig: { noFill: false } }),
+
     ],
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
@@ -74,18 +75,24 @@ const simpleLevel: Level = new Level({
         new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape: spikey, patternSprite: sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
-        
-        new Wall({ x: 10, y: 4, place: Direction.east, color: new Color(120, 40, 20), shape:doorway, open:true, features:[door2] }),
+
+        new Wall({ x: 10, y: 4, place: Direction.east, color: new Color(120, 40, 20), shape: doorway, open: true, features: [door2] }),
 
     ],
     contents: [
-        // duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveClockwise  ) , initialAnimation:"WALK"}),
-        blueSquare,
-        redSquare
+        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveAntiClockwise  ) , initialAnimation:"WALK"}),
+        new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare] }),
+        new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare] }),
+
+        new SquareWithFeatures({
+            x: 9, y: 4, direction: Direction.north, floorFeatures: [
+                new Pit({}),
+            ]
+        }),
     ],
     items: [
         new Item({
-            type: itemTypes.bardHat, vantage: new Vantage({ x: 4.5, y: 4.5, direction: Direction.north })
+            type: itemTypes.bardHat, vantage: new Vantage({ x: 8.2, y: 6.2, direction: Direction.north })
         }),
         new Item({
             type: itemTypes.helmet, vantage: new Vantage({ x: 5.5, y: 4.5, direction: Direction.north })
@@ -94,7 +101,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 8, y: 4, direction: Direction.east,
+    x: 8, y: 5, direction: Direction.north,
     inventory: [
         null, null,
         new Item({ type: itemTypes.key, }), null,

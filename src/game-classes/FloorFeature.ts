@@ -1,21 +1,15 @@
 import { ConvertFunction, mapPointOnFloor, plotPolygon, RelativePoint, PlotConfig, Point } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
-import { game } from "@/instances/game";
-import { Character } from "./Character";
-import { Direction } from "./Direction";
-import { Figure } from "./Figure";
 import { Item } from "./Item";
 import { Level } from "./Level";
 import { Reaction } from "./Reaction";
 import { RelativeDirection } from "./RelativeDirection";
+import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Trigger } from "./Trigger";
 import { Vantage } from "./Vantage";
 
 
 interface FloorFeatureConfig {
-    x: number
-    y: number
-    direction: Direction
     blocksByDefault?: boolean
     shape?: [number, number][]
     plotConfig?: PlotConfig,
@@ -24,13 +18,13 @@ interface FloorFeatureConfig {
 }
 
 
-class FloorFeature extends Vantage {
+class FloorFeature  {
     data: FloorFeatureConfig
     hadWeightOnItLastTick?: boolean
-    thingsOnMeLastTick: Array<Item | Figure | Character>
+    thingsOnMeLastTick: Array<Item |Vantage>
 
     constructor(config: FloorFeatureConfig) {
-        super(config)
+
         this.data = config
         this.hadWeightOnItLastTick = false
         this.thingsOnMeLastTick = []
@@ -46,35 +40,21 @@ class FloorFeature extends Vantage {
      * Check the which of the contents are on the floorFeature's square
      * compare the list with the version stored on the floorFeature last tick
      * do something if there is a change?
-     * (not efficient for every floorFeature to check every item - see note in Game.tick)
      * 
      * @param playerCharacter 
      * @param figures 
      * @param items 
      */
-    checkWeightChange(playerCharacter: Character, figures: Figure[], items: Item[]): {
-        newThings: Array<Item | Figure | Character>
+    checkWeightChange(square: SquareWithFeatures): {
+        newThings: Array<Item | Vantage>
         usedToHaveWeightOn: boolean
         hasWeightOnNow: boolean
     } {
 
-        const thingsOnMeNow: Array<Item | Figure | Character> = []
-
-        if (playerCharacter.isInSameSquareAs(this)) {
-            thingsOnMeNow.push(playerCharacter)
-        }
-
-        figures.forEach(figure => {
-            if (figure.isInSameSquareAs(this)) {
-                thingsOnMeNow.push(figure)
-            }
-        })
-
-        items.forEach(item => {
-            if (item.figure && item.figure.isInSameSquareAs(this)) {
-                thingsOnMeNow.push(item)
-            }
-        })
+        const thingsOnMeNow: Array<Item | Vantage> = [
+            ...square.itemsOnThisSquareNow,
+            ...square.vantagesOnThisSquareNow
+        ]
 
         const hasWeightOnNow = thingsOnMeNow.length != 0
         const newThings = thingsOnMeNow.filter(thing => !this.thingsOnMeLastTick.includes(thing))
@@ -91,7 +71,7 @@ class FloorFeature extends Vantage {
         const { shape = Vantage.defaultMarkerShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data
         const { place, viewedFrom, relativeDirection = RelativeDirection.FORWARD } = renderInstruction
 
-        const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
+        const rotatedSquarePosition = viewedFrom.rotateSquarePosition(renderInstruction.thing as Vantage);
         const exactPlace: RelativePoint = {
             f: place.forward - 1.5 + rotatedSquarePosition.x,
             r: place.right - .5 + rotatedSquarePosition.y
@@ -114,7 +94,7 @@ class Pit extends FloorFeature {
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { place, viewedFrom, level } = renderInstruction
         const relativeDirection = RelativeDirection.FORWARD
-        const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
+        const rotatedSquarePosition = viewedFrom.rotateSquarePosition(renderInstruction.thing as Vantage);
         const exactPlace: RelativePoint = {
             f: place.forward - 1.5 + rotatedSquarePosition.x,
             r: place.right - .5 + rotatedSquarePosition.y

@@ -1,4 +1,3 @@
-import { FloorFeature } from "@/game-classes/FloorFeature";
 import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
@@ -6,6 +5,7 @@ import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
 import { mapPointInSight, Point, RelativePoint } from "@/canvas/canvas-utility";
 import { Level } from "@/game-classes/Level";
+import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 
 const LOG_RENDER_ORDER = false;
 
@@ -18,7 +18,7 @@ class RenderInstruction {
     relativeDirection?: RelativeDirection
     relativePositionInSquare: { forward: number, right: number }
     isReverseOfWall: boolean
-    subjectClass: typeof Wall | typeof Vantage | typeof Position | typeof FloorFeature
+    subjectClass: typeof Wall | typeof Vantage | typeof Position | typeof SquareWithFeatures
 
     constructor(config: {
         place: { position: Position, forward: number, right: number },
@@ -35,8 +35,8 @@ class RenderInstruction {
         if (Object.getPrototypeOf(subject).constructor === Wall) {
             this.subjectClass = Wall
         }
-        else if (subject.isFloorFeature)
-            this.subjectClass = FloorFeature
+        else if (subject.isSquareWithFeatures)
+            this.subjectClass = SquareWithFeatures
         else if (subject.isVantage)
             this.subjectClass = Vantage
         else {
@@ -68,7 +68,7 @@ class RenderInstruction {
                     break
             }
 
-        } else if (this.subjectClass === Vantage || this.subjectClass === FloorFeature) {
+        } else if (this.subjectClass === Vantage || this.subjectClass === SquareWithFeatures) {
             this.thing = subject;
             this.isReverseOfWall = false
             this.relativePositionInSquare = observer.data.direction.getRelativeSquarePosition(this.thing);
@@ -149,8 +149,8 @@ class RenderInstruction {
         }
 
         //render floor features before figures or walls
-        if ((itemA.subjectClass === FloorFeature) !== (itemB.subjectClass === FloorFeature)) {
-            return itemA.subjectClass === FloorFeature ? -1 : 1
+        if ((itemA.subjectClass === SquareWithFeatures) !== (itemB.subjectClass === SquareWithFeatures)) {
+            return itemA.subjectClass === SquareWithFeatures ? -1 : 1
         }
 
         // if one is a wall and the other isn't
@@ -197,8 +197,8 @@ class RenderInstruction {
                     if (item.subjectClass == Vantage) {
                         console.log('FIGURE', [item.place.forward, item.place.right], item.exactPlace)
                     }
-                    if (item.subjectClass == FloorFeature) {
-                        console.log('FloorFeature', [item.place.forward, item.place.right], item.exactPlace)
+                    if (item.subjectClass == SquareWithFeatures) {
+                        console.log('SquareWithFeatures', [item.place.forward, item.place.right], item.exactPlace)
                     }
                 })
         }

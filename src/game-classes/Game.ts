@@ -7,7 +7,7 @@ import { RelativeDirection } from './RelativeDirection'
 import { Item } from './Item'
 import { Character } from './Character'
 import { Vantage } from './Vantage'
-import { FloorFeature } from './FloorFeature'
+import { SquareWithFeatures } from './SquareWithFeatures'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -64,12 +64,12 @@ class Game {
         this.data.level.tickCount = this.tickCount
 
         const figures: Figure[] = this.data.level.data.contents
-            .filter(item => Object.getPrototypeOf(item).constructor == Figure)
+            .filter(item => Object.getPrototypeOf(item).constructor == Figure) // subclasses???!!
             .map(item => item as Figure)
 
-        const floorFeatures: FloorFeature[] = this.data.level.data.contents
-            .filter(item => Object.getPrototypeOf(item).constructor == FloorFeature)
-            .map(item => item as FloorFeature)
+        const squaresWithFeatures: SquareWithFeatures[] = this.data.level.data.contents
+            .filter(item => Object.getPrototypeOf(item).constructor == SquareWithFeatures)
+            .map(item => item as SquareWithFeatures)
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
@@ -82,19 +82,38 @@ class Game {
             }
         })
 
-        // not very efficient - every floorFeature checks its position aginst every item.vantage and vantange
-        // better: 
-        // - copy each vantage and item.vantage to an array
-        // - map the floorFeature array to array of empty arrays (or better map <FloorFeature, (Vantage|Item)[]>)
-        // - iterate over vantages, move them to the array for the floorFeature they are inSameSquare as (if any)
-        // - use the Vantage[] as the argument for checkweight
-        floorFeatures.forEach(floorFeature => {
-            const { triggers = [] } = floorFeature.data
-            const weightChange = floorFeature.checkWeightChange(this.data.playerCharacter, figures, this.data.level.data.items)
 
-            if (weightChange.hasWeightOnNow !== weightChange.usedToHaveWeightOn) {
-                triggers.forEach(trigger => trigger.fire(floorFeature, this))
+        // make this a method of SquaresWithFeature ?
+        squaresWithFeatures.forEach(square => {
+            square.vantagesOnThisSquareNow = []
+            square.itemsOnThisSquareNow = []
+
+            if (this.data.playerCharacter.isInSameSquareAs(square)) {
+                square.vantagesOnThisSquareNow.push(this.data.playerCharacter)
             }
+
+            figures.forEach(figure => {
+                if (figure.isInSameSquareAs(square)) {
+                    square.vantagesOnThisSquareNow.push(figure)
+                }
+            })
+
+            this.data.level.data.items.forEach(item => {
+                if (item.figure && item.figure.isInSameSquareAs(square)) {
+                    square.itemsOnThisSquareNow.push(item)
+                }
+            })
+        })
+
+        squaresWithFeatures.forEach(square => {
+            square.data.floorFeatures.forEach(floorFeature => {
+                const { triggers = [] } = floorFeature.data
+                const weightChange = floorFeature.checkWeightChange(square)
+
+                if (weightChange.hasWeightOnNow !== weightChange.usedToHaveWeightOn) {
+                    triggers.forEach(trigger => trigger.fire(floorFeature, this))
+                }
+            })
         })
     }
 

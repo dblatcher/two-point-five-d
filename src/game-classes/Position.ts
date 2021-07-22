@@ -19,7 +19,7 @@ class Position {
     }
 
     get isVantage(): boolean { return false }
-    get isFloorFeature(): boolean { return false }
+    get isSquareWithFeatures(): boolean { return false }
 
     get gridX(): number {
         return Math.floor(this.data.x);
@@ -46,21 +46,8 @@ class Position {
     }
 
     changePosition(place: Point, game: Game): void {
-
-        // const floorFeaturesStandingOnBefore = game.data.level.data.contents.filter(thing => 
-        //     thing.isFloorFeature && thing.isInSameSquareAs(this)
-        // )
-
         this.data.x = Position.roundCoordinate(place.x)
         this.data.y = Position.roundCoordinate(place.y)
-
-        // const floorFeaturesStandingOnNow = game.data.level.data.contents.filter(thing => 
-        //     thing.isFloorFeature && thing.isInSameSquareAs(this)
-        // )
-
-        // if (floorFeaturesStandingOnBefore.length >0 || floorFeaturesStandingOnNow.length>0) {
-        //     console.log({floorFeaturesStandingOnBefore,floorFeaturesStandingOnNow})
-        // }
     }
 
     moveAbsolute(direction: Direction, game: Game, ignoreWalls = false): void {

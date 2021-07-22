@@ -55,13 +55,11 @@ const bigSquareOnFloor: [number, number][] = [
 
 
 const blueSquare = new FloorFeature({
-     x: 9, y: 4, direction: Direction.east, 
      blocksByDefault: false, triggers:[plateOpensDoor],
      plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor 
 })
 
 const redSquare = new FloorFeature({
-     x: 10, y: 4, direction: Direction.east, 
      blocksByDefault: false, triggers:[plateOpensDoor],
      plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor 
 })

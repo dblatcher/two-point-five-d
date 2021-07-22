@@ -3,11 +3,11 @@ import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "../canvas/Color";
 import { Direction } from "./Direction";
-import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
+import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall"
 
@@ -44,7 +44,15 @@ class Level {
         const dY = targetY - startY
 
         if (this.data.contents.find(
-            item => item.isFloorFeature && (item as FloorFeature).isBlocking && item.gridX == targetX && item.gridY == targetY
+            item => {
+                if (item.gridX != targetX || item.gridY != targetY) { return false }
+                if (item.isSquareWithFeatures) {
+                    const squareWithFeatures = (item as SquareWithFeatures)
+                    return squareWithFeatures.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
+                }
+                return false
+            }
+
         )) { return true }
 
         if (this.data.walls.find(
