@@ -1,10 +1,9 @@
 
-import { ConvertFunction } from "@/canvas/canvas-utility";
+import { ConvertFunction, plotPolygon, Point } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Direction } from "./Direction";
 import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
-import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 
 
@@ -38,12 +37,12 @@ class SquareWithFeatures extends Vantage {
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
-        const { floorFeatures = [] } = this.data
+
+        const { floorFeatures = [], direction } = this.data
         const featureToDraw = floorFeatures.find(feature => feature.isDrawnInMap);
 
-        //TO DO - use getDrawInMapPolygons
         if (featureToDraw) {
-            Position.prototype.drawInMap.apply(this, [ctx, gridSize])
+            featureToDraw.drawInMap(ctx,gridSize,this,direction)
         }
     }
 

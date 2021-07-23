@@ -1,7 +1,8 @@
-import { Dimensions, Point } from "@/canvas/canvas-utility"
+import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { Sprite } from "@/canvas/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
+import { Position } from "./Position"
 import { Reaction } from "./Reaction"
 import { RelativeDirection } from "./RelativeDirection"
 import { Trigger } from "./Trigger"
@@ -75,7 +76,19 @@ class AbstractFeature {
     }
 
 
-    getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number, position:Position, direction:Direction): void {
+        const convert: ConvertFunction = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
+        const squareCenter: Point = {
+            x: (position.gridX + .5),
+            y: (position.gridY + .5)
+        }
+
+        this.getDrawInMapPolygons(direction, squareCenter).forEach(polygon => {
+            plotPolygon(ctx, convert, polygon, { noClose: true, noFill: true })
+        })
+    }
+
+    getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
         return []
     }
 

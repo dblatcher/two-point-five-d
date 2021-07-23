@@ -84,9 +84,15 @@ class FloorFeature extends AbstractFeature {
         plotPolygon(ctx, convertFunction, shapePoints, plotConfig)
     }
 
-    getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {
+    getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
+
+        const topMiddle = direction.translatePoint(squareCenter, .25);
+        const leftMiddle = direction.leftOf.translatePoint(squareCenter, .25);
+        const bottomMiddle = direction.behind.translatePoint(squareCenter, .25);
+        const rightMiddle = direction.rightOf.translatePoint(squareCenter, .25);
+
         return [
-        //TO DO - default map draing for FloorFeature    
+            [topMiddle,leftMiddle,bottomMiddle, rightMiddle, topMiddle]
         ]
     }
 

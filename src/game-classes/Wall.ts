@@ -89,7 +89,7 @@ class Wall extends Position {
 
         features.forEach(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return }
-            feature.drawInSight(ctx,convertFunction,renderInstruction,tickCount,fullWallPoints, wallShapePoints)
+            feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount, fullWallPoints, wallShapePoints)
         })
 
 
@@ -131,16 +131,20 @@ class Wall extends Position {
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
-        const convert = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
 
         const { place, features = [] } = this.data;
-        const squareCenter: Point = {
-            x: (this.gridX + .5),
-            y: (this.gridY + .5)
-        }
-
         const featureToDraw = features.find(feature => feature.isDrawnInMap);
-        if (!featureToDraw) {
+
+        if (featureToDraw) {
+            featureToDraw.drawInMap(ctx,gridSize,this,this.data.place)
+        } else {
+
+            const convert: ConvertFunction = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
+            const squareCenter: Point = {
+                x: (this.gridX + .5),
+                y: (this.gridY + .5)
+            }
+
             const edge = place.translatePoint(squareCenter, .5);
             const leftCorner = place.leftOf.translatePoint(edge, .5);
             const rightCorner = place.rightOf.translatePoint(edge, .5);
@@ -152,10 +156,6 @@ class Wall extends Position {
                 plotPolygon(ctx, convert, [leftCorner, leftMiddle], { noClose: true, noFill: true })
                 plotPolygon(ctx, convert, [rightCorner, rightMiddle], { noClose: true, noFill: true })
             }
-        } else {
-            featureToDraw.getDrawInMapPolygons(place, squareCenter).forEach(polygon => {
-                plotPolygon(ctx, convert, polygon, { noClose: true, noFill: true })
-            })
         }
     }
 
