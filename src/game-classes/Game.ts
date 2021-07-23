@@ -8,6 +8,8 @@ import { Item } from './Item'
 import { Character } from './Character'
 import { Vantage } from './Vantage'
 import { SquareWithFeatures } from './SquareWithFeatures'
+import { Controller } from './Controller'
+import { AbstractFeature } from './AbstractFeature'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -16,6 +18,7 @@ interface GameConfig {
     itemInHand?: Item
     level: Level
     levels: Level[]
+    controllers: Controller[]
 }
 
 class FeedbackToUI {
@@ -48,6 +51,8 @@ class Game {
     tickCount: number
     pointerLocator: PointerLocator
 
+    featuresTriggeredThisTick: AbstractFeature[]
+
     static MAX_QUEUE_LENGTH: 10
 
     constructor(config: GameConfig) {
@@ -56,16 +61,19 @@ class Game {
         this.tickCount = 0
         this.pointerLocator = new PointerLocator;
         this.tick = this.tick.bind(this)
+
+        this.featuresTriggeredThisTick = []
     }
 
 
     tick(): void {
         this.tickCount++;
         this.data.level.tickCount = this.tickCount
+        this.featuresTriggeredThisTick = []
 
         const figures: Figure[] = this.data.level.data.contents
-            .filter(item => Object.getPrototypeOf(item).constructor == Figure) // subclasses???!!
-            .map(item => item as Figure)
+            .filter(thing => Object.getPrototypeOf(thing).constructor == Figure) // subclasses???!!
+            .map(figure => figure as Figure)
 
         const squaresWithFeatures: SquareWithFeatures[] = this.data.level.data.contents
             .filter(item => Object.getPrototypeOf(item).constructor == SquareWithFeatures)
@@ -83,26 +91,11 @@ class Game {
         })
 
 
-        // make this a method of SquaresWithFeature ?
+        // TODO: make copy of items and figures array that the method can splice from
+        // So square don't have to check if things already assigned are on them too
+        // althought, that woudl stop two squaresWithFeatures having the same location
         squaresWithFeatures.forEach(square => {
-            square.vantagesOnThisSquareNow = []
-            square.itemsOnThisSquareNow = []
-
-            if (this.data.playerCharacter.isInSameSquareAs(square)) {
-                square.vantagesOnThisSquareNow.push(this.data.playerCharacter)
-            }
-
-            figures.forEach(figure => {
-                if (figure.isInSameSquareAs(square)) {
-                    square.vantagesOnThisSquareNow.push(figure)
-                }
-            })
-
-            this.data.level.data.items.forEach(item => {
-                if (item.figure && item.figure.isInSameSquareAs(square)) {
-                    square.itemsOnThisSquareNow.push(item)
-                }
-            })
+            square.updateThingsOnThisSquare(this.data.playerCharacter, figures, this.data.level.data.items)
         })
 
         squaresWithFeatures.forEach(square => {
@@ -114,6 +107,17 @@ class Game {
                 }
             })
         })
+
+        if (this.featuresTriggeredThisTick.length > 0) {
+            this.data.controllers.forEach(controller => {
+                controller.reactToTriggers(this.featuresTriggeredThisTick)
+            })
+        }
+
+        this.data.controllers.forEach(controller => {
+            controller.reactToInputStatus()
+        })
+
     }
 
     changeLevel(levelIndex: number, vantage: Vantage): void {

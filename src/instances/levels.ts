@@ -15,6 +15,7 @@ import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingCl
 import { lowWall, doorway, spikey } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
+import { Controller } from "@/game-classes/Controller";
 
 
 
@@ -27,8 +28,7 @@ const busyLevel: Level = new Level({
     walls: [
         new Wall({ x: 1, y: 2, place: Direction.east, features: [button1] }),
         new Wall({ x: 1, y: 3, place: Direction.west, features: [stairs2] }),
-        new Wall({ x: 3, y: 3, place: Direction.east, shape: doorway, features: [door1, keyhole], open: true }),
-        new Wall({ x: 1, y: 1, place: Direction.east, color: new Color(200, 255, 0), patternSprite: sprites.brickWall, features: [lever1] }),
+
         new Wall({ x: 3, y: 4, place: Direction.east, shape: doorway, open: true }),
         new Wall({ x: 3, y: 2, place: Direction.east, shape: lowWall }),
         new Wall({ x: 4, y: 3, place: Direction.south, shape: lowWall }),
@@ -66,11 +66,8 @@ const busyLevel: Level = new Level({
 const simpleLevel: Level = new Level({
     height: 10, width: 15,
     walls: [
-        new Wall({ x: 6, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [poemBoard,] }),
-        new Wall({ x: 6, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,] }),
-        new Wall({ x: 6, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [advertBoard] }),
-        new Wall({ x: 5, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard,] }),
-        new Wall({ x: 5, y: 2, place: Direction.south, color: new Color(120, 40, 20), features: [poemBoard,] }),
+        new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door1, keyhole], open: true }),
+        new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0), features: [lever1] }),
 
         new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape: spikey, patternSprite: sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
@@ -80,12 +77,12 @@ const simpleLevel: Level = new Level({
 
     ],
     contents: [
-        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveAntiClockwise  ) , initialAnimation:"WALK"}),
+        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveAntiClockwise), initialAnimation: "WALK" }),
         new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare] }),
         new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare] }),
 
         new SquareWithFeatures({
-            x: 9, y: 4, direction: Direction.north, floorFeatures: [
+            x: 2, y: 4, direction: Direction.north, floorFeatures: [
                 new Pit({}),
             ]
         }),
@@ -115,6 +112,15 @@ const playerCharacter = new Character({
         .set("LEGS", null)
 });
 
+const controllers: Controller[] = [
 
+    new Controller({
+        inputs: [blueSquare, redSquare], subject: door2, defaultSubjectState: "CLOSED", statusMap: [
+            [['WEIGHED', 'WEIGHED'], "OPEN"],
+        ]
+    }),
+    new Controller({ inputs: [keyhole], subject: door1, statusChangeOnInputTrigger: "OPEN" }),
 
-export { simpleLevel as level1, busyLevel as level2, playerCharacter }
+]
+
+export { simpleLevel as level1, busyLevel as level2, playerCharacter, controllers }

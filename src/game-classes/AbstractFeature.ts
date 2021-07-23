@@ -2,19 +2,21 @@ import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas
 import { Sprite } from "@/canvas/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
+import { ItemType } from "./ItemType"
 import { Position } from "./Position"
 import { Reaction } from "./Reaction"
 import { RelativeDirection } from "./RelativeDirection"
-import { Trigger } from "./Trigger"
 import { Vantage } from "./Vantage"
 
 interface AbstractFeatureData {
-    triggers?: Trigger[]
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
     animation?: string
     id?: string
+
+    requiresItem?: ItemType
+    consumesItem?: boolean
 }
 
 class AbstractFeature {
@@ -94,10 +96,19 @@ class AbstractFeature {
 
 
     fireTriggers(game: Game): void {
-        const { triggers = [] } = this.data
-        triggers.forEach(trigger => {
-            trigger.fire(this, game)
-        });
+        const { requiresItem, consumesItem } = this.data
+        const { itemInHand } = game.data;
+        if (requiresItem) {
+            if (requiresItem !== itemInHand?.data.type) {
+                console.log(`Do not have ${requiresItem.name}.`)
+                return
+            }
+            if (consumesItem) {
+                console.log(`Used up ${requiresItem.name}.`)
+                game.data.itemInHand = undefined;
+            }
+        }
+        game.featuresTriggeredThisTick.push(this)
     }
 
     fireReactions(actor: Vantage, game: Game): void {

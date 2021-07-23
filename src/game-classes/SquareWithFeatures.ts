@@ -1,7 +1,9 @@
 
 import { ConvertFunction, plotPolygon, Point } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
+import { Character } from "./Character";
 import { Direction } from "./Direction";
+import { Figure } from "./Figure";
 import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
 import { Vantage } from "./Vantage";
@@ -42,10 +44,30 @@ class SquareWithFeatures extends Vantage {
         const featureToDraw = floorFeatures.find(feature => feature.isDrawnInMap);
 
         if (featureToDraw) {
-            featureToDraw.drawInMap(ctx,gridSize,this,direction)
+            featureToDraw.drawInMap(ctx, gridSize, this, direction)
         }
     }
 
+    updateThingsOnThisSquare(playerCharacter: Character, figures: Figure[], items: Item[]): void {
+        this.vantagesOnThisSquareNow = []
+        this.itemsOnThisSquareNow = []
+
+        if (playerCharacter.isInSameSquareAs(this)) {
+            this.vantagesOnThisSquareNow.push(playerCharacter)
+        }
+
+        figures.forEach(figure => {
+            if (figure.isInSameSquareAs(this)) {
+                this.vantagesOnThisSquareNow.push(figure)
+            }
+        })
+
+        items.forEach(item => {
+            if (item.figure && item.figure.isInSameSquareAs(this)) {
+                this.itemsOnThisSquareNow.push(item)
+            }
+        })
+    }
 }
 
 export { SquareWithFeatures, SquareWithFeaturesData }

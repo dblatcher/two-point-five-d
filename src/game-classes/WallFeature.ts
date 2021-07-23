@@ -6,19 +6,19 @@ import { Sprite } from "@/canvas/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Reaction } from "./Reaction"
-import { Trigger } from "./Trigger"
 import { Vantage } from "./Vantage"
 
 import { AbstractFeature } from './AbstractFeature'
+import { ItemType } from "./ItemType"
 
 interface WallFeatureConfig {
-    triggers?: Trigger[]
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
     animation?: string
     id?: string
-
+    requiresItem?: ItemType, 
+    consumesItem?: boolean
     textBoard?: TextBoard
     onBothSides?: boolean
     clipToWall?: boolean
@@ -98,7 +98,6 @@ interface DoorConfig {
     sprite: Sprite
     animation: "OPEN" | "CLOSED"
     id?: string
-    triggers?: Trigger[]
     canOpenDirectly?: boolean
     onBothSides?: boolean
 }

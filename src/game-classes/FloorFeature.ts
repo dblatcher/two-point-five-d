@@ -5,7 +5,6 @@ import { Level } from "./Level";
 import { Reaction } from "./Reaction";
 import { RelativeDirection } from "./RelativeDirection";
 import { SquareWithFeatures } from "./SquareWithFeatures";
-import { Trigger } from "./Trigger";
 import { Vantage } from "./Vantage";
 
 
@@ -14,7 +13,6 @@ import { Sprite } from "@/canvas/Sprite";
 import { Direction } from "./Direction";
 
 interface FloorFeatureConfig {
-    triggers?: Trigger[]
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
@@ -40,6 +38,10 @@ class FloorFeature extends AbstractFeature {
 
     get isFloorFeature(): boolean { return true }
     get isDrawnInMap(): boolean { return true }
+
+    get status():string {
+        return this.hadWeightOnItLastTick ? "WEIGHED" : "NOT_WEIGHED";
+    }
 
     /**
      * Check the which of the contents are on the floorFeature's square
