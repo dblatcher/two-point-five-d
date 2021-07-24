@@ -2,7 +2,6 @@ import { sprites, textBoards } from "@/instances/sprites";
 import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { Direction } from "@/game-classes/Direction";
 import { TeleportReaction, makeTunnel } from "@/game-classes/Reaction";
-import { Sprite } from "@/canvas/Sprite";
 import { itemTypes } from "@/instances/itemTypes";
 import { FloorFeature } from "@/game-classes/FloorFeature";
 
@@ -10,29 +9,29 @@ import { FloorFeature } from "@/game-classes/FloorFeature";
 
 const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
 
-const lever1 = new WallSwitch({ sprite: sprites.leverSprite, animation: "OFF" })
-const painting1 = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation })
-const paintingClipped = new WallFeature({ sprite: sprites.paintingWall, animation: Sprite.defaultWallAnimation, clipToWall: true })
+const lever1 = new WallSwitch({ sprite: sprites.leverSprite, })
+const painting1 = new WallFeature({ sprite: sprites.paintingWall, })
+const paintingClipped = new WallFeature({ sprite: sprites.paintingWall, clipToWall: true })
 const poemBoard = new WallFeature({
-    animation: Sprite.defaultWallAnimation,
+
     clipToWall: true,
     textBoard: textBoards.poem,
 })
 const advertBoard = new WallFeature({
-    animation: Sprite.defaultWallAnimation,
+
     clipToWall: true,
     textBoard: textBoards.advert,
 })
 
-const door1 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly: false, id: "door1" })
-const door2 = new Door({ sprite: sprites.doorSprite, animation: 'CLOSED', canOpenDirectly: false, id: "door2" })
+const door1 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
+const door2 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
 
-const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, animation: Sprite.defaultWallAnimation, reactions: [teleportToCorner] })
-const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, animation: Sprite.defaultWallAnimation, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
+const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, reactions: [teleportToCorner] })
+const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
 
 const tunnel = makeTunnel();
-const stairs = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation, reactions: [tunnel[0]] })
-const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, animation: Sprite.defaultWallAnimation, reactions: [tunnel[1]] })
+const stairs = new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[0]] })
+const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[1]] })
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -41,13 +40,13 @@ const bigSquareOnFloor: [number, number][] = [
 
 
 const blueSquare = new FloorFeature({
-     blocksByDefault: false,
-     plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor 
+    blocksByDefault: false,
+    plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor
 })
 
 const redSquare = new FloorFeature({
-     blocksByDefault: false,
-     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor 
+    blocksByDefault: false,
+    plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
 })
 
 export {

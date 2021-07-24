@@ -16,8 +16,7 @@ interface FloorFeatureConfig {
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
-    animation?: string
-    id?: string
+    status?: string
 
     shape?: [number, number][]
     plotConfig?: PlotConfig,
@@ -32,16 +31,13 @@ class FloorFeature extends AbstractFeature {
     constructor(config: FloorFeatureConfig) {
         super(config)
         this.data = config
+        this.data.status = config.status || this.defaultStatus
         this.hadWeightOnItLastTick = false
         this.thingsOnMeLastTick = []
     }
 
     get isFloorFeature(): boolean { return true }
     get isDrawnInMap(): boolean { return true }
-
-    get status():string {
-        return this.hadWeightOnItLastTick ? "WEIGHED" : "NOT_WEIGHED";
-    }
 
     /**
      * Check the which of the contents are on the floorFeature's square
@@ -67,6 +63,8 @@ class FloorFeature extends AbstractFeature {
 
         this.hadWeightOnItLastTick = hasWeightOnNow;
         this.thingsOnMeLastTick = thingsOnMeNow
+
+        this.setStatus(hasWeightOnNow ? "WEIGHED":"NOT_WEIGHED") // TO DO - don't use status for this - already stored as hadWeightOnItLastTick
 
         return { newThings, usedToHaveWeightOn, hasWeightOnNow }
     }
@@ -94,7 +92,7 @@ class FloorFeature extends AbstractFeature {
         const rightMiddle = direction.rightOf.translatePoint(squareCenter, .25);
 
         return [
-            [topMiddle,leftMiddle,bottomMiddle, rightMiddle, topMiddle]
+            [topMiddle, leftMiddle, bottomMiddle, rightMiddle, topMiddle]
         ]
     }
 
@@ -108,8 +106,11 @@ class Pit extends FloorFeature {
         if (typeof config.blocksByDefault == 'undefined') { this.data.blocksByDefault = true }
     }
 
+    get defaultStatus(): string { return 'OPEN' } // is getting set to WEIGHED or NOT_WEIGHED by
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+
         const { place, viewedFrom, level } = renderInstruction
         const relativeDirection = RelativeDirection.FORWARD
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(renderInstruction.thing as Vantage);

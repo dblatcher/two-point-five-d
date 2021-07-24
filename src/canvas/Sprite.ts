@@ -144,6 +144,11 @@ class Sprite {
         return this.loadImage(animation[frameIndex], animationFrameKey);
     }
 
+    get keyArray(): string[] {
+        const list: string[] = []
+        this.animations.forEach((value: Frame[], key: string) => { list.push(key) })
+        return list
+    }
 
     getFrameSelector(frame: Frame): string {
         return `img[sheet-id=${frame.sheet.id}]`

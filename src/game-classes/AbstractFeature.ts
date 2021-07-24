@@ -12,8 +12,8 @@ interface AbstractFeatureData {
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
-    animation?: string
-    id?: string
+
+    status?: string
 
     requiresItem?: ItemType
     consumesItem?: boolean
@@ -21,9 +21,12 @@ interface AbstractFeatureData {
 
 class AbstractFeature {
     data: AbstractFeatureData
-    constructor(config:AbstractFeatureData) {
+    constructor(config: AbstractFeatureData) {
         this.data = config
+
+        this.data.status = config.status || this.defaultStatus
     }
+    get defaultStatus(): string { return 'NEUTRAL' }
     get isFloorFeature(): boolean { return false }
     get isWallFeature(): boolean { return false }
     get isDrawnInMap(): boolean { return false }
@@ -31,16 +34,18 @@ class AbstractFeature {
 
     get requiredAnimations(): string[] { return [] }
 
-    get status():string {
-        return this.data.animation || Sprite.defaultWallAnimation
-    }
+    get animation(): string {
+        const { status } = this.data
+        if (!this.data.sprite) { return "" }
 
-    setStatus(animation: string): void {
-        if (this.requiredAnimations.includes(animation)) {
-            this.data.animation = animation
-        } else {
-            console.warn(`invalid animation [${animation}] for feature`, this)
+
+        const { keyArray } = this.data.sprite;
+
+        if (status && keyArray.some(key => key.indexOf(status) == 0)) {
+            return status
         }
+
+        return this.defaultStatus
     }
 
     get missingAnimations(): string[] {
@@ -78,7 +83,11 @@ class AbstractFeature {
     }
 
 
-    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number, position:Position, direction:Direction): void {
+    setStatus(newStatus: string): void {
+        this.data.status = newStatus
+    }
+
+    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number, position: Position, direction: Direction): void {
         const convert: ConvertFunction = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
         const squareCenter: Point = {
             x: (position.gridX + .5),
@@ -120,4 +129,4 @@ class AbstractFeature {
 }
 
 
-export {AbstractFeature, AbstractFeatureData}
+export { AbstractFeature, AbstractFeatureData }

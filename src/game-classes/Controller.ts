@@ -1,6 +1,5 @@
 import { AbstractFeature } from "./AbstractFeature";
-import { FloorFeature } from "./FloorFeature";
-import { WallFeature } from "./WallFeature";
+
 
 interface ControllerData {
     inputs: AbstractFeature[]
@@ -21,7 +20,8 @@ class Controller {
     }
 
     get inputStatus(): string[] {
-        const status: string[] = this.data.inputs.map(feature => feature.status)
+        //TO DO - check floorFeature.hasWeight, not floorfeature.data.status
+        const status: string[] = this.data.inputs.map(feature => feature.data.status || feature.defaultStatus)
         return status
     }
 

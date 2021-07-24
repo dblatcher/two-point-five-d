@@ -15,8 +15,7 @@ interface WallFeatureConfig {
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
-    animation?: string
-    id?: string
+    status?:string
     requiresItem?: ItemType, 
     consumesItem?: boolean
     textBoard?: TextBoard
@@ -30,7 +29,7 @@ class WallFeature extends AbstractFeature {
     constructor(config: WallFeatureConfig) {
         super(config)
         this.data = config
-        this.data.animation = this.data.animation || Sprite.defaultWallAnimation
+        this.data.status = config.status || this.defaultStatus
         this.data.onBothSides == !!config.onBothSides
 
         const { missingAnimations } = this
@@ -62,7 +61,7 @@ class WallFeature extends AbstractFeature {
 
         let featureImage: CanvasPattern | null = null;
         if (this.data.sprite) {
-            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.status, fullWallPoints);
+            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.animation, fullWallPoints);
         }
         if (this.data.textBoard) {
             featureImage = getTextPatternFill(ctx, convertFunction, renderInstruction, this.data.textBoard)
@@ -81,9 +80,10 @@ class WallSwitch extends InteractableWallFeature {
 
     get requiredAnimations(): string[] { return ["OFF", "ON"] }
     get isDrawnInMap(): boolean { return true }
+    get defaultStatus(): string { return 'OFF' }
 
     handleInteraction(actor: Vantage, game: Game): void {
-        if (this.data.animation === "OFF") {
+        if (this.data.status === "OFF") {
             this.setStatus("ON");
         } else {
             this.setStatus("OFF");
@@ -96,8 +96,7 @@ class WallSwitch extends InteractableWallFeature {
 
 interface DoorConfig {
     sprite: Sprite
-    animation: "OPEN" | "CLOSED"
-    id?: string
+    status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
     onBothSides?: boolean
 }
@@ -111,15 +110,16 @@ class Door extends InteractableWallFeature {
         if (typeof config.onBothSides == 'undefined') { this.data.onBothSides = true }
     }
 
+    get defaultStatus(): string { return 'OPEN' }
     get requiredAnimations(): string[] { return ["OPEN", "CLOSED"] }
-    get canInteract(): boolean { return this.data.animation === "CLOSED" }
-    get isBlocking(): boolean { return this.data.animation === "CLOSED" }
+    get canInteract(): boolean { return this.data.status === "CLOSED" }
+    get isBlocking(): boolean { return this.data.status === "CLOSED" }
     get isDrawnInMap(): boolean { return true }
 
     handleInteraction(actor: Vantage, game: Game): void {
 
         if (this.data.canOpenDirectly) {
-            if (this.data.animation === "OPEN") {
+            if (this.data.status === "OPEN") {
                 this.setStatus("CLOSED");
             } else {
                 this.setStatus("OPEN");
