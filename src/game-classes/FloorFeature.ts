@@ -11,6 +11,7 @@ import { Vantage } from "./Vantage";
 import { AbstractFeature } from './AbstractFeature'
 import { Sprite } from "@/canvas/Sprite";
 import { Direction } from "./Direction";
+import { Color } from "@/canvas/Color";
 
 interface FloorFeatureConfig {
     reactions?: Reaction[]
@@ -95,18 +96,29 @@ class FloorFeature extends AbstractFeature {
             [topMiddle, leftMiddle, bottomMiddle, rightMiddle, topMiddle]
         ]
     }
+}
 
 
+interface pitConfig {
+    reactions?: Reaction[]
+    blocksByDefault?: boolean
+    sprite?: Sprite
+    status?: "OPEN"|"CLOSED"
+
+    plotConfig?: PlotConfig,
 }
 
 class Pit extends FloorFeature {
-    constructor(config: FloorFeatureConfig) {
+    data: pitConfig
+    constructor(config: pitConfig) {
         super(config)
         this.data = config
         if (typeof config.blocksByDefault == 'undefined') { this.data.blocksByDefault = true }
     }
 
     get defaultStatus(): string { return 'OPEN' }
+    get isBlocking():boolean {return this.data.status === 'OPEN'}
+
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
@@ -129,6 +141,11 @@ class Pit extends FloorFeature {
         const [forwardLeft, forwardRight, backRight, backLeft] = corners;
 
         const floorColor = level.data.floorColor || Level.defaultFloorColor;
+
+        if (this.data.status === 'CLOSED') {
+            plotPolygon(ctx, convertFunction, corners, { strokeStyle: Color.BLACK.css, fillStyle: floorColor.lighter(5).css })
+            return 
+        }
 
         plotPolygon(ctx, convertFunction, corners, { fillStyle: floorColor.darker(5).css })
 

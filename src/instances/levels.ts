@@ -86,6 +86,11 @@ const simpleLevel: Level = new Level({
                 new Pit({}),
             ]
         }),
+        new SquareWithFeatures({
+            x: 2, y: 3, direction: Direction.north, floorFeatures: [
+                new Pit({status:"CLOSED"}),
+            ]
+        }),
     ],
     items: [
         new Item({
@@ -98,7 +103,7 @@ const simpleLevel: Level = new Level({
 })
 
 const playerCharacter = new Character({
-    x: 8, y: 5, direction: Direction.north,
+    x: 5, y: 4, direction: Direction.west,
     inventory: [
         null, null,
         new Item({ type: itemTypes.key, }), null,
