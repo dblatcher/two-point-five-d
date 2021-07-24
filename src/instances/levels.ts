@@ -115,8 +115,8 @@ const playerCharacter = new Character({
 const controllers: Controller[] = [
 
     new Controller({
-        inputs: [blueSquare, redSquare], subject: door2, defaultSubjectState: "CLOSED", statusMap: [
-            [['WEIGHED', 'WEIGHED'], "OPEN"],
+        inputs: [blueSquare, redSquare], subject: door2, defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures:true, statusMap: [
+            [[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "OPEN"],
         ]
     }),
     new Controller({ inputs: [keyhole], subject: door1, statusChangeOnInputTrigger: "OPEN" }),

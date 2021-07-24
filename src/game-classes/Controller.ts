@@ -1,12 +1,12 @@
 import { AbstractFeature } from "./AbstractFeature";
+import { FloorFeature } from "./FloorFeature";
 
 
 interface ControllerData {
     inputs: AbstractFeature[]
     subject: AbstractFeature
-
+    useWeightAsStatusForFloorFeatures?: boolean
     statusChangeOnInputTrigger?: string
-
     statusMap?: [string[], string][]
     defaultSubjectState?: string
 }
@@ -20,8 +20,14 @@ class Controller {
     }
 
     get inputStatus(): string[] {
-        //TO DO - check floorFeature.hasWeight, not floorfeature.data.status
-        const status: string[] = this.data.inputs.map(feature => feature.data.status || feature.defaultStatus)
+        const status: string[] = this.data.inputs.map(feature => {
+
+            if (this.data.useWeightAsStatusForFloorFeatures && feature.isFloorFeature) {
+                return (feature as FloorFeature).hadWeightOnItLastTick ? FloorFeature.WEIGHED : FloorFeature.NOT_WEIGHED
+            }
+
+            return feature.data.status || feature.defaultStatus
+        })
         return status
     }
 

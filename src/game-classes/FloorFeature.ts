@@ -39,10 +39,12 @@ class FloorFeature extends AbstractFeature {
     get isFloorFeature(): boolean { return true }
     get isDrawnInMap(): boolean { return true }
 
+    static WEIGHED = "WEIGHED"
+    static NOT_WEIGHED = "NOT_WEIGHED"
+
     /**
      * Check the which of the contents are on the floorFeature's square
      * compare the list with the version stored on the floorFeature last tick
-     * do something if there is a change?
      * 
      * @param square 
      */
@@ -63,8 +65,6 @@ class FloorFeature extends AbstractFeature {
 
         this.hadWeightOnItLastTick = hasWeightOnNow;
         this.thingsOnMeLastTick = thingsOnMeNow
-
-        this.setStatus(hasWeightOnNow ? "WEIGHED":"NOT_WEIGHED") // TO DO - don't use status for this - already stored as hadWeightOnItLastTick
 
         return { newThings, usedToHaveWeightOn, hasWeightOnNow }
     }
@@ -106,7 +106,7 @@ class Pit extends FloorFeature {
         if (typeof config.blocksByDefault == 'undefined') { this.data.blocksByDefault = true }
     }
 
-    get defaultStatus(): string { return 'OPEN' } // is getting set to WEIGHED or NOT_WEIGHED by
+    get defaultStatus(): string { return 'OPEN' }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
