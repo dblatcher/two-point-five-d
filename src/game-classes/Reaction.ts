@@ -47,7 +47,7 @@ class ChangeLevelReaction extends Reaction {
     }
 
     fire(actor: Vantage, game: Game): void {
-        if (actor !== game.data.playerCharacter) {
+        if (actor !== game.data.playerVantage) {
             console.warn('only the player can change levels')
             return
         }
@@ -66,7 +66,7 @@ class TunnelReaction extends Reaction {
     }
 
     fire(actor: Vantage, game: Game): void {
-        if (actor !== game.data.playerCharacter) {
+        if (actor !== game.data.playerVantage) {
             console.warn('only the player can change levels')
             return
         }

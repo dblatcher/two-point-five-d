@@ -5,6 +5,7 @@ import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
 import { RelativeDirection } from './RelativeDirection'
 import { Item } from './Item'
+import { PlayerVantage } from './PlayerVantage'
 import { Character } from './Character'
 import { Vantage } from './Vantage'
 import { SquareWithFeatures } from './SquareWithFeatures'
@@ -14,11 +15,12 @@ import { AbstractFeature } from './AbstractFeature'
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
 interface GameConfig {
-    playerCharacter: Character,
+    playerVantage: PlayerVantage,
     itemInHand?: Item
     level: Level
     levels: Level[]
     controllers: Controller[]
+    characters: Character[]
 }
 
 class FeedbackToUI {
@@ -81,7 +83,7 @@ class Game {
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
-            nextPlayerAction.perform(this.data.playerCharacter, this);
+            nextPlayerAction.perform(this.data.playerVantage, this);
         }
 
         figures.forEach(figure => {
@@ -95,7 +97,7 @@ class Game {
         // So square don't have to check if things already assigned are on them too
         // althought, that woudl stop two squaresWithFeatures having the same location
         squaresWithFeatures.forEach(square => {
-            square.updateThingsOnThisSquare(this.data.playerCharacter, figures, this.data.level.data.items)
+            square.updateThingsOnThisSquare(this.data.playerVantage, figures, this.data.level.data.items)
         })
 
         squaresWithFeatures.forEach(square => {
@@ -121,16 +123,16 @@ class Game {
     }
 
     changeLevel(levelIndex: number, vantage: Vantage): void {
-        const { levels, playerCharacter } = this.data
+        const { levels, playerVantage } = this.data
         const newLevel = levels[levelIndex];
         if (!newLevel) {
             console.warn(`There is no level ${levelIndex}!`)
             return
         }
         this.data.level = newLevel;
-        playerCharacter.data.direction = vantage.data.direction
-        playerCharacter.data.x = vantage.data.x
-        playerCharacter.data.y = vantage.data.y
+        playerVantage.data.direction = vantage.data.direction
+        playerVantage.data.x = vantage.data.x
+        playerVantage.data.y = vantage.data.y
     }
 
     queuePlayerMovementAction(movement: Movement): void {
@@ -141,11 +143,11 @@ class Game {
     }
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
-        const { level, playerCharacter, itemInHand } = this.data
+        const { level, playerVantage, itemInHand } = this.data
         const { pointerLocator } = this
         const { walls, items } = level.data
-        const playerHasWallInFace = level.hasWallInFace(playerCharacter)
-        const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerCharacter)
+        const playerHasWallInFace = level.hasWallInFace(playerVantage)
+        const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerVantage)
         const locations = pointerLocator.locate(clickInfo, playerHasWallInFace)
         if (locations.length == 0) { return }
 
@@ -154,9 +156,9 @@ class Game {
             const location = locations[index];
 
             if (location.type === 'WALL') {
-                const wallClicked = pointerLocator.identifyClickedWall(location, walls, playerCharacter);
+                const wallClicked = pointerLocator.identifyClickedWall(location, walls, playerVantage);
                 if (!wallClicked) { continue }
-                const isReverseOfWall = wallClicked.reverseSideShowingfrom(this.data.playerCharacter)
+                const isReverseOfWall = wallClicked.reverseSideShowingfrom(this.data.playerVantage)
                 const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall);
 
                 if (!featureClicked) {
@@ -174,7 +176,7 @@ class Game {
             }
 
             // playerHasWallInFace is true even if the wall is an open door
-            const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerCharacter, items, clickInfo, !squareAheadIsBlocked)
+            const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerVantage, items, clickInfo, !squareAheadIsBlocked)
 
             if (itemClicked) {
                 if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
@@ -185,16 +187,16 @@ class Game {
 
             if (location.type === 'FLOOR') {
                 if (location.zone == "FLOOR") {
-                    const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerCharacter.data.direction);
+                    const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerVantage.data.direction);
                     const withinSquareAhead = rotatedLocation.x <= 1 && rotatedLocation.y < 1 && rotatedLocation.x >= 0 && rotatedLocation.y >= 0
 
                     const positionClicked = new Position({
-                        x: playerCharacter.data.x + rotatedLocation.x,
-                        y: playerCharacter.data.y + rotatedLocation.y
-                    }).translate(playerCharacter.data.direction)
+                        x: playerVantage.data.x + rotatedLocation.x,
+                        y: playerVantage.data.y + rotatedLocation.y
+                    }).translate(playerVantage.data.direction)
 
                     if (itemInHand && withinSquareAhead) {
-                        itemInHand.placeAt(positionClicked, this.data.playerCharacter.data.direction, this);
+                        itemInHand.placeAt(positionClicked, this.data.playerVantage.data.direction, this);
                         this.data.itemInHand = undefined;
                     }
 
@@ -205,7 +207,7 @@ class Game {
     }
 
     handleInventoryClick(item: Item, index: number): FeedbackToUI {
-        const { inventory } = this.data.playerCharacter.data
+        const { inventory } = this.data.characters[0].data
         const { itemInHand } = this.data
 
         if (item) {
@@ -228,13 +230,13 @@ class Game {
     }
 
     handleEquipSlotClick(clickInfo: { slotName: string, character?: Character }): FeedbackToUI {
-        const character = clickInfo.character || this.data.playerCharacter;
+        const character = clickInfo.character || this.data.characters[0];
         const { itemInHand } = this.data;
         return character.equip(clickInfo.slotName, itemInHand, this);
     }
 
     handleSelfClick(clickInfo: { buttonName: string, character?: Character }): FeedbackToUI {
-        const character = clickInfo.character || this.data.playerCharacter;
+        const character = clickInfo.character || this.data.characters[0];
         const { itemInHand } = this.data;
 
         switch (clickInfo.buttonName) {

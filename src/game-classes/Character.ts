@@ -4,23 +4,19 @@ import { Item } from "./Item";
 import { Vantage } from "./Vantage";
 
 interface CharacterConfig {
-    x: number
-    y: number
-    direction: Direction
+    name?:string
     inventory: Array<Item | null>
     equipmentSlots?: Map<string, Item | null>
 }
 
-class Character extends Vantage {
-
+class Character {
     data: CharacterConfig
     constructor(config: CharacterConfig) {
-        super(config)
         this.data = config
     }
 
     say(message: string, game: Game): void {
-        console.log(`CHARACTER: "${message}"`)
+        console.log(`${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`)
     }
 
     consume(item: Item, game: Game): FeedbackToUI {
@@ -68,7 +64,6 @@ class Character extends Vantage {
 
         return FeedbackToUI.empty
     }
-
 }
 
 export { Character, CharacterConfig }

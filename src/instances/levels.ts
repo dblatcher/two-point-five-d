@@ -6,7 +6,7 @@ import { Level } from "@/game-classes/Level";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Item } from "@/game-classes/Item";
-import { Character } from "@/game-classes/Character";
+import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
 import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
@@ -102,19 +102,8 @@ const simpleLevel: Level = new Level({
     ]
 })
 
-const playerCharacter = new Character({
+const playerVantage = new PlayerVantage({
     x: 5, y: 4, direction: Direction.west,
-    inventory: [
-        null, null,
-        new Item({ type: itemTypes.key, }), null,
-        null, new Item({ type: itemTypes.bean }),
-        null, null,
-        null, null,
-    ],
-    equipmentSlots: new Map<string, Item | null>()
-        .set("HEAD", new Item({ type: itemTypes.helmet }))
-        .set("TORSO", null)
-        .set("LEGS", null)
 });
 
 const controllers: Controller[] = [
@@ -128,4 +117,4 @@ const controllers: Controller[] = [
 
 ]
 
-export { simpleLevel as level1, busyLevel as level2, playerCharacter, controllers }
+export { simpleLevel as level1, busyLevel as level2, playerVantage, controllers }

@@ -59,13 +59,13 @@ export default class InventoryWindow extends Vue {
 
   get inventory(): Array<Item | null> {
     const store = useStore() as typeof gameStore;
-    return toRaw(store.state.game.data.playerCharacter.data.inventory);
+    return toRaw(store.state.game.data.characters[0].data.inventory);
   }
 
   getEquipment(slotName:string) : Item|null {
     const store = useStore() as typeof gameStore;
 
-    return toRaw(store.state.game.data.playerCharacter.data.equipmentSlots?.get(slotName)) || null;
+    return toRaw(store.state.game.data.characters[0].data.equipmentSlots?.get(slotName)) || null;
   }
 
   handleInventoryClick(item: Item, index: number): void {

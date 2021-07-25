@@ -256,18 +256,18 @@ class PointerLocator {
         return { x, y }
     }
 
-    identifyClickedItemOnFloor(playerCharacter: Vantage, items: Item[], clickInfo: Point, canReachSquareAhead = false): Item | null {
-        const squareIn = new Position(playerCharacter.data);
+    identifyClickedItemOnFloor(playerVantage: Vantage, items: Item[], clickInfo: Point, canReachSquareAhead = false): Item | null {
+        const squareIn = new Position(playerVantage.data);
         const itemsInSquareIn = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareIn))
-        const squareAhead = squareIn.translate(playerCharacter.data.direction)
+        const squareAhead = squareIn.translate(playerVantage.data.direction)
         const itemsInSquareAhead = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareAhead))
 
         if (!canReachSquareAhead) {
-            return identifyClickedItemInSquare(playerCharacter.data.direction, itemsInSquareIn, clickInfo, 0)
+            return identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareIn, clickInfo, 0)
         }
 
-        return identifyClickedItemInSquare(playerCharacter.data.direction, itemsInSquareIn, clickInfo, 0) ||
-            identifyClickedItemInSquare(playerCharacter.data.direction, itemsInSquareAhead, clickInfo, 1)
+        return identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareIn, clickInfo, 0) ||
+            identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareAhead, clickInfo, 1)
 
         function identifyClickedItemInSquare(viewedFrom: Direction, items: Item[], clickInfo: Point, forward = 0): Item | null {
             return items.find(item => {

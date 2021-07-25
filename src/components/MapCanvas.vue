@@ -3,8 +3,8 @@
     <figcaption>{{ caption }}</figcaption>
     <canvas ref="canvas"></canvas>
     <p>
-      {{ $store.state.game.data.playerCharacter.gridX }}, {{ $store.state.game.data.playerCharacter.gridY }}
-      {{ $store.state.game.data.playerCharacter.data.direction.name }}
+      {{ $store.state.game.data.playerVantage.gridX }}, {{ $store.state.game.data.playerVantage.gridY }}
+      {{ $store.state.game.data.playerVantage.data.direction.name }}
     </p>
   </figure>
 </template>
@@ -40,9 +40,9 @@ export default class MapCanvas extends Vue {
   }
 
   draw(): void {
-    const { playerCharacter, level } = this.$store.state.game.data;
+    const { playerVantage, level } = this.$store.state.game.data;
     const canvas = this.$refs.canvas;
-    level.drawAsMap(canvas, playerCharacter, 20 );
+    level.drawAsMap(canvas, playerVantage, 20 );
   }
 }
 </script>

@@ -1,7 +1,7 @@
 
-import { ConvertFunction, plotPolygon, Point } from "@/canvas/canvas-utility";
+import { ConvertFunction } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
-import { Character } from "./Character";
+import { PlayerVantage } from "./PlayerVantage";
 import { Direction } from "./Direction";
 import { Figure } from "./Figure";
 import { FloorFeature } from "./FloorFeature";
@@ -48,12 +48,12 @@ class SquareWithFeatures extends Vantage {
         }
     }
 
-    updateThingsOnThisSquare(playerCharacter: Character, figures: Figure[], items: Item[]): void {
+    updateThingsOnThisSquare(playerVantage: PlayerVantage, figures: Figure[], items: Item[]): void {
         this.vantagesOnThisSquareNow = []
         this.itemsOnThisSquareNow = []
 
-        if (playerCharacter.isInSameSquareAs(this)) {
-            this.vantagesOnThisSquareNow.push(playerCharacter)
+        if (playerVantage.isInSameSquareAs(this)) {
+            this.vantagesOnThisSquareNow.push(playerVantage)
         }
 
         figures.forEach(figure => {
