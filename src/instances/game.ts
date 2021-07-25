@@ -5,7 +5,7 @@ import { Character } from '@/game-classes/Character';
 import { itemTypes } from './itemTypes';
 import { Item } from '@/game-classes/Item';
 
-const character = new Character({
+const boblin = new Character({
     name: "Boblin",
     inventory: [
         null, null,
@@ -20,12 +20,27 @@ const character = new Character({
         .set("LEGS", null)
 });
 
+const drake = new Character({
+    name: "Drake",
+    inventory: [
+        null, null,
+        null, null,
+        null, null,
+        null, null,
+        null, null,
+    ],
+    equipmentSlots: new Map<string, Item | null>()
+        .set("HEAD", new Item({ type: itemTypes.helmet }))
+        .set("TORSO", null)
+        .set("LEGS", null)
+});
+
 const game = new Game({
     level: level1,
     levels: [level1, level2],
     playerVantage,
     controllers,
-    characters: [character],
+    characters: [drake, boblin],
 })
 
 export { game }

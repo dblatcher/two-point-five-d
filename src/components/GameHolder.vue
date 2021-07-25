@@ -2,7 +2,13 @@
   <div v-if="spritesLoaded">
     <nav class="menu">
       <pause-button />
-      <button @click="()=>{characterScreenOpen = !characterScreenOpen}">open character screen</button>
+      <button
+        v-for="(character, index) in characters"
+        :key="index"
+        @click="characterButtonClick(character)"
+      >
+        {{ character.data.name }}
+      </button>
     </nav>
     <main>
       <section class="sight">
@@ -10,15 +16,16 @@
       </section>
 
       <section class="controls">
-        <item-in-hand/>
+        <item-in-hand />
         <map-canvas />
         <controls />
       </section>
     </main>
 
-    <aside v-show="characterScreenOpen">
-      <self-window />
-      <inventory-window />
+    <aside v-if="characterWithScreenOpen">
+      {{characterWithScreenOpen?.data.name}}
+      <self-window :character="characterWithScreenOpen" />
+      <inventory-window :character="characterWithScreenOpen" />
     </aside>
   </div>
 
@@ -37,10 +44,13 @@ import PauseButton from "./PauseButton.vue";
 import InventoryWindow from "./InventoryWindow.vue";
 import SelfWindow from "./SelfWindow.vue";
 import ItemInHand from "./ItemInHand.vue";
+import { Character } from "@/game-classes/Character";
+import { toRaw } from "@vue/reactivity";
 
-interface MyTestComponentData {
-  characterScreenOpen: boolean
-  spritesLoaded: boolean
+interface GameHolderData {
+  characterScreenOpen: boolean;
+  characterWithScreenOpen: Character | null;
+  spritesLoaded: boolean;
 }
 
 @Options({
@@ -59,17 +69,31 @@ interface MyTestComponentData {
 export default class GameHolder extends Vue {
   $store!: typeof gameStore;
   spritesLoaded!: boolean;
+  characterWithScreenOpen!: Character | null;
 
-  data(): MyTestComponentData {
+  data(): GameHolderData {
     return {
       characterScreenOpen: true,
       spritesLoaded: false,
+      characterWithScreenOpen: null,
     };
+  }
+
+  characterButtonClick(character: Character): void {
+    if (character == toRaw(this.characterWithScreenOpen)) {
+      this.characterWithScreenOpen = null;
+    } else {
+      this.characterWithScreenOpen = character;
+    }
   }
 
   handleAllSpriteSheetsLoaded(): void {
     this.$store.dispatch("startTimer");
     this.spritesLoaded = true;
+  }
+
+  get characters(): Character[] {
+    return toRaw(this.$store.state.game.data.characters);
   }
 }
 </script>
@@ -99,7 +123,7 @@ main {
 aside {
   position: fixed;
   bottom: 0;
-  margin:0;
+  margin: 0;
   box-sizing: border-box;
   background-color: rgba($color: #a44, $alpha: 0.5);
   display: flex;

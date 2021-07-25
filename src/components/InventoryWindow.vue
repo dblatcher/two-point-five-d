@@ -1,28 +1,29 @@
 <template>
   <section :timeStamp="timeStamp.toString()">
-
     <div class="bag">
       <item-slot
         v-for="(item, index) in inventory"
         :key="index"
         @click="handleInventoryClick(item, index)"
         :item="item"
-        :imgIcon="index == 0 ? '/img/bag.png':''"
+        :imgIcon="index == 0 ? '/img/bag.png' : ''"
       />
     </div>
   </section>
   <section :timeStamp="timeStamp.toString()">
-
     <div>
-      <item-slot @click="handleEquipSlotClick('HEAD')"
+      <item-slot
+        @click="handleEquipSlotClick('HEAD')"
         :imgIcon="'/img/head.png'"
         :item="getEquipment('HEAD')"
       />
-      <item-slot @click="handleEquipSlotClick('TORSO')"
+      <item-slot
+        @click="handleEquipSlotClick('TORSO')"
         :imgIcon="'/img/torso.png'"
         :item="getEquipment('TORSO')"
       />
-      <item-slot @click="handleEquipSlotClick('LEGS')"
+      <item-slot
+        @click="handleEquipSlotClick('LEGS')"
         :imgIcon="'/img/legs.png'"
         :item="getEquipment('LEGS')"
       />
@@ -39,17 +40,20 @@ import ItemSlot from "./ItemSlot.vue";
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
 import { toRaw } from "vue";
-
-
+import { Character } from "@/game-classes/Character";
 
 @Options({
   components: {
     ItemSlot,
   },
+  props: {
+    character: Character,
+  },
 })
 export default class InventoryWindow extends Vue {
   caption!: string;
   $store!: typeof gameStore;
+  character!: Character;
 
   // maintains reactivity - change to the store value triggers updated()
   get timeStamp(): number {
@@ -58,22 +62,26 @@ export default class InventoryWindow extends Vue {
   }
 
   get inventory(): Array<Item | null> {
-    const store = useStore() as typeof gameStore;
-    return toRaw(store.state.game.data.characters[0].data.inventory);
+    return toRaw(this.character.data.inventory);
   }
 
-  getEquipment(slotName:string) : Item|null {
-    const store = useStore() as typeof gameStore;
-
-    return toRaw(store.state.game.data.characters[0].data.equipmentSlots?.get(slotName)) || null;
+  getEquipment(slotName: string): Item | null {
+    return toRaw(this.character.data.equipmentSlots?.get(slotName)) || null;
   }
 
   handleInventoryClick(item: Item, index: number): void {
-    this.$store.dispatch("inventoryClick", { item, index });
+    this.$store.dispatch("inventoryClick", {
+      item,
+      index,
+      character: toRaw(this.character),
+    });
   }
 
-  handleEquipSlotClick(slotName:string): void {
-    this.$store.dispatch("equipSlotClick", { slotName });
+  handleEquipSlotClick(slotName: string): void {
+    this.$store.dispatch("equipSlotClick", {
+      slotName,
+      character: toRaw(this.character),
+    });
   }
 }
 </script>

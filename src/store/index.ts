@@ -1,14 +1,15 @@
-import { toRaw } from 'vue'
+import { markRaw, toRaw } from 'vue'
 import { createStore } from 'vuex'
 
 import { spriteSheets } from '@/instances/sprites'
 import { game } from '@/instances/game'
 import { Item } from '@/game-classes/Item'
+import { Character } from '@/game-classes/Character'
 
 
 export default createStore({
   state: {
-    game,
+    game: markRaw(game),
     timestamp: Date.now(),
     spriteSheets,
     timer: 0,
@@ -32,19 +33,19 @@ export default createStore({
         toRaw(state.game).handleSightClick(clickInfo)
       }
     },
-    inventoryClick({ state }, clickInfo:{item: Item, index:number}) {
+    inventoryClick({ state }, clickInfo: { item: Item, index: number, character: Character }) {
       if (!this.getters.gameIsPaused) {
-        toRaw(state.game).handleInventoryClick(toRaw(clickInfo.item), clickInfo.index)
+        toRaw(state.game).handleInventoryClick(toRaw(clickInfo))
       }
     },
 
-    equipSlotClick({ state }, clickInfo:{slotName:string}) {
+    equipSlotClick({ state }, clickInfo: { slotName: string, character: Character }) {
       if (!this.getters.gameIsPaused) {
         return toRaw(state.game).handleEquipSlotClick(clickInfo)
       }
     },
 
-    selfClick({state}, clickInfo:{buttonName:string}) {
+    selfClick({ state }, clickInfo: { buttonName: string, character: Character }) {
       if (!this.getters.gameIsPaused) {
         return toRaw(state.game).handleSelfClick(toRaw(clickInfo))
       }

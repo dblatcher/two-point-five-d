@@ -1,6 +1,5 @@
 <template>
   <section @mouseleave="clearOutput()">
-
     <div class="control-icon" @click="doSelfClick('LOOK')">
       <figure>
         <figcaption>examine</figcaption>
@@ -37,6 +36,7 @@ import ItemSlot from "./ItemSlot.vue";
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
 import { FeedbackToUI } from "@/game-classes/Game";
+import { Character } from "@/game-classes/Character";
 
 interface SelfWindowData {
   feedback: FeedbackToUI;
@@ -46,10 +46,14 @@ interface SelfWindowData {
   components: {
     ItemSlot,
   },
+  props: {
+    character: Character,
+  },
 })
 export default class SelfWindow extends Vue {
   $store!: typeof gameStore;
   feedback!: FeedbackToUI;
+  character!: Character;
 
   data(): SelfWindowData {
     return {
@@ -59,7 +63,7 @@ export default class SelfWindow extends Vue {
 
   doSelfClick(verb: string): void {
     this.$store
-      .dispatch("selfClick", { buttonName: verb })
+      .dispatch("selfClick", { buttonName: verb, character:this.character })
       .then((feedback: FeedbackToUI) => {
         this.feedback = feedback;
       });
@@ -69,9 +73,6 @@ export default class SelfWindow extends Vue {
     this.feedback = FeedbackToUI.empty;
   }
 
-  handleInventoryClick(item: Item, index: number): void {
-    this.$store.dispatch("inventoryClick", { item, index });
-  }
 }
 </script>
 
