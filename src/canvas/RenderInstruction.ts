@@ -3,11 +3,12 @@ import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
-import { mapPointInSight, Point, RelativePoint } from "@/canvas/canvas-utility";
+import { mapPointInSight, MAX_VIEW_DISTANCE, Point, RelativePoint } from "@/canvas/canvas-utility";
 import { Level } from "@/game-classes/Level";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 
 const LOG_RENDER_ORDER = false;
+const USE_MATRIX_SORT = true;
 
 class RenderInstruction {
     place: { position: Position, forward: number, right: number }
@@ -18,6 +19,8 @@ class RenderInstruction {
     relativeDirection?: RelativeDirection
     relativePositionInSquare: { forward: number, right: number }
     isReverseOfWall: boolean
+    forwardToBackRenderOrder: number
+    sideToSideRenderOrder: number | undefined
     subjectClass: typeof Wall | typeof Vantage | typeof Position | typeof SquareWithFeatures
 
     constructor(config: {
@@ -83,6 +86,10 @@ class RenderInstruction {
             this.relativePositionInSquare.right -= .5;
         }
 
+        this.forwardToBackRenderOrder = this.calculateForwardToBackRenderOrder()
+        if (this.forwardToBackRenderOrder == 0) {
+            this.sideToSideRenderOrder = this.calculateSideToSideRenderOrder()
+        }
     }
 
     get viewedFrom(): Direction {
@@ -183,9 +190,87 @@ class RenderInstruction {
         return 0
     }
 
+
+    calculateForwardToBackRenderOrder(): number {
+        if (this.subjectClass === SquareWithFeatures) {
+            return 300
+        }
+        if (this.subjectClass === Wall && this.relativeDirection === RelativeDirection.FORWARD) {
+            if (this.isReverseOfWall) { return 200 }
+            return 100
+        }
+        if (this.subjectClass === Wall && this.relativeDirection === RelativeDirection.BACK) {
+            if (this.isReverseOfWall) { return -100 }
+            return -200
+        }
+        return 0 // vantage, position or side facing wall
+    }
+
+    calculateSideToSideRenderOrder(): number {
+
+        let placeScore = Math.abs(this.exactPlace.r) * 100000
+        if (this.isReverseOfWall) { placeScore += 1000 }
+
+        if (LOG_RENDER_ORDER && this.subjectClass === Vantage) {
+            console.log({ placeScore }, this.wall || this.thing)
+        }
+
+        return placeScore
+    }
+
     static putInOrder(list: RenderInstruction[]): RenderInstruction[] {
 
-        const sortedList = list.sort(RenderInstruction.sortFunction);
+        // problem - figure's position is their center
+        // if the center is in a forward, but the 'front' of the figure over to the row closer to observer
+        // the walls of the closer row are rendered after(over) the figure
+
+        // is the problem that the figures are allowed to be closer to the wall that they should be?
+        // IE their shape 'goes through' a wall?
+
+        if (USE_MATRIX_SORT) {
+
+            const viewMatrix: RenderInstruction[][] = [];
+
+            for (let rowIndex = 0; rowIndex < MAX_VIEW_DISTANCE; rowIndex++) {
+                viewMatrix.push([])
+                viewMatrix[rowIndex].push(...list.filter(instruction => instruction.place.forward === rowIndex))
+            }
+            viewMatrix.reverse()
+
+            viewMatrix.forEach(row => {
+                row.sort((instructionA, instructionB) => {
+
+                    //not back or front wall
+                    if (typeof instructionA.sideToSideRenderOrder == 'number' && typeof instructionB.sideToSideRenderOrder == 'number') {
+
+                        // if they are things in the same square, use front position to order
+                        if (instructionA.thing && instructionB.thing) {
+                            if (instructionA.thing.isInSameSquareAs(instructionB.thing)) {
+                                return instructionB.relativePositionInSquare.forward - instructionA.relativePositionInSquare.forward
+                            }
+                        }
+
+                        return instructionB.sideToSideRenderOrder - instructionA.sideToSideRenderOrder
+                    }
+
+                    return instructionB.forwardToBackRenderOrder - instructionA.forwardToBackRenderOrder
+                })
+            })
+
+            if (LOG_RENDER_ORDER) {
+                console.log(viewMatrix)
+            }
+
+            return viewMatrix.flat()
+
+        }
+
+
+
+        let sortedList = list.map(instruction => instruction)
+
+
+        sortedList = list.sort(RenderInstruction.sortFunction);
 
         if (LOG_RENDER_ORDER) {
             console.log("***")
