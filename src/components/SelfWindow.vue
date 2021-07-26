@@ -80,7 +80,7 @@ export default class SelfWindow extends Vue {
 section {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: .25rem;
 
   .control-icon {
     border: 1px solid black;

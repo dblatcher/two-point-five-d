@@ -89,7 +89,7 @@ export default class InventoryWindow extends Vue {
 <style scoped lang="scss">
 section {
   display: inline-block;
-  padding: 1rem;
+  padding: .25rem;
 
   div.bag {
     display: flex;

@@ -1,8 +1,14 @@
 <template>
-  <aside v-if="character" :style="computedStyle">
-      <p>{{character.data.name}}</p>
-            <self-window :character="character" />
-      <inventory-window :character="character" />
+  <aside v-if="character" >
+      <header :style="computedHeaderStyle">
+        <slot></slot>
+        <h3>{{character.data.name}}</h3>
+        <button @click="$emit('close')">close</button>
+      </header>
+      <main :style="computedMainStyle">
+        <self-window :character="character" />
+        <inventory-window :character="character" />
+      </main>
   </aside>
 </template>
 
@@ -13,35 +19,55 @@ import { Game } from "@/game-classes/Game";
 import { Options, Vue } from "vue-class-component";
 import InventoryWindow from "./InventoryWindow.vue";
 import SelfWindow from "./SelfWindow.vue";
+import { Color } from "@/canvas/Color";
+import { toRaw } from "vue";
 
 
 interface styleObject {
-    backgroundColor:string
+    backgroundColor?:string
+    borderColor?:string
 }
 
 @Options({
   props: {
-    character: Character,
     index:Number
   },
   components: {
     InventoryWindow,
     SelfWindow,
   },
+  emits:[
+    'close'
+  ]
 })
 export default class GameHolder extends Vue {
-    character!: Character;
     index!: number;
     $store!: typeof gameStore;
 
-    get backgroundColor():string {
-        const colorIndex = this.index < Game.CHARACTER_COLORS.length ? this.index : 0;
-        return Game.CHARACTER_COLORS[colorIndex].opacityAt(.7).css
+
+    get characters(): Character[] {
+      return toRaw(this.$store.state.game.data.characters);
     }
 
-    get computedStyle():styleObject {
+    get character():Character|null {
+      if (this.index == null) {return  null}
+      return toRaw(this.$store.state.game.data.characters[this.index]);
+    }
+
+    get backgroundColor():Color {
+        const colorIndex = this.index < Game.CHARACTER_COLORS.length ? this.index : 0;
+        return Game.CHARACTER_COLORS[colorIndex]
+    }
+
+    get computedHeaderStyle():styleObject {
         return {
-            backgroundColor: this.backgroundColor
+            backgroundColor: this.backgroundColor.opacityAt(.9).css,
+        }
+    }
+    get computedMainStyle():styleObject {
+        return {
+            backgroundColor: this.backgroundColor.opacityAt(.5).lighter(50).css,
+            borderColor: this.backgroundColor.opacityAt(.9).css,
         }
     }
 }
@@ -54,7 +80,26 @@ aside {
   bottom: 0;
   margin: 0;
   box-sizing: border-box;
-  display: flex;
+  color: black;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem;
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  main {
+    display: flex;
+    border-style: solid;
+    border-left-width: .25rem;
+    border-right-width: .25rem;
+    border-bottom-width: .25rem;
+  }
+
 }
 
 </style>

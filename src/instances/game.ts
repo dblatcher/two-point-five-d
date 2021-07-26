@@ -30,6 +30,21 @@ const drake = new Character({
         null, null,
     ],
     equipmentSlots: new Map<string, Item | null>()
+        .set("HEAD", null)
+        .set("TORSO", null)
+        .set("LEGS", null)
+});
+
+const sally = new Character({
+    name: "Sally",
+    inventory: [
+        null, null,
+        null, null,
+        null, null,
+        null, null,
+        null, null,
+    ],
+    equipmentSlots: new Map<string, Item | null>()
         .set("HEAD", new Item({ type: itemTypes.helmet }))
         .set("TORSO", null)
         .set("LEGS", null)
@@ -40,7 +55,7 @@ const game = new Game({
     levels: [level1, level2],
     playerVantage,
     controllers,
-    characters: [drake, boblin],
+    characters: [drake, boblin, sally],
 })
 
 export { game }
