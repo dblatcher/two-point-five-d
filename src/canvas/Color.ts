@@ -26,6 +26,11 @@ class Color {
         return new Color(r + amount, g + amount, b + amount, a).normalise()
     }
 
+    opacityAt(amount:number): Color {
+        const { r, g, b } = this
+        return new Color(r, g, b, amount).normalise()
+    }
+
     normalise(): Color {
         function normaliseComponent(v: number) {
             return v < 0 ? 0 : v > 255 ? 255 : v
@@ -43,6 +48,10 @@ class Color {
 
     static BLACK = new Color(0,0,0);
     static TRANSPARENT = new Color(0,0,0,0);
+    static RED = new Color(200,40,40);
+    static GREEN = new Color(40,200,40);
+    static BLUE = new Color(40,40,200);
+    static YELLOW = new Color(150,150,40);
 }
 
 

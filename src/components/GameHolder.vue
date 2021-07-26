@@ -5,7 +5,8 @@
       <button
         v-for="(character, index) in characters"
         :key="index"
-        @click="characterButtonClick(character)"
+        @click="characterButtonClick(character, index)"
+        :style="characterButtonStyle(index)"
       >
         {{ character.data.name }}
       </button>
@@ -22,11 +23,10 @@
       </section>
     </main>
 
-    <aside v-if="characterWithScreenOpen">
-      {{characterWithScreenOpen?.data.name}}
-      <self-window :character="characterWithScreenOpen" />
-      <inventory-window :character="characterWithScreenOpen" />
-    </aside>
+    <character-screen
+      :character="characterWithScreenOpen"
+      :index="indexOfCharacterWithScreenOpen"
+    />
   </div>
 
   <p v-if="!spritesLoaded">loading...</p>
@@ -41,15 +41,20 @@ import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
 import SpriteLoader from "./SpriteLoader.vue";
 import PauseButton from "./PauseButton.vue";
-import InventoryWindow from "./InventoryWindow.vue";
-import SelfWindow from "./SelfWindow.vue";
+import CharacterScreen from "./CharacterScreen.vue";
 import ItemInHand from "./ItemInHand.vue";
 import { Character } from "@/game-classes/Character";
 import { toRaw } from "@vue/reactivity";
+import { Game } from "@/game-classes/Game";
+
+interface styleObject {
+  backgroundColor: string;
+}
 
 interface GameHolderData {
   characterScreenOpen: boolean;
   characterWithScreenOpen: Character | null;
+  indexOfCharacterWithScreenOpen: number | null;
   spritesLoaded: boolean;
 }
 
@@ -61,29 +66,32 @@ interface GameHolderData {
     SightCanvas,
     SpriteLoader,
     PauseButton,
-    InventoryWindow,
-    SelfWindow,
     ItemInHand,
+    CharacterScreen,
   },
 })
 export default class GameHolder extends Vue {
   $store!: typeof gameStore;
   spritesLoaded!: boolean;
   characterWithScreenOpen!: Character | null;
+  indexOfCharacterWithScreenOpen!: number | null;
 
   data(): GameHolderData {
     return {
       characterScreenOpen: true,
       spritesLoaded: false,
       characterWithScreenOpen: null,
+      indexOfCharacterWithScreenOpen: null,
     };
   }
 
-  characterButtonClick(character: Character): void {
+  characterButtonClick(character: Character, index: number): void {
     if (character == toRaw(this.characterWithScreenOpen)) {
       this.characterWithScreenOpen = null;
+      this.indexOfCharacterWithScreenOpen = null;
     } else {
       this.characterWithScreenOpen = character;
+      this.indexOfCharacterWithScreenOpen = index;
     }
   }
 
@@ -94,6 +102,12 @@ export default class GameHolder extends Vue {
 
   get characters(): Character[] {
     return toRaw(this.$store.state.game.data.characters);
+  }
+
+  characterButtonStyle(index: number): styleObject {
+    return {
+      backgroundColor: Game.CHARACTER_COLORS[index].css,
+    };
   }
 }
 </script>
@@ -118,15 +132,6 @@ main {
       flex: 1;
     }
   }
-}
-
-aside {
-  position: fixed;
-  bottom: 0;
-  margin: 0;
-  box-sizing: border-box;
-  background-color: rgba($color: #a44, $alpha: 0.5);
-  display: flex;
 }
 
 nav.menu {

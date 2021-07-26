@@ -11,6 +11,7 @@ import { Vantage } from './Vantage'
 import { SquareWithFeatures } from './SquareWithFeatures'
 import { Controller } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
+import { Color } from '@/canvas/Color'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -56,6 +57,10 @@ class Game {
     featuresTriggeredThisTick: AbstractFeature[]
 
     static MAX_QUEUE_LENGTH: 10
+
+    static CHARACTER_COLORS = [
+        Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW
+    ]
 
     constructor(config: GameConfig) {
         this.data = config;
