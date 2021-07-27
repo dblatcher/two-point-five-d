@@ -51,6 +51,12 @@ const sheets = {
     painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
     leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
     woodenDoor: new SpriteSheet("woodenDoor", require("../assets/sprites/door.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 3 }),
+
+    //https://opengameart.org/content/39-portraits-pixel-art-pack
+    portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png"),spriteSheets),
+    portrait2: new SpriteSheet("portrait2", require("../assets/sprites/portraits/Icons_02.png"),spriteSheets),
+    portrait3: new SpriteSheet("portrait3", require("../assets/sprites/portraits/Icons_03.png"),spriteSheets),
+    portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png"),spriteSheets),
 }
 
 
@@ -259,6 +265,10 @@ const sprites = {
     key: Sprite.itemSprite("key", { sheet: sheets.fruits, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),
     bardHat: Sprite.itemSprite("bardHat", { sheet: sheets.bardHat }, { baseline: .25, transforms: ["CROP_BASE",], }),
     helmet: Sprite.itemSprite("helmet", { sheet: sheets.helmet }, { baseline: .05, transforms: ["CROP_BASE",], }),
+
+    drake_portrait: Sprite.portraitSprite("drake",sheets.portrait1),
+    sally_portrait: Sprite.portraitSprite("sally",sheets.portrait2),
+    boblin_portrait: Sprite.portraitSprite("boblin",sheets.portrait3),
 }
 
 const textBoards = {

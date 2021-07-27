@@ -1,17 +1,19 @@
 <template>
   <article>
-      <button
-        v-for="(character, index) in characters"
-        :key="index"
-        @click="characterButtonClick(index)"
-        :style="characterButtonStyle(index)"
-      >
-        {{ character.data.name }}
-        <span v-if="index === active">*</span>
-      </button>
-      
-  </article>
+    <button
+      v-for="(character, index) in characters"
+      :key="index"
+      @click="characterButtonClick(index)"
+      :style="characterButtonStyle(index)"
+    >
+      <img
+        v-if="index === active"
+        :src="character.portraitSrc"
+      />
+      {{ character.data.name }}
 
+    </button>
+  </article>
 </template>
 
 <script lang="ts">
@@ -26,22 +28,20 @@ interface styleObject {
   backgroundColor: string;
 }
 
-
 @Options({
   props: {
-    active:Number
+    active: Number,
   },
-  components: {
-
-  },
-  emits:["choose"]
+  components: {},
+  emits: ["choose"],
 })
 export default class CharacterButtons extends Vue {
   $store!: typeof gameStore;
-
+  active!: number;
+  declare $refs: { canvas: HTMLCanvasElement };
 
   characterButtonClick(index: number): void {
-      this.$emit('choose', index)
+    this.$emit("choose", index);
   }
 
   get characters(): Character[] {
@@ -57,14 +57,19 @@ export default class CharacterButtons extends Vue {
 </script>
 
 <style scoped lang="scss">
+article {
+  display: flex;
+  flex-basis: 30rem;
 
-    article {
-        display: flex;
-        flex-basis: 30rem;
+  button {
+    flex: 1;
+    display: inline-flex;
+    justify-content: space-between;
+  }
 
-        button {
-            flex: 1
-        }
-    }
-
+  img {
+    width:3rem;
+    height: 3rem;
+  }
+}
 </style>

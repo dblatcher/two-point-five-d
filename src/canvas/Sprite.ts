@@ -52,6 +52,7 @@ class Sprite {
 
     static get defaultWallAnimation(): "NEUTRAL" { return "NEUTRAL" }
     static get defaultFigureAnimation(): "STAND" { return "STAND" }
+    static get defaultPortraitAnimation(): "NEUTRAL" { return "NEUTRAL" }
 
     constructor(name: string, config: SpriteConfig = {}) {
         this.name = name
@@ -103,6 +104,33 @@ class Sprite {
 
         this.loadedFrames.set(animationFrameKey, image);
         return image;
+    }
+
+
+    provideSrc(actionName: string, direction: RelativeDirection = RelativeDirection.BACK): string | null {
+
+        const directionName = direction.name;
+
+        const animationWithDirection = `${actionName}_${directionName}`
+        const animationWithoutDirection = `${actionName}`
+        let animationKey = `${actionName}_${directionName}`
+
+        if (this.animations.has(animationWithDirection)) {
+            animationKey = animationWithDirection
+        } else if (this.animations.has(animationWithoutDirection)) {
+            animationKey = animationWithoutDirection
+        } else {
+            console.warn(`Invalid animation key on ${this.name}: ${animationWithDirection}`);
+            return null
+        }
+
+        const animation = this.animations.get(animationKey) as Frame[];
+        if (animation.length == 0) {
+            console.warn(`No frames in animation ${animationKey} of ${this.name}`);
+            return null
+        }
+
+        return animation[0].sheet.src;
     }
 
     /**
@@ -186,6 +214,13 @@ class Sprite {
             ])
 
         return new Sprite(name, config)
+    }
+
+    static portraitSprite(name: string, sheet: SpriteSheet): Sprite {
+        return new Sprite(name, {
+            animations: new Map<string, Frame[]>()
+                .set(Sprite.defaultPortraitAnimation, [{ sheet }])
+        })
     }
 
     static DEFAULT_SIZE: Dimensions = { x: .5, y: .5 }

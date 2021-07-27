@@ -1,12 +1,15 @@
+import { Sprite } from "@/canvas/Sprite";
 import { Direction } from "./Direction";
 import { FeedbackToUI, Game } from "./Game";
 import { Item } from "./Item";
+import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 
 interface CharacterConfig {
-    name?:string
+    name?: string
     inventory: Array<Item | null>
     equipmentSlots?: Map<string, Item | null>
+    portrait: Sprite
 }
 
 class Character {
@@ -14,6 +17,39 @@ class Character {
     constructor(config: CharacterConfig) {
         this.data = config
     }
+
+
+    get portraitSrc(): string | null {
+        return this.data.portrait.provideSrc(Sprite.defaultPortraitAnimation)
+    }
+
+    get icon(): CanvasImageSource {
+        try {
+            return this.data.portrait.provideImage(Sprite.defaultPortraitAnimation, RelativeDirection.BACK, 0)
+        } catch (error) {
+            console.warn(error.message)
+        }
+        return document.createElement('img');
+    }
+
+    drawAsIcon(canvas: HTMLCanvasElement): void {
+        const ctx = canvas.getContext("2d");
+        if (!ctx) { return }
+        const height = Number(canvas.getAttribute('height') || "100");
+        const width = Number(canvas.getAttribute('width') || "100");
+        const { icon } = this
+        ctx.clearRect(0, 0, width, height)
+        ctx.drawImage(icon, 0, 0, width, height)
+    }
+
+    static clearIcon(canvas: HTMLCanvasElement): void {
+        const ctx = canvas.getContext("2d");
+        if (!ctx) { return }
+        const height = Number(canvas.getAttribute('height') || "100");
+        const width = Number(canvas.getAttribute('width') || "100");
+        ctx.clearRect(0, 0, width, height)
+    }
+
 
     say(message: string, game: Game): void {
         console.log(`${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`)
@@ -47,9 +83,9 @@ class Character {
 
         if (itemInHand) {
             const canEquipInSlot = itemInHand.data.type.data.equipable?.slotName === slotName;
-            if ( canEquipInSlot ) {
+            if (canEquipInSlot) {
                 game.data.itemInHand = currentEquipment || undefined
-                this.data.equipmentSlots?.set(slotName,itemInHand)
+                this.data.equipmentSlots?.set(slotName, itemInHand)
                 return FeedbackToUI.yes
             } else {
                 return FeedbackToUI.no
@@ -58,7 +94,7 @@ class Character {
 
         if (currentEquipment) {
             game.data.itemInHand = currentEquipment
-            this.data.equipmentSlots?.set(slotName,null)
+            this.data.equipmentSlots?.set(slotName, null)
             return FeedbackToUI.yes
         }
 
