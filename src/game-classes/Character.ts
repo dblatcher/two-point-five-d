@@ -1,9 +1,7 @@
 import { Sprite } from "@/canvas/Sprite";
-import { Direction } from "./Direction";
 import { FeedbackToUI, Game } from "./Game";
 import { Item } from "./Item";
 import { RelativeDirection } from "./RelativeDirection";
-import { Vantage } from "./Vantage";
 
 interface CharacterConfig {
     name?: string
@@ -18,6 +16,15 @@ class Character {
         this.data = config
     }
 
+    static emptyEquipmentSlots():Map<string, Item | null> {
+        return new Map<string, Item | null>()
+        .set("HEAD", null)
+        .set("TORSO", null)
+        .set("LEGS", null)
+        .set("FEET", null)
+        .set("RIGHT_HAND", null)
+        .set("LEFT_HAND", null)
+    }
 
     get portraitSrc(): string | null {
         return this.data.portrait.provideSrc(Sprite.defaultPortraitAnimation)
@@ -82,7 +89,8 @@ class Character {
         const currentEquipment = equipmentSlots.get(slotName);
 
         if (itemInHand) {
-            const canEquipInSlot = itemInHand.data.type.data.equipable?.slotName === slotName;
+            const isHandSlot = slotName.indexOf('HAND') != -1;
+            const canEquipInSlot = isHandSlot || itemInHand.data.type.data.equipable?.slotName === slotName;
             if (canEquipInSlot) {
                 game.data.itemInHand = currentEquipment || undefined
                 this.data.equipmentSlots?.set(slotName, itemInHand)

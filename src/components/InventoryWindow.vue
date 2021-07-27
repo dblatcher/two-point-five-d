@@ -10,7 +10,16 @@
       />
     </div>
   </section>
-  <section :timeStamp="timeStamp.toString()">
+  <section>
+    <div class="hand-holder">
+      <item-slot
+        @click="handleEquipSlotClick('LEFT_HAND')"
+        :imgIcon="'/img/hand-left.png'"
+        :item="getEquipment('LEFT_HAND')"
+      />
+    </div>
+  </section>
+  <section>
     <div>
       <item-slot
         @click="handleEquipSlotClick('HEAD')"
@@ -26,6 +35,21 @@
         @click="handleEquipSlotClick('LEGS')"
         :imgIcon="'/img/legs.png'"
         :item="getEquipment('LEGS')"
+      />
+      <item-slot
+        @click="handleEquipSlotClick('FEET')"
+        :imgIcon="'/img/feet.png'"
+        :item="getEquipment('FEET')"
+      />
+    </div>
+  </section>
+
+  <section>
+    <div class="hand-holder">
+      <item-slot
+        @click="handleEquipSlotClick('RIGHT_HAND')"
+        :imgIcon="'/img/hand-right.png'"
+        :item="getEquipment('RIGHT_HAND')"
       />
     </div>
   </section>
@@ -89,12 +113,16 @@ export default class InventoryWindow extends Vue {
 <style scoped lang="scss">
 section {
   display: inline-block;
-  padding: .25rem;
+  padding: 0.25rem;
 
   div.bag {
     display: flex;
     max-width: 20em;
     flex-wrap: wrap;
+  }
+
+  div.hand-holder {
+    padding-top: 6em;
   }
 }
 </style>
