@@ -1,25 +1,28 @@
 <template>
-  <div v-if="spritesLoaded">
+  <div class="container" v-if="spritesLoaded">
     <nav class="menu">
-      <character-buttons @choose="characterButtonClick" :active="indexOfCharacterWithScreenOpen"/>
+      <character-buttons
+        @choose="characterButtonClick"
+        :active="indexOfCharacterWithScreenOpen"
+      />
       <pause-button />
     </nav>
+
     <main>
-      <section class="sight">
-        <sight-canvas />
+      <section class="primary">
+        <sight-canvas v-show="indexOfCharacterWithScreenOpen == null" />
+        <character-screen v-show="indexOfCharacterWithScreenOpen != null"
+          :index="indexOfCharacterWithScreenOpen"
+          @close="characterButtonClick(null)"
+        ></character-screen>
       </section>
 
-      <section class="controls">
+      <section class="sidebar">
         <item-in-hand />
         <map-canvas />
         <controls />
       </section>
     </main>
-
-    <character-screen
-      :index="indexOfCharacterWithScreenOpen"
-      @close="characterButtonClick(null)"
-    ></character-screen>
   </div>
 
   <p v-if="!spritesLoaded">loading...</p>
@@ -39,7 +42,6 @@ import ItemInHand from "./ItemInHand.vue";
 import CharacterButtons from "./CharacterButtons.vue";
 import { Character } from "@/game-classes/Character";
 import { toRaw } from "@vue/reactivity";
-
 
 interface GameHolderData {
   characterScreenOpen: boolean;
@@ -73,7 +75,7 @@ export default class GameHolder extends Vue {
     };
   }
 
-  characterButtonClick( index: number): void {
+  characterButtonClick(index: number): void {
     if (index == this.indexOfCharacterWithScreenOpen) {
       this.indexOfCharacterWithScreenOpen = null;
     } else {
@@ -93,29 +95,36 @@ export default class GameHolder extends Vue {
 </script>
 
 <style scoped lang="scss">
-main {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+.container {
+  
+  background-color: lightgray;
 
-  section {
+  nav.menu {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: space-between;
+  }
 
-    &.sight {
-      flex: 2;
-    }
+  main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 
-    &.controls {
-      flex: 1;
+    section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+
+      &.primary {
+        flex: 2;
+        padding-right: .25rem;
+      }
+
+      &.sidebar {
+        flex: 1;
+        padding-left: .25rem;
+      }
     }
   }
-}
-
-nav.menu {
-  display: flex;
-  justify-content: space-between;
 }
 </style>

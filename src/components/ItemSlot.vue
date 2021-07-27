@@ -104,7 +104,7 @@ figure {
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    z-index: -1;
+    z-index: 1;
   }
 
   img {
@@ -116,6 +116,8 @@ figure {
     width: 5em;
     border: 1px dotted black;
     box-sizing: border-box;
+    z-index: 2;
+    position: relative;
   }
 }
 </style>
