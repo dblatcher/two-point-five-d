@@ -52,6 +52,12 @@ figure {
   display: inline-block;
   background-color: burlywood;
   margin: 0;
+  max-width: 15rem;
+
+  canvas {
+    max-width: inherit;
+  }
+
 }
 
 p {

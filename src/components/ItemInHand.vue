@@ -1,8 +1,8 @@
 <template>
   <figure :timeStamp="timeStamp.toString()">
-    <item-slot :item="item || null" :size="5" />
+    <item-slot :item="item || null" :size="3" />
     <figcaption>
-      {{ item ? item.data.type.description : "" }}
+      {{ item ? item.data.type.name : "" }}
     </figcaption>
   </figure>
 </template>
@@ -59,10 +59,14 @@ export default class ItemInHand extends Vue {
 <style scoped lang="scss">
 figure {
   display: flex;
-  align-items: flex-end;
   justify-content: flex-start;
+  align-items: flex-start;
   margin: 0;
-  align-self: stretch;
-  padding: .25rem;
+
+  figcaption {
+    min-width: 6rem;
+    text-align: left;
+    padding-left: .2rem;
+  }
 }
 </style>

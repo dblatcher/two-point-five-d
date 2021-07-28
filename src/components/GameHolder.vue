@@ -5,6 +5,7 @@
         @choose="characterButtonClick"
         :active="indexOfCharacterWithScreenOpen"
       />
+      <item-in-hand />
       <pause-button />
     </nav>
 
@@ -18,7 +19,7 @@
       </section>
 
       <section class="sidebar">
-        <item-in-hand />
+
         <map-canvas />
         <controls />
       </section>
@@ -102,6 +103,7 @@ export default class GameHolder extends Vue {
   nav.menu {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
   }
 
   main {
