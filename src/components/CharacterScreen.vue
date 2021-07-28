@@ -8,6 +8,7 @@
     <main :style="computedMainStyle">
       <self-window :character="character" />
       <inventory-window :character="character" />
+      <equipment-window :character="character" />
     </main>
   </article>
 </template>
@@ -18,6 +19,8 @@ import gameStore from "@/store";
 import { Game } from "@/game-classes/Game";
 import { Options, Vue } from "vue-class-component";
 import InventoryWindow from "./InventoryWindow.vue";
+import EquipmentWindow from "./EquipmentWindow.vue";
+
 import SelfWindow from "./SelfWindow.vue";
 import { Color } from "@/canvas/Color";
 import { toRaw } from "vue";
@@ -34,6 +37,7 @@ interface styleObject {
   components: {
     InventoryWindow,
     SelfWindow,
+    EquipmentWindow,
   },
   emits: ["close"],
 })

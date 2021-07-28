@@ -6,12 +6,15 @@
       @click="characterButtonClick(index)"
       :style="characterButtonStyle(index)"
     >
-      <img
-        v-if="index === active"
-        :src="character.portraitSrc"
-      />
-      {{ character.data.name }}
+      <img v-if="index === active" :src="character.portraitSrc" />
 
+      <equipment-window
+        v-if="index !== active"
+        :character="character"
+        :handsOnly="true"
+      />
+
+      {{ character.data.name }}
     </button>
   </article>
 </template>
@@ -19,7 +22,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import gameStore from "@/store";
-
+import EquipmentWindow from "./EquipmentWindow.vue";
 import { Character } from "@/game-classes/Character";
 import { toRaw } from "@vue/reactivity";
 import { Game } from "@/game-classes/Game";
@@ -32,7 +35,7 @@ interface styleObject {
   props: {
     active: Number,
   },
-  components: {},
+  components: { EquipmentWindow },
   emits: ["choose"],
 })
 export default class CharacterButtons extends Vue {
@@ -68,7 +71,7 @@ article {
   }
 
   img {
-    width:3rem;
+    width: 3rem;
     height: 3rem;
   }
 }
