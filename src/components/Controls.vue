@@ -29,11 +29,15 @@ export default class Controls extends Vue {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 nav {
-  display: inline-block;
-  padding: 1rem;
+  display: block;
   margin:0;
+
+  div {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 button {

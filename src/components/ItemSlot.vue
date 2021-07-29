@@ -70,7 +70,7 @@ export default class ItemSlot extends Vue {
   }
 
   get canvasComputedStyle(): { width?: string; height?: string } {
-    const { size = 4, unit = "em" } = this;
+    const { size = 3, unit = "em" } = this;
     return {
       width: `${size}${unit}`,
       height: `${size}${unit}`,
@@ -78,14 +78,14 @@ export default class ItemSlot extends Vue {
   }
 
   get imgIconComputedStyle(): { width?: string; } {
-    const { size = 4, unit = "em" } = this;
+    const { size = 3, unit = "em" } = this;
     return {
       width: `${size*(3/4)}${unit}`,
     };
   }
 
   get glyphIconComputedStyle(): { "font-size"?: string } {
-    const { size = 4, unit = "em" } = this;
+    const { size = 3, unit = "em" } = this;
     return {
       "font-size": `${size * (3 / 4)}${unit}`,
     };

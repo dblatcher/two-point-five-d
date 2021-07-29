@@ -1,25 +1,29 @@
 <template>
   <div class="container" v-if="spritesLoaded">
     <nav class="menu">
-      <character-buttons
-        @choose="characterButtonClick"
-        :active="indexOfCharacterWithScreenOpen"
-      />
-      <item-in-hand />
-      <pause-button />
+      <section class="primary">
+        <character-tags
+          @choose="characterButtonClick"
+          :active="indexOfCharacterWithScreenOpen"
+        />
+      </section>
+      <section class="sidebar">
+        <item-in-hand />
+        <pause-button />
+      </section>
     </nav>
 
     <main>
       <section class="primary">
         <sight-canvas v-show="indexOfCharacterWithScreenOpen == null" />
-        <character-screen v-show="indexOfCharacterWithScreenOpen != null"
+        <character-screen
+          v-show="indexOfCharacterWithScreenOpen != null"
           :index="indexOfCharacterWithScreenOpen"
           @close="characterButtonClick(null)"
         ></character-screen>
       </section>
 
       <section class="sidebar">
-
         <map-canvas />
         <controls />
       </section>
@@ -40,7 +44,7 @@ import SpriteLoader from "./SpriteLoader.vue";
 import PauseButton from "./PauseButton.vue";
 import CharacterScreen from "./CharacterScreen.vue";
 import ItemInHand from "./ItemInHand.vue";
-import CharacterButtons from "./CharacterButtons.vue";
+import CharacterTags from "./CharacterTags.vue";
 import { Character } from "@/game-classes/Character";
 import { toRaw } from "@vue/reactivity";
 
@@ -60,7 +64,7 @@ interface GameHolderData {
     PauseButton,
     ItemInHand,
     CharacterScreen,
-    CharacterButtons,
+    CharacterTags,
   },
 })
 export default class GameHolder extends Vue {
@@ -97,13 +101,13 @@ export default class GameHolder extends Vue {
 
 <style scoped lang="scss">
 .container {
-  
   background-color: lightgray;
 
-  nav.menu {
+  .menu {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-wrap: wrap;
   }
 
   main {
@@ -116,17 +120,22 @@ export default class GameHolder extends Vue {
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-
-      &.primary {
-        flex: 2;
-        padding-right: .25rem;
-      }
-
-      &.sidebar {
-        flex: 1;
-        padding-left: .25rem;
-      }
     }
+  }
+
+  .primary {
+    flex: 3;
+    max-width: 800px;
+  }
+
+  .sidebar {
+    flex: 1;
+    padding-left: 0.25rem;
+  }
+
+  .menu .sidebar {
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>

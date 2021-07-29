@@ -1,21 +1,29 @@
 <template>
   <article>
-    <button
+    <section
       v-for="(character, index) in characters"
       :key="index"
       @click="characterButtonClick(index)"
-      :style="characterButtonStyle(index)"
+      :class="{ 
+        'tag': true,
+        'active-tag': index === active 
+      }"
+      :style="CharacterTagstyle(index)"
     >
-      <img v-if="index === active" :src="character.portraitSrc" />
+      <header>
+        {{ character.data.name }}
+      </header>
 
-      <equipment-window
-        v-if="index !== active"
-        :character="character"
-        :handsOnly="true"
-      />
+      <div>
+        <img v-if="index === active" :src="character.portraitSrc" />
 
-      {{ character.data.name }}
-    </button>
+        <equipment-window
+          v-if="index !== active"
+          :character="character"
+          :handsOnly="true"
+        />
+      </div>
+    </section>
   </article>
 </template>
 
@@ -38,7 +46,7 @@ interface styleObject {
   components: { EquipmentWindow },
   emits: ["choose"],
 })
-export default class CharacterButtons extends Vue {
+export default class CharacterTags extends Vue {
   $store!: typeof gameStore;
   active!: number;
   declare $refs: { canvas: HTMLCanvasElement };
@@ -51,7 +59,7 @@ export default class CharacterButtons extends Vue {
     return toRaw(this.$store.state.game.data.characters);
   }
 
-  characterButtonStyle(index: number): styleObject {
+  CharacterTagstyle(index: number): styleObject {
     return {
       backgroundColor: Game.CHARACTER_COLORS[index].css,
     };
@@ -64,15 +72,29 @@ article {
   display: flex;
   flex-basis: 30rem;
 
-  button {
-    flex: 1;
+  .tag {
+    flex-basis: 25%;
     display: inline-flex;
-    justify-content: space-between;
-  }
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 
-  img {
-    width: 3rem;
-    height: 3rem;
+    header {
+      text-align: center;
+      color: black;
+    }
+
+    div {
+      display: flex;
+      justify-content: center;
+      flex: 1;
+
+      img {
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+
   }
 }
 </style>

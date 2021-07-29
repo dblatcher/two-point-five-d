@@ -94,7 +94,7 @@ section {
     display: inline-block;
 
     &.hand-holder {
-      padding-top: 6em;
+      padding-top: 50%;
     }
   }
 

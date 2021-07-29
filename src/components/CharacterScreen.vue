@@ -64,13 +64,13 @@ export default class GameHolder extends Vue {
 
   get computedHeaderStyle(): styleObject {
     return {
-      backgroundColor: this.backgroundColor.opacityAt(0.9).css,
+      backgroundColor: this.backgroundColor.css,
     };
   }
   get computedMainStyle(): styleObject {
     return {
       backgroundColor: this.backgroundColor.opacityAt(0.5).lighter(50).css,
-      borderColor: this.backgroundColor.opacityAt(0.9).css,
+      borderColor: this.backgroundColor.css,
     };
   }
 }
@@ -102,8 +102,8 @@ article {
     flex: 1;
     display: flex;
     border-style: solid;
-    border-left-width: 0.25rem;
-    border-right-width: 0.25rem;
+    border-left-width: 0;
+    border-right-width: 0;
     border-bottom-width: 0.25rem;
   }
 }
