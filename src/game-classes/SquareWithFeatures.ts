@@ -62,7 +62,8 @@ class SquareWithFeatures extends Vantage {
             }
         })
 
-        items.forEach(item => {
+        items.filter(item => !item.data.altitude)
+        .forEach(item => {
             if (item.figure && item.figure.isInSameSquareAs(this)) {
                 this.itemsOnThisSquareNow.push(item)
             }

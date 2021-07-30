@@ -5,7 +5,7 @@ import { Sprite } from '../canvas/Sprite'
 import { Direction } from "./Direction";
 import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
-import { RelativeDirection  } from "./RelativeDirection";
+import { RelativeDirection } from "./RelativeDirection";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 
 interface FigureConfig {
@@ -17,6 +17,7 @@ interface FigureConfig {
     width?: number
     behaviour?: Behaviour
     initialAnimation?: string
+    altitude?: number
 }
 
 class Figure extends Vantage {
@@ -58,7 +59,7 @@ class Figure extends Vantage {
 
     drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { place } = renderInstruction
-        const { sprite } = this.data
+        const { sprite, altitude = 0 } = this.data
 
         const { centerOnFloor, topLeft, topRight, widthAtDistance, heightAtDistance } = this.getRenderParams(renderInstruction.viewedFrom, place.forward, place.right);
 
@@ -78,10 +79,14 @@ class Figure extends Vantage {
             y: centerOnFloor.y - topLeft.y
         }
 
+        const topLeftAtAltitude: Point = {
+            x: topLeft.x,
+            y: topLeft.y - altitude
+        }
 
         ctx.drawImage(
             this.getSpriteImage(renderInstruction, tickCount),
-            ...convert(topLeft),
+            ...convert(topLeftAtAltitude),
             ...convert(relativeDimensions)
         );
 

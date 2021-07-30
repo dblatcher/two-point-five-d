@@ -33,8 +33,16 @@ class Position {
         return this.data.x - this.gridX
     }
 
+    set squareX(value:number) {
+        this.data.x = this.gridX + value
+    }
+
     get squareY(): number {
         return this.data.y - this.gridY
+    }
+
+    set squareY(value:number) {
+        this.data.y = this.gridY + value
     }
 
     get coords(): [number, number] {

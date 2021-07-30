@@ -58,6 +58,22 @@ class Direction {
         }
     }
 
+    rotatePoint(point: Point): Point {
+        const { x, y } = point;
+        switch (this.name) {
+            case "NORTH":
+                return { x: 1 - y, y: x }
+            case "EAST":
+                return { x: x, y: y, }
+            case "SOUTH":
+                return { x: y, y: 1 - x, }
+            case "WEST":
+                return { x: 1 - x, y: 1 - y, }
+            default:
+                return { x: 0.5, y: 0.5 }
+        }
+    }
+
     rotateSquarePosition(position: Position): Point {
         const { squareX, squareY } = position;
         switch (this.name) {
@@ -90,7 +106,7 @@ class Direction {
         }
     }
 
-    static combine(directions: Direction[]) {
+    static combine(directions: Direction[]):Point {
         let x = 0, y = 0;
         directions.forEach(direction => {
             x += direction.x;

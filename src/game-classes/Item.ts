@@ -6,31 +6,36 @@ import { RelativeDirection } from "./RelativeDirection";
 import { Sprite } from "../canvas/Sprite";
 import { Vantage } from "./Vantage";
 import { ItemType } from "./ItemType";
+import { Point } from "@/canvas/canvas-utility";
 
 
 interface ItemConfig {
     vantage?: Vantage
     type: ItemType
+    altitude?: number
+    momentum?: number
 }
 
 class Item {
+
     data: ItemConfig
     constructor(config: ItemConfig) {
         this.data = config
     }
 
-    get propertyList():[string, string | number][] {
+    get propertyList(): [string, string | number][] {
         return this.data.type.propertyList
     }
 
     get figure(): Figure | null {
-        const { vantage } = this.data
+        const { vantage, altitude = 0 } = this.data
         const { figureDimensions = { width: .2, height: .2 }, sprite } = this.data.type.data
         if (vantage) {
             return new Figure({
                 sprite,
                 ...vantage.data,
                 ...figureDimensions,
+                altitude,
             })
         }
 
@@ -93,6 +98,38 @@ class Item {
             ...position.data, direction
         })
         game.data.level.data.items.push(this)
+    }
+
+    throw(pointInBackOfScreen: Point, vantage: Vantage, game: Game): void {
+
+        const howFarRight = pointInBackOfScreen.x
+
+        const thrownPoint = vantage.data.direction.rotatePoint({ x: howFarRight, y: howFarRight })
+        const squareAhead = vantage.translate(vantage.data.direction)
+
+        squareAhead.squareX = 1 - thrownPoint.x;
+        squareAhead.squareY = thrownPoint.y;
+
+        this.data.vantage = new Vantage({
+            ...squareAhead.data,
+            direction: vantage.data.direction
+        })
+        this.data.altitude = .5
+        this.data.momentum = 10
+        game.data.level.data.items.push(this)
+    }
+
+    flyThroughAir(game: Game): void {
+        if (!this.data.altitude) {
+            this.data.momentum = 0
+        }
+        if (this.data.altitude && this.data.altitude > 0) {
+            this.data.altitude = Math.max(0, this.data.altitude - .05)
+        }
+        if (this.data.momentum && this.data.momentum > 0) {
+            this.data.vantage?.moveAbsoluteBy(.1, this.data.vantage.data.direction, game)
+            this.data.momentum = Math.max(0, this.data.momentum - 1)
+        }
     }
 }
 

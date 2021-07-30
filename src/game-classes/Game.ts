@@ -78,11 +78,13 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const figures: Figure[] = this.data.level.data.contents
+        const { items, contents } = this.data.level.data;
+
+        const figures: Figure[] = contents
             .filter(thing => Object.getPrototypeOf(thing).constructor == Figure) // subclasses???!!
             .map(figure => figure as Figure)
 
-        const squaresWithFeatures: SquareWithFeatures[] = this.data.level.data.contents
+        const squaresWithFeatures: SquareWithFeatures[] = contents
             .filter(item => Object.getPrototypeOf(item).constructor == SquareWithFeatures)
             .map(item => item as SquareWithFeatures)
 
@@ -97,12 +99,15 @@ class Game {
             }
         })
 
+        items.forEach(item => {
+            item.flyThroughAir(this)
+        })
 
         // TODO: make copy of items and figures array that the method can splice from
         // So square don't have to check if things already assigned are on them too
         // althought, that woudl stop two squaresWithFeatures having the same location
         squaresWithFeatures.forEach(square => {
-            square.updateThingsOnThisSquare(this.data.playerVantage, figures, this.data.level.data.items)
+            square.updateThingsOnThisSquare(this.data.playerVantage, figures, items)
         })
 
         squaresWithFeatures.forEach(square => {
@@ -160,6 +165,17 @@ class Game {
         for (let index = 0; index < locations.length; index++) {
             const location = locations[index];
 
+
+            // playerHasWallInFace is true even if the wall is an open door
+            const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerVantage, items, clickInfo, !squareAheadIsBlocked)
+
+            if (itemClicked) {
+                if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
+                this.queuedPlayerActions.push(new InterAction(itemClicked));
+                break
+            }
+
+
             if (location.type === 'WALL') {
                 const wallClicked = pointerLocator.identifyClickedWall(location, walls, playerVantage);
                 if (!wallClicked) { continue }
@@ -180,16 +196,6 @@ class Game {
                 }
             }
 
-            // playerHasWallInFace is true even if the wall is an open door
-            const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerVantage, items, clickInfo, !squareAheadIsBlocked)
-
-            if (itemClicked) {
-                if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
-                this.queuedPlayerActions.push(new InterAction(itemClicked));
-                break
-            }
-
-
             if (location.type === 'FLOOR') {
                 if (location.zone == "FLOOR") {
                     const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerVantage.data.direction);
@@ -205,6 +211,13 @@ class Game {
                         this.data.itemInHand = undefined;
                     }
 
+                }
+            }
+
+            if (location.type === 'AIR') {
+                if (itemInHand) {
+                    itemInHand.throw({ x: location.x, y: location.y }, playerVantage, this)
+                    this.data.itemInHand = undefined;
                 }
             }
 
