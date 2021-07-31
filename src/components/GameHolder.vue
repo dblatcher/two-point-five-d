@@ -3,8 +3,8 @@
     <nav class="menu">
       <section class="primary">
         <character-tags
-          @choose="characterButtonClick"
-          :active="indexOfCharacterWithScreenOpen"
+          @chooseOpen="handleChooseOpenCharacter"
+          :open="indexOfCharacterWithScreenOpen"
         />
       </section>
       <section class="sidebar">
@@ -19,7 +19,7 @@
         <character-screen
           v-show="indexOfCharacterWithScreenOpen != null"
           :index="indexOfCharacterWithScreenOpen"
-          @close="characterButtonClick(null)"
+          @close="handleChooseOpenCharacter(null)"
         ></character-screen>
       </section>
 
@@ -45,8 +45,7 @@ import PauseButton from "./PauseButton.vue";
 import CharacterScreen from "./CharacterScreen.vue";
 import ItemInHand from "./ItemInHand.vue";
 import CharacterTags from "./CharacterTags.vue";
-import { Character } from "@/game-classes/Character";
-import { toRaw } from "@vue/reactivity";
+
 
 interface GameHolderData {
   characterScreenOpen: boolean;
@@ -80,7 +79,7 @@ export default class GameHolder extends Vue {
     };
   }
 
-  characterButtonClick(index: number): void {
+  handleChooseOpenCharacter(index: number): void {
     if (index == this.indexOfCharacterWithScreenOpen) {
       this.indexOfCharacterWithScreenOpen = null;
     } else {
@@ -93,9 +92,6 @@ export default class GameHolder extends Vue {
     this.spritesLoaded = true;
   }
 
-  get characters(): Character[] {
-    return toRaw(this.$store.state.game.data.characters);
-  }
 }
 </script>
 

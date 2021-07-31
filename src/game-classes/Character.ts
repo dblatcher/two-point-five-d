@@ -1,6 +1,7 @@
 import { Sprite } from "@/canvas/Sprite";
 import { FeedbackToUI, Game } from "./Game";
 import { Item } from "./Item";
+import { PlayerVantage } from "./PlayerVantage";
 import { RelativeDirection } from "./RelativeDirection";
 
 interface CharacterConfig {
@@ -105,9 +106,14 @@ class Character {
             this.data.equipmentSlots?.set(slotName, null)
             return FeedbackToUI.yes
         }
-
         return FeedbackToUI.empty
     }
+
+    throw(item: Item, clickPoint: { x: number; y: number; }, playerVantage: PlayerVantage, game: Game):void {
+        item.launch(clickPoint, playerVantage, game);
+        this.say(`I threw the ${item.data.type.name}`, game)
+    }
+
 }
 
 export { Character, CharacterConfig }

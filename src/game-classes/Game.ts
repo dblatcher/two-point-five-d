@@ -22,6 +22,7 @@ interface GameConfig {
     levels: Level[]
     controllers: Controller[]
     characters: Character[]
+    activeCharacterIndex: number | undefined
 }
 
 class FeedbackToUI {
@@ -70,8 +71,16 @@ class Game {
         this.tick = this.tick.bind(this)
 
         this.featuresTriggeredThisTick = []
+
+        this.setActiveCharacter(config.activeCharacterIndex);
     }
 
+    get activeCharacter(): Character | null {
+        if (typeof this.data.activeCharacterIndex == 'undefined') {
+            return null
+        }
+        return this.data.characters[this.data.activeCharacterIndex] || null
+    }
 
     tick(): void {
         this.tickCount++;
@@ -152,15 +161,29 @@ class Game {
         this.queuedPlayerActions.push(new MovementAction(movement.action, RelativeDirection[movement.direction]))
     }
 
+    setActiveCharacter(characterIndex: number | undefined): FeedbackToUI {
+        if (typeof characterIndex == 'undefined') {
+            this.data.activeCharacterIndex = undefined
+            return FeedbackToUI.empty
+        } else if (this.data.characters[characterIndex]) {
+            this.data.activeCharacterIndex = characterIndex
+            return FeedbackToUI.yes
+        } else {
+            return FeedbackToUI.no
+        }
+    }
+
     handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerVantage, itemInHand } = this.data
-        const { pointerLocator } = this
+        const { pointerLocator, activeCharacter } = this
         const { walls, items } = level.data
         const playerHasWallInFace = level.hasWallInFace(playerVantage)
         const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerVantage)
         const locations = pointerLocator.locate(clickInfo, playerHasWallInFace)
         if (locations.length == 0) { return }
 
+
+        //TO DO - what actions can be done with no active character?
 
         for (let index = 0; index < locations.length; index++) {
             const location = locations[index];
@@ -215,8 +238,9 @@ class Game {
             }
 
             if (location.type === 'AIR') {
-                if (itemInHand) {
-                    itemInHand.throw({ x: location.x, y: location.y }, playerVantage, this)
+                if (activeCharacter &&  itemInHand) {
+                    activeCharacter.throw(itemInHand,{ x: location.x, y: location.y }, playerVantage, this)
+                    
                     this.data.itemInHand = undefined;
                 }
             }

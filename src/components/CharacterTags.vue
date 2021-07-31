@@ -1,24 +1,26 @@
 <template>
-  <article>
+  <article :timeStamp="timeStamp.toString()">
     <section
       v-for="(character, index) in characters"
       :key="index"
-      @click="characterButtonClick(index)"
-      :class="{ 
-        'tag': true,
-        'active-tag': index === active 
+      @click="handleChooseOpenCharacter(index)"
+      @contextmenu.prevent="handleChooseOpenCharacter(index)"
+      :class="{
+        tag: true,
+        'open-tag': index === open,
+        'active-tag': index === active,
       }"
       :style="CharacterTagstyle(index)"
     >
-      <header>
+      <header @click.stop="characterNameClick(index)">
         {{ character.data.name }}
       </header>
 
       <div>
-        <img v-if="index === active" :src="character.portraitSrc" />
+        <img v-if="index === open" :src="character.portraitSrc" />
 
         <equipment-window
-          v-if="index !== active"
+          v-if="index !== open"
           :character="character"
           :handsOnly="true"
         />
@@ -34,6 +36,7 @@ import EquipmentWindow from "./EquipmentWindow.vue";
 import { Character } from "@/game-classes/Character";
 import { toRaw } from "@vue/reactivity";
 import { Game } from "@/game-classes/Game";
+import { useStore } from "vuex";
 
 interface styleObject {
   backgroundColor: string;
@@ -41,22 +44,46 @@ interface styleObject {
 
 @Options({
   props: {
-    active: Number,
+    open: Number,
   },
   components: { EquipmentWindow },
-  emits: ["choose"],
+  emits: ["chooseOpen"],
 })
 export default class CharacterTags extends Vue {
   $store!: typeof gameStore;
-  active!: number;
+  open!: number;
+  active!: number | undefined;
   declare $refs: { canvas: HTMLCanvasElement };
 
-  characterButtonClick(index: number): void {
-    this.$emit("choose", index);
+  data(): { active: number | undefined } {
+    const store = useStore() as typeof gameStore;
+    return {
+      active: store.state.game.data.activeCharacterIndex,
+    };
+  }
+
+  handleChooseOpenCharacter(index: number): void {
+    this.$emit("chooseOpen", index);
+  }
+
+  characterNameClick(index: number): void {
+    this.$store.dispatch("setActiveCharacter", index).then(
+      // feedback => {console.log(feedback)}
+    );
+  }
+
+  get timeStamp(): number {
+    const store = useStore() as typeof gameStore;
+    return store.state.timestamp;
   }
 
   get characters(): Character[] {
     return toRaw(this.$store.state.game.data.characters);
+  }
+
+  updated(): void {
+    const store = useStore() as typeof gameStore;
+    this.active = store.state.game.data.activeCharacterIndex;
   }
 
   CharacterTagstyle(index: number): styleObject {
@@ -82,6 +109,8 @@ article {
     header {
       text-align: center;
       color: black;
+      align-self: stretch;
+      cursor: pointer;
     }
 
     div {
@@ -94,7 +123,12 @@ article {
         height: 3rem;
       }
     }
+  }
 
+  .active-tag {
+    header {
+      font-weight: 700;
+    }
   }
 }
 </style>

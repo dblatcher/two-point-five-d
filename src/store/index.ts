@@ -5,6 +5,7 @@ import { spriteSheets } from '@/instances/sprites'
 import { game } from '@/instances/game'
 import { Item } from '@/game-classes/Item'
 import { Character } from '@/game-classes/Character'
+import { FeedbackToUI } from '@/game-classes/Game'
 
 
 export default createStore({
@@ -49,6 +50,13 @@ export default createStore({
       if (!this.getters.gameIsPaused) {
         return toRaw(state.game).handleSelfClick(toRaw(clickInfo))
       }
+    },
+
+    setActiveCharacter({state}, characterIndex:number):FeedbackToUI {
+      if (!this.getters.gameIsPaused) {
+        return state.game.setActiveCharacter(characterIndex)
+      }
+      return FeedbackToUI.empty
     },
 
     tick({ state, commit }) {

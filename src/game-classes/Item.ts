@@ -100,7 +100,7 @@ class Item {
         game.data.level.data.items.push(this)
     }
 
-    throw(pointInBackOfScreen: Point, vantage: Vantage, game: Game): void {
+    launch(pointInBackOfScreen: Point, vantage: Vantage, game: Game): void {
 
         const howFarRight = pointInBackOfScreen.x
 
