@@ -81,11 +81,12 @@ class Wall extends Position {
 
 
         let fillStyle: CanvasPattern | string = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
+        const strokeStyle = Color.BLACK.css 
 
         if (patternSprite) {
             fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints) || fillStyle
         }
-        plotPolygon(ctx, convertFunction, wallShapePoints, { noStroke: !!patternSprite, fillStyle })
+        plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle, fillStyle })
 
         features.forEach(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return }

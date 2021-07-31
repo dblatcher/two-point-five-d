@@ -1,12 +1,12 @@
-import { level1, level2, playerVantage, controllers } from './levels'
+import { level1, level2,duckPuzzleLevel, playerVantage, controllers } from './levels'
 
 import { Game } from '../game-classes/Game'
 import { characters } from './characters'
 
 
 const game = new Game({
-    level: level1,
-    levels: [level1, level2],
+    level: duckPuzzleLevel,
+    levels: [duckPuzzleLevel, level1, level2],
     playerVantage,
     controllers,
     activeCharacterIndex: 0,

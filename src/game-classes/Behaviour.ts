@@ -24,16 +24,21 @@ function moveClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action 
 }
 
 function moveAntiClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
-    const distance = .1
+    const distanceToMove = .1
     const placeAhead = actor.translate({
-        x: actor.data.direction.x * distance,
-        y: actor.data.direction.y * distance,
+        x: actor.data.direction.x * distanceToMove,
+        y: actor.data.direction.y * distanceToMove,
+    })
+    const howCloseToGet = .5
+    const whereToLookForBlockage = actor.translate({
+        x: actor.data.direction.x * howCloseToGet,
+        y: actor.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...actor.coords, ...placeAhead.coords)) {
+    if (game.data.level.isBlocked(...actor.coords, ...whereToLookForBlockage.coords)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
-        return new MovementByAction(distance, RelativeDirection.FORWARD)
+        return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
     }
 }
 

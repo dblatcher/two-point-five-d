@@ -18,7 +18,7 @@ import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Controller } from "@/game-classes/Controller";
 
 
-
+import {features as duckPuzzleFeatures, moveAntiClockwiseUnlessOnStar} from "./featuresForDuckPuzzle"
 
 
 const busyLevel: Level = new Level({
@@ -102,8 +102,38 @@ const simpleLevel: Level = new Level({
     ]
 })
 
+
+const duckPuzzleLevel = new Level({
+    height:8,
+    width:8,
+    defaultWallPattern:sprites.brickWall,
+    floorColor: new Color(100,40,40),
+    walls: [
+        new Wall({x:0, y:3, place:Direction.north, patternSprite:sprites.windowWall}),
+        new Wall({x:1, y:3, place:Direction.north, features:[duckPuzzleFeatures.hintForDuckGame]}),
+        new Wall({x:2, y:3, place:Direction.north, patternSprite:sprites.windowWall}),
+        new Wall({x:3, y:3, place:Direction.north}),
+        new Wall({x:4, y:2, place:Direction.west, shape:doorway, open:true, features:[duckPuzzleFeatures.door1]}),
+        new Wall({x:4, y:1, place:Direction.west, features:[duckPuzzleFeatures.lever1]}),
+        new Wall({x:4, y:0, place:Direction.west}),
+    ],
+    contents: [
+        duck({ x: 0.5, y: 0.5, direction: Direction.west, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+
+        new SquareWithFeatures({
+            x: 7, y: 7, direction: Direction.north, floorFeatures: [
+                duckPuzzleFeatures.blueStar
+            ]
+        }),
+
+    ],
+    items: [
+
+    ]
+}).withWallsAround()
+
 const playerVantage = new PlayerVantage({
-    x: 5, y: 4, direction: Direction.west,
+    x: 7, y: 6, direction: Direction.south,
 });
 
 const controllers: Controller[] = [
@@ -115,6 +145,8 @@ const controllers: Controller[] = [
     }),
     new Controller({ inputs: [keyhole], subject: door1, statusChangeOnInputTrigger: "OPEN" }),
 
+    new Controller({inputs:[duckPuzzleFeatures.lever1], defaultSubjectState:"CLOSED", subject:duckPuzzleFeatures.door1,
+    statusMap:[[["ON"],"OPEN"]]})
 ]
 
-export { simpleLevel as level1, busyLevel as level2, playerVantage, controllers }
+export { simpleLevel as level1, busyLevel as level2, duckPuzzleLevel, playerVantage, controllers }
