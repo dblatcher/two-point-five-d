@@ -120,6 +120,23 @@ class Pit extends FloorFeature {
     get isBlocking():boolean {return this.data.status === 'OPEN'}
 
 
+    getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
+        const size = .25;
+        const topleft =  direction.leftOf.translatePoint(direction.translatePoint(squareCenter, size),size);
+        const topRight = direction.rightOf.translatePoint(direction.translatePoint(squareCenter, size),size);
+        const bottomRight = direction.rightOf.translatePoint(direction.behind.translatePoint(squareCenter, size),size);
+        const bottomleft =  direction.leftOf.translatePoint(direction.behind.translatePoint(squareCenter, size),size);
+
+        return [
+            [topleft, topRight, bottomRight,bottomleft, topleft]
+        ]
+    }
+
+
+    getDrawInMapConfig(): PlotConfig {
+        return { noClose: true, noFill: this.data.status == "CLOSED" }
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
 

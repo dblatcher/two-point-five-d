@@ -1,4 +1,4 @@
-import { ConvertFunction, Dimensions, plotPolygon, Point } from "@/canvas/canvas-utility"
+import { ConvertFunction, Dimensions, PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { Sprite } from "@/canvas/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
@@ -95,7 +95,7 @@ class AbstractFeature {
         }
 
         this.getDrawInMapPolygons(direction, squareCenter).forEach(polygon => {
-            plotPolygon(ctx, convert, polygon, { noClose: true, noFill: true })
+            plotPolygon(ctx, convert, polygon, this.getDrawInMapConfig())
         })
     }
 
@@ -103,6 +103,9 @@ class AbstractFeature {
         return []
     }
 
+    getDrawInMapConfig(): PlotConfig {
+        return { noClose: true, noFill: true }
+    }
 
     fireTriggers(game: Game): void {
         const { requiresItem, consumesItem } = this.data
