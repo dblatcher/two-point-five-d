@@ -28,6 +28,8 @@
         <controls />
       </section>
     </main>
+
+    <intersitial-window/>
   </div>
 
   <p v-if="!spritesLoaded">loading...</p>
@@ -45,6 +47,7 @@ import PauseButton from "./PauseButton.vue";
 import CharacterScreen from "./CharacterScreen.vue";
 import ItemInHand from "./ItemInHand.vue";
 import CharacterTags from "./CharacterTags.vue";
+import IntersitialWindow from "./IntersitialWindow.vue";
 
 
 interface GameHolderData {
@@ -64,6 +67,7 @@ interface GameHolderData {
     ItemInHand,
     CharacterScreen,
     CharacterTags,
+    IntersitialWindow,
   },
 })
 export default class GameHolder extends Vue {
@@ -98,6 +102,7 @@ export default class GameHolder extends Vue {
 <style scoped lang="scss">
 .container {
   background-color: lightgray;
+  position: relative;
 
   .menu {
     display: flex;

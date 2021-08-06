@@ -13,6 +13,8 @@ import { Controller } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
 import { Direction } from './Direction'
+import { Intersitial } from './Intersitial'
+import { game } from '@/instances/game'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -24,6 +26,7 @@ interface GameConfig {
     controllers: Controller[]
     characters: Character[]
     activeCharacterIndex: number | undefined
+    intersitial?: Intersitial
 }
 
 class FeedbackToUI {
@@ -146,15 +149,37 @@ class Game {
 
     }
 
-    handleVictory(level: Level):void {
+    handleVictory(level: Level): void {
         const levelIndex = this.data.levels.indexOf(level);
-        const nextLevel = this.data.levels[levelIndex+1]
+        const nextLevel = this.data.levels[levelIndex + 1]
 
         if (nextLevel) {
-            this.changeLevel(levelIndex+1, nextLevel.data.startingVantage || new Vantage({x:0,y:0, direction:Direction.south}))
+            this.data.intersitial = new Intersitial({
+                role: 'END_OF_LEVEL',
+                content: 'Well done on victorying this level',
+                options: [
+                    {
+                        buttonText: 'go on to the next level',
+                        response: (game: Game) => {
+                            game.changeLevel(levelIndex + 1, nextLevel.data.startingVantage || new Vantage({ x: 0, y: 0, direction: Direction.south }))
+                        }
+                    }
+                ]
+            })
         }
-
     }
+
+    handleInterstitialOptionClick(optionIndex: number): FeedbackToUI {
+        const { intersitial } = this.data
+        if (!intersitial) return FeedbackToUI.no
+        if (!intersitial.data.options[optionIndex]) { return FeedbackToUI.no }
+
+        intersitial.data.options[optionIndex].response(this);
+        this.data.intersitial = undefined
+
+        return FeedbackToUI.yes
+    }
+
 
     changeLevel(levelIndex: number, vantage: Vantage): void {
         const { levels, playerVantage } = this.data

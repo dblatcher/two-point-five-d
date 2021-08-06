@@ -126,7 +126,7 @@ const duckPuzzleLevel = new Level({
         new Wall({ x: 6, y: 1, place: Direction.east }),
     ],
     contents: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.west, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+        duck({ x: 4.5, y: 7.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
 
         new SquareWithFeatures({
             x: 7, y: 7, direction: Direction.north, floorFeatures: [

@@ -16,7 +16,9 @@ export default createStore({
     timer: 0,
   },
   getters: {
-    gameIsPaused: state => state.timer == 0
+    gameIsPaused: state => state.timer == 0,
+    intersitial: state => state.game.data.intersitial || null,
+    timestamp: state => state.timestamp,
   },
   mutations: {
     updateTimestamp(state) {
@@ -52,11 +54,15 @@ export default createStore({
       }
     },
 
-    setActiveCharacter({state}, characterIndex:number):FeedbackToUI {
+    setActiveCharacter({ state }, characterIndex: number): FeedbackToUI {
       if (!this.getters.gameIsPaused) {
         return state.game.setActiveCharacter(characterIndex)
       }
       return FeedbackToUI.empty
+    },
+
+    interstitialOptionClick({ state }, intersitialOptionIndex: number): FeedbackToUI {
+      return state.game.handleInterstitialOptionClick(intersitialOptionIndex);
     },
 
     tick({ state, commit }) {
