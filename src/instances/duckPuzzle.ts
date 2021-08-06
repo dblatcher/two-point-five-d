@@ -29,11 +29,13 @@ const hintForDuckGame = new WallFeature({
     clipToWall: true,
     textBoard: new TextBoard({
         content: [
-            "Get the duck",
-            "to the star!",
+            "Help the duck",
+            "reach the",
+            "blue star!",
         ],
         size: { x: .8, y: .5 },
-        textScale: 3,
+        textScale: 3.5,
+        font: 'arial',
         textColor: Color.BLUE,
         backgroundColor: Color.YELLOW,
     }),
@@ -109,6 +111,25 @@ function moveAntiClockwiseUnlessOnStar(actor: Figure, game: Game, behaviour: Beh
 }
 
 
+const areAllDucksOnTheStar = (level: Level, game: Game) => {
+
+    const ducks: Figure[] = level.data.contents
+        .filter(content => content.isVantage)
+        .filter(vantage => (vantage as Figure).data.sprite && (vantage as Figure).data.sprite === sprites.duckSprite)
+        .map(duck => duck as Figure)
+
+    const squareWithStar = level.data.contents
+        .filter(content => content.isSquareWithFeatures)
+        .find(square => {
+            return (square as SquareWithFeatures).data.floorFeatures.includes(blueStar)
+        })
+
+    if (!squareWithStar) { return false }
+
+    return ducks.every(duck => duck.isInSameSquareAs(squareWithStar))
+}
+
+
 const duckPuzzleLevel = new Level({
     height: 6,
     width: 8,
@@ -125,68 +146,48 @@ const duckPuzzleLevel = new Level({
         new Wall({ x: 4, y: 2, place: Direction.west, shape: doorway, open: true, features: [door1] }),
         new Wall({ x: 4, y: 1, place: Direction.west, features: [lever1] }),
         new Wall({ x: 4, y: 0, place: Direction.west }),
-        new Wall({ x: 6, y: 1, place: Direction.north }),
+        new Wall({ x: 6, y: 0, place: Direction.west }),
         new Wall({ x: 6, y: 1, place: Direction.west }),
         new Wall({ x: 6, y: 1, place: Direction.south }),
         new Wall({ x: 6, y: 1, place: Direction.east }),
+        new Wall({ x: 7, y: 0, place: Direction.south }),
     ],
     contents: [
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
 
         new SquareWithFeatures({
-            x: 7, y: 5, direction: Direction.north, floorFeatures: [
-                blueStar
-            ]
+            x: 7, y: 5, direction: Direction.north, floorFeatures: [blueStar]
         }),
 
         new SquareWithFeatures({
-            x: 7, y: 2, direction: Direction.north, floorFeatures: [
-                pit1
-            ]
+            x: 7, y: 2, direction: Direction.north, floorFeatures: [pit1]
         }),
 
         new SquareWithFeatures({
-            x: 5, y: 2, direction: Direction.north, floorFeatures: [
-                floorSwitch
-            ]
+            x: 5, y: 2, direction: Direction.north, floorFeatures: [floorSwitch]
         }),
 
     ],
     items: [
 
     ],
-    victoryCondition(level: Level, game: Game) {
+    controllers: [
+        new Controller({
+            inputs: [lever1], defaultSubjectState: "CLOSED", subject: door1,
+            statusMap: [[["ON"], "OPEN"]]
+        }),
 
-        const ducks: Figure[] = level.data.contents
-            .filter(content => content.isVantage)
-            .filter(vantage => (vantage as Figure).data.sprite && (vantage as Figure).data.sprite === sprites.duckSprite)
-            .map(duck => duck as Figure)
-
-        const squareWithStar = level.data.contents
-            .filter(content => content.isSquareWithFeatures)
-            .find(square => {
-                return (square as SquareWithFeatures).data.floorFeatures.includes(blueStar)
-            })
-
-        if (!squareWithStar) { return false }
-
-        return ducks.every(duck => duck.isInSameSquareAs(squareWithStar))
-    }
+        new Controller({
+            inputs: [floorSwitch], subject: pit1, defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
+                [[FloorFeature.WEIGHED], "CLOSED"],
+            ]
+        }),
+    ],
+    victoryCondition: areAllDucksOnTheStar,
 }).withWallsAround()
 
-const duckPuzzleControllers = [
-    new Controller({
-        inputs: [lever1], defaultSubjectState: "CLOSED", subject: door1,
-        statusMap: [[["ON"], "OPEN"]]
-    }),
 
-    new Controller({
-        inputs: [floorSwitch], subject: pit1, defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
-            [[FloorFeature.WEIGHED], "CLOSED"],
-        ]
-    }),
-]
 
 export {
-    duckPuzzleLevel, duckPuzzleControllers
+    duckPuzzleLevel
 }

@@ -18,9 +18,6 @@ import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Controller } from "@/game-classes/Controller";
 
 
-import { duckPuzzleControllers } from "./duckPuzzle"
-
-
 const busyLevel: Level = new Level({
     height: 8, width: 15,
     defaultWallPattern: undefined,
@@ -115,8 +112,6 @@ const controllers: Controller[] = [
         ]
     }),
     new Controller({ inputs: [keyhole], subject: door1, statusChangeOnInputTrigger: "OPEN" }),
-
-    ...duckPuzzleControllers,
 
 ]
 

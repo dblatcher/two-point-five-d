@@ -12,7 +12,6 @@ import { SquareWithFeatures } from './SquareWithFeatures'
 import { Controller } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
-import { Direction } from './Direction'
 import { Intersitial } from './Intersitial'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -90,7 +89,9 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { items, contents, victoryCondition } = this.data.level.data;
+        const { items, contents, victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
+
+        const allControllers = [...this.data.controllers, ...levelControllers];
 
         const figures: Figure[] = contents
             .filter(thing => Object.getPrototypeOf(thing).constructor == Figure) // subclasses???!!
@@ -133,12 +134,12 @@ class Game {
         })
 
         if (this.featuresTriggeredThisTick.length > 0) {
-            this.data.controllers.forEach(controller => {
+            allControllers.forEach(controller => {
                 controller.reactToTriggers(this.featuresTriggeredThisTick)
             })
         }
 
-        this.data.controllers.forEach(controller => {
+        allControllers.forEach(controller => {
             controller.reactToInputStatus()
         })
 

@@ -2,6 +2,7 @@ import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFl
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "../canvas/Color";
+import { Controller } from "./Controller";
 import { Direction } from "./Direction";
 import { Game } from "./Game";
 import { Item } from "./Item";
@@ -27,6 +28,7 @@ interface LevelConfig {
     floorColor?: Color
     items: Item[]
 
+    controllers?: Controller[]
     victoryCondition?: VictoryTest
     startingVantage?: Vantage
 }
