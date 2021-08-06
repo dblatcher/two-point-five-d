@@ -1,7 +1,8 @@
-import { level1, level2,duckPuzzleLevel, playerVantage, controllers } from './levels'
+import { level1, level2, playerVantage, controllers } from './levels'
 
 import { Game } from '../game-classes/Game'
 import { characters } from './characters'
+import { duckPuzzleLevel } from './duckPuzzle'
 
 
 const game = new Game({

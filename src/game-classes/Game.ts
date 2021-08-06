@@ -14,7 +14,6 @@ import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
 import { Direction } from './Direction'
 import { Intersitial } from './Intersitial'
-import { game } from '@/instances/game'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -160,9 +159,7 @@ class Game {
                 options: [
                     {
                         buttonText: 'go on to the next level',
-                        response: (game: Game) => {
-                            game.changeLevel(levelIndex + 1, nextLevel.data.startingVantage || new Vantage({ x: 0, y: 0, direction: Direction.south }))
-                        }
+                        response: Intersitial.goToNextLevel
                     }
                 ]
             })
