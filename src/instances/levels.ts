@@ -18,7 +18,8 @@ import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Controller } from "@/game-classes/Controller";
 
 
-import {features as duckPuzzleFeatures, moveAntiClockwiseUnlessOnStar} from "./featuresForDuckPuzzle"
+import { features as duckPuzzleFeatures, moveAntiClockwiseUnlessOnStar } from "./featuresForDuckPuzzle"
+import { Game } from "@/game-classes/Game";
 
 
 const busyLevel: Level = new Level({
@@ -88,7 +89,7 @@ const simpleLevel: Level = new Level({
         }),
         new SquareWithFeatures({
             x: 2, y: 3, direction: Direction.north, floorFeatures: [
-                new Pit({status:"CLOSED"}),
+                new Pit({ status: "CLOSED" }),
             ]
         }),
     ],
@@ -104,18 +105,25 @@ const simpleLevel: Level = new Level({
 
 
 const duckPuzzleLevel = new Level({
-    height:8,
-    width:8,
-    defaultWallPattern:sprites.brickWall,
-    floorColor: new Color(100,40,40),
+    height: 8,
+    width: 8,
+    startingVantage: new Vantage({
+        x: 1, y: 4, direction: Direction.north,
+    }),
+    defaultWallPattern: sprites.brickWall,
+    floorColor: new Color(100, 40, 40),
     walls: [
-        new Wall({x:0, y:3, place:Direction.north, patternSprite:sprites.windowWall}),
-        new Wall({x:1, y:3, place:Direction.north, features:[duckPuzzleFeatures.hintForDuckGame]}),
-        new Wall({x:2, y:3, place:Direction.north, patternSprite:sprites.windowWall}),
-        new Wall({x:3, y:3, place:Direction.north}),
-        new Wall({x:4, y:2, place:Direction.west, shape:doorway, open:true, features:[duckPuzzleFeatures.door1]}),
-        new Wall({x:4, y:1, place:Direction.west, features:[duckPuzzleFeatures.lever1]}),
-        new Wall({x:4, y:0, place:Direction.west}),
+        new Wall({ x: 0, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
+        new Wall({ x: 1, y: 3, place: Direction.north, features: [duckPuzzleFeatures.hintForDuckGame] }),
+        new Wall({ x: 2, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
+        new Wall({ x: 3, y: 3, place: Direction.north }),
+        new Wall({ x: 4, y: 2, place: Direction.west, shape: doorway, open: true, features: [duckPuzzleFeatures.door1] }),
+        new Wall({ x: 4, y: 1, place: Direction.west, features: [duckPuzzleFeatures.lever1] }),
+        new Wall({ x: 4, y: 0, place: Direction.west }),
+        new Wall({ x: 6, y: 1, place: Direction.north }),
+        new Wall({ x: 6, y: 1, place: Direction.west }),
+        new Wall({ x: 6, y: 1, place: Direction.south }),
+        new Wall({ x: 6, y: 1, place: Direction.east }),
     ],
     contents: [
         duck({ x: 0.5, y: 0.5, direction: Direction.west, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
@@ -126,27 +134,65 @@ const duckPuzzleLevel = new Level({
             ]
         }),
 
+        new SquareWithFeatures({
+            x: 7, y: 2, direction: Direction.north, floorFeatures: [
+                duckPuzzleFeatures.pit1
+            ]
+        }),
+
+        new SquareWithFeatures({
+            x: 5, y: 2, direction: Direction.north, floorFeatures: [
+                duckPuzzleFeatures.floorSwitch
+            ]
+        }),
+
     ],
     items: [
 
-    ]
+    ],
+    victoryCondition(level: Level, game: Game) {
+
+        const ducks: Figure[] = level.data.contents
+            .filter(content => content.isVantage)
+            .filter(vantage => (vantage as Figure).data.sprite && (vantage as Figure).data.sprite === sprites.duckSprite)
+            .map(duck => duck as Figure)
+
+        const squareWithStar = level.data.contents
+            .filter(content => content.isSquareWithFeatures)
+            .find(square => {
+                return (square as SquareWithFeatures).data.floorFeatures.includes(duckPuzzleFeatures.blueStar)
+            })
+
+        if (!squareWithStar) { return false }
+
+        return ducks.every(duck => duck.isInSameSquareAs(squareWithStar))
+    }
 }).withWallsAround()
 
 const playerVantage = new PlayerVantage({
-    x: 7, y: 6, direction: Direction.south,
+    x: 1, y: 5, direction: Direction.north,
 });
 
 const controllers: Controller[] = [
 
     new Controller({
-        inputs: [blueSquare, redSquare], subject: door2, defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures:true, statusMap: [
+        inputs: [blueSquare, redSquare], subject: door2, defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, statusMap: [
             [[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "OPEN"],
         ]
     }),
     new Controller({ inputs: [keyhole], subject: door1, statusChangeOnInputTrigger: "OPEN" }),
 
-    new Controller({inputs:[duckPuzzleFeatures.lever1], defaultSubjectState:"CLOSED", subject:duckPuzzleFeatures.door1,
-    statusMap:[[["ON"],"OPEN"]]})
+    new Controller({
+        inputs: [duckPuzzleFeatures.lever1], defaultSubjectState: "CLOSED", subject: duckPuzzleFeatures.door1,
+        statusMap: [[["ON"], "OPEN"]]
+    }),
+
+    new Controller({
+        inputs: [duckPuzzleFeatures.floorSwitch], subject: duckPuzzleFeatures.pit1, defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
+            [[FloorFeature.WEIGHED], "CLOSED"],
+        ]
+    }),
+
 ]
 
 export { simpleLevel as level1, busyLevel as level2, duckPuzzleLevel, playerVantage, controllers }

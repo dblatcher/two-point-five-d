@@ -12,6 +12,7 @@ import { SquareWithFeatures } from './SquareWithFeatures'
 import { Controller } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
+import { Direction } from './Direction'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -87,7 +88,7 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { items, contents } = this.data.level.data;
+        const { items, contents, victoryCondition } = this.data.level.data;
 
         const figures: Figure[] = contents
             .filter(thing => Object.getPrototypeOf(thing).constructor == Figure) // subclasses???!!
@@ -138,6 +139,20 @@ class Game {
         this.data.controllers.forEach(controller => {
             controller.reactToInputStatus()
         })
+
+        if (victoryCondition && victoryCondition(this.data.level, this)) {
+            this.handleVictory(this.data.level)
+        }
+
+    }
+
+    handleVictory(level: Level):void {
+        const levelIndex = this.data.levels.indexOf(level);
+        const nextLevel = this.data.levels[levelIndex+1]
+
+        if (nextLevel) {
+            this.changeLevel(levelIndex+1, nextLevel.data.startingVantage || new Vantage({x:0,y:0, direction:Direction.south}))
+        }
 
     }
 
@@ -238,9 +253,9 @@ class Game {
             }
 
             if (location.type === 'AIR') {
-                if (activeCharacter &&  itemInHand) {
-                    activeCharacter.throw(itemInHand,{ x: location.x, y: location.y }, playerVantage, this)
-                    
+                if (activeCharacter && itemInHand) {
+                    activeCharacter.throw(itemInHand, { x: location.x, y: location.y }, playerVantage, this)
+
                     this.data.itemInHand = undefined;
                 }
             }

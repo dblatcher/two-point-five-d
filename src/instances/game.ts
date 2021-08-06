@@ -7,7 +7,7 @@ import { characters } from './characters'
 const game = new Game({
     level: duckPuzzleLevel,
     levels: [duckPuzzleLevel, level1, level2],
-    playerVantage,
+    playerVantage: duckPuzzleLevel.data.startingVantage || playerVantage,
     controllers,
     activeCharacterIndex: 0,
     characters: [characters.drake, characters.boblin, characters.sally],

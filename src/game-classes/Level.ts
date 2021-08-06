@@ -3,6 +3,7 @@ import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "../canvas/Color";
 import { Direction } from "./Direction";
+import { Game } from "./Game";
 import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
@@ -13,6 +14,10 @@ import { Wall } from "./Wall"
 
 const renderingZoneFrames = false;
 
+interface VictoryTest {
+    (level:Level, game:Game) : boolean
+}
+
 interface LevelConfig {
     width: number
     height: number
@@ -21,7 +26,12 @@ interface LevelConfig {
     defaultWallPattern?: Sprite
     floorColor?: Color
     items: Item[]
+
+    victoryCondition?: VictoryTest
+    startingVantage?: Vantage
 }
+
+
 
 class Level {
     data: LevelConfig

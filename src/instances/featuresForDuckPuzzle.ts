@@ -2,7 +2,7 @@ import { sprites, textBoards } from "@/instances/sprites";
 import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { makeTunnel } from "@/game-classes/Reaction";
 import { itemTypes } from "@/instances/itemTypes";
-import { FloorFeature } from "@/game-classes/FloorFeature";
+import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
 import { TextBoard } from "@/canvas/TextBoard"
 import { Color } from "@/canvas/Color";
@@ -49,14 +49,14 @@ const bigSquareOnFloor: [number, number][] = [
 ]
 
 const starOnFloor: [number, number][] = [
-    [   0  ,   0.5],
-    [   0.1,   0.1],
-    [   0.5,   0  ],
-    [   0.1,  -0.1],
-    [   0  ,  -0.5],
-    [  -0.1,  -0.1],
-    [  -0.5,   0  ],
-    [  -0.1,   0.1],
+    [0, 0.5],
+    [0.1, 0.1],
+    [0.5, 0],
+    [0.1, -0.1],
+    [0, -0.5],
+    [-0.1, -0.1],
+    [-0.5, 0],
+    [-0.1, 0.1],
 ]
 
 
@@ -70,17 +70,19 @@ const floorSwitch = new FloorFeature({
     plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
 })
 
+const pit1 = new Pit({ status: "OPEN" })
+
 const features = {
-    door1, door2, hintForDuckGame, blueStar, lever1, floorSwitch
+    door1, door2, hintForDuckGame, blueStar, lever1, floorSwitch, pit1
 }
 
 function moveAntiClockwiseUnlessOnStar(actor: Figure, game: Game, behaviour: Behaviour): Action {
 
-    const squareWithStar =  game.data.level.data.contents
-    .filter(content =>  content.isSquareWithFeatures)
-    .find(square => {
-       return  (square as SquareWithFeatures).data.floorFeatures.includes(blueStar)
-    })
+    const squareWithStar = game.data.level.data.contents
+        .filter(content => content.isSquareWithFeatures)
+        .find(square => {
+            return (square as SquareWithFeatures).data.floorFeatures.includes(blueStar)
+        })
 
     if (squareWithStar && squareWithStar.isInSameSquareAs(actor)) {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
