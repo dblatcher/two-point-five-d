@@ -30,6 +30,7 @@ interface LevelConfig {
 
     controllers?: Controller[]
     victoryCondition?: VictoryTest
+    victoryMessage?:string
     startingVantage?: Vantage
 }
 

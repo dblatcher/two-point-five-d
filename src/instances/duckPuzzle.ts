@@ -181,6 +181,7 @@ const duckPuzzleLevel = new Level({
         }),
     ],
     victoryCondition: areAllDucksOnTheStar,
+    victoryMessage: "Well done! But there are more ducks who need your help..."
 }).withWallsAround()
 
 
@@ -228,6 +229,7 @@ const duckPuzzleLevel2 = new Level({
         }),
     ],
     victoryCondition: areAllDucksOnTheStar,
+    victoryMessage: "You're getting the hang of this!"
 }).withWallsAround()
 
 

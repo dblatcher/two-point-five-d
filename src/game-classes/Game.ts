@@ -27,6 +27,10 @@ interface GameConfig {
     intersitial?: Intersitial
 }
 
+interface GameRules {
+    needCharacterToPickUpItems?: boolean
+}
+
 class FeedbackToUI {
     message?: string
     propertyList?: [string, string | number][]
@@ -53,6 +57,7 @@ class FeedbackToUI {
 
 class Game {
     data: GameConfig
+    rules: GameRules
     queuedPlayerActions: Action[]
     tickCount: number
     pointerLocator: PointerLocator
@@ -65,8 +70,9 @@ class Game {
         Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW
     ]
 
-    constructor(config: GameConfig) {
+    constructor(config: GameConfig, rules: GameRules = {}) {
         this.data = config;
+        this.rules = rules;
         this.queuedPlayerActions = []
         this.tickCount = 0
         this.pointerLocator = new PointerLocator;
@@ -156,10 +162,10 @@ class Game {
         if (nextLevel) {
             this.data.intersitial = new Intersitial({
                 role: 'END_OF_LEVEL',
-                content: 'Well done on victorying this level',
+                content: level.data.victoryMessage || 'Level complete.',
                 options: [
                     {
-                        buttonText: 'go on to the next level',
+                        buttonText: 'Next level',
                         response: Intersitial.goToNextLevel
                     }
                 ]
@@ -213,6 +219,7 @@ class Game {
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
         const { level, playerVantage, itemInHand } = this.data
+        const { needCharacterToPickUpItems = false } = this.rules
         const { pointerLocator, activeCharacter } = this
         const { walls, items } = level.data
         const playerHasWallInFace = level.hasWallInFace(playerVantage)
@@ -231,9 +238,11 @@ class Game {
             const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerVantage, items, clickInfo, !squareAheadIsBlocked)
 
             if (itemClicked) {
-                if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
-                this.queuedPlayerActions.push(new InterAction(itemClicked));
-                break
+                if (!needCharacterToPickUpItems || this.activeCharacter) {
+                    if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
+                    this.queuedPlayerActions.push(new InterAction(itemClicked));
+                    break
+                }
             }
 
 
@@ -278,7 +287,10 @@ class Game {
             if (location.type === 'AIR') {
                 if (activeCharacter && itemInHand) {
                     activeCharacter.throw(itemInHand, { x: location.x, y: location.y }, playerVantage, this)
+                    this.data.itemInHand = undefined;
 
+                } else if (!needCharacterToPickUpItems && itemInHand) {
+                    itemInHand.launch({ x: location.x, y: location.y }, playerVantage, this);
                     this.data.itemInHand = undefined;
                 }
             }

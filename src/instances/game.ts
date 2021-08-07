@@ -7,11 +7,13 @@ import { duckPuzzleLevel, duckPuzzleLevel2 } from './duckPuzzle'
 
 const game = new Game({
     level: duckPuzzleLevel,
-    levels: [duckPuzzleLevel, duckPuzzleLevel2, ],
+    levels: [duckPuzzleLevel, duckPuzzleLevel2,],
     playerVantage: duckPuzzleLevel.data.startingVantage || playerVantage,
     controllers,
     activeCharacterIndex: 0,
-    characters: [characters.drake, characters.boblin, characters.sally],
+    characters: [],
+}, {
+    needCharacterToPickUpItems: false
 })
 
 export { game }
