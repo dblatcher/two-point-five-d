@@ -87,6 +87,16 @@ class FloorFeature extends AbstractFeature {
 
     getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
 
+        if (this.data.shape) {
+            const points = this.data.shape.map(coord => {
+                let point = direction.translatePoint(squareCenter, coord[0])
+                point = direction.leftOf.translatePoint(point, coord[1])
+                return point
+            })
+            points.push(points[0])
+            return [points]
+        }
+
         const topMiddle = direction.translatePoint(squareCenter, .25);
         const leftMiddle = direction.leftOf.translatePoint(squareCenter, .25);
         const bottomMiddle = direction.behind.translatePoint(squareCenter, .25);
@@ -103,7 +113,7 @@ interface pitConfig {
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
-    status?: "OPEN"|"CLOSED"
+    status?: "OPEN" | "CLOSED"
 
     plotConfig?: PlotConfig,
 }
@@ -117,18 +127,18 @@ class Pit extends FloorFeature {
     }
 
     get defaultStatus(): string { return 'OPEN' }
-    get isBlocking():boolean {return this.data.status === 'OPEN'}
+    get isBlocking(): boolean { return this.data.status === 'OPEN' }
 
 
     getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
-        const size = .25;
-        const topleft =  direction.leftOf.translatePoint(direction.translatePoint(squareCenter, size),size);
-        const topRight = direction.rightOf.translatePoint(direction.translatePoint(squareCenter, size),size);
-        const bottomRight = direction.rightOf.translatePoint(direction.behind.translatePoint(squareCenter, size),size);
-        const bottomleft =  direction.leftOf.translatePoint(direction.behind.translatePoint(squareCenter, size),size);
+        const size = .35;
+        const topleft = direction.leftOf.translatePoint(direction.translatePoint(squareCenter, size), size);
+        const topRight = direction.rightOf.translatePoint(direction.translatePoint(squareCenter, size), size);
+        const bottomRight = direction.rightOf.translatePoint(direction.behind.translatePoint(squareCenter, size), size);
+        const bottomleft = direction.leftOf.translatePoint(direction.behind.translatePoint(squareCenter, size), size);
 
         return [
-            [topleft, topRight, bottomRight,bottomleft, topleft]
+            [topleft, topRight, bottomRight, bottomleft, topleft]
         ]
     }
 
@@ -161,7 +171,7 @@ class Pit extends FloorFeature {
 
         if (this.data.status === 'CLOSED') {
             plotPolygon(ctx, convertFunction, corners, { strokeStyle: Color.BLACK.css, fillStyle: floorColor.lighter(5).css })
-            return 
+            return
         }
 
         plotPolygon(ctx, convertFunction, corners, { fillStyle: floorColor.darker(5).css })
