@@ -1,6 +1,5 @@
-import { sprites, textBoards } from "@/instances/sprites";
+import { sprites } from "@/instances/sprites";
 import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
-import { makeTunnel } from "@/game-classes/Reaction";
 import { itemTypes } from "@/instances/itemTypes";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 
@@ -17,44 +16,38 @@ import { Level } from "@/game-classes/Level";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { duck } from "./figureFactory";
-import { doorway } from "./wallShapes";
+import { doorway, lowWall } from "./wallShapes";
 import { Controller } from "@/game-classes/Controller";
+import { Item } from "@/game-classes/Item";
 
 
+
+function makeSign(text: string[]): WallFeature {
+    return new WallFeature({
+        clipToWall: true,
+        textBoard: new TextBoard({
+            content: text,
+            size: { x: .8, y: .5 },
+            textScale: 3.5,
+            font: 'arial',
+            textColor: Color.BLUE,
+            backgroundColor: Color.YELLOW,
+        }),
+    })
+}
+
+
+const hintForLevel1 = makeSign(["Help the duck","reach the","blue star!",])
+const hintForLevel2 = makeSign(["Use both plates","to open","the door"])
 
 const lever1 = new WallSwitch({ sprite: sprites.leverSprite, })
-
-
-const hintForDuckGame = new WallFeature({
-    clipToWall: true,
-    textBoard: new TextBoard({
-        content: [
-            "Help the duck",
-            "reach the",
-            "blue star!",
-        ],
-        size: { x: .8, y: .5 },
-        textScale: 3.5,
-        font: 'arial',
-        textColor: Color.BLUE,
-        backgroundColor: Color.YELLOW,
-    }),
-})
-
 const door1 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
 const door2 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-
-
-
 const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
-
-const tunnel = makeTunnel();
-const stairs = new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[0]] })
-const stairs2 = new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[1]] })
 
 
 const bigSquareOnFloor: [number, number][] = [
-    [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
+    [-.4, -.4], [.4, -.4], [.4, .4], [-.4, .4]
 ]
 
 const starOnFloor: [number, number][] = [
@@ -75,6 +68,10 @@ const blueStar = new FloorFeature({
 })
 
 const floorSwitch = new FloorFeature({
+    blocksByDefault: false,
+    plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
+})
+const floorSwitch2 = new FloorFeature({
     blocksByDefault: false,
     plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
 })
@@ -140,7 +137,7 @@ const duckPuzzleLevel = new Level({
     floorColor: new Color(100, 40, 40),
     walls: [
         new Wall({ x: 0, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
-        new Wall({ x: 1, y: 3, place: Direction.north, features: [hintForDuckGame] }),
+        new Wall({ x: 1, y: 3, place: Direction.north, features: [hintForLevel1] }),
         new Wall({ x: 2, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
         new Wall({ x: 3, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
         new Wall({ x: 4, y: 2, place: Direction.west, shape: doorway, open: true, features: [door1] }),
@@ -187,7 +184,53 @@ const duckPuzzleLevel = new Level({
 }).withWallsAround()
 
 
+const duckPuzzleLevel2 = new Level({
+    height: 6,
+    width: 6,
+    startingVantage: new Vantage({
+        x: 1, y: 2, direction: Direction.east,
+    }),
+    // defaultWallPattern: sprites.brickWall,
+    floorColor: new Color(30, 120, 90),
+    walls: [
+        new Wall({ x: 5, y: 2, place: Direction.north, shape: lowWall, }),
+        new Wall({ x: 5, y: 2, place: Direction.south,shape: lowWall, }),
+        new Wall({ x: 5, y: 3, place: Direction.east, features:[hintForLevel2] }),
+        new Wall({ x: 4, y: 2, place: Direction.north,shape: lowWall, }),
+        new Wall({ x: 4, y: 2, place: Direction.south,shape: lowWall, }),
+        new Wall({ x: 4, y: 2, place: Direction.west, features: [door1], open: true, shape: doorway }),
+    ],
+    contents: [
+        duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+
+        new SquareWithFeatures({
+            x: 1, y: 2, direction: Direction.north, floorFeatures: [blueStar]
+        }),
+
+        new SquareWithFeatures({
+            x: 3, y: 1, direction: Direction.north, floorFeatures: [floorSwitch2]
+        }),
+
+        new SquareWithFeatures({
+            x: 3, y: 3, direction: Direction.north, floorFeatures: [floorSwitch]
+        }),
+
+    ],
+    items: [
+        new Item({
+            type: itemTypes.helmet, vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
+        }),
+    ],
+    controllers: [
+        new Controller({
+            inputs: [floorSwitch, floorSwitch2], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subject: door1,
+            statusMap: [[[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "OPEN"]]
+        }),
+    ],
+    victoryCondition: areAllDucksOnTheStar,
+}).withWallsAround()
+
 
 export {
-    duckPuzzleLevel
+    duckPuzzleLevel, duckPuzzleLevel2
 }

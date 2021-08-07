@@ -160,7 +160,7 @@ class Wall extends Position {
         }
     }
 
-    static get defaultColor(): Color { return new Color(250, 250, 250, 1) }
+    static get defaultColor(): Color { return Color.GRAY }
 
     static get defaultShape(): Point[] {
         return [

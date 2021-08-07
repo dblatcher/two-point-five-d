@@ -52,6 +52,7 @@ class Color {
     static GREEN = new Color(40,200,40);
     static BLUE = new Color(40,40,200);
     static YELLOW = new Color(150,150,40);
+    static GRAY = new Color(100,100,100);
 }
 
 
