@@ -10,7 +10,7 @@ import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { SquareWithFeatures } from "./SquareWithFeatures";
-import { Vantage } from "./Vantage";
+import { Vantage, VantageConfig } from "./Vantage";
 import { Wall } from "./Wall"
 
 const renderingZoneFrames = false;
@@ -31,7 +31,7 @@ interface LevelConfig {
     controllers?: Controller[]
     victoryCondition?: VictoryTest
     victoryMessage?:string
-    startingVantage?: Vantage
+    startingVantage?: VantageConfig
 }
 
 

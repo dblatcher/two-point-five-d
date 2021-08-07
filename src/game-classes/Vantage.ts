@@ -2,7 +2,7 @@ import { Direction } from './Direction'
 import { Position } from './Position'
 import { Game } from './Game'
 import { RelativeDirection } from './RelativeDirection'
-import { ConvertFunction, mapPointOnFloor, plotPolygon, RelativePoint } from '@/canvas/canvas-utility'
+import { ConvertFunction, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility'
 import { RenderInstruction } from '@/canvas/RenderInstruction'
 
 interface VantageConfig {
@@ -34,36 +34,37 @@ class Vantage extends Position {
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
+        plotPolygon(
+            ctx, p => [p.x, p.y], 
+            this.getDrawInMapPoints(gridSize),
+            { noClose: true, noFill:true })
+    }
+
+    getDrawInMapPoints(gridSize:number):Point[] {
         const { direction: d } = this.data;
         const { gridX, gridY } = this;
-        const arrowCenterX = (gridX + .5) * gridSize
-        const arrowCenterY = (gridY + .5) * gridSize
 
-        let arrowEndX = arrowCenterX,
-            arrowEndY = arrowCenterY,
-            arrowLeftX = arrowCenterX,
-            arrowLeftY = arrowCenterY,
-            arrowRightX = arrowCenterX,
-            arrowRightY = arrowCenterY;
+        const arrowCenter: Point = {
+            x: (gridX + .5) * gridSize,
+            y: (gridY + .5) * gridSize
+        }
 
-        arrowEndX += gridSize * .4 * d.x
-        arrowEndY += gridSize * .4 * d.y
-        arrowLeftX += gridSize * .3 * d.x
-        arrowLeftY += gridSize * .3 * d.y
-        arrowLeftX += gridSize * .15 * d.leftOf.x
-        arrowLeftY += gridSize * .15 * d.leftOf.y
-        arrowRightX += gridSize * .3 * d.x
-        arrowRightY += gridSize * .3 * d.y
-        arrowRightX += gridSize * .1 * d.rightOf.x
-        arrowRightY += gridSize * .1 * d.rightOf.y
+        const arrowEnd = {
+            x: arrowCenter.x + (gridSize * .4 * d.x),
+            y: arrowCenter.y + (gridSize * .4 * d.y),
+        }
 
-        ctx.beginPath();
-        ctx.moveTo(arrowCenterX, arrowCenterY);
-        ctx.lineTo(arrowEndX, arrowEndY);
-        ctx.lineTo(arrowLeftX, arrowLeftY);
-        ctx.lineTo(arrowEndX, arrowEndY);
-        ctx.lineTo(arrowRightX, arrowRightY);
-        ctx.stroke();
+        const arrowLeft = {
+            x: arrowCenter.x + (gridSize * .3 * d.x) + (gridSize * .15 * d.leftOf.x),
+            y: arrowCenter.y + (gridSize * .3 * d.y) + (gridSize * .15 * d.leftOf.y),
+        }
+
+        const arrowRight = {
+            x: arrowCenter.x + (gridSize * .3 * d.x) + (gridSize * .15 * d.rightOf.x),
+            y: arrowCenter.y + (gridSize * .3 * d.y) + (gridSize * .15 * d.rightOf.y),
+        }
+
+        return [arrowCenter,arrowEnd,arrowLeft,arrowEnd,arrowRight]
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -82,7 +83,7 @@ class Vantage extends Position {
     }
 
     static defaultMarkerSize = .2
-    static defaultMarkerShape:[number,number][] = [
+    static defaultMarkerShape: [number, number][] = [
         [- Vantage.defaultMarkerSize, - Vantage.defaultMarkerSize],
         [- Vantage.defaultMarkerSize, + Vantage.defaultMarkerSize],
         [+ Vantage.defaultMarkerSize, 0],

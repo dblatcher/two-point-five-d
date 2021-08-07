@@ -130,9 +130,9 @@ const areAllDucksOnTheStar = (level: Level, game: Game) => {
 const duckPuzzleLevel = new Level({
     height: 6,
     width: 8,
-    startingVantage: new Vantage({
+    startingVantage: {
         x: 1, y: 4, direction: Direction.north,
-    }),
+    },
     defaultWallPattern: sprites.brickWall,
     floorColor: new Color(100, 40, 40),
     walls: [
@@ -188,9 +188,9 @@ const duckPuzzleLevel = new Level({
 const duckPuzzleLevel2 = new Level({
     height: 6,
     width: 6,
-    startingVantage: new Vantage({
+    startingVantage: {
         x: 1, y: 2, direction: Direction.east,
-    }),
+    },
     // defaultWallPattern: sprites.brickWall,
     floorColor: new Color(30, 120, 90),
     walls: [

@@ -1,5 +1,6 @@
 import { Direction } from "./Direction";
 import { Game } from "./Game"
+import { PlayerVantage } from "./PlayerVantage";
 import { Vantage } from "./Vantage";
 
 interface IntersitialOptionFunction {
@@ -24,7 +25,7 @@ class Intersitial {
     static goToNextLevel(game: Game): void {
         const levelIndex = game.data.levels.indexOf(game.data.level);
         const nextLevel = game.data.levels[levelIndex + 1]
-        game.changeLevel(levelIndex + 1, nextLevel.data.startingVantage || new Vantage({ x: 0, y: 0, direction: Direction.south }))
+        game.changeLevel(levelIndex + 1, new PlayerVantage(nextLevel.data.startingVantage || { x: 0, y: 0, direction: Direction.south }))
     }
 }
 
