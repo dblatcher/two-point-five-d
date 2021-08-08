@@ -86,26 +86,19 @@ class FloorFeature extends AbstractFeature {
     }
 
     getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
-
-        if (this.data.shape) {
-            const points = this.data.shape.map(coord => {
-                let point = direction.translatePoint(squareCenter, coord[0])
-                point = direction.leftOf.translatePoint(point, coord[1])
-                return point
-            })
-            points.push(points[0])
-            return [points]
-        }
-
-        const topMiddle = direction.translatePoint(squareCenter, .25);
-        const leftMiddle = direction.leftOf.translatePoint(squareCenter, .25);
-        const bottomMiddle = direction.behind.translatePoint(squareCenter, .25);
-        const rightMiddle = direction.rightOf.translatePoint(squareCenter, .25);
-
-        return [
-            [topMiddle, leftMiddle, bottomMiddle, rightMiddle, topMiddle]
-        ]
+        const shape = this.data.shape || this.defaultShape
+        const points = shape.map(coord => {
+            let point = direction.translatePoint(squareCenter, coord[0])
+            point = direction.leftOf.translatePoint(point, coord[1])
+            return point
+        })
+        points.push(points[0])
+        return [points]
     }
+
+    defaultShape: [number, number][] = [
+        [0, -.25], [.25, 0], [0, .25], [-.25, 0]
+    ]
 }
 
 
