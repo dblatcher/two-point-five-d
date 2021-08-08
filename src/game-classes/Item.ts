@@ -101,18 +101,35 @@ class Item {
     }
 
     launch(pointInBackOfScreen: Point, vantage: Vantage, game: Game): void {
+        const { direction } = vantage.data;
 
         const howFarRight = pointInBackOfScreen.x
 
-        const thrownPoint = vantage.data.direction.rotatePoint({ x: howFarRight, y: howFarRight })
-        const squareAhead = vantage.translate(vantage.data.direction)
+        const thrownPoint = direction.rotatePoint({ x: howFarRight, y: howFarRight })
+        const squareAhead = vantage.translate(direction)
 
-        squareAhead.squareX = 1 - thrownPoint.x;
-        squareAhead.squareY = thrownPoint.y;
+        switch (direction) {
+            case Direction.north:
+                squareAhead.squareX = 1 - thrownPoint.x;
+                squareAhead.squareY = 1
+                break;
+            case Direction.south:
+                squareAhead.squareX = 1 - thrownPoint.x;
+                squareAhead.squareY = 0
+                break;
+            case Direction.east:
+                squareAhead.squareX = 0
+                squareAhead.squareY = thrownPoint.y;
+                break;
+            case Direction.west:
+                squareAhead.squareX = 1
+                squareAhead.squareY = thrownPoint.y;
+                break;
+        }
 
         this.data.vantage = new Vantage({
             ...squareAhead.data,
-            direction: vantage.data.direction
+            direction
         })
         this.data.altitude = .5
         this.data.momentum = 10
@@ -127,7 +144,7 @@ class Item {
             this.data.altitude = Math.max(0, this.data.altitude - .05)
         }
         if (this.data.momentum && this.data.momentum > 0) {
-            this.data.vantage?.moveAbsoluteBy(.1, this.data.vantage.data.direction, game)
+            this.data.vantage?.moveAbsoluteBy(.15, this.data.vantage.data.direction, game)
             this.data.momentum = Math.max(0, this.data.momentum - 1)
         }
     }
