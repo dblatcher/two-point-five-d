@@ -1,5 +1,5 @@
 import { Direction } from './Direction'
-import { ConvertFunction, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility';
+import { ConvertFunction, mapPointOnFloor, PlotConfig, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility';
 import { Game } from './Game';
 import { RenderInstruction } from '@/canvas/RenderInstruction';
 
@@ -33,7 +33,7 @@ class Position {
         return this.data.x - this.gridX
     }
 
-    set squareX(value:number) {
+    set squareX(value: number) {
         this.data.x = this.gridX + value
     }
 
@@ -41,7 +41,7 @@ class Position {
         return this.data.y - this.gridY
     }
 
-    set squareY(value:number) {
+    set squareY(value: number) {
         this.data.y = this.gridY + value
     }
 
@@ -134,18 +134,27 @@ class Position {
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
         const { gridX, gridY } = this;
-        const crossCenterX = (gridX + .5) * gridSize
-        const crossCenterY = (gridY + .5) * gridSize
 
-        const crossArmLength = gridSize * (1 / 3)
+        const convert = ( p:Point) => [
+            (gridX + .5 + p.x) * gridSize,
+            (gridY + .5 + p.y) * gridSize,
+        ] as [number, number]
 
-        ctx.beginPath();
-        ctx.moveTo(crossCenterX - crossArmLength, crossCenterY - crossArmLength);
-        ctx.lineTo(crossCenterX + crossArmLength, crossCenterY + crossArmLength);
-        ctx.moveTo(crossCenterX + crossArmLength, crossCenterY - crossArmLength);
-        ctx.lineTo(crossCenterX - crossArmLength, crossCenterY + crossArmLength);
+        this.drawInMapPoints.forEach(polygon => {
+            plotPolygon(
+                ctx, convert, 
+                polygon,
+                this.drawInMapConfig)
+        })
+    }
 
-        ctx.stroke();
+
+    drawInMapConfig:PlotConfig = { noClose: true, noFill:true }
+
+    get drawInMapPoints():Point[][] {
+        const arm1 = [{x:-.2, y:.2},{x:.2,y:-.2}];
+        const arm2 = [{x:-.2, y:-.2},{x:.2,y:.2}];
+        return [arm1,arm2]
     }
 
     static roundCoordinate(value: number): number {

@@ -33,38 +33,28 @@ class Vantage extends Position {
         this.data.direction = direction.getAbsoluteDirection(this.data.direction);
     }
 
-    drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
-        plotPolygon(
-            ctx, p => [p.x, p.y], 
-            this.getDrawInMapPoints(gridSize),
-            { noClose: true, noFill:true })
-    }
 
-    getDrawInMapPoints(gridSize:number):Point[] {
+    get drawInMapPoints(): Point[][] {
         const { direction: d } = this.data;
-        const { gridX, gridY } = this;
 
-        const arrowCenter: Point = {
-            x: (gridX + .5) * gridSize,
-            y: (gridY + .5) * gridSize
-        }
+        const arrowCenter = { x: 0, y: 0 }
 
         const arrowEnd = {
-            x: arrowCenter.x + (gridSize * .4 * d.x),
-            y: arrowCenter.y + (gridSize * .4 * d.y),
+            x: .4 * d.x,
+            y: .4 * d.y,
         }
 
         const arrowLeft = {
-            x: arrowCenter.x + (gridSize * .3 * d.x) + (gridSize * .15 * d.leftOf.x),
-            y: arrowCenter.y + (gridSize * .3 * d.y) + (gridSize * .15 * d.leftOf.y),
+            x: (.3 * d.x) + (.15 * d.leftOf.x),
+            y: (.3 * d.y) + (.15 * d.leftOf.y),
         }
 
         const arrowRight = {
-            x: arrowCenter.x + (gridSize * .3 * d.x) + (gridSize * .15 * d.rightOf.x),
-            y: arrowCenter.y + (gridSize * .3 * d.y) + (gridSize * .15 * d.rightOf.y),
+            x: (.3 * d.x) + (.15 * d.rightOf.x),
+            y: (.3 * d.y) + (.15 * d.rightOf.y),
         }
 
-        return [arrowCenter,arrowEnd,arrowLeft,arrowEnd,arrowRight]
+        return [[arrowCenter, arrowEnd, arrowLeft, arrowEnd, arrowRight]]
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
