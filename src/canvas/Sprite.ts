@@ -213,6 +213,9 @@ class Sprite {
                 frame
             ])
 
+        config.size = config.size || Sprite.DEFAULT_SIZE
+        config.shadow = config.shadow || { x: config.size.x*(3/5), y: .1 }
+
         return new Sprite(name, config)
     }
 

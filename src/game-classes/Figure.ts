@@ -7,6 +7,7 @@ import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
 import { RelativeDirection } from "./RelativeDirection";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
+import { Color } from "@/canvas/Color";
 
 interface FigureConfig {
     x: number
@@ -69,7 +70,7 @@ class Figure extends Vantage {
                 x: widthAtDistance * sprite.shadow.x, y: heightAtDistance * sprite.shadow.y
             }
             ctx.beginPath()
-            ctx.fillStyle = "black"
+            ctx.fillStyle = Color.BLACK.opacityAt(.5).css
             ctx.ellipse(...convert(centerOnFloor), ...convert(shadowSize), 0, 0, Math.PI * 2)
             ctx.fill()
         }

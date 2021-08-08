@@ -166,7 +166,12 @@ const duckPuzzleLevel = new Level({
 
     ],
     items: [
-
+        new Item({
+            type: itemTypes.apple, vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
+        }),
+        new Item({
+            type: itemTypes.bardHat, vantage: new Vantage({ x: 4.5, y: 3.25, direction: Direction.north })
+        }),
     ],
     controllers: [
         new Controller({
