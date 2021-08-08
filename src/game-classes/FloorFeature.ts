@@ -126,12 +126,15 @@ class Pit extends FloorFeature {
     getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
         const size = .35;
         const topleft = direction.leftOf.translatePoint(direction.translatePoint(squareCenter, size), size);
+        const topMiddle = direction.translatePoint(squareCenter, size);
+
         const topRight = direction.rightOf.translatePoint(direction.translatePoint(squareCenter, size), size);
         const bottomRight = direction.rightOf.translatePoint(direction.behind.translatePoint(squareCenter, size), size);
+        const bottomMiddle = direction.behind.translatePoint(squareCenter, size);
         const bottomleft = direction.leftOf.translatePoint(direction.behind.translatePoint(squareCenter, size), size);
 
         return [
-            [topleft, topRight, bottomRight, bottomleft, topleft]
+            [topleft, topMiddle,bottomMiddle,topMiddle, topRight, bottomRight, bottomleft, topleft]
         ]
     }
 

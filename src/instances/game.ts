@@ -1,15 +1,16 @@
-import { level1, level2, playerVantage, controllers } from './levels'
+import { playerVantage, controllers } from './levels'
 
 import { Game } from '../game-classes/Game'
-import { characters } from './characters'
-import { duckPuzzleLevel, duckPuzzleLevel2 } from './duckPuzzle'
+import { duckPuzzleLevel, duckPuzzleLevel2, duckPuzzleLevel3 } from './duckPuzzle'
 import { PlayerVantage } from '@/game-classes/PlayerVantage'
 
 
+const levels = [duckPuzzleLevel, duckPuzzleLevel2, duckPuzzleLevel3]
+
 const game = new Game({
-    level: duckPuzzleLevel,
-    levels: [duckPuzzleLevel, duckPuzzleLevel2,],
-    playerVantage: duckPuzzleLevel.data.startingVantage ? new PlayerVantage(duckPuzzleLevel.data.startingVantage) : playerVantage,
+    level: levels[0],
+    levels: levels,
+    playerVantage: levels[0].data.startingVantage ? new PlayerVantage(levels[0].data.startingVantage) : playerVantage,
     controllers,
     activeCharacterIndex: 0,
     characters: [],

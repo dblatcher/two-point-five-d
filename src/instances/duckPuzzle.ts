@@ -37,8 +37,8 @@ function makeSign(text: string[]): WallFeature {
 }
 
 
-const hintForLevel1 = makeSign(["Help the duck","reach the","blue star!",])
-const hintForLevel2 = makeSign(["Use both plates","to open","the door"])
+const hintForLevel1 = makeSign(["Help the duck", "reach the", "blue star!",])
+const hintForLevel2 = makeSign(["Use both plates", "to open", "the door"])
 
 const lever1 = new WallSwitch({ sprite: sprites.leverSprite, })
 const door1 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
@@ -77,6 +77,7 @@ const floorSwitch2 = new FloorFeature({
 })
 
 const pit1 = new Pit({ status: "OPEN" })
+const pitClosed = new Pit({ status: "CLOSED" })
 
 
 
@@ -200,10 +201,10 @@ const duckPuzzleLevel2 = new Level({
     floorColor: new Color(30, 120, 90),
     walls: [
         new Wall({ x: 5, y: 2, place: Direction.north, shape: lowWall, }),
-        new Wall({ x: 5, y: 2, place: Direction.south,shape: lowWall, }),
-        new Wall({ x: 5, y: 3, place: Direction.east, features:[hintForLevel2] }),
-        new Wall({ x: 4, y: 2, place: Direction.north,shape: lowWall, }),
-        new Wall({ x: 4, y: 2, place: Direction.south,shape: lowWall, }),
+        new Wall({ x: 5, y: 2, place: Direction.south, shape: lowWall, }),
+        new Wall({ x: 5, y: 3, place: Direction.east, features: [hintForLevel2] }),
+        new Wall({ x: 4, y: 2, place: Direction.north, shape: lowWall, }),
+        new Wall({ x: 4, y: 2, place: Direction.south, shape: lowWall, }),
         new Wall({ x: 4, y: 2, place: Direction.west, features: [door1], open: true, shape: doorway }),
     ],
     contents: [
@@ -237,7 +238,72 @@ const duckPuzzleLevel2 = new Level({
     victoryMessage: "You're getting the hang of this!"
 }).withWallsAround()
 
+const duckPuzzleLevel3 = new Level({
+    height: 7,
+    width: 7,
+    startingVantage: {
+        x: 0, y: 0, direction: Direction.east,
+    },
+    floorColor: new Color(120, 90, 30),
+    walls: [
+
+        new Wall({ x: 2, y: 2, place: Direction.north, }),
+        new Wall({ x: 3, y: 2, place: Direction.north, shape:doorway, open:true, features:[door1] }),
+        new Wall({ x: 4, y: 2, place: Direction.north, }),
+
+        new Wall({ x: 2, y: 4, place: Direction.south, }),
+        new Wall({ x: 3, y: 4, place: Direction.south, shape:doorway, open:true, features:[door2]}),
+        new Wall({ x: 4, y: 4, place: Direction.south, }),
+
+        new Wall({ x: 2, y: 2, place: Direction.west, }),
+        new Wall({ x: 2, y: 3, place: Direction.west, features:[lever1] }),
+        new Wall({ x: 2, y: 4, place: Direction.west, }),
+
+        new Wall({ x: 4, y: 2, place: Direction.east, }),
+        new Wall({ x: 4, y: 3, place: Direction.east, }),
+        new Wall({ x: 4, y: 4, place: Direction.east, }),
+
+        new Wall({ x: 4, y: 6, place: Direction.west, shape:doorway, open:true, features:[door1] }),
+    ],
+    contents: [
+        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+        duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+
+        new SquareWithFeatures({
+            x: 3, y: 3, direction: Direction.north, floorFeatures: [blueStar]
+        }),
+
+        new SquareWithFeatures({
+            x: 4, y: 0, direction: Direction.north, floorFeatures: [pitClosed]
+        }),
+
+        new SquareWithFeatures({
+            x: 3, y: 0, direction: Direction.north, floorFeatures: [floorSwitch]
+        }),
+
+    ],
+    items: [
+
+    ],
+    controllers: [
+        new Controller({
+            inputs: [floorSwitch], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subject: pitClosed,
+            statusMap: [[[FloorFeature.WEIGHED], "OPEN"]]
+        }),
+        new Controller({
+            inputs: [floorSwitch], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subject: door1,
+            statusMap: [[[FloorFeature.WEIGHED], "OPEN"]]
+        }),
+        new Controller({
+            inputs: [lever1], defaultSubjectState: "CLOSED", subject: door2,
+            statusMap: [[["ON"], "OPEN"]]
+        }),
+    ],
+    victoryCondition: areAllDucksOnTheStar,
+    victoryMessage: "Something something ducks!"
+}).withWallsAround()
+
 
 export {
-    duckPuzzleLevel, duckPuzzleLevel2
+    duckPuzzleLevel, duckPuzzleLevel2, duckPuzzleLevel3,
 }
