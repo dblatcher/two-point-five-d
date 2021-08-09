@@ -8,7 +8,6 @@ import { Wall } from "@/game-classes/Wall";
 import { Item } from "@/game-classes/Item";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
-import { duck } from "@/instances/figureFactory";
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2, redSquare } from "@/instances/features"
@@ -48,12 +47,7 @@ const busyLevel: Level = new Level({
         new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: sprites.brickWall, features: [painting1] }),
     ],
     contents: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(decisionFunctions.moveClockwise), initialAnimation: "WALK" }),
-        duck({ x: 4.25, y: 5.25, direction: Direction.north, behaviour: new Behaviour(decisionFunctions.shiftAround), initialAnimation: "WALK" }),
-        duck({ x: 9.9, y: 3.25, direction: Direction.west, behaviour: undefined }),
-
         new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
-
     ],
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
@@ -74,7 +68,6 @@ const simpleLevel: Level = new Level({
 
     ],
     contents: [
-        duck({ x: 9.2, y: 2.2, direction: Direction.west, behaviour: new Behaviour(decisionFunctions.moveAntiClockwise), initialAnimation: "WALK" }),
         new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare] }),
         new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare] }),
 

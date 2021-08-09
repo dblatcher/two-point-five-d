@@ -1,10 +1,8 @@
-import { sprites } from "@/instances/sprites";
-import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
-import { itemTypes } from "@/instances/itemTypes";
-import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-
 import { TextBoard } from "@/canvas/TextBoard"
 import { Color } from "@/canvas/Color";
+
+import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { Action, MovementAction, MovementByAction } from "@/game-classes/Action";
 import { Behaviour } from "@/game-classes/Behaviour";
 import { Figure } from "@/game-classes/Figure";
@@ -15,11 +13,14 @@ import { Direction } from "@/game-classes/Direction";
 import { Level } from "@/game-classes/Level";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { duck } from "./figureFactory";
-import { doorway, lowWall } from "./wallShapes";
+import { doorway, lowWall } from "../instances/wallShapes";
 import { Controller } from "@/game-classes/Controller";
 import { Item } from "@/game-classes/Item";
 
+
+import { duck } from "@/duck-puzzle/figureFactory";
+import { sprites } from "@/instances/sprites";
+import { itemTypes } from "@/instances/itemTypes";
 
 
 function makeSign(text: string[]): WallFeature {
@@ -128,7 +129,7 @@ const areAllDucksOnTheStar = (level: Level, game: Game) => {
 }
 
 
-const duckPuzzleLevel = new Level({
+const duckPuzzleLevel1 = new Level({
     height: 6,
     width: 8,
     startingVantage: {
@@ -303,7 +304,4 @@ const duckPuzzleLevel3 = new Level({
     victoryMessage: "Something something ducks!"
 }).withWallsAround()
 
-
-export {
-    duckPuzzleLevel, duckPuzzleLevel2, duckPuzzleLevel3,
-}
+export {duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3}
