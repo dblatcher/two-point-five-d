@@ -1,7 +1,7 @@
 import { Character } from '@/game-classes/Character';
-import { itemTypes } from './itemTypes';
+import { itemTypes } from '../instances/itemTypes';
 import { Item } from '@/game-classes/Item';
-import { sprites } from './sprites';
+import { sprites } from '../instances/sprites';
 
 const boblin = new Character({
     name: "Boblin",
@@ -44,8 +44,22 @@ const sally = new Character({
         .set("HEAD", new Item({ type: itemTypes.helmet }))
 });
 
+const gwim = new Character({
+    name: "Gwimin",
+    portrait: sprites.gwim_portrait,
+    inventory: [
+        null, null,
+        null, null,
+        null, null,
+        null, null,
+        null, null,
+    ],
+    equipmentSlots: Character.emptyEquipmentSlots()
+        .set("HEAD", new Item({ type: itemTypes.helmet }))
+});
+
 const characters = {
-    boblin,drake,sally
+    boblin,drake,sally,gwim
 }
 
 export {characters}

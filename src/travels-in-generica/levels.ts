@@ -6,12 +6,11 @@ import { Level } from "@/game-classes/Level";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Item } from "@/game-classes/Item";
-import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
-import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2, redSquare } from "@/instances/features"
-import { lowWall, doorway, spikey } from "@/instances/wallShapes"
+import { lever1, painting1, door1, button1, keyhole, stairs, stairs2, paintingClipped, poemBoard, advertBoard, blueSquare, door2, redSquare } from "@/travels-in-generica/features"
+import { lowWall, doorway, spikey, tower } from "@/instances/wallShapes"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Controller } from "@/game-classes/Controller";
@@ -56,11 +55,16 @@ const busyLevel: Level = new Level({
 
 const simpleLevel: Level = new Level({
     height: 10, width: 15,
+    startingVantage: { x: 1, y: 5, direction: Direction.north },
     walls: [
         new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door1, keyhole], open: true }),
         new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0), features: [lever1] }),
 
-        new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape: spikey, patternSprite: sprites.brickWall2, }),
+        new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [poemBoard], shape: tower, patternSprite: sprites.brickWall2, }),
+        new Wall({ x: 3, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [paintingClipped], shape: spikey, patternSprite: sprites.brickWall2, }),
+        new Wall({ x: 2, y: 1, place: Direction.west, color: new Color(120, 40, 20),  shape: tower, patternSprite: sprites.brickWall2, }),
+        new Wall({ x: 2, y: 1, place: Direction.east, color: new Color(120, 40, 20),  shape: tower, patternSprite: sprites.brickWall2, }),
+        new Wall({ x: 2, y: 1, place: Direction.north, color: new Color(120, 40, 20),  shape: tower, patternSprite: sprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [stairs] }),
 
@@ -92,11 +96,6 @@ const simpleLevel: Level = new Level({
     ]
 })
 
-
-const playerVantage = new PlayerVantage({
-    x: 1, y: 5, direction: Direction.north,
-});
-
 const controllers: Controller[] = [
 
     new Controller({
@@ -108,4 +107,4 @@ const controllers: Controller[] = [
 
 ]
 
-export { simpleLevel as level1, busyLevel as level2, playerVantage, controllers }
+export { simpleLevel as level1, busyLevel as level2, controllers }

@@ -56,6 +56,7 @@ const sheets = {
     portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png"),spriteSheets),
     portrait2: new SpriteSheet("portrait2", require("../assets/sprites/portraits/Icons_02.png"),spriteSheets),
     portrait3: new SpriteSheet("portrait3", require("../assets/sprites/portraits/Icons_03.png"),spriteSheets),
+    portrait13: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_13.png"),spriteSheets),
     portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png"),spriteSheets),
 }
 
@@ -269,6 +270,7 @@ const sprites = {
     drake_portrait: Sprite.portraitSprite("drake",sheets.portrait1),
     sally_portrait: Sprite.portraitSprite("sally",sheets.portrait2),
     boblin_portrait: Sprite.portraitSprite("boblin",sheets.portrait3),
+    gwim_portrait: Sprite.portraitSprite("gwim",sheets.portrait13),
 }
 
 const textBoards = {

@@ -35,4 +35,11 @@ const spikey: Point[] = [
     { x: 1, y: 0 },
 ]
 
-export { lowWall, doorway, spikey }
+const tower: Point[] = [
+    { x: 0, y: 0 },
+    { x: 0, y: 2 },
+    { x: 1, y: 2 },
+    { x: 1, y: 0 },
+]
+
+export { lowWall, doorway, spikey, tower }
