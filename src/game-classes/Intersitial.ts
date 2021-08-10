@@ -9,7 +9,7 @@ interface IntersitialOptionFunction {
 
 
 interface IntersitialData {
-    role: "END_OF_LEVEL" | "MESSAGE"
+    role: "END_OF_LEVEL" | "END_OF_GAME" | "MESSAGE"
     content: string
     options: { buttonText: string, response: IntersitialOptionFunction }[]
 }

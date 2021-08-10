@@ -25,6 +25,7 @@ interface GameConfig {
     characters: Character[]
     activeCharacterIndex: number | undefined
     intersitial?: Intersitial
+    gameCompleteMessage?: string
 }
 
 interface GameRules {
@@ -168,6 +169,13 @@ class Game {
                         buttonText: 'Next level',
                         response: Intersitial.goToNextLevel
                     }
+                ]
+            })
+        } else {
+            this.data.intersitial = new Intersitial({
+                role: 'END_OF_GAME',
+                content: this.data.gameCompleteMessage || 'Game complete.',
+                options: [
                 ]
             })
         }

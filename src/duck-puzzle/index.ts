@@ -5,7 +5,11 @@ import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
 import {duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3} from "./levels"
 
-const levels = [duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3]
+const levels = [
+    duckPuzzleLevel1,
+    duckPuzzleLevel2,
+    duckPuzzleLevel3
+]
 
 const game = new Game({
     level: levels[0],
