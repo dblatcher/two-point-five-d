@@ -1,6 +1,8 @@
+import { Color } from "@/canvas/Color";
 import { Sprite } from "@/canvas/Sprite";
 import { FeedbackToUI, Game } from "./Game";
 import { Item } from "./Item";
+import { NarrativeMessage } from "./NarrativeMessage";
 import { PlayerVantage } from "./PlayerVantage";
 import { RelativeDirection } from "./RelativeDirection";
 
@@ -61,12 +63,19 @@ class Character {
 
     say(message: string, game: Game): void {
         console.log(`${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`)
+
+        const color = Game.CHARACTER_COLORS[ game.data.characters.indexOf(this)]
+
+        game.narrativeMessages.push(new NarrativeMessage({
+            content: `${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`,
+            color,
+        }))
+
     }
 
     consume(item: Item, game: Game): FeedbackToUI {
-        this.say(`I want to eat this ${item.data.type.name}.`, game);
         if (!item.data.type.data.consumable) {
-            this.say(`But I cannot!`, game);
+            this.say(`I want to eat this ${item.data.type.name}, but I cannot!`, game);
             return new FeedbackToUI({ message: `${item.data.type.name} is not consumable!` })
         }
         if (item.data.type.data.consumable.remains) {

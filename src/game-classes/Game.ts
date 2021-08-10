@@ -13,6 +13,7 @@ import { Controller } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
 import { Intersitial } from './Intersitial'
+import { NarrativeMessage } from './NarrativeMessage'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -60,6 +61,7 @@ class Game {
     data: GameConfig
     rules: GameRules
     queuedPlayerActions: Action[]
+    narrativeMessages: NarrativeMessage[]
     tickCount: number
     pointerLocator: PointerLocator
 
@@ -75,6 +77,7 @@ class Game {
         this.data = config;
         this.rules = rules;
         this.queuedPlayerActions = []
+        this.narrativeMessages = []
         this.tickCount = 0
         this.pointerLocator = new PointerLocator;
         this.tick = this.tick.bind(this)

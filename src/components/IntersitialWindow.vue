@@ -17,7 +17,7 @@ import gameStore from "@/store";
 
 import { Intersitial } from "@/game-classes/Intersitial";
 
-export default class GameHolder extends Vue {
+export default class IntersitialWindow extends Vue {
   $store!: typeof gameStore;
 
   get intersitial(): Intersitial | null {

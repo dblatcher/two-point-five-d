@@ -29,6 +29,10 @@
       </section>
     </main>
 
+    <aside>
+      <message-box/>
+    </aside>
+
     <intersitial-window/>
   </div>
 
@@ -48,6 +52,7 @@ import CharacterScreen from "./CharacterScreen.vue";
 import ItemInHand from "./ItemInHand.vue";
 import CharacterTags from "./CharacterTags.vue";
 import IntersitialWindow from "./IntersitialWindow.vue";
+import MessageBox from "./MessageBox.vue";
 
 
 interface GameHolderData {
@@ -68,6 +73,7 @@ interface GameHolderData {
     CharacterScreen,
     CharacterTags,
     IntersitialWindow,
+    MessageBox,
   },
 })
 export default class GameHolder extends Vue {

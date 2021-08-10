@@ -19,6 +19,7 @@ export default createStore({
     gameIsPaused: state => state.timer == 0,
     intersitial: state => state.game.data.intersitial || null,
     timestamp: state => state.timestamp,
+    narrativeMessages: state => state.game.narrativeMessages
   },
   mutations: {
     updateTimestamp(state) {
