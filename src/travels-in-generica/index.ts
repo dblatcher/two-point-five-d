@@ -1,9 +1,9 @@
-
 import { Game } from "@/game-classes/Game";
 import { Direction } from "@/game-classes/Direction";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
-import { level1, controllers, level2 } from "./levels"
+import { level1 } from "./level1"
+import {  level2 } from "./level2"
 import { characters } from "./characters";
 
 const levels = [
@@ -14,7 +14,7 @@ const game = new Game({
     level: levels[0],
     levels: levels,
     playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 0, y: 0, direction: Direction.south }),
-    controllers: controllers,
+    controllers: [],
     activeCharacterIndex: 0,
     characters: [characters.sally, characters.boblin, characters.drake, characters.gwim],
 }, {
