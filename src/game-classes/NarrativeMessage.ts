@@ -1,10 +1,10 @@
 import { Color } from "@/canvas/Color"
-import { Sprite } from "@/canvas/Sprite"
+import { Character } from "./Character"
 
 interface NarrativeMessageData {
     content: string
     color: Color
-    sprite?: Sprite
+    character?: Character
 }
 
 

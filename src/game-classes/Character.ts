@@ -19,14 +19,14 @@ class Character {
         this.data = config
     }
 
-    static emptyEquipmentSlots():Map<string, Item | null> {
+    static emptyEquipmentSlots(): Map<string, Item | null> {
         return new Map<string, Item | null>()
-        .set("HEAD", null)
-        .set("TORSO", null)
-        .set("LEGS", null)
-        .set("FEET", null)
-        .set("RIGHT_HAND", null)
-        .set("LEFT_HAND", null)
+            .set("HEAD", null)
+            .set("TORSO", null)
+            .set("LEGS", null)
+            .set("FEET", null)
+            .set("RIGHT_HAND", null)
+            .set("LEFT_HAND", null)
     }
 
     get portraitSrc(): string | null {
@@ -61,14 +61,19 @@ class Character {
     }
 
 
+    getMyColor(game: Game): Color {
+        if (game.data.characters.indexOf(this) == -1) { return Color.BLACK }
+        return Game.CHARACTER_COLORS[game.data.characters.indexOf(this)]
+    }
+
     say(message: string, game: Game): void {
         console.log(`${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`)
 
-        const color = Game.CHARACTER_COLORS[ game.data.characters.indexOf(this)]
 
         game.narrativeMessages.push(new NarrativeMessage({
             content: `${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`,
-            color,
+            color: this.getMyColor(game),
+            character: this,
         }))
 
     }
@@ -118,7 +123,7 @@ class Character {
         return FeedbackToUI.empty
     }
 
-    throw(item: Item, clickPoint: { x: number; y: number; }, playerVantage: PlayerVantage, game: Game):void {
+    throw(item: Item, clickPoint: { x: number; y: number; }, playerVantage: PlayerVantage, game: Game): void {
         item.launch(clickPoint, playerVantage, game);
         this.say(`I threw the ${item.data.type.name}`, game)
     }
