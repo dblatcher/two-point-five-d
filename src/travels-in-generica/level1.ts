@@ -14,6 +14,7 @@ import { doorway, spikey, tower } from "@/instances/wallShapes"
 import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import * as globalFeatures from "@/travels-in-generica/features"
+import { Figure } from "@/game-classes/Figure";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -38,7 +39,7 @@ const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, requiresI
 
 const level1: Level = new Level({
     height: 10, width: 15,
-    startingVantage: { x: 2, y: 4, direction: Direction.south },
+    startingVantage: { x: 4, y: 4, direction: Direction.south },
     walls: [
         new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door3, keyhole], open: true }),
         new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0) }),
@@ -70,6 +71,15 @@ const level1: Level = new Level({
             x: 2, y: 8, direction: Direction.north, floorFeatures: [
                 new Pit({ status: "CLOSED" }),
             ]
+        }),
+
+        new Figure({
+            x:4.75, y:5.75, direction:Direction.north, sprite:sprites.skeletonSprite,
+            initialAnimation: "ATTACK",
+        }),
+        new Figure({
+            x:4.25, y:5.25, direction:Direction.north, sprite:sprites.skeletonSprite,
+            initialAnimation: "STAND",
         }),
     ],
     items: [
