@@ -107,63 +107,80 @@ class Sprite {
     }
 
 
+    /**
+     * Get the src for the spritesheet used by the first frame of an animation
+     * @param actionName 
+     * @param direction 
+     * @returns the src path for the first frame of the animation, or null if there is none
+     */
     provideSrc(actionName: string, direction: RelativeDirection = RelativeDirection.BACK): string | null {
+        const animation = this.getFrameList(actionName,direction);
 
-        const directionName = direction.name;
-
-        const animationWithDirection = `${actionName}_${directionName}`
-        const animationWithoutDirection = `${actionName}`
-        let animationKey = `${actionName}_${directionName}`
-
-        if (this.animations.has(animationWithDirection)) {
-            animationKey = animationWithDirection
-        } else if (this.animations.has(animationWithoutDirection)) {
-            animationKey = animationWithoutDirection
-        } else {
-            console.warn(`Invalid animation key on ${this.name}: ${animationWithDirection}`);
+        if (animation == null ) {
+            console.warn(`Invalid animation key on ${this.name}: ${actionName} (${direction.name})`);
             return null
         }
 
-        const animation = this.animations.get(animationKey) as Frame[];
         if (animation.length == 0) {
-            console.warn(`No frames in animation ${animationKey} of ${this.name}`);
+            console.warn(`No frames in animation ${actionName} (${direction.name}) of ${this.name}`);
             return null
         }
 
         return animation[0].sheet.src;
     }
 
+
+    /**
+     * get the list of frames for an action and direction, or null if there is non
+     * @param actionName 
+     * @param direction 
+     * @return the list of frames for the animation, or null
+     */
+    getFrameList(actionName: string, direction: RelativeDirection): Frame[] | null {
+        const animationWithDirection = `${actionName}_${direction.name}`
+        const animationWithoutDirection = `${actionName}`
+        return this.animations.get(animationWithDirection) || this.animations.get(animationWithoutDirection) || null
+    }
+
+    /**
+     * Get the index of the frame to use given the tickCount and transition
+     * @param animation a list of frames
+     * @param tickCount the game's tickcount
+     * @param transitionPhase
+     * @returns the index of the frame
+     */
+    getFrameIndex(animation:Frame[], tickCount:number, transitionPhase?:number):number {
+        if (typeof transitionPhase == 'number') {
+            return (Math.floor(transitionPhase*(animation.length-1)))
+        }
+
+        return tickCount % animation.length
+    }
+
     /**
      * 
-     * @param actionName The string descibing what the sprite is doing 
+     * @param actionName The string describing what the sprite is doing 
      * @param direction The relative direction the sprite is facing
      * @param tickCount the game's current tick count
+     * @param transitionPhase 
      * @throws an error is there is no animation for the action and direction, or if that animation is empty
      * @returns the image to draw
      */
-    provideImage(actionName: string, direction: RelativeDirection, tickCount: number): CanvasImageSource {
+    provideImage(actionName: string, direction: RelativeDirection, tickCount: number, transitionPhase?:number): CanvasImageSource {
 
-        const directionName = direction.name;
+        const animation = this.getFrameList(actionName,direction);
 
-        const animationWithDirection = `${actionName}_${directionName}`
-        const animationWithoutDirection = `${actionName}`
-        let animationKey = `${actionName}_${directionName}`
-
-        if (this.animations.has(animationWithDirection)) {
-            animationKey = animationWithDirection
-        } else if (this.animations.has(animationWithoutDirection)) {
-            animationKey = animationWithoutDirection
-        } else {
-            throw new Error(`Invalid animation key on ${this.name}: ${animationWithDirection}`);
+        if (animation === null) {
+            throw new Error(`Invalid animation key on ${this.name}: ${actionName} (${direction.name})`);
         }
 
-        const animation = this.animations.get(animationKey) as Frame[];
         if (animation.length == 0) {
-            throw new Error(`No frames in animation ${animationKey} of ${this.name}`);
+            throw new Error(`No frames in animation ${actionName} (${direction.name}) of ${this.name}`);
         }
 
-        const frameIndex = tickCount % animation.length
-        const animationFrameKey = `${actionName}_${directionName}_${frameIndex.toString()}`;
+        const frameIndex = this.getFrameIndex(animation, tickCount, transitionPhase);
+
+        const animationFrameKey = `${actionName}_${direction.name}_${frameIndex.toString()}`;
 
         if (this.loadedFrames.has(animationFrameKey)) {
             return this.loadedFrames.get(animationFrameKey) as CanvasImageSource;

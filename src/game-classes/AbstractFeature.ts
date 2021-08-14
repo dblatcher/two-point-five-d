@@ -1,5 +1,6 @@
 import { ConvertFunction, Dimensions, PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { Sprite } from "@/canvas/Sprite"
+import { AnimationTransition } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { ItemType } from "./ItemType"
@@ -7,6 +8,9 @@ import { Position } from "./Position"
 import { Reaction } from "./Reaction"
 import { RelativeDirection } from "./RelativeDirection"
 import { Vantage } from "./Vantage"
+
+
+
 
 interface AbstractFeatureData {
     reactions?: Reaction[]
@@ -17,14 +21,23 @@ interface AbstractFeatureData {
 
     requiresItem?: ItemType
     consumesItem?: boolean
+
+    transitions?: AnimationTransition[]
 }
 
 class AbstractFeature {
     data: AbstractFeatureData
+    transitionTickCount: number | undefined
+    transitionReversed: boolean
+    transition: AnimationTransition | undefined
+
     constructor(config: AbstractFeatureData) {
         this.data = config
-
         this.data.status = config.status || this.defaultStatus
+
+        this.transitionTickCount = undefined
+        this.transitionReversed = false
+        this.transition = undefined
     }
     get defaultStatus(): string { return 'NEUTRAL' }
     get isFloorFeature(): boolean { return false }
@@ -38,15 +51,27 @@ class AbstractFeature {
         const { status } = this.data
         if (!this.data.sprite) { return "" }
 
-
         const { keyArray } = this.data.sprite;
 
-        if (status && keyArray.some(key => key.indexOf(status) == 0)) {
+        if (this.transition) {
+            const { animationKey } = this.transition
+            if (status && keyArray.some(key => key.indexOf(animationKey) != -1)) {
+                return animationKey
+            }
+        }
+
+        if (status && keyArray.some(key => key.indexOf(status) != -1)) {
             return status
         }
 
         return this.defaultStatus
     }
+
+    get transitionPhase(): number | undefined {
+        if (!this.transition) { return undefined }
+        return this.transition.getTransitionPhase(this.transitionTickCount || 0, this.transitionReversed)
+    }
+
 
     get missingAnimations(): string[] {
         if (!this.data.sprite) { return [] }
@@ -84,7 +109,47 @@ class AbstractFeature {
 
 
     setStatus(newStatus: string): void {
+
+        const oldStatus = this.data.status;
+        if (oldStatus == newStatus) { return }
+
+        const transition = this.data.transitions?.find(transition => transition.startStatus == oldStatus && transition.endStatus == newStatus)
+        const reversedTransition = this.data.transitions?.find(transition => transition.startStatus == newStatus && transition.endStatus == oldStatus)
+
+        if (transition) {
+            if (transition == this.transition) {
+                this.transitionTickCount = transition.duration - (this.transitionTickCount || 0)
+            } else {
+                this.transitionTickCount = 0
+            }
+            this.transition = transition
+            this.transitionReversed = false
+        } else if (reversedTransition) {
+            if (reversedTransition == this.transition) {
+                this.transitionTickCount = reversedTransition.duration - (this.transitionTickCount || 0)
+            } else {
+                this.transitionTickCount = 0
+            }
+            this.transition = reversedTransition
+            this.transitionReversed = true
+        } else {
+            this.transitionTickCount = undefined
+            this.transition = undefined
+            this.transitionReversed = false
+        }
+
         this.data.status = newStatus
+    }
+
+    advanceTransition():void {
+        if (this.transition) {
+            if (typeof this.transitionTickCount == 'undefined') { this.transitionTickCount = -1 }
+            this.transitionTickCount++;
+            if (this.transitionTickCount > this.transition.duration) {
+                this.transition = undefined
+                this.transitionTickCount = undefined
+            }
+        }
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number, position: Position, direction: Direction): void {

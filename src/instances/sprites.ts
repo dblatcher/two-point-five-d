@@ -218,11 +218,35 @@ const doorSprite = new Sprite("DOOR", {
         .set("CLOSED", [
             { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET"] },
         ])
+        .set("CLOSED^OPEN", [
+            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 0, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor, col: 0, row: 1, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 1, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET"] },
+        ])
         .set("CLOSED_LEFT", [
             { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
         ])
+        .set("CLOSED^OPEN_LEFT", [
+            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor, col: 0, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor, col: 0, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+        ])
         .set("CLOSED_RIGHT", [
             { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+        ])
+        .set("CLOSED^OPEN_RIGHT", [
+            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor, col: 0, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor, col: 0, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
         ])
         .set("OPEN", [
             { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET"] },

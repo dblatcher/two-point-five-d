@@ -7,20 +7,21 @@ import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Reaction } from "./Reaction"
 import { Vantage } from "./Vantage"
-
 import { AbstractFeature } from './AbstractFeature'
 import { ItemType } from "./ItemType"
+import { AnimationTransition } from "./AnimationTransition"
 
 interface WallFeatureConfig {
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite
-    status?:string
-    requiresItem?: ItemType, 
+    status?: string
+    requiresItem?: ItemType,
     consumesItem?: boolean
     textBoard?: TextBoard
     onBothSides?: boolean
     clipToWall?: boolean
+    transitions?: AnimationTransition[]
 }
 
 class WallFeature extends AbstractFeature {
@@ -59,13 +60,16 @@ class WallFeature extends AbstractFeature {
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints: Point[], wallShapePoints: Point[]): void {
 
+        this.advanceTransition();
+
         let featureImage: CanvasPattern | null = null;
         if (this.data.sprite) {
-            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.animation, fullWallPoints);
+            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.animation, fullWallPoints, this.transitionPhase);
         }
         if (this.data.textBoard) {
             featureImage = getTextPatternFill(ctx, convertFunction, renderInstruction, this.data.textBoard)
         }
+
         if (featureImage) {
             plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle: featureImage })
         }
@@ -99,6 +103,7 @@ interface DoorConfig {
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
     onBothSides?: boolean
+    transitions?: AnimationTransition[]
 }
 
 class Door extends InteractableWallFeature {
@@ -108,6 +113,7 @@ class Door extends InteractableWallFeature {
         super(config)
         this.data = config
         if (typeof config.onBothSides == 'undefined') { this.data.onBothSides = true }
+        this.data.transitions = [new AnimationTransition('CLOSED', 'OPEN', 15)]
     }
 
     get defaultStatus(): string { return 'OPEN' }

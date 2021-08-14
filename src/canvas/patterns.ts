@@ -10,14 +10,15 @@ import { TextBoard } from "./TextBoard";
 function getPatternFill(
     ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction,
     tickCount: number,
-    sprite: Sprite, animationName: string, fullWallPoints: Point[]
+    sprite: Sprite, animationName: string, fullWallPoints: Point[],
+    transitionPhase?:number
 ): CanvasPattern | null {
 
     const { topLeft, convertedWallDimensions } = getMeasurements(fullWallPoints, convertFunction);
 
     let image: CanvasImageSource;
     try {
-        image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount)
+        image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
     } catch (error) {
         console.warn(error.message)
         return null
