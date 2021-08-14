@@ -4,6 +4,7 @@ import { Direction } from "@/game-classes/Direction";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
 import {duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3} from "./levels"
+import { spriteSheets } from "@/instances/sprites";
 
 const levels = [
     duckPuzzleLevel1,
@@ -22,4 +23,4 @@ const game = new Game({
     needCharacterToPickUpItems: false
 })
 
-export { game }
+export { game, spriteSheets }

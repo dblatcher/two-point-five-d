@@ -1,11 +1,10 @@
 import { markRaw, toRaw } from 'vue'
 import { createStore } from 'vuex'
-
-import { spriteSheets } from '@/instances/sprites'
-import { game } from '@/travels-in-generica'
 import { Item } from '@/game-classes/Item'
 import { Character } from '@/game-classes/Character'
 import { FeedbackToUI } from '@/game-classes/Game'
+
+import { game, spriteSheets } from '@/travels-in-generica'
 
 
 export default createStore({

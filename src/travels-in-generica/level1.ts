@@ -11,10 +11,11 @@ import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFe
 
 
 import { doorway, spikey, tower } from "@/instances/wallShapes"
-import { sprites } from "@/instances/sprites";
+import { sprites as sharedSprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import * as globalFeatures from "@/travels-in-generica/features"
 import { Figure } from "@/game-classes/Figure";
+import { sprites } from "./sprites";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -31,11 +32,11 @@ const redSquare = new FloorFeature({
     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
 })
 
-const door1 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const door3 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const lever1 = new WallSwitch({ sprite: sprites.leverSprite, })
-const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
+const door1 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
+const door2 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
+const door3 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
+const lever1 = new WallSwitch({ sprite: sharedSprites.leverSprite, })
+const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
 
 const level1: Level = new Level({
     height: 10, width: 15,
@@ -44,11 +45,11 @@ const level1: Level = new Level({
         new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door3, keyhole], open: true }),
         new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0) }),
 
-        new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [globalFeatures.poemBoard], shape: tower, patternSprite: sprites.brickWall2, }),
-        new Wall({ x: 3, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [globalFeatures.paintingClipped], shape: spikey, patternSprite: sprites.brickWall2, }),
-        new Wall({ x: 2, y: 1, place: Direction.west, color: new Color(120, 40, 20), shape: tower, patternSprite: sprites.brickWall2, }),
-        new Wall({ x: 2, y: 1, place: Direction.east, color: new Color(120, 40, 20), shape: tower, patternSprite: sprites.brickWall2, }),
-        new Wall({ x: 2, y: 1, place: Direction.north, color: new Color(120, 40, 20), shape: tower, patternSprite: sprites.brickWall2, }),
+        new Wall({ x: 2, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [globalFeatures.poemBoard], shape: tower, patternSprite: sharedSprites.brickWall2, }),
+        new Wall({ x: 3, y: 2, place: Direction.north, color: new Color(120, 40, 20), features: [globalFeatures.paintingClipped], shape: spikey, patternSprite: sharedSprites.brickWall2, }),
+        new Wall({ x: 2, y: 1, place: Direction.west, color: new Color(120, 40, 20), shape: tower, patternSprite: sharedSprites.brickWall2, }),
+        new Wall({ x: 2, y: 1, place: Direction.east, color: new Color(120, 40, 20), shape: tower, patternSprite: sharedSprites.brickWall2, }),
+        new Wall({ x: 2, y: 1, place: Direction.north, color: new Color(120, 40, 20), shape: tower, patternSprite: sharedSprites.brickWall2, }),
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [globalFeatures.painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [globalFeatures.staircaseA.down] }),
 
