@@ -24,7 +24,7 @@ function moveClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action 
 }
 
 function moveAntiClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
-    const distanceToMove = .1
+    const distanceToMove = .05
     const placeAhead = actor.translate({
         x: actor.data.direction.x * distanceToMove,
         y: actor.data.direction.y * distanceToMove,

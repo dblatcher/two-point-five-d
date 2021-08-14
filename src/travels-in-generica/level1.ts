@@ -16,6 +16,7 @@ import { itemTypes } from "@/instances/itemTypes"
 import * as globalFeatures from "@/travels-in-generica/features"
 import { Figure } from "@/game-classes/Figure";
 import { sprites } from "./sprites";
+import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -75,12 +76,17 @@ const level1: Level = new Level({
         }),
 
         new Figure({
-            x:4.75, y:5.75, direction:Direction.north, sprite:sprites.skeletonSprite,
+            x:4.75, y:5.75, direction:Direction.north, sprite:sprites.fighterSprite,
+            initialAnimation: "WALK",
+        }),
+        new Figure({
+            x:4.25, y:5.25, direction:Direction.north, sprite:sprites.fighterSprite,
             initialAnimation: "ATTACK",
         }),
         new Figure({
-            x:4.25, y:5.25, direction:Direction.north, sprite:sprites.skeletonSprite,
-            initialAnimation: "STAND",
+            x:5.25, y:5.25, direction:Direction.north, sprite:sprites.farmerSprite,
+            initialAnimation: "WALK",
+            behaviour: new Behaviour(decisionFunctions.moveAntiClockwise)
         }),
     ],
     items: [

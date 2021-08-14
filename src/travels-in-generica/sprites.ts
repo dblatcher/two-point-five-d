@@ -7,109 +7,118 @@ const sheets = {
     //https://opengameart.org/content/lpc-medieval-fantasy-character-sprites
     skeleton_walk: new SpriteSheet("skeleton_walk", require("../assets/sprites/skeleton/walk.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 4 }),
     skeleton_slash: new SpriteSheet("skeleton_slash", require("../assets/sprites/skeleton/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
+    farmer_walk: new SpriteSheet("farmer_walk", require("../assets/sprites/farmer/walk.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 4 }),
+    farmer_slash: new SpriteSheet("farmer_slash", require("../assets/sprites/farmer/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
+    guard_walk: new SpriteSheet("guard_walk", require("../assets/sprites/guard/walk.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 4 }),
+    guard_slash: new SpriteSheet("guard_slash", require("../assets/sprites/guard/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
+    fighter_walk: new SpriteSheet("fighter_walk", require("../assets/sprites/fighter/walk.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 4 }),
+    fighter_slash: new SpriteSheet("fighter_slash", require("../assets/sprites/fighter/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
 }
 
-const skeletonSprite = new Sprite("SKELETON", {
-    baseline: .25,
-    shadow: { x: 1 / 8, y: 1 / 24 },
-    size: { x: .5, y: .5 },
-    transforms: ["RESIZE_CENTER", "CROP_BASE"],
-    animations: new Map<string, Frame[]>()
-        .set("STAND_FORWARD", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 0 },
-        ])
-        .set("STAND_LEFT", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 1 },
-        ])
-        .set("STAND_BACK", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 2 },
-        ])
-        .set("STAND_RIGHT", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 3 },
-        ])
-        .set("WALK_FORWARD", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 1, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 2, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 3, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 4, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 5, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 6, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 7, row: 0 },
-            { sheet: sheets.skeleton_walk, col: 8, row: 0 },
-        ])
-        .set("WALK_LEFT", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 1, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 2, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 3, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 4, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 5, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 6, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 7, row: 1 },
-            { sheet: sheets.skeleton_walk, col: 8, row: 1 },
-        ])
-        .set("WALK_BACK", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 1, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 2, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 3, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 4, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 5, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 6, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 7, row: 2 },
-            { sheet: sheets.skeleton_walk, col: 8, row: 2 },
-        ])
-        .set("WALK_RIGHT", [
-            { sheet: sheets.skeleton_walk, col: 0, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 1, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 2, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 3, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 4, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 5, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 6, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 7, row: 3 },
-            { sheet: sheets.skeleton_walk, col: 8, row: 3 },
-        ])
-        .set("ATTACK_FORWARD", [
-            { sheet: sheets.skeleton_slash, col: 0, row: 0 },
-            { sheet: sheets.skeleton_slash, col: 1, row: 0 },
-            { sheet: sheets.skeleton_slash, col: 2, row: 0 },
-            { sheet: sheets.skeleton_slash, col: 3, row: 0 },
-            { sheet: sheets.skeleton_slash, col: 4, row: 0 },
-            { sheet: sheets.skeleton_slash, col: 5, row: 0 },
+function makeLpcSprite(name:string, walkSheet:SpriteSheet, slashSheet:SpriteSheet):Sprite {
 
-        ])
-        .set("ATTACK_LEFT", [
-            { sheet: sheets.skeleton_slash, col: 0, row: 1 },
-            { sheet: sheets.skeleton_slash, col: 1, row: 1 },
-            { sheet: sheets.skeleton_slash, col: 2, row: 1 },
-            { sheet: sheets.skeleton_slash, col: 3, row: 1 },
-            { sheet: sheets.skeleton_slash, col: 4, row: 1 },
-            { sheet: sheets.skeleton_slash, col: 5, row: 1 },
+    return new Sprite(name, {
+        baseline: .26,
+        shadow: { x: 1 / 10, y: 1 / 26 },
+        size: { x: .5, y: .5 },
+        transforms: ["RESIZE_CENTER", "CROP_BASE"],
+        animations: new Map<string, Frame[]>()
+            .set("STAND_FORWARD", [
+                { sheet: walkSheet, col: 0, row: 0 },
+            ])
+            .set("STAND_LEFT", [
+                { sheet: walkSheet, col: 0, row: 1 },
+            ])
+            .set("STAND_BACK", [
+                { sheet: walkSheet, col: 0, row: 2 },
+            ])
+            .set("STAND_RIGHT", [
+                { sheet: walkSheet, col: 0, row: 3 },
+            ])
+            .set("WALK_FORWARD", [
+                { sheet: walkSheet, col: 1, row: 0 },
+                { sheet: walkSheet, col: 2, row: 0 },
+                { sheet: walkSheet, col: 3, row: 0 },
+                { sheet: walkSheet, col: 4, row: 0 },
+                { sheet: walkSheet, col: 5, row: 0 },
+                { sheet: walkSheet, col: 6, row: 0 },
+                { sheet: walkSheet, col: 7, row: 0 },
+                { sheet: walkSheet, col: 8, row: 0 },
+            ])
+            .set("WALK_LEFT", [
+                { sheet: walkSheet, col: 1, row: 1 },
+                { sheet: walkSheet, col: 2, row: 1 },
+                { sheet: walkSheet, col: 3, row: 1 },
+                { sheet: walkSheet, col: 4, row: 1 },
+                { sheet: walkSheet, col: 5, row: 1 },
+                { sheet: walkSheet, col: 6, row: 1 },
+                { sheet: walkSheet, col: 7, row: 1 },
+                { sheet: walkSheet, col: 8, row: 1 },
+            ])
+            .set("WALK_BACK", [
+                { sheet: walkSheet, col: 1, row: 2 },
+                { sheet: walkSheet, col: 2, row: 2 },
+                { sheet: walkSheet, col: 3, row: 2 },
+                { sheet: walkSheet, col: 4, row: 2 },
+                { sheet: walkSheet, col: 5, row: 2 },
+                { sheet: walkSheet, col: 6, row: 2 },
+                { sheet: walkSheet, col: 7, row: 2 },
+                { sheet: walkSheet, col: 8, row: 2 },
+            ])
+            .set("WALK_RIGHT", [
+                { sheet: walkSheet, col: 1, row: 3 },
+                { sheet: walkSheet, col: 2, row: 3 },
+                { sheet: walkSheet, col: 3, row: 3 },
+                { sheet: walkSheet, col: 4, row: 3 },
+                { sheet: walkSheet, col: 5, row: 3 },
+                { sheet: walkSheet, col: 6, row: 3 },
+                { sheet: walkSheet, col: 7, row: 3 },
+                { sheet: walkSheet, col: 8, row: 3 },
+            ])
+            .set("ATTACK_FORWARD", [
+                { sheet: slashSheet, col: 0, row: 0 },
+                { sheet: slashSheet, col: 1, row: 0 },
+                { sheet: slashSheet, col: 2, row: 0 },
+                { sheet: slashSheet, col: 3, row: 0 },
+                { sheet: slashSheet, col: 4, row: 0 },
+                { sheet: slashSheet, col: 5, row: 0 },
+    
+            ])
+            .set("ATTACK_LEFT", [
+                { sheet: slashSheet, col: 0, row: 1 },
+                { sheet: slashSheet, col: 1, row: 1 },
+                { sheet: slashSheet, col: 2, row: 1 },
+                { sheet: slashSheet, col: 3, row: 1 },
+                { sheet: slashSheet, col: 4, row: 1 },
+                { sheet: slashSheet, col: 5, row: 1 },
+    
+            ])
+            .set("ATTACK_BACK", [
+                { sheet: slashSheet, col: 0, row: 2 },
+                { sheet: slashSheet, col: 1, row: 2 },
+                { sheet: slashSheet, col: 2, row: 2 },
+                { sheet: slashSheet, col: 3, row: 2 },
+                { sheet: slashSheet, col: 4, row: 2 },
+                { sheet: slashSheet, col: 5, row: 2 },
+    
+            ])
+            .set("ATTACK_RIGHT", [
+                { sheet: slashSheet, col: 0, row: 3 },
+                { sheet: slashSheet, col: 1, row: 3 },
+                { sheet: slashSheet, col: 2, row: 3 },
+                { sheet: slashSheet, col: 3, row: 3 },
+                { sheet: slashSheet, col: 4, row: 3 },
+                { sheet: slashSheet, col: 5, row: 3 },
+            ])
+    })
+}
 
-        ])
-        .set("ATTACK_BACK", [
-            { sheet: sheets.skeleton_slash, col: 0, row: 2 },
-            { sheet: sheets.skeleton_slash, col: 1, row: 2 },
-            { sheet: sheets.skeleton_slash, col: 2, row: 2 },
-            { sheet: sheets.skeleton_slash, col: 3, row: 2 },
-            { sheet: sheets.skeleton_slash, col: 4, row: 2 },
-            { sheet: sheets.skeleton_slash, col: 5, row: 2 },
-
-        ])
-        .set("ATTACK_RIGHT", [
-            { sheet: sheets.skeleton_slash, col: 0, row: 3 },
-            { sheet: sheets.skeleton_slash, col: 1, row: 3 },
-            { sheet: sheets.skeleton_slash, col: 2, row: 3 },
-            { sheet: sheets.skeleton_slash, col: 3, row: 3 },
-            { sheet: sheets.skeleton_slash, col: 4, row: 3 },
-            { sheet: sheets.skeleton_slash, col: 5, row: 3 },
-        ])
-})
 
 const sprites = {
-    skeletonSprite
+    skeletonSprite: makeLpcSprite("SKELETON", sheets.skeleton_walk,sheets.skeleton_slash),
+    farmerSprite: makeLpcSprite("FARMER", sheets.farmer_walk,sheets.farmer_slash),
+    guardSprite: makeLpcSprite("GUARD", sheets.guard_walk,sheets.guard_slash),
+    fighterSprite: makeLpcSprite("FIGHTER", sheets.fighter_walk,sheets.fighter_slash),
 }
 
 export {
