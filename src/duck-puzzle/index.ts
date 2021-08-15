@@ -13,8 +13,8 @@ const spriteSheets = [
 ];
 
 const levels = [
-    duckPuzzleLevel1,
     duckPuzzleLevel2,
+    duckPuzzleLevel1,
     duckPuzzleLevel3
 ]
 

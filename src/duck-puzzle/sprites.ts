@@ -83,14 +83,21 @@ const duckSprite = new Sprite("DUCK", {
 })
 
 
-
-
+const weight = Sprite.itemSpriteDirectional("WEIGHT", {
+    back: [{ sheet: sheets.weight, row: 0, col: 1, }],
+    left: [{ sheet: sheets.weight, row: 1, col: 1, }],
+    forward: [{ sheet: sheets.weight, row: 0, col: 0, }],
+    right: [{ sheet: sheets.weight, row: 1, col: 0, }],
+}, {
+    baseline: .08,
+    transforms: ["CROP_BASE",],
+})
 
 const sprites = {
     brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks),
     duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side),
     windowWall: Sprite.patternSprite("WINDOW", sheets.window),
-    weight: Sprite.itemSprite("WEIGHT", {sheet:sheets.weight, col:0, row:0},{ baseline: .08, transforms: ["CROP_BASE",], } ),
+    weight: weight,
     duckSprite,
 }
 

@@ -114,9 +114,9 @@ class Sprite {
      * @returns the src path for the first frame of the animation, or null if there is none
      */
     provideSrc(actionName: string, direction: RelativeDirection = RelativeDirection.BACK): string | null {
-        const animation = this.getFrameList(actionName,direction);
+        const animation = this.getFrameList(actionName, direction);
 
-        if (animation == null ) {
+        if (animation == null) {
             console.warn(`Invalid animation key on ${this.name}: ${actionName} (${direction.name})`);
             return null
         }
@@ -149,9 +149,9 @@ class Sprite {
      * @param transitionPhase
      * @returns the index of the frame
      */
-    getFrameIndex(animation:Frame[], tickCount:number, transitionPhase?:number):number {
+    getFrameIndex(animation: Frame[], tickCount: number, transitionPhase?: number): number {
         if (typeof transitionPhase == 'number') {
-            return (Math.floor(transitionPhase*(animation.length-1)))
+            return (Math.floor(transitionPhase * (animation.length - 1)))
         }
 
         return tickCount % animation.length
@@ -166,9 +166,9 @@ class Sprite {
      * @throws an error is there is no animation for the action and direction, or if that animation is empty
      * @returns the image to draw
      */
-    provideImage(actionName: string, direction: RelativeDirection, tickCount: number, transitionPhase?:number): CanvasImageSource {
+    provideImage(actionName: string, direction: RelativeDirection, tickCount: number, transitionPhase?: number): CanvasImageSource {
 
-        const animation = this.getFrameList(actionName,direction);
+        const animation = this.getFrameList(actionName, direction);
 
         if (animation === null) {
             throw new Error(`Invalid animation key on ${this.name}: ${actionName} (${direction.name})`);
@@ -223,15 +223,29 @@ class Sprite {
         return new Sprite(name, config)
     }
 
-    static itemSprite(name: string, frame: Frame, config: SpriteConfig = {}): Sprite {
+    static itemSpriteOneFrame(name: string, frames: Frame[] | Frame, config: SpriteConfig = {}): Sprite {
+
+        const framesInArray = Array.isArray(frames) ? frames : [frames];
 
         config.animations = new Map<string, Frame[]>()
-            .set(Sprite.defaultFigureAnimation, [
-                frame
-            ])
+            .set(Sprite.defaultFigureAnimation, framesInArray)
 
         config.size = config.size || Sprite.DEFAULT_SIZE
-        config.shadow = config.shadow || { x: config.size.x*(3/5), y: .1 }
+        config.shadow = config.shadow || { x: config.size.x * (3 / 5), y: .1 }
+
+        return new Sprite(name, config)
+    }
+
+    static itemSpriteDirectional(name: string, frames: { back: Frame[], left: Frame[], right: Frame[], forward: Frame[] }, config: SpriteConfig = {}): Sprite {
+
+        config.animations = new Map<string, Frame[]>()
+            .set(Sprite.defaultFigureAnimation + "_BACK", frames.back)
+            .set(Sprite.defaultFigureAnimation + "_LEFT", frames.left)
+            .set(Sprite.defaultFigureAnimation + "_FORWARD", frames.forward)
+            .set(Sprite.defaultFigureAnimation + "_RIGHT", frames.right)
+
+        config.size = config.size || Sprite.DEFAULT_SIZE
+        config.shadow = config.shadow || { x: config.size.x * (3 / 5), y: .1 }
 
         return new Sprite(name, config)
     }
