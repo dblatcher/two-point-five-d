@@ -33,7 +33,7 @@
 import { Options, Vue } from "vue-class-component";
 import gameStore from "@/store";
 import EquipmentWindow from "./EquipmentWindow.vue";
-import { Character } from "@/game-classes/Character";
+import { Character } from "@/rpg-classes/Character";
 import { toRaw } from "@vue/reactivity";
 import { Game } from "@/game-classes/Game";
 import { useStore } from "vuex";

@@ -1,10 +1,10 @@
 import { Color } from "@/canvas/Color";
 import { Sprite } from "@/canvas/Sprite";
-import { FeedbackToUI, Game } from "./Game";
-import { Item } from "./Item";
-import { NarrativeMessage } from "./NarrativeMessage";
-import { PlayerVantage } from "./PlayerVantage";
-import { RelativeDirection } from "./RelativeDirection";
+import { FeedbackToUI, Game } from "../game-classes/Game";
+import { Item } from "../game-classes/Item";
+import { NarrativeMessage } from "../game-classes/NarrativeMessage";
+import { PlayerVantage } from "../game-classes/PlayerVantage";
+import { RelativeDirection } from "../game-classes/RelativeDirection";
 
 interface CharacterConfig {
     name?: string

@@ -36,7 +36,7 @@ import ItemSlot from "./ItemSlot.vue";
 import gameStore from "@/store";
 import { Item } from "@/game-classes/Item";
 import { FeedbackToUI } from "@/game-classes/Game";
-import { Character } from "@/game-classes/Character";
+import { Character } from "@/rpg-classes/Character";
 
 interface SelfWindowData {
   feedback: FeedbackToUI;

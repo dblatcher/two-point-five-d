@@ -26,7 +26,8 @@ const game = new Game({
     activeCharacterIndex: 0,
     characters: [],
 }, {
-    needCharacterToPickUpItems: false
+    needCharacterToPickUpItems: false,
+    noCharacters: true,
 })
 
 export { game, spriteSheets }

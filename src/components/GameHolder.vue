@@ -1,7 +1,7 @@
 <template>
   <div class="container" v-if="spritesLoaded">
     <nav class="menu">
-      <section class="primary">
+      <section class="primary" v-if="hasCharacters">
         <character-tags
           @chooseOpen="handleChooseOpenCharacter"
           :open="indexOfCharacterWithScreenOpen"
@@ -16,7 +16,7 @@
     <main>
       <section class="primary">
         <sight-canvas v-show="indexOfCharacterWithScreenOpen == null" />
-        <character-screen
+        <character-screen v-if="hasCharacters"
           v-show="indexOfCharacterWithScreenOpen != null"
           :index="indexOfCharacterWithScreenOpen"
           @close="handleChooseOpenCharacter(null)"
@@ -102,6 +102,9 @@ export default class GameHolder extends Vue {
     this.spritesLoaded = true;
   }
 
+  get hasCharacters():boolean {
+    return !this.$store.state.game.rules.noCharacters
+  }
 }
 </script>
 

@@ -1,4 +1,4 @@
-import { Character } from '@/game-classes/Character';
+import { Character } from '@/rpg-classes/Character';
 import { itemTypes } from '../instances/itemTypes';
 import { Item } from '@/game-classes/Item';
 import { sprites } from './sprites';

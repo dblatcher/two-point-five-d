@@ -1,5 +1,5 @@
 import { Color } from "@/canvas/Color"
-import { Character } from "./Character"
+import { Character } from "../rpg-classes/Character"
 
 interface NarrativeMessageData {
     content: string

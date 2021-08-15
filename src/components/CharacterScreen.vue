@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Character } from "@/game-classes/Character";
+import { Character } from "@/rpg-classes/Character";
 import gameStore from "@/store";
 import { Game } from "@/game-classes/Game";
 import { Options, Vue } from "vue-class-component";

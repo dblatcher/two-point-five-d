@@ -6,7 +6,7 @@ import { Position } from './Position'
 import { RelativeDirection } from './RelativeDirection'
 import { Item } from './Item'
 import { PlayerVantage } from './PlayerVantage'
-import { Character } from './Character'
+import { Character } from '../rpg-classes/Character'
 import { Vantage } from './Vantage'
 import { SquareWithFeatures } from './SquareWithFeatures'
 import { Controller } from './Controller'
@@ -31,6 +31,7 @@ interface GameConfig {
 
 interface GameRules {
     needCharacterToPickUpItems?: boolean
+    noCharacters?:boolean
 }
 
 class FeedbackToUI {
