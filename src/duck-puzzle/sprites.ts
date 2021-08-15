@@ -93,11 +93,13 @@ const weight = Sprite.itemSpriteDirectional("WEIGHT", {
     transforms: ["CROP_BASE",],
 })
 
+const weightIcon = Sprite.itemSpriteOneFrame("WEIGHT_ICON", { sheet: sheets.weight, row: 0, col: 0, })
+
 const sprites = {
     brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks),
     duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side),
     windowWall: Sprite.patternSprite("WINDOW", sheets.window),
-    weight: weight,
+    weight, weightIcon,
     duckSprite,
 }
 

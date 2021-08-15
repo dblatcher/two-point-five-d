@@ -44,7 +44,7 @@ class Item {
 
     get icon(): CanvasImageSource {
         try {
-            return this.data.type.data.sprite.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
+            return this.data.type.icon.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
         } catch (error) {
             console.warn(error.message)
         }

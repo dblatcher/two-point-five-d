@@ -5,6 +5,7 @@ interface ItemTypeConfig {
     name: string
     figureDimensions?: { width: number, height: number }
     sprite: Sprite
+    iconSprite?: Sprite
     backgroundColor?: Color
     weight?: number
     consumable?: ConsumeableData
@@ -31,6 +32,8 @@ class ItemType {
     get backgroundColor(): Color { return this.data.backgroundColor || Color.TRANSPARENT }
     get isConsumable(): boolean { return !!this.data.consumable }
     get isEquipable(): boolean { return !!this.data.equipable }
+
+    get icon(): Sprite { return this.data.iconSprite || this.data.sprite}
 
     get propertyList(): [string, string | number][] {
         const list: [string, string | number][] = [];
