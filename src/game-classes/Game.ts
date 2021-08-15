@@ -99,7 +99,7 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { items, contents, victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
+        const { walls, items, contents, victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
 
         const allControllers = [...this.data.controllers, ...levelControllers];
 
@@ -135,11 +135,18 @@ class Game {
 
         squaresWithFeatures.forEach(square => {
             square.data.floorFeatures.forEach(floorFeature => {
+                floorFeature.tick(this)
                 const weightChange = floorFeature.checkWeightChange(square)
 
                 if (weightChange.hasWeightOnNow !== weightChange.usedToHaveWeightOn) {
                     floorFeature.fireTriggers(this);
                 }
+            })
+        })
+
+        walls.forEach(wall => {
+            wall.data.features?.forEach(wallFeature => {
+                wallFeature.tick(this)
             })
         })
 

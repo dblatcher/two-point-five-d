@@ -60,8 +60,6 @@ class WallFeature extends AbstractFeature {
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints: Point[], wallShapePoints: Point[]): void {
 
-        this.advanceTransition();
-
         let featureImage: CanvasPattern | null = null;
         if (this.data.sprite) {
             featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.animation, fullWallPoints, this.transitionPhase);

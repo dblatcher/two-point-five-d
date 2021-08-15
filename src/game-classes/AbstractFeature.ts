@@ -152,6 +152,10 @@ class AbstractFeature {
         }
     }
 
+    tick(game:Game):void {
+        this.advanceTransition()
+    }
+
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number, position: Position, direction: Direction): void {
         const convert: ConvertFunction = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
         const squareCenter: Point = {
