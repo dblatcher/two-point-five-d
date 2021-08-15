@@ -6,25 +6,6 @@ import { TextBoard } from "@/canvas/TextBoard"
 const spriteSheets: SpriteSheet[] = []
 
 const sheets = {
-    //https://opengameart.org/content/cute-duck-animated-set
-    duck_front: new SpriteSheet("duck-front", require("../assets/sprites/duck-front.png"), spriteSheets),
-    duck_side: new SpriteSheet("duck-side", require("../assets/sprites/duck-side.png"), spriteSheets),
-    duck_back: new SpriteSheet("duck-back", require("../assets/sprites/duck-back.png"), spriteSheets),
-    duck_walk_front_1: new SpriteSheet("duck-front-walk-1", require("../assets/sprites/duck/walk/front/1.png"), spriteSheets),
-    duck_walk_front_2: new SpriteSheet("duck-front-walk-2", require("../assets/sprites/duck/walk/front/2.png"), spriteSheets),
-    duck_walk_front_3: new SpriteSheet("duck-front-walk-3", require("../assets/sprites/duck/walk/front/3.png"), spriteSheets),
-    duck_walk_front_4: new SpriteSheet("duck-front-walk-4", require("../assets/sprites/duck/walk/front/4.png"), spriteSheets),
-    duck_walk_back_1: new SpriteSheet("duck-back-walk-1", require("../assets/sprites/duck/walk/back/1.png"), spriteSheets),
-    duck_walk_back_2: new SpriteSheet("duck-back-walk-2", require("../assets/sprites/duck/walk/back/2.png"), spriteSheets),
-    duck_walk_back_3: new SpriteSheet("duck-back-walk-3", require("../assets/sprites/duck/walk/back/3.png"), spriteSheets),
-    duck_walk_back_4: new SpriteSheet("duck-back-walk-4", require("../assets/sprites/duck/walk/back/4.png"), spriteSheets),
-    duck_walk_side_1: new SpriteSheet("duck-side-walk-1", require("../assets/sprites/duck/walk/side/1.png"), spriteSheets),
-    duck_walk_side_2: new SpriteSheet("duck-side-walk-2", require("../assets/sprites/duck/walk/side/2.png"), spriteSheets),
-    duck_walk_side_3: new SpriteSheet("duck-side-walk-3", require("../assets/sprites/duck/walk/side/3.png"), spriteSheets),
-    duck_walk_side_4: new SpriteSheet("duck-side-walk-4", require("../assets/sprites/duck/walk/side/4.png"), spriteSheets),
-    duck_walk_side_5: new SpriteSheet("duck-side-walk-5", require("../assets/sprites/duck/walk/side/5.png"), spriteSheets),
-    duck_walk_side_6: new SpriteSheet("duck-side-walk-6", require("../assets/sprites/duck/walk/side/6.png"), spriteSheets),
-    duck_walk_side_7: new SpriteSheet("duck-side-walk-7", require("../assets/sprites/duck/walk/side/7.png"), spriteSheets),
 
     //https://opengameart.org/content/dinosaur-0
     dinosaur: new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
@@ -52,62 +33,10 @@ const sheets = {
     leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
     woodenDoor: new SpriteSheet("woodenDoor", require("../assets/sprites/door.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 3 }),
 
-    //https://opengameart.org/content/39-portraits-pixel-art-pack
-    portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png"), spriteSheets),
-    portrait2: new SpriteSheet("portrait2", require("../assets/sprites/portraits/Icons_02.png"), spriteSheets),
-    portrait3: new SpriteSheet("portrait3", require("../assets/sprites/portraits/Icons_03.png"), spriteSheets),
-    portrait13: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_13.png"), spriteSheets),
-    portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png"), spriteSheets),
+
 
 }
 
-
-const duckSprite = new Sprite("DUCK", {
-    shadow: { x: 1 / 4, y: 1 / 12 },
-    animations: new Map<string, Frame[]>()
-        .set("STAND_FORWARD", [
-            { sheet: sheets.duck_back },
-        ])
-        .set("STAND_BACK", [
-            { sheet: sheets.duck_front },
-        ])
-        .set("STAND_LEFT", [
-            { sheet: sheets.duck_side },
-        ])
-        .set("STAND_RIGHT", [
-            { sheet: sheets.duck_side, transforms: ["FLIP_H"] },
-        ])
-        .set("WALK_FORWARD", [
-            { sheet: sheets.duck_walk_back_1 },
-            { sheet: sheets.duck_walk_back_2 },
-            { sheet: sheets.duck_walk_back_3 },
-            { sheet: sheets.duck_walk_back_4 },
-        ])
-        .set("WALK_BACK", [
-            { sheet: sheets.duck_walk_front_1 },
-            { sheet: sheets.duck_walk_front_2 },
-            { sheet: sheets.duck_walk_front_3 },
-            { sheet: sheets.duck_walk_front_4 },
-        ])
-        .set("WALK_LEFT", [
-            { sheet: sheets.duck_walk_side_1 },
-            { sheet: sheets.duck_walk_side_2 },
-            { sheet: sheets.duck_walk_side_3 },
-            { sheet: sheets.duck_walk_side_4 },
-            { sheet: sheets.duck_walk_side_5 },
-            { sheet: sheets.duck_walk_side_6 },
-            { sheet: sheets.duck_walk_side_7 },
-        ])
-        .set("WALK_RIGHT", [
-            { sheet: sheets.duck_walk_side_1, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_2, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_3, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_4, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_5, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_6, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_7, transforms: ["FLIP_H"] },
-        ])
-})
 
 
 const dinoSprite = new Sprite("DINOSAUR", {
@@ -268,12 +197,11 @@ const doorSprite = new Sprite("DOOR", {
 const sprites = {
     brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks),
     brickWall2: Sprite.patternSprite("BRICK_WALL", sheets.brickWall2),
-    duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side),
     windowWall: Sprite.patternSprite("WINDOW", sheets.window),
     testPattern: Sprite.patternSprite("TEST", sheets.testCard),
     paintingWall: Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .35 } }),
     stairs: Sprite.patternSprite("stairs", sheets.stairs, { size: { x: .75, y: 1 } }, { col: 0, row: 0 }),
-    duckSprite,
+
     dinoSprite,
     testSprite,
     leverSprite,
@@ -292,11 +220,6 @@ const sprites = {
     key: Sprite.itemSprite("key", { sheet: sheets.fruits, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),
     bardHat: Sprite.itemSprite("bardHat", { sheet: sheets.bardHat }, { baseline: .25, transforms: ["CROP_BASE",], }),
     helmet: Sprite.itemSprite("helmet", { sheet: sheets.helmet }, { baseline: .05, transforms: ["CROP_BASE",], }),
-
-    drake_portrait: Sprite.portraitSprite("drake", sheets.portrait1),
-    sally_portrait: Sprite.portraitSprite("sally", sheets.portrait2),
-    boblin_portrait: Sprite.portraitSprite("boblin", sheets.portrait3),
-    gwim_portrait: Sprite.portraitSprite("gwim", sheets.portrait13),
 }
 
 const textBoards = {

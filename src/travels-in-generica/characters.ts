@@ -1,7 +1,7 @@
 import { Character } from '@/game-classes/Character';
 import { itemTypes } from '../instances/itemTypes';
 import { Item } from '@/game-classes/Item';
-import { sprites } from '../instances/sprites';
+import { sprites } from './sprites';
 
 const boblin = new Character({
     name: "Boblin",

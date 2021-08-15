@@ -4,7 +4,7 @@ import { Item } from '@/game-classes/Item'
 import { Character } from '@/game-classes/Character'
 import { FeedbackToUI } from '@/game-classes/Game'
 
-import { game, spriteSheets } from '@/travels-in-generica'
+import { game, spriteSheets } from '@/duck-puzzle'
 
 
 export default createStore({

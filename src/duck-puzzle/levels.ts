@@ -1,7 +1,7 @@
 import { TextBoard } from "@/canvas/TextBoard"
 import { Color } from "@/canvas/Color";
 
-import { Door, InteractableWallFeature, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { Action, MovementAction, MovementByAction } from "@/game-classes/Action";
 import { Behaviour } from "@/game-classes/Behaviour";
@@ -20,7 +20,9 @@ import { Item } from "@/game-classes/Item";
 
 import { duck } from "@/duck-puzzle/figureFactory";
 import { sprites } from "@/instances/sprites";
-import { itemTypes } from "@/instances/itemTypes";
+
+import { sprites as mySprites} from "./sprites";
+import * as itemTypes  from "./itemTypes";
 
 
 function makeSign(text: string[]): WallFeature {
@@ -44,7 +46,6 @@ const hintForLevel2 = makeSign(["Use both plates", "to open", "the door"])
 const lever1 = new WallSwitch({ sprite: sprites.leverSprite, })
 const door1 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
 const door2 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const keyhole = new InteractableWallFeature({ sprite: sprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -114,7 +115,7 @@ const areAllDucksOnTheStar = (level: Level, game: Game) => {
 
     const ducks: Figure[] = level.data.contents
         .filter(content => content.isVantage)
-        .filter(vantage => (vantage as Figure).data.sprite && (vantage as Figure).data.sprite === sprites.duckSprite)
+        .filter(vantage => (vantage as Figure).data.sprite && (vantage as Figure).data.sprite === mySprites.duckSprite)
         .map(duck => duck as Figure)
 
     const squareWithStar = level.data.contents
@@ -168,12 +169,6 @@ const duckPuzzleLevel1 = new Level({
 
     ],
     items: [
-        new Item({
-            type: itemTypes.apple, vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
-        }),
-        new Item({
-            type: itemTypes.bardHat, vantage: new Vantage({ x: 4.5, y: 3.25, direction: Direction.north })
-        }),
     ],
     controllers: [
         new Controller({
@@ -226,7 +221,7 @@ const duckPuzzleLevel2 = new Level({
     ],
     items: [
         new Item({
-            type: itemTypes.helmet, vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
+            type: itemTypes.weight, vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
         }),
     ],
     controllers: [

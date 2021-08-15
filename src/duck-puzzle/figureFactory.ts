@@ -1,4 +1,4 @@
-import { sprites } from '@/instances/sprites'
+import { sprites } from './sprites'
 import { Behaviour } from '../game-classes/Behaviour';
 import { Direction } from "../game-classes/Direction";
 import { Figure } from "../game-classes/Figure";

@@ -13,6 +13,13 @@ const sheets = {
     guard_slash: new SpriteSheet("guard_slash", require("../assets/sprites/guard/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
     fighter_walk: new SpriteSheet("fighter_walk", require("../assets/sprites/fighter/walk.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 4 }),
     fighter_slash: new SpriteSheet("fighter_slash", require("../assets/sprites/fighter/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
+
+    //https://opengameart.org/content/39-portraits-pixel-art-pack
+    portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png"), spriteSheets),
+    portrait2: new SpriteSheet("portrait2", require("../assets/sprites/portraits/Icons_02.png"), spriteSheets),
+    portrait3: new SpriteSheet("portrait3", require("../assets/sprites/portraits/Icons_03.png"), spriteSheets),
+    portrait13: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_13.png"), spriteSheets),
+    portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png"), spriteSheets),
 }
 
 function makeLpcSprite(name:string, walkSheet:SpriteSheet, slashSheet:SpriteSheet):Sprite {
@@ -119,6 +126,11 @@ const sprites = {
     farmerSprite: makeLpcSprite("FARMER", sheets.farmer_walk,sheets.farmer_slash),
     guardSprite: makeLpcSprite("GUARD", sheets.guard_walk,sheets.guard_slash),
     fighterSprite: makeLpcSprite("FIGHTER", sheets.fighter_walk,sheets.fighter_slash),
+
+    drake_portrait: Sprite.portraitSprite("drake", sheets.portrait1),
+    sally_portrait: Sprite.portraitSprite("sally", sheets.portrait2),
+    boblin_portrait: Sprite.portraitSprite("boblin", sheets.portrait3),
+    gwim_portrait: Sprite.portraitSprite("gwim", sheets.portrait13),
 }
 
 export {

@@ -4,7 +4,13 @@ import { Direction } from "@/game-classes/Direction";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
 import {duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3} from "./levels"
-import { spriteSheets } from "@/instances/sprites";
+import { spriteSheets as sharedSheets } from "@/instances/sprites";
+import { spriteSheets as localSheets } from "./sprites";
+
+const spriteSheets = [
+    ...sharedSheets,
+    ...localSheets,
+];
 
 const levels = [
     duckPuzzleLevel1,
