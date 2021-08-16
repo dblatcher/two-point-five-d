@@ -1,6 +1,8 @@
 import { mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas/canvas-utility";
 import { Direction } from "./Direction";
+import { FigureMap } from "./Game";
 import { Item } from "./Item";
+import { PlayerVantage } from "./PlayerVantage";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
 import { Wall } from "./Wall";
@@ -256,22 +258,24 @@ class PointerLocator {
         return { x, y }
     }
 
-    identifyClickedItemOnFloor(playerVantage: Vantage, items: Item[], clickInfo: Point, canReachSquareAhead = false): Item | null {
+    identifyClickedFigure(playerVantage: PlayerVantage, figureMaps: FigureMap[], clickInfo: { x: number; y: number; }, canReachSquareAhead = false): FigureMap | null {
+
         const squareIn = new Position(playerVantage.data);
-        const itemsInSquareIn = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareIn))
         const squareAhead = squareIn.translate(playerVantage.data.direction)
-        const itemsInSquareAhead = items.filter(item => item.data.vantage && item.data.vantage.isInSameSquareAs(squareAhead))
+
+        const figureInSquareIn = figureMaps.filter(figureMap => figureMap.figure.isInSameSquareAs(squareIn))
+        const figuresSquareAhead = figureMaps.filter(figureMap => figureMap.figure.isInSameSquareAs(squareAhead))
 
         if (!canReachSquareAhead) {
-            return identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareIn, clickInfo, 0)
+            return identifyClickedFigureInSquare(playerVantage.data.direction, figureInSquareIn, clickInfo, 0)
         }
 
-        return identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareIn, clickInfo, 0) ||
-            identifyClickedItemInSquare(playerVantage.data.direction, itemsInSquareAhead, clickInfo, 1)
+        return identifyClickedFigureInSquare(playerVantage.data.direction, figureInSquareIn, clickInfo, 0) ||
+            identifyClickedFigureInSquare(playerVantage.data.direction, figuresSquareAhead, clickInfo, 1)
 
-        function identifyClickedItemInSquare(viewedFrom: Direction, items: Item[], clickInfo: Point, forward = 0): Item | null {
-            return items.find(item => {
-                const { figure } = item
+        function identifyClickedFigureInSquare(viewedFrom: Direction, figureMaps: FigureMap[], clickInfo: Point, forward = 0): FigureMap | null {
+            return figureMaps.find(figureMap => {
+                const { figure } = figureMap
                 if (!figure) { return false }
                 const renderParams = figure.getRenderParams(viewedFrom, forward, 0)
                 const inBoundX = clickInfo.x >= renderParams.topLeft.x && clickInfo.x <= renderParams.topRight.x;
@@ -279,6 +283,7 @@ class PointerLocator {
                 return inBoundX && inBoundY
             }) || null
         }
+
     }
 
 }

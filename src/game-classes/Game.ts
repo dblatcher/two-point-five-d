@@ -31,7 +31,7 @@ interface GameConfig {
 
 interface GameRules {
     needCharacterToPickUpItems?: boolean
-    noCharacters?:boolean
+    noCharacters?: boolean
 }
 
 class FeedbackToUI {
@@ -56,6 +56,12 @@ class FeedbackToUI {
     static get empty(): FeedbackToUI { return new FeedbackToUI({}) }
     static get yes(): FeedbackToUI { return new FeedbackToUI({ success: true }) }
     static get no(): FeedbackToUI { return new FeedbackToUI({ success: false }) }
+}
+
+interface FigureMap {
+    figure: Figure
+    subject: Item
+    subjectClass: typeof Item
 }
 
 class Game {
@@ -93,6 +99,17 @@ class Game {
             return null
         }
         return this.data.characters[this.data.activeCharacterIndex] || null
+    }
+
+    get figureMaps(): FigureMap[] {
+        const { items } = this.data.level.data
+        const output: FigureMap[] = [];
+        items.forEach(item => {
+            if (item.figure) {
+                output.push({ figure: item.figure, subject: item, subjectClass: Item })
+            }
+        })
+        return output
     }
 
     tick(): void {
@@ -240,21 +257,28 @@ class Game {
         const { level, playerVantage, itemInHand } = this.data
         const { needCharacterToPickUpItems = false } = this.rules
         const { pointerLocator, activeCharacter } = this
-        const { walls, items } = level.data
+        const { walls } = level.data
         const playerHasWallInFace = level.hasWallInFace(playerVantage)
         const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerVantage)
         const locations = pointerLocator.locate(clickInfo, playerHasWallInFace)
         if (locations.length == 0) { return }
-
-
-        //TO DO - what actions can be done with no active character?
 
         for (let index = 0; index < locations.length; index++) {
             const location = locations[index];
 
 
             // playerHasWallInFace is true even if the wall is an open door
-            const itemClicked = this.pointerLocator.identifyClickedItemOnFloor(this.data.playerVantage, items, clickInfo, !squareAheadIsBlocked)
+            const figureClicked: FigureMap | null = this.pointerLocator.identifyClickedFigure(this.data.playerVantage, this.figureMaps, clickInfo, !squareAheadIsBlocked)
+            console.log(figureClicked)
+
+
+            let itemClicked: Item | null = null;
+            if (figureClicked) {
+                switch (figureClicked.subjectClass) {
+                    case Item:
+                        itemClicked = figureClicked.subject as Item
+                }
+            }
 
             if (itemClicked) {
                 if (!needCharacterToPickUpItems || this.activeCharacter) {
@@ -368,4 +392,4 @@ class Game {
     }
 }
 
-export { Game, GameConfig, FeedbackToUI }
+export { Game, GameConfig, FeedbackToUI, FigureMap }
