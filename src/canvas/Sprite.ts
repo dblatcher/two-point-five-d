@@ -261,5 +261,5 @@ class Sprite {
 }
 
 export {
-    SpriteSheet, Sprite, Frame
+    SpriteSheet, Sprite, Frame, SpriteConfig
 }

@@ -16,7 +16,7 @@ interface FigureConfig {
     sprite: Sprite
     height?: number
     width?: number
-    behaviour?: Behaviour
+
     initialAnimation?: string
     altitude?: number
 }

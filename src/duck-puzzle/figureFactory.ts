@@ -1,7 +1,9 @@
 import { sprites } from './sprites'
 import { Behaviour } from '../game-classes/Behaviour';
 import { Direction } from "../game-classes/Direction";
-import { Figure } from "../game-classes/Figure";
+import { NonPlayerCharacter } from '@/game-classes/NonPlayerCharacter';
+import { Vantage } from '@/game-classes/Vantage';
+
 
 
 interface DuckConfig {
@@ -12,13 +14,16 @@ interface DuckConfig {
     initialAnimation?: string
 }
 
-function duck(config: DuckConfig): Figure {
-    const figureConfig = Object.assign(config, {
+function duck(config: DuckConfig): NonPlayerCharacter {
+    const { x, y, direction, initialAnimation, behaviour } = config
+
+    return new NonPlayerCharacter({
+        vantage: new Vantage({ x, y, direction }),
         sprite: sprites.duckSprite,
-        height: .5,
-        width: .5,
+        animation: initialAnimation,
+        behaviour,
+        height:.5, width:.5
     })
-    return new Figure(figureConfig)
 }
 
 export { duck }

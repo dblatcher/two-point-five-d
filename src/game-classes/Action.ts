@@ -1,4 +1,5 @@
 import { Point } from "@/canvas/canvas-utility";
+import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
 import { Game } from "./Game";
 import { Item } from "./Item";
 import { RelativeDirection } from "./RelativeDirection";
@@ -12,7 +13,7 @@ class Action {
         this.action = action
     }
 
-    perform(actor: Vantage, game: Game): void {
+    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
         console.warn(`No performance class defined for Action ${this.action}`, actor);
     }
 }
@@ -27,7 +28,7 @@ class MovementAction extends Action {
         this.direction = direction;
     }
 
-    perform(actor: Vantage, game: Game): void {
+    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
         switch (this.action) {
             case "MOVE": return actor.move(this.direction, game);
             case "TURN": return actor.turn(this.direction);
@@ -47,7 +48,7 @@ class MovementByAction extends Action {
         this.direction = direction;
     }
 
-    perform(actor: Vantage, game: Game): void {
+    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
         return actor.moveBy(this.distance, this.direction, game);
     }
 }
@@ -62,7 +63,7 @@ class ShiftAction extends Action {
         this.position = position;
     }
 
-    perform(actor: Vantage, game: Game): void {
+    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
         actor.shiftWithinSquare(this.position, game)
     }
 
@@ -72,13 +73,13 @@ class InterAction extends Action {
     action: "INTERACT"
     feature: WallFeature | Item
 
-    constructor(target: WallFeature|Item) {
+    constructor(target: WallFeature | Item) {
         super("INTERACT")
         this.action = "INTERACT"
         this.feature = target
     }
 
-    perform(actor: Vantage, game: Game): void {
+    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
         this.feature.handleInteraction(actor, game);
     }
 }

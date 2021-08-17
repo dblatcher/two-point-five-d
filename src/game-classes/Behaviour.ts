@@ -1,59 +1,82 @@
 import { Game } from './Game';
-import { Figure } from './Figure';
 import { Action, MovementAction, MovementByAction, ShiftAction } from './Action';
 import { RelativeDirection } from './RelativeDirection';
+import { NonPlayerCharacter } from '@/game-classes/NonPlayerCharacter';
 
 
 
 interface DecisionFunction {
-    (actor: Figure, game: Game, behaviour: Behaviour): Action | null
+    (actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null
 }
 
-function moveClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
+function moveClockwise(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action|null {
+
+    const { vantage } = actor.data;
+    if (!vantage) { return null }
+
     const distance = .1
-    const placeAhead = actor.translate({
-        x: actor.data.direction.x * distance,
-        y: actor.data.direction.y * distance,
+    const placeAhead = vantage.translate({
+        x: vantage.data.direction.x * distance,
+        y: vantage.data.direction.y * distance,
     })
 
-    if (game.data.level.isBlocked(...actor.coords, ...placeAhead.coords)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...placeAhead.coords)) {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
         return new MovementByAction(distance, RelativeDirection.FORWARD)
     }
 }
 
-function moveAntiClockwise(actor: Figure, game: Game, behaviour: Behaviour): Action {
+function moveAntiClockwise(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action|null {
+
+    const { vantage } = actor.data;
+    if (!vantage) { return null }
+
     const distanceToMove = .05
-    const placeAhead = actor.translate({
-        x: actor.data.direction.x * distanceToMove,
-        y: actor.data.direction.y * distanceToMove,
-    })
     const howCloseToGet = .5
-    const whereToLookForBlockage = actor.translate({
-        x: actor.data.direction.x * howCloseToGet,
-        y: actor.data.direction.y * howCloseToGet,
+    const whereToLookForBlockage = vantage.translate({
+        x: vantage.data.direction.x * howCloseToGet,
+        y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...actor.coords, ...whereToLookForBlockage.coords)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
     }
 }
 
-function shiftAround(actor: Figure, game: Game, behaviour: Behaviour): Action | null {
+function moveBackAndForward(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action|null {
+
+    const { vantage } = actor.data;
+    if (!vantage) { return null }
+
+    const distanceToMove = .05
+    const howCloseToGet = .5
+    const whereToLookForBlockage = vantage.translate({
+        x: vantage.data.direction.x * howCloseToGet,
+        y: vantage.data.direction.y * howCloseToGet,
+    })
+
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords)) {
+        return new MovementAction("TURN", RelativeDirection.BACK)
+    } else {
+        return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
+    }
+}
+
+function shiftAround(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null {
     if (game.tickCount % 3 !== 0) { return null }
     return new ShiftAction({ x: Math.random(), y: Math.random() })
 }
 
-function wanderForward(actor: Figure, game: Game, behaviour: Behaviour): Action | null {
+function wanderForward(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null {
     if (game.tickCount % 2 !== 0) { return null }
-    return new MovementByAction(.2, RelativeDirection.FORWARD)
+    return new MovementByAction(.05, RelativeDirection.FORWARD)
 }
 
 const decisionFunctions = {
-    moveClockwise, moveAntiClockwise, shiftAround, wanderForward
+    moveClockwise, moveAntiClockwise, shiftAround, wanderForward, moveBackAndForward
 }
 
 class Behaviour {
@@ -63,10 +86,10 @@ class Behaviour {
         this.decisionFunction = decisionFunction
     }
 
-    decideAction(actor: Figure, game: Game): Action | null {
+    decideAction(actor: NonPlayerCharacter, game: Game): Action | null {
         return this.decisionFunction(actor, game, this);
     }
 
 }
 
-export { Behaviour, decisionFunctions }
+export { Behaviour, decisionFunctions, DecisionFunction }

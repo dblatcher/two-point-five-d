@@ -1,5 +1,6 @@
 import { ConvertFunction, Dimensions, PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { Sprite } from "@/canvas/Sprite"
+import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter"
 import { AnimationTransition } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
@@ -192,7 +193,7 @@ class AbstractFeature {
         game.featuresTriggeredThisTick.push(this)
     }
 
-    fireReactions(actor: Vantage, game: Game): void {
+    fireReactions(actor: Vantage|NonPlayerCharacter, game: Game): void {
         const { reactions = [] } = this.data
         reactions.forEach(reaction => {
             reaction.fire(actor, game)

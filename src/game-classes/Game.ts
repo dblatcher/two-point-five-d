@@ -14,6 +14,7 @@ import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
 import { Intersitial } from './Intersitial'
 import { NarrativeMessage } from './NarrativeMessage'
+import { NonPlayerCharacter } from '@/game-classes/NonPlayerCharacter'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -60,8 +61,8 @@ class FeedbackToUI {
 
 interface FigureMap {
     figure: Figure
-    subject: Item
-    subjectClass: typeof Item
+    subject: Item | NonPlayerCharacter
+    subjectClass: typeof Item | typeof NonPlayerCharacter
 }
 
 class Game {
@@ -102,11 +103,16 @@ class Game {
     }
 
     get figureMaps(): FigureMap[] {
-        const { items } = this.data.level.data
+        const { items=[], nonPlayerCharacters=[] } = this.data.level.data
         const output: FigureMap[] = [];
         items.forEach(item => {
             if (item.figure) {
                 output.push({ figure: item.figure, subject: item, subjectClass: Item })
+            }
+        })
+        nonPlayerCharacters.forEach(npc => {
+            if (npc.figure) {
+                output.push({ figure: npc.figure, subject: npc, subjectClass: NonPlayerCharacter })
             }
         })
         return output
@@ -117,26 +123,18 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { walls, items, contents, victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
+        const { walls=[], items=[], squaresWithFeatures=[], nonPlayerCharacters=[], victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
 
         const allControllers = [...this.data.controllers, ...levelControllers];
-
-        const figures: Figure[] = contents
-            .filter(thing => Object.getPrototypeOf(thing).constructor == Figure) // subclasses???!!
-            .map(figure => figure as Figure)
-
-        const squaresWithFeatures: SquareWithFeatures[] = contents
-            .filter(item => Object.getPrototypeOf(item).constructor == SquareWithFeatures)
-            .map(item => item as SquareWithFeatures)
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
             nextPlayerAction.perform(this.data.playerVantage, this);
         }
 
-        figures.forEach(figure => {
-            if (figure.data.behaviour) {
-                figure.data.behaviour.decideAction(figure, this)?.perform(figure, this)
+        nonPlayerCharacters.forEach(npc => {
+            if (npc.data.behaviour) {
+                npc.data.behaviour.decideAction(npc, this)?.perform(npc, this)
             }
         })
 
@@ -144,11 +142,14 @@ class Game {
             item.flyThroughAir(this)
         })
 
+
+        const npcFigures = nonPlayerCharacters.filter(npc=>npc.figure).map(npc=>npc.figure) as Figure[];
+
         // TODO: make copy of items and figures array that the method can splice from
         // So square don't have to check if things already assigned are on them too
         // althought, that woudl stop two squaresWithFeatures having the same location
         squaresWithFeatures.forEach(square => {
-            square.updateThingsOnThisSquare(this.data.playerVantage, figures, items)
+            square.updateThingsOnThisSquare(this.data.playerVantage, npcFigures, items)
         })
 
         squaresWithFeatures.forEach(square => {
@@ -276,7 +277,11 @@ class Game {
             if (figureClicked) {
                 switch (figureClicked.subjectClass) {
                     case Item:
-                        itemClicked = figureClicked.subject as Item
+                        itemClicked = figureClicked.subject as Item;
+                        break;
+                    case NonPlayerCharacter:
+                        console.log(figureClicked.subject)
+                        break
                 }
             }
 

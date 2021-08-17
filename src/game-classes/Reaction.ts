@@ -1,3 +1,4 @@
+import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
 import { Game } from "./Game";
 import { Vantage, VantageConfig } from "./Vantage";
 
@@ -8,7 +9,7 @@ class Reaction {
         this.effect = effect
     }
 
-    fire(actor: Vantage, game: Game): void {
+    fire(actor: Vantage|NonPlayerCharacter, game: Game): void {
         console.warn(`No performance class defined for Reaction ${this.effect}`, actor);
     }
 }
@@ -23,11 +24,22 @@ class TeleportReaction extends Reaction {
         this.destination = destination
     }
 
-    fire(actor: Vantage, game: Game): void {
+    fire(actor: Vantage|NonPlayerCharacter, game: Game): void {
         const { x, y, direction } = this.destination;
-        actor.data.direction = direction;
-        actor.data.x = x;
-        actor.data.y = y;
+
+        if (Object.getPrototypeOf(actor) == NonPlayerCharacter) {
+            console.log('NonPlayerCharacter teleport');
+            const npc = actor as NonPlayerCharacter;
+            if (npc.data.vantage) {
+                npc.data.vantage.data.direction = direction;
+                npc.data.vantage.data.x = x;
+                npc.data.vantage.data.y = y;
+            }
+        } else {
+            (actor as Vantage).data.direction = direction;
+            (actor as Vantage).data.x = x;
+            (actor as Vantage).data.y = y;
+        }
 
         //to do - check if anything is already at destination?
     }

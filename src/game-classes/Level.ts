@@ -1,6 +1,7 @@
 import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
+import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
 import { Color } from "../canvas/Color";
 import { Controller } from "./Controller";
 import { Direction } from "./Direction";
@@ -23,10 +24,11 @@ interface LevelConfig {
     width: number
     height: number
     walls: Wall[]
-    contents: Array<Vantage | Position>
+    squaresWithFeatures?: SquareWithFeatures[]
     defaultWallPattern?: Sprite
     floorColor?: Color
     items: Item[]
+    nonPlayerCharacters?: NonPlayerCharacter[]
 
     controllers?: Controller[]
     victoryCondition?: VictoryTest
@@ -48,6 +50,7 @@ class Level {
     static defaultFloorColor = new Color(80, 80, 80);
 
     isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
+        const {squaresWithFeatures = [], walls =[]} = this.data
         if (targetX < 0) { return true }
         if (targetY < 0) { return true }
         if (targetX >= this.data.width) { return true }
@@ -56,23 +59,19 @@ class Level {
         const dX = targetX - startX
         const dY = targetY - startY
 
-        if (this.data.contents.find(
+        if (squaresWithFeatures.find(
             item => {
                 if (item.gridX != targetX || item.gridY != targetY) { return false }
-                if (item.isSquareWithFeatures) {
-                    const squareWithFeatures = (item as SquareWithFeatures)
-                    return squareWithFeatures.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
-                }
-                return false
+                return item.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
             }
 
         )) { return true }
 
-        if (this.data.walls.find(
+        if (walls.find(
             wall => wall.gridX == startX && wall.gridY == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
         )) { return true }
 
-        if (this.data.walls.find(
+        if (walls.find(
             wall => wall.gridX == targetX && wall.gridY == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY && wall.isBlocking
         )) { return true }
 
@@ -126,8 +125,13 @@ class Level {
         }
 
         ctx.setLineDash([]);
-        this.data.walls.forEach((wall) => { wall.drawInMap(ctx, gridSize) });
-        this.data.contents.forEach(thing => { thing.drawInMap(ctx, gridSize) })
+
+        const {walls= [], squaresWithFeatures = [], nonPlayerCharacters = []} = this.data
+
+        walls.forEach(wall => { wall.drawInMap(ctx, gridSize) });
+        squaresWithFeatures.forEach(thing => { thing.drawInMap(ctx, gridSize) })
+
+        nonPlayerCharacters.filter(npc=>npc.figure).forEach(npc => npc.figure?.drawInMap(ctx, gridSize))
 
         if (vantage) {
             vantage.drawInMap(ctx, gridSize);
@@ -165,6 +169,8 @@ class Level {
     }
 
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
+        const {items = [], squaresWithFeatures = [], nonPlayerCharacters=[], walls =[]} = this.data
+
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
         const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
@@ -175,7 +181,7 @@ class Level {
         const placesInSight = getPlacesInSight(vantage);
         let renderInstructions: RenderInstruction[] = [];
 
-        this.data.walls.forEach(wall => {
+        walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isInSameSquareAs(wall))
             if (!place) { return }
             const relativeDirection = wall.data.place.relativeDirection(vantage.data.direction);
@@ -186,7 +192,7 @@ class Level {
             }))
         })
 
-        this.data.contents.forEach(thing => {
+        squaresWithFeatures.forEach(thing => {
             const place = placesInSight.find(place => place.position.isInSameSquareAs(thing))
             if (!place) { return }
 
@@ -195,17 +201,27 @@ class Level {
             }))
         })
 
-        this.data.items.
-            forEach(item => {
-                const { figure: itemFigure } = item
-                if (itemFigure) {
-                    const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
-                    if (!place) { return }
-                    renderInstructions.push(new RenderInstruction({
-                        place, observer: vantage, subject: itemFigure, level: this,
-                    }))
-                }
-            })
+        items.forEach(item => {
+            const { figure: itemFigure } = item
+            if (itemFigure) {
+                const place = placesInSight.find(place => place.position.isInSameSquareAs(itemFigure))
+                if (!place) { return }
+                renderInstructions.push(new RenderInstruction({
+                    place, observer: vantage, subject: itemFigure, level: this,
+                }))
+            }
+        })
+
+        nonPlayerCharacters.forEach(npc => {
+            const { figure } = npc
+            if (figure) {
+                const place = placesInSight.find(place => place.position.isInSameSquareAs(figure))
+                if (!place) { return }
+                renderInstructions.push(new RenderInstruction({
+                    place, observer: vantage, subject: figure, level: this,
+                }))
+            }
+        })
 
         renderInstructions = RenderInstruction.putInOrder(renderInstructions);
 

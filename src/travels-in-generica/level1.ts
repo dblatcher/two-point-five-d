@@ -14,9 +14,9 @@ import { doorway, spikey, tower } from "@/instances/wallShapes"
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import * as globalFeatures from "@/travels-in-generica/features"
-import { Figure } from "@/game-classes/Figure";
 import { sprites } from "./sprites";
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
+import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -41,7 +41,7 @@ const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, req
 
 const level1: Level = new Level({
     height: 10, width: 15,
-    startingVantage: { x: 4, y: 4, direction: Direction.south },
+    startingVantage: { x: 7, y: 3, direction: Direction.south },
     walls: [
         new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door3, keyhole], open: true }),
         new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0) }),
@@ -58,12 +58,12 @@ const level1: Level = new Level({
 
         new Wall({ x: 1, y: 5, place: Direction.south, color: new Color(120, 40, 20), shape: doorway, open: true, features: [door1] }),
         new Wall({ x: 2, y: 4, place: Direction.south, color: new Color(120, 40, 20), features: [lever1] }),
+        new Wall({ x: 8, y: 6, place: Direction.south}),
 
     ],
-    contents: [
+    squaresWithFeatures: [
         new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare] }),
         new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare] }),
-
         new SquareWithFeatures({
             x: 4, y: 8, direction: Direction.north, floorFeatures: [
                 new Pit({}),
@@ -74,20 +74,6 @@ const level1: Level = new Level({
                 new Pit({ status: "CLOSED" }),
             ]
         }),
-
-        new Figure({
-            x:4.75, y:5.75, direction:Direction.north, sprite:sprites.fighterSprite,
-            initialAnimation: "WALK",
-        }),
-        new Figure({
-            x:4.25, y:5.25, direction:Direction.north, sprite:sprites.fighterSprite,
-            initialAnimation: "ATTACK",
-        }),
-        new Figure({
-            x:5.25, y:5.25, direction:Direction.north, sprite:sprites.farmerSprite,
-            initialAnimation: "WALK",
-            behaviour: new Behaviour(decisionFunctions.moveAntiClockwise)
-        }),
     ],
     items: [
         new Item({
@@ -97,6 +83,36 @@ const level1: Level = new Level({
             type: itemTypes.helmet, vantage: new Vantage({ x: 5.5, y: 4.5, direction: Direction.north })
         }),
     ],
+
+    nonPlayerCharacters: [
+        new NonPlayerCharacter({
+            sprite:sprites.skeletonSprite,
+            animation:'WALK',
+            behaviour: new Behaviour(decisionFunctions.moveAntiClockwise),
+            vantage: new Vantage({ x: 7.2, y: 6.2, direction: Direction.north })
+        }),
+
+        new NonPlayerCharacter({
+            sprite:sprites.farmerSprite,
+            animation:'WALK',
+            behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
+            vantage: new Vantage({x:8.25, y:4.25, direction:Direction.north}),
+        }),
+
+        new NonPlayerCharacter({
+            sprite:sprites.fighterSprite,
+            animation: "WALK",
+            vantage: new Vantage({x:4.75, y:5.75, direction:Direction.north}),
+        }),
+
+        new NonPlayerCharacter({
+            sprite:sprites.guardSprite,
+            animation: "ATTACK",
+            vantage: new Vantage({x:4.25, y:5.25, direction:Direction.north}),
+        }),
+
+    ],
+
     controllers: [
         new Controller({
             inputs: [lever1], subject: door1, defaultSubjectState: "CLOSED", statusMap: [

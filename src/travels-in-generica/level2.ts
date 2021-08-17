@@ -13,6 +13,7 @@ import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import { lowWall, doorway } from "@/instances/wallShapes"
 import * as globalFeatures from "@/travels-in-generica/features"
+import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
 
 
 const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
@@ -47,8 +48,16 @@ const level2: Level = new Level({
         new Wall({ x: 6, y: 0, place: Direction.north, patternSprite: sprites.brickWall }),
         new Wall({ x: 9, y: 0, place: Direction.east, patternSprite: sprites.brickWall, features: [globalFeatures.painting1] }),
     ],
-    contents: [
-        new Figure({ x: 5.5, y: 3.5, direction: Direction.west, sprite: sprites.dinoSprite, height: .5, width: .5, initialAnimation: "WALK", behaviour: new Behaviour(decisionFunctions.moveAntiClockwise) }),
+    squaresWithFeatures: [
+    ],
+    nonPlayerCharacters: [
+        new NonPlayerCharacter({
+            vantage: new Vantage({ x: 5.5, y: 3.5, direction: Direction.west }),
+            sprite: sprites.dinoSprite,
+            height: .5, width: .5,
+            animation: "WALK"
+        })
+
     ],
     items: [
         new Item({ type: itemTypes.apple, vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),

@@ -44,8 +44,9 @@ class FloorFeature extends AbstractFeature {
     static NOT_WEIGHED = "NOT_WEIGHED"
 
     /**
-     * Check the which of the contents are on the floorFeature's square
+     * Check the which of the items or vantages are on the floorFeature's square
      * compare the list with the version stored on the floorFeature last tick
+     * (TO DO - newThings should by Items, NPCs or PlayerVantage)
      * 
      * @param square 
      */
