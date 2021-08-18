@@ -84,4 +84,19 @@ class InterAction extends Action {
     }
 }
 
-export { Action, MovementAction, InterAction, ShiftAction, MovementByAction }
+class NpcInterAction extends Action {
+    action: "INTERACT"
+    npc: NonPlayerCharacter
+
+    constructor(target: NonPlayerCharacter) {
+        super("INTERACT")
+        this.action = "INTERACT"
+        this.npc = target
+    }
+
+    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+        this.npc.handleInteraction(actor, game);
+    }
+}
+
+export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction }

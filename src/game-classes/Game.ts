@@ -1,5 +1,5 @@
 import { Level } from './Level'
-import { Action, InterAction, MovementAction } from './Action'
+import { Action, InterAction, MovementAction, NpcInterAction } from './Action'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
@@ -133,9 +133,7 @@ class Game {
         }
 
         nonPlayerCharacters.forEach(npc => {
-            if (npc.data.behaviour) {
-                npc.data.behaviour.decideAction(npc, this)?.perform(npc, this)
-            }
+            npc.tick(this);
         })
 
         items.forEach(item => {
@@ -270,17 +268,16 @@ class Game {
 
             // playerHasWallInFace is true even if the wall is an open door
             const figureClicked: FigureMap | null = this.pointerLocator.identifyClickedFigure(this.data.playerVantage, this.figureMaps, clickInfo, !squareAheadIsBlocked)
-            console.log(figureClicked)
-
 
             let itemClicked: Item | null = null;
+            let npcClicked: NonPlayerCharacter | null = null;
             if (figureClicked) {
                 switch (figureClicked.subjectClass) {
                     case Item:
                         itemClicked = figureClicked.subject as Item;
                         break;
                     case NonPlayerCharacter:
-                        console.log(figureClicked.subject)
+                        npcClicked = figureClicked.subject as NonPlayerCharacter;
                         break
                 }
             }
@@ -291,6 +288,10 @@ class Game {
                     this.queuedPlayerActions.push(new InterAction(itemClicked));
                     break
                 }
+            } else if (npcClicked) {
+                if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
+                this.queuedPlayerActions.push(new NpcInterAction(npcClicked));
+                break
             }
 
 
