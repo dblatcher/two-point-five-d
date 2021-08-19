@@ -3,7 +3,6 @@ import { Vantage } from "./Vantage";
 
 import { Sprite } from '../canvas/Sprite'
 import { Direction } from "./Direction";
-import { Behaviour } from "./Behaviour";
 import { Wall } from "./Wall";
 import { RelativeDirection } from "./RelativeDirection";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
@@ -19,6 +18,7 @@ interface FigureConfig {
 
     initialAnimation?: string
     altitude?: number
+    transitionPhase?:number
 }
 
 class Figure extends Vantage {
@@ -97,7 +97,7 @@ class Figure extends Vantage {
         const { sprite } = this.data
 
         try {
-            return sprite.provideImage(this.actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount)
+            return sprite.provideImage(this.actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount, this.data.transitionPhase)
         } catch (error) {
             console.warn(error.message)
         }

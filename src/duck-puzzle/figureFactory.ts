@@ -11,16 +11,14 @@ interface DuckConfig {
     y: number
     direction: Direction
     behaviour?: Behaviour
-    initialAnimation?: string
 }
 
 function duck(config: DuckConfig): NonPlayerCharacter {
-    const { x, y, direction, initialAnimation, behaviour } = config
+    const { x, y, direction, behaviour } = config
 
     return new NonPlayerCharacter({
         vantage: new Vantage({ x, y, direction }),
         sprite: sprites.duckSprite,
-        animation: initialAnimation,
         behaviour,
         height:.5, width:.5
     })

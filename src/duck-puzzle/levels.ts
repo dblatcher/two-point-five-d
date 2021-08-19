@@ -4,8 +4,7 @@ import { Color } from "@/canvas/Color";
 import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { Action, MovementAction, MovementByAction } from "@/game-classes/Action";
-import { Behaviour, DecisionFunction } from "@/game-classes/Behaviour";
-import { Figure } from "@/game-classes/Figure";
+import { Behaviour } from "@/game-classes/Behaviour";
 import { Game } from "@/game-classes/Game";
 import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
@@ -21,8 +20,8 @@ import { Item } from "@/game-classes/Item";
 import { duck } from "@/duck-puzzle/figureFactory";
 import { sprites } from "@/instances/sprites";
 
-import { sprites as mySprites} from "./sprites";
-import * as itemTypes  from "./itemTypes";
+import { sprites as mySprites } from "./sprites";
+import * as itemTypes from "./itemTypes";
 import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
 
 
@@ -84,19 +83,17 @@ const pitClosed = new Pit({ status: "CLOSED" })
 
 
 
-function moveAntiClockwiseUnlessOnStar (actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action|null {
+function moveAntiClockwiseUnlessOnStar(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null {
 
-    const {vantage} = actor.data;
+    const { vantage } = actor.data;
     if (!vantage) return null
 
-    const squareWithStar = game.data.level.data.contents
-        .filter(content => content.isSquareWithFeatures)
+    const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
         .find(square => {
-            return (square as SquareWithFeatures).data.floorFeatures.includes(blueStar)
+            return square.data.floorFeatures.includes(blueStar)
         })
 
     if (squareWithStar && squareWithStar.isInSameSquareAs(vantage)) {
-        actor.data.animation="STAND"
         return null
     }
 
@@ -122,11 +119,9 @@ const areAllDucksOnTheStar = (level: Level, game: Game) => {
         .filter(npc => npc.data.sprite === mySprites.duckSprite)
         .filter(npc => npc.data.vantage)
 
-
-    const squareWithStar = level.data.contents
-        .filter(content => content.isSquareWithFeatures)
+    const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
         .find(square => {
-            return (square as SquareWithFeatures).data.floorFeatures.includes(blueStar)
+            return square.data.floorFeatures.includes(blueStar)
         })
 
     if (!squareWithStar) { return false }
@@ -157,7 +152,7 @@ const duckPuzzleLevel1 = new Level({
         new Wall({ x: 6, y: 1, place: Direction.east }),
         new Wall({ x: 7, y: 0, place: Direction.south }),
     ],
-    contents: [
+    squaresWithFeatures: [
         new SquareWithFeatures({
             x: 7, y: 5, direction: Direction.north, floorFeatures: [blueStar]
         }),
@@ -172,7 +167,7 @@ const duckPuzzleLevel1 = new Level({
 
     ],
     nonPlayerCharacters: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
     ],
@@ -209,9 +204,7 @@ const duckPuzzleLevel2 = new Level({
         new Wall({ x: 4, y: 2, place: Direction.south, shape: lowWall, }),
         new Wall({ x: 4, y: 2, place: Direction.west, features: [door1], open: true, shape: doorway }),
     ],
-    contents: [
-        
-
+    squaresWithFeatures: [
         new SquareWithFeatures({
             x: 1, y: 2, direction: Direction.north, floorFeatures: [blueStar]
         }),
@@ -226,7 +219,7 @@ const duckPuzzleLevel2 = new Level({
 
     ],
     nonPlayerCharacters: [
-        duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+        duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
         new Item({
@@ -253,24 +246,24 @@ const duckPuzzleLevel3 = new Level({
     walls: [
 
         new Wall({ x: 2, y: 2, place: Direction.north, }),
-        new Wall({ x: 3, y: 2, place: Direction.north, shape:doorway, open:true, features:[door1] }),
+        new Wall({ x: 3, y: 2, place: Direction.north, shape: doorway, open: true, features: [door1] }),
         new Wall({ x: 4, y: 2, place: Direction.north, }),
 
         new Wall({ x: 2, y: 4, place: Direction.south, }),
-        new Wall({ x: 3, y: 4, place: Direction.south, shape:doorway, open:true, features:[door2]}),
+        new Wall({ x: 3, y: 4, place: Direction.south, shape: doorway, open: true, features: [door2] }),
         new Wall({ x: 4, y: 4, place: Direction.south, }),
 
         new Wall({ x: 2, y: 2, place: Direction.west, }),
-        new Wall({ x: 2, y: 3, place: Direction.west, features:[lever1] }),
+        new Wall({ x: 2, y: 3, place: Direction.west, features: [lever1] }),
         new Wall({ x: 2, y: 4, place: Direction.west, }),
 
         new Wall({ x: 4, y: 2, place: Direction.east, }),
         new Wall({ x: 4, y: 3, place: Direction.east, }),
         new Wall({ x: 4, y: 4, place: Direction.east, }),
 
-        new Wall({ x: 4, y: 6, place: Direction.west, shape:doorway, open:true, features:[door1] }),
+        new Wall({ x: 4, y: 6, place: Direction.west, shape: doorway, open: true, features: [door1] }),
     ],
-    contents: [
+    squaresWithFeatures: [
         new SquareWithFeatures({
             x: 3, y: 3, direction: Direction.north, floorFeatures: [blueStar]
         }),
@@ -284,8 +277,8 @@ const duckPuzzleLevel3 = new Level({
         }),
     ],
     nonPlayerCharacters: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
-        duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar), initialAnimation: "WALK" }),
+        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
+        duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
 
@@ -308,4 +301,4 @@ const duckPuzzleLevel3 = new Level({
     victoryMessage: "Something something ducks!"
 }).withWallsAround()
 
-export {duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3}
+export { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 }

@@ -22,7 +22,7 @@ const sheets = {
     portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png"), spriteSheets),
 }
 
-function makeLpcSprite(name:string, walkSheet:SpriteSheet, slashSheet:SpriteSheet):Sprite {
+function makeLpcSprite(name: string, walkSheet: SpriteSheet, slashSheet: SpriteSheet): Sprite {
 
     return new Sprite(name, {
         baseline: .26,
@@ -89,7 +89,7 @@ function makeLpcSprite(name:string, walkSheet:SpriteSheet, slashSheet:SpriteShee
                 { sheet: slashSheet, col: 3, row: 0 },
                 { sheet: slashSheet, col: 4, row: 0 },
                 { sheet: slashSheet, col: 5, row: 0 },
-    
+
             ])
             .set("ATTACK_LEFT", [
                 { sheet: slashSheet, col: 0, row: 1 },
@@ -98,7 +98,7 @@ function makeLpcSprite(name:string, walkSheet:SpriteSheet, slashSheet:SpriteShee
                 { sheet: slashSheet, col: 3, row: 1 },
                 { sheet: slashSheet, col: 4, row: 1 },
                 { sheet: slashSheet, col: 5, row: 1 },
-    
+
             ])
             .set("ATTACK_BACK", [
                 { sheet: slashSheet, col: 0, row: 2 },
@@ -107,7 +107,6 @@ function makeLpcSprite(name:string, walkSheet:SpriteSheet, slashSheet:SpriteShee
                 { sheet: slashSheet, col: 3, row: 2 },
                 { sheet: slashSheet, col: 4, row: 2 },
                 { sheet: slashSheet, col: 5, row: 2 },
-    
             ])
             .set("ATTACK_RIGHT", [
                 { sheet: slashSheet, col: 0, row: 3 },
@@ -122,10 +121,10 @@ function makeLpcSprite(name:string, walkSheet:SpriteSheet, slashSheet:SpriteShee
 
 
 const sprites = {
-    skeletonSprite: makeLpcSprite("SKELETON", sheets.skeleton_walk,sheets.skeleton_slash),
-    farmerSprite: makeLpcSprite("FARMER", sheets.farmer_walk,sheets.farmer_slash),
-    guardSprite: makeLpcSprite("GUARD", sheets.guard_walk,sheets.guard_slash),
-    fighterSprite: makeLpcSprite("FIGHTER", sheets.fighter_walk,sheets.fighter_slash),
+    skeletonSprite: makeLpcSprite("SKELETON", sheets.skeleton_walk, sheets.skeleton_slash),
+    farmerSprite: makeLpcSprite("FARMER", sheets.farmer_walk, sheets.farmer_slash),
+    guardSprite: makeLpcSprite("GUARD", sheets.guard_walk, sheets.guard_slash),
+    fighterSprite: makeLpcSprite("FIGHTER", sheets.fighter_walk, sheets.fighter_slash),
 
     drake_portrait: Sprite.portraitSprite("drake", sheets.portrait1),
     sally_portrait: Sprite.portraitSprite("sally", sheets.portrait2),

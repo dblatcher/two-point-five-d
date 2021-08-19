@@ -8,13 +8,27 @@ import { WallFeature } from "./WallFeature";
 
 class Action {
     action: string
+    duration: number
+    tickCount: number
+    somethingHappensOnFinish:boolean
 
     constructor(action: string) {
         this.action = action
+        this.duration = 1
+        this.tickCount = 0
+        this.somethingHappensOnFinish = false
     }
 
     perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
-        console.warn(`No performance class defined for Action ${this.action}`, actor);
+        console.warn(`No perform function defined for Action ${this.action}`, actor);
+    }
+
+    onFinish(actor: Vantage | NonPlayerCharacter, game: Game): void {
+        console.warn(`No onFinish function defined for Action ${this.action}`, actor);
+    }
+
+    get isFinished(): boolean {
+        return this.tickCount >= this.duration
     }
 }
 
@@ -99,4 +113,26 @@ class NpcInterAction extends Action {
     }
 }
 
-export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction }
+class DoAction extends Action {
+    action: "DO"
+    animation: string
+    duration: number
+
+    constructor(animation: string, duration: number) {
+        super("DO")
+        this.action = "DO"
+        this.animation = animation
+        this.duration = duration
+        this.somethingHappensOnFinish = true
+    }
+
+    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+        console.log(`Actor should DO :  ${this.animation}`);
+    }
+
+    onFinish(actor: Vantage | NonPlayerCharacter, game: Game): void {
+        console.log(`Actor has finished ${this.animation}`);
+    }
+}
+
+export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction, DoAction }

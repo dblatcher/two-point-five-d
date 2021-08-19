@@ -55,7 +55,6 @@ const level2: Level = new Level({
             vantage: new Vantage({ x: 5.5, y: 3.5, direction: Direction.west }),
             sprite: sprites.dinoSprite,
             height: .5, width: .5,
-            animation: "WALK"
         })
 
     ],

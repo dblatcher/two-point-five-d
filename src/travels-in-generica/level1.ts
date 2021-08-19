@@ -87,27 +87,24 @@ const level1: Level = new Level({
     nonPlayerCharacters: [
         new NonPlayerCharacter({
             sprite:sprites.skeletonSprite,
-            animation:'WALK',
             behaviour: new Behaviour(decisionFunctions.moveAntiClockwise),
             vantage: new Vantage({ x: 7.2, y: 6.2, direction: Direction.north })
         }),
 
         new NonPlayerCharacter({
             sprite:sprites.farmerSprite,
-            animation:'WALK',
-            behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
+            // behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
             vantage: new Vantage({x:8.25, y:4.25, direction:Direction.north}),
         }),
 
         new NonPlayerCharacter({
             sprite:sprites.fighterSprite,
-            animation: "WALK",
             vantage: new Vantage({x:4.75, y:5.75, direction:Direction.north}),
         }),
 
         new NonPlayerCharacter({
             sprite:sprites.guardSprite,
-            animation: "ATTACK",
+            // animation: "ATTACK",
             vantage: new Vantage({x:4.25, y:5.25, direction:Direction.north}),
         }),
 
