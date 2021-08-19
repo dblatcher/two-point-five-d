@@ -1,7 +1,7 @@
 import { sprites } from './sprites'
 import { Behaviour } from '../game-classes/Behaviour';
 import { Direction } from "../game-classes/Direction";
-import { NonPlayerCharacter } from '@/game-classes/NonPlayerCharacter';
+import { Actor } from '@/game-classes/Actor';
 import { Vantage } from '@/game-classes/Vantage';
 
 
@@ -13,10 +13,10 @@ interface DuckConfig {
     behaviour?: Behaviour
 }
 
-function duck(config: DuckConfig): NonPlayerCharacter {
+function duck(config: DuckConfig): Actor {
     const { x, y, direction, behaviour } = config
 
-    return new NonPlayerCharacter({
+    return new Actor({
         vantage: new Vantage({ x, y, direction }),
         sprite: sprites.duckSprite,
         behaviour,

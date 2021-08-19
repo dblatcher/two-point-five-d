@@ -13,7 +13,7 @@ import { sprites } from "@/instances/sprites";
 import { itemTypes } from "@/instances/itemTypes"
 import { lowWall, doorway } from "@/instances/wallShapes"
 import * as globalFeatures from "@/travels-in-generica/features"
-import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
+import { Actor } from "@/game-classes/Actor";
 
 
 const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
@@ -50,8 +50,8 @@ const level2: Level = new Level({
     ],
     squaresWithFeatures: [
     ],
-    nonPlayerCharacters: [
-        new NonPlayerCharacter({
+    actors: [
+        new Actor({
             vantage: new Vantage({ x: 5.5, y: 3.5, direction: Direction.west }),
             sprite: sprites.dinoSprite,
             height: .5, width: .5,

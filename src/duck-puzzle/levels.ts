@@ -22,7 +22,7 @@ import { sprites } from "@/instances/sprites";
 
 import { sprites as mySprites } from "./sprites";
 import * as itemTypes from "./itemTypes";
-import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
+import { Actor } from "@/game-classes/Actor";
 
 
 function makeSign(text: string[]): WallFeature {
@@ -83,7 +83,7 @@ const pitClosed = new Pit({ status: "CLOSED" })
 
 
 
-function moveAntiClockwiseUnlessOnStar(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null {
+function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) return null
@@ -115,7 +115,7 @@ function moveAntiClockwiseUnlessOnStar(actor: NonPlayerCharacter, game: Game, be
 
 const areAllDucksOnTheStar = (level: Level, game: Game) => {
 
-    const ducks: NonPlayerCharacter[] = (level.data.nonPlayerCharacters || [])
+    const ducks: Actor[] = (level.data.actors || [])
         .filter(npc => npc.data.sprite === mySprites.duckSprite)
         .filter(npc => npc.data.vantage)
 
@@ -166,7 +166,7 @@ const duckPuzzleLevel1 = new Level({
         }),
 
     ],
-    nonPlayerCharacters: [
+    actors: [
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
@@ -218,7 +218,7 @@ const duckPuzzleLevel2 = new Level({
         }),
 
     ],
-    nonPlayerCharacters: [
+    actors: [
         duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
@@ -276,7 +276,7 @@ const duckPuzzleLevel3 = new Level({
             x: 3, y: 0, direction: Direction.north, floorFeatures: [floorSwitch]
         }),
     ],
-    nonPlayerCharacters: [
+    actors: [ 
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
         duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],

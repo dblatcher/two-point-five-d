@@ -1,5 +1,5 @@
 import { Point } from "@/canvas/canvas-utility";
-import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
+import { Actor } from "@/game-classes/Actor";
 import { Game } from "./Game";
 import { Item } from "./Item";
 import { RelativeDirection } from "./RelativeDirection";
@@ -19,11 +19,11 @@ class Action {
         this.somethingHappensOnFinish = false
     }
 
-    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    perform(actor: Vantage | Actor, game: Game): void {
         console.warn(`No perform function defined for Action ${this.action}`, actor);
     }
 
-    onFinish(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    onFinish(actor: Vantage | Actor, game: Game): void {
         console.warn(`No onFinish function defined for Action ${this.action}`, actor);
     }
 
@@ -42,7 +42,7 @@ class MovementAction extends Action {
         this.direction = direction;
     }
 
-    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    perform(actor: Vantage | Actor, game: Game): void {
         switch (this.action) {
             case "MOVE": return actor.move(this.direction, game);
             case "TURN": return actor.turn(this.direction);
@@ -62,7 +62,7 @@ class MovementByAction extends Action {
         this.direction = direction;
     }
 
-    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    perform(actor: Vantage | Actor, game: Game): void {
         return actor.moveBy(this.distance, this.direction, game);
     }
 }
@@ -77,7 +77,7 @@ class ShiftAction extends Action {
         this.position = position;
     }
 
-    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    perform(actor: Vantage | Actor, game: Game): void {
         actor.shiftWithinSquare(this.position, game)
     }
 
@@ -93,22 +93,22 @@ class InterAction extends Action {
         this.feature = target
     }
 
-    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    perform(actor: Vantage | Actor, game: Game): void {
         this.feature.handleInteraction(actor, game);
     }
 }
 
 class NpcInterAction extends Action {
     action: "INTERACT"
-    npc: NonPlayerCharacter
+    npc: Actor
 
-    constructor(target: NonPlayerCharacter) {
+    constructor(target: Actor) {
         super("INTERACT")
         this.action = "INTERACT"
         this.npc = target
     }
 
-    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    perform(actor: Vantage | Actor, game: Game): void {
         this.npc.handleInteraction(actor, game);
     }
 }
@@ -126,11 +126,11 @@ class DoAction extends Action {
         this.somethingHappensOnFinish = true
     }
 
-    perform(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    perform(actor: Vantage | Actor, game: Game): void {
         console.log(`Actor should DO :  ${this.animation}`);
     }
 
-    onFinish(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    onFinish(actor: Vantage | Actor, game: Game): void {
         console.log(`Actor has finished ${this.animation}`);
     }
 }

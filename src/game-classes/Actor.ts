@@ -7,7 +7,7 @@ import { RelativeDirection } from "@/game-classes/RelativeDirection"
 import { Vantage } from "@/game-classes/Vantage"
 import { Action, DoAction } from "./Action"
 
-interface NonPlayerCharacterData {
+interface ActorData {
     vantage?: Vantage
     sprite: Sprite
     behaviour?: Behaviour
@@ -15,13 +15,13 @@ interface NonPlayerCharacterData {
     width?: number
 }
 
-class NonPlayerCharacter {
-    data: NonPlayerCharacterData
+class Actor {
+    data: ActorData
     actionQueue: Action[]
     currentAction: Action | undefined
     static MAX_QUEUE_LENGTH = 10
 
-    constructor(data: NonPlayerCharacterData) {
+    constructor(data: ActorData) {
         this.data = data
         this.actionQueue = []
         this.currentAction = undefined
@@ -62,7 +62,7 @@ class NonPlayerCharacter {
 
     tick(game: Game): void {
 
-        if (this.data.behaviour && (this.actionQueue.length < NonPlayerCharacter.MAX_QUEUE_LENGTH)) {
+        if (this.data.behaviour && (this.actionQueue.length < Actor.MAX_QUEUE_LENGTH)) {
             const action = this.data.behaviour.decideAction(this, game)
             if (action) { this.actionQueue.push(action) }
         }
@@ -88,7 +88,7 @@ class NonPlayerCharacter {
 
     }
 
-    handleInteraction(actor: Vantage | NonPlayerCharacter, game: Game): void {
+    handleInteraction(actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
         // this.actionQueue.push(new DoAction("ATTACK", 8))
     }
@@ -109,5 +109,5 @@ class NonPlayerCharacter {
 
 
 export {
-    NonPlayerCharacter
+    Actor
 }

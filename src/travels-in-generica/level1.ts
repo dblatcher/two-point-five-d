@@ -16,7 +16,7 @@ import { itemTypes } from "@/instances/itemTypes"
 import * as globalFeatures from "@/travels-in-generica/features"
 import { sprites } from "./sprites";
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
-import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
+import { Actor } from "@/game-classes/Actor";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -84,25 +84,25 @@ const level1: Level = new Level({
         }),
     ],
 
-    nonPlayerCharacters: [
-        new NonPlayerCharacter({
+    actors: [
+        new Actor({
             sprite:sprites.skeletonSprite,
             behaviour: new Behaviour(decisionFunctions.moveAntiClockwise),
             vantage: new Vantage({ x: 7.2, y: 6.2, direction: Direction.north })
         }),
 
-        new NonPlayerCharacter({
+        new Actor({
             sprite:sprites.farmerSprite,
             // behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
             vantage: new Vantage({x:8.25, y:4.25, direction:Direction.north}),
         }),
 
-        new NonPlayerCharacter({
+        new Actor({
             sprite:sprites.fighterSprite,
             vantage: new Vantage({x:4.75, y:5.75, direction:Direction.north}),
         }),
 
-        new NonPlayerCharacter({
+        new Actor({
             sprite:sprites.guardSprite,
             // animation: "ATTACK",
             vantage: new Vantage({x:4.25, y:5.25, direction:Direction.north}),

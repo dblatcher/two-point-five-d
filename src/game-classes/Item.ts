@@ -7,7 +7,7 @@ import { Sprite } from "../canvas/Sprite";
 import { Vantage } from "./Vantage";
 import { ItemType } from "./ItemType";
 import { Point } from "@/canvas/canvas-utility";
-import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
+import { Actor } from "@/game-classes/Actor";
 
 
 interface ItemConfig {
@@ -72,7 +72,7 @@ class Item {
         ctx.clearRect(0, 0, width, height)
     }
 
-    handleInteraction(actor: Vantage|NonPlayerCharacter, game: Game): void {
+    handleInteraction(actor: Vantage|Actor, game: Game): void {
         const { items } = game.data.level.data;
         if (!game.data.itemInHand) {
             this.takeIntoHand(items, game)

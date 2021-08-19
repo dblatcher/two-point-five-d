@@ -8,13 +8,12 @@ import { Item } from './Item'
 import { PlayerVantage } from './PlayerVantage'
 import { Character } from '../rpg-classes/Character'
 import { Vantage } from './Vantage'
-import { SquareWithFeatures } from './SquareWithFeatures'
 import { Controller } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
 import { Intersitial } from './Intersitial'
 import { NarrativeMessage } from './NarrativeMessage'
-import { NonPlayerCharacter } from '@/game-classes/NonPlayerCharacter'
+import { Actor } from '@/game-classes/Actor'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -61,8 +60,8 @@ class FeedbackToUI {
 
 interface FigureMap {
     figure: Figure
-    subject: Item | NonPlayerCharacter
-    subjectClass: typeof Item | typeof NonPlayerCharacter
+    subject: Item | Actor
+    subjectClass: typeof Item | typeof Actor
 }
 
 class Game {
@@ -103,16 +102,16 @@ class Game {
     }
 
     get figureMaps(): FigureMap[] {
-        const { items=[], nonPlayerCharacters=[] } = this.data.level.data
+        const { items=[], actors=[] } = this.data.level.data
         const output: FigureMap[] = [];
         items.forEach(item => {
             if (item.figure) {
                 output.push({ figure: item.figure, subject: item, subjectClass: Item })
             }
         })
-        nonPlayerCharacters.forEach(npc => {
+        actors.forEach(npc => {
             if (npc.figure) {
-                output.push({ figure: npc.figure, subject: npc, subjectClass: NonPlayerCharacter })
+                output.push({ figure: npc.figure, subject: npc, subjectClass: Actor })
             }
         })
         return output
@@ -123,7 +122,7 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { walls=[], items=[], squaresWithFeatures=[], nonPlayerCharacters=[], victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
+        const { walls=[], items=[], squaresWithFeatures=[], actors=[], victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
 
         const allControllers = [...this.data.controllers, ...levelControllers];
 
@@ -132,7 +131,7 @@ class Game {
             nextPlayerAction.perform(this.data.playerVantage, this);
         }
 
-        nonPlayerCharacters.forEach(npc => {
+        actors.forEach(npc => {
             npc.tick(this);
         })
 
@@ -141,7 +140,7 @@ class Game {
         })
 
 
-        const npcFigures = nonPlayerCharacters.filter(npc=>npc.figure).map(npc=>npc.figure) as Figure[];
+        const npcFigures = actors.filter(npc=>npc.figure).map(npc=>npc.figure) as Figure[];
 
         // TODO: make copy of items and figures array that the method can splice from
         // So square don't have to check if things already assigned are on them too
@@ -270,14 +269,14 @@ class Game {
             const figureClicked: FigureMap | null = this.pointerLocator.identifyClickedFigure(this.data.playerVantage, this.figureMaps, clickInfo, !squareAheadIsBlocked)
 
             let itemClicked: Item | null = null;
-            let npcClicked: NonPlayerCharacter | null = null;
+            let npcClicked: Actor | null = null;
             if (figureClicked) {
                 switch (figureClicked.subjectClass) {
                     case Item:
                         itemClicked = figureClicked.subject as Item;
                         break;
-                    case NonPlayerCharacter:
-                        npcClicked = figureClicked.subject as NonPlayerCharacter;
+                    case Actor:
+                        npcClicked = figureClicked.subject as Actor;
                         break
                 }
             }

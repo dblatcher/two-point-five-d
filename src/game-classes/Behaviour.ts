@@ -1,15 +1,15 @@
 import { Game } from './Game';
 import { Action, MovementAction, MovementByAction, ShiftAction } from './Action';
 import { RelativeDirection } from './RelativeDirection';
-import { NonPlayerCharacter } from '@/game-classes/NonPlayerCharacter';
+import { Actor } from '@/game-classes/Actor';
 
 
 
 interface DecisionFunction {
-    (actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null
+    (actor: Actor, game: Game, behaviour: Behaviour): Action | null
 }
 
-function moveClockwise(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action|null {
+function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action|null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -27,7 +27,7 @@ function moveClockwise(actor: NonPlayerCharacter, game: Game, behaviour: Behavio
     }
 }
 
-function moveAntiClockwise(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action|null {
+function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action|null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -46,7 +46,7 @@ function moveAntiClockwise(actor: NonPlayerCharacter, game: Game, behaviour: Beh
     }
 }
 
-function moveBackAndForward(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action|null {
+function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Action|null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -65,12 +65,12 @@ function moveBackAndForward(actor: NonPlayerCharacter, game: Game, behaviour: Be
     }
 }
 
-function shiftAround(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null {
+function shiftAround(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
     if (game.tickCount % 3 !== 0) { return null }
     return new ShiftAction({ x: Math.random(), y: Math.random() })
 }
 
-function wanderForward(actor: NonPlayerCharacter, game: Game, behaviour: Behaviour): Action | null {
+function wanderForward(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
     if (game.tickCount % 2 !== 0) { return null }
     return new MovementByAction(.05, RelativeDirection.FORWARD)
 }
@@ -86,7 +86,7 @@ class Behaviour {
         this.decisionFunction = decisionFunction
     }
 
-    decideAction(actor: NonPlayerCharacter, game: Game): Action | null {
+    decideAction(actor: Actor, game: Game): Action | null {
         return this.decisionFunction(actor, game, this);
     }
 

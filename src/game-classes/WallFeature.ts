@@ -10,7 +10,7 @@ import { Vantage } from "./Vantage"
 import { AbstractFeature } from './AbstractFeature'
 import { ItemType } from "./ItemType"
 import { AnimationTransition } from "./AnimationTransition"
-import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter"
+import { Actor } from "@/game-classes/Actor"
 
 interface WallFeatureConfig {
     reactions?: Reaction[]
@@ -42,7 +42,7 @@ class WallFeature extends AbstractFeature {
     get isWallFeature(): boolean { return true }
     get canInteract(): boolean { return false }
 
-    handleInteraction(actor: Vantage|NonPlayerCharacter, game: Game): void {
+    handleInteraction(actor: Vantage|Actor, game: Game): void {
         this.fireTriggers(game)
         this.fireReactions(actor, game)
     }

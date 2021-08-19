@@ -1,14 +1,13 @@
 import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
-import { NonPlayerCharacter } from "@/game-classes/NonPlayerCharacter";
+import { Actor } from "@/game-classes/Actor";
 import { Color } from "../canvas/Color";
 import { Controller } from "./Controller";
 import { Direction } from "./Direction";
 import { Game } from "./Game";
 import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
-import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
@@ -28,7 +27,7 @@ interface LevelConfig {
     defaultWallPattern?: Sprite
     floorColor?: Color
     items: Item[]
-    nonPlayerCharacters?: NonPlayerCharacter[]
+    actors?: Actor[]
 
     controllers?: Controller[]
     victoryCondition?: VictoryTest
@@ -126,12 +125,12 @@ class Level {
 
         ctx.setLineDash([]);
 
-        const {walls= [], squaresWithFeatures = [], nonPlayerCharacters = []} = this.data
+        const {walls= [], squaresWithFeatures = [], actors = []} = this.data
 
         walls.forEach(wall => { wall.drawInMap(ctx, gridSize) });
         squaresWithFeatures.forEach(thing => { thing.drawInMap(ctx, gridSize) })
 
-        nonPlayerCharacters.filter(npc=>npc.figure).forEach(npc => npc.figure?.drawInMap(ctx, gridSize))
+        actors.filter(npc=>npc.figure).forEach(npc => npc.figure?.drawInMap(ctx, gridSize))
 
         if (vantage) {
             vantage.drawInMap(ctx, gridSize);
@@ -169,7 +168,7 @@ class Level {
     }
 
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
-        const {items = [], squaresWithFeatures = [], nonPlayerCharacters=[], walls =[]} = this.data
+        const {items = [], squaresWithFeatures = [], actors=[], walls =[]} = this.data
 
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
@@ -212,7 +211,7 @@ class Level {
             }
         })
 
-        nonPlayerCharacters.forEach(npc => {
+        actors.forEach(npc => {
             const { figure } = npc
             if (figure) {
                 const place = placesInSight.find(place => place.position.isInSameSquareAs(figure))
