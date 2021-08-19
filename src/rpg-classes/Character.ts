@@ -67,8 +67,6 @@ class Character {
     }
 
     say(message: string, game: Game): void {
-        console.log(`${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`)
-
 
         game.narrativeMessages.push(new NarrativeMessage({
             content: `${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`,

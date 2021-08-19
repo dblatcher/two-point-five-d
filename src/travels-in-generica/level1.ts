@@ -17,6 +17,7 @@ import * as globalFeatures from "@/travels-in-generica/features"
 import { sprites } from "./sprites";
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { Actor } from "@/game-classes/Actor";
+import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -91,21 +92,33 @@ const level1: Level = new Level({
             vantage: new Vantage({ x: 7.2, y: 6.2, direction: Direction.north })
         }),
 
-        new Actor({
+        new NonPlayerCharacter({
             sprite:sprites.farmerSprite,
             // behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
             vantage: new Vantage({x:8.25, y:4.25, direction:Direction.north}),
+            talkMessage: "I am taking my turnips to the market.",
+            name: "John the farmer",
         }),
 
-        new Actor({
+        new NonPlayerCharacter({
             sprite:sprites.fighterSprite,
             vantage: new Vantage({x:4.75, y:5.75, direction:Direction.north}),
+            talkMessage: "They aren't offering enough money for me to fight any monsters.",
+            name: "Harry Longblade",
         }),
 
-        new Actor({
+        new NonPlayerCharacter({
             sprite:sprites.guardSprite,
-            // animation: "ATTACK",
             vantage: new Vantage({x:4.25, y:5.25, direction:Direction.north}),
+            talkMessage: "Abide by the laws and we won't have any trouble.",
+            name: "Corporal Mack",
+        }),
+
+        new NonPlayerCharacter({
+            sprite:sprites.guardSprite,
+            vantage: new Vantage({x:3.5, y:2.5, direction:Direction.north}),
+            talkMessage: "I'm just a guard.",
+            name: "Corporal Colin",
         }),
 
     ],

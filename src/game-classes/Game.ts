@@ -118,6 +118,9 @@ class Game {
     }
 
     tick(): void {
+
+        if (this.data.intersitial?.data.pausesTime) {return}
+
         this.tickCount++;
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
