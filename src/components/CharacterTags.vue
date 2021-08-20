@@ -12,11 +12,11 @@
       }"
       :style="CharacterTagstyle(index)"
     >
-      <header @click.stop="characterNameClick(index)">
+      <header @click.stop="characterNameClick(index)" v-if="index !== open">
         {{ character.data.name }}
       </header>
 
-      <div>
+      <div class="main">
         <img v-if="index === open" :src="character.portraitSrc" />
 
         <equipment-window
@@ -24,6 +24,12 @@
           :character="character"
           :handsOnly="true"
         />
+
+        <stat-bars
+          v-if="index !== open"
+          :character="character"
+        />
+
       </div>
     </section>
   </article>
@@ -33,6 +39,7 @@
 import { Options, Vue } from "vue-class-component";
 import gameStore from "@/store";
 import EquipmentWindow from "./EquipmentWindow.vue";
+import StatBars from "./StatBars.vue";
 import { Character } from "@/rpg-classes/Character";
 import { toRaw } from "@vue/reactivity";
 import { Game } from "@/game-classes/Game";
@@ -46,7 +53,7 @@ interface styleObject {
   props: {
     open: Number,
   },
-  components: { EquipmentWindow },
+  components: { EquipmentWindow , StatBars},
   emits: ["chooseOpen"],
 })
 export default class CharacterTags extends Vue {
@@ -113,14 +120,15 @@ article {
       cursor: pointer;
     }
 
-    div {
+    .main {
       display: flex;
       justify-content: center;
       flex: 1;
+      align-items: center;
 
       img {
-        width: 3rem;
-        height: 3rem;
+        width: auto;
+        height: 90%;
       }
     }
   }

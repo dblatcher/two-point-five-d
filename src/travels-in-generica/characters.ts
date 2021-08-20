@@ -2,9 +2,11 @@ import { Character } from '@/rpg-classes/Character';
 import { itemTypes } from '../instances/itemTypes';
 import { Item } from '@/game-classes/Item';
 import { sprites } from './sprites';
+import { CharacterStats } from '@/rpg-classes/CharacterStats';
 
 const boblin = new Character({
     name: "Boblin",
+    stats: new CharacterStats([10,12],[20,20],[5,5]),
     portrait: sprites.boblin_portrait,
     inventory: [
         null, null,
@@ -14,11 +16,12 @@ const boblin = new Character({
         null, null,
     ],
     equipmentSlots: Character.emptyEquipmentSlots()
-        .set("HEAD", new Item({ type: itemTypes.bardHat }))
+        .set("HEAD", new Item({ type: itemTypes.bardHat })),
 });
 
 const drake = new Character({
     name: "Drake",
+    stats: new CharacterStats([12,15],[15,15],[0,0]),
     portrait: sprites.drake_portrait,
     inventory: [
         null, null,
@@ -33,6 +36,7 @@ const drake = new Character({
 const sally = new Character({
     name: "Sally",
     portrait: sprites.sally_portrait,
+    stats: new CharacterStats([10,18],[20,20],[0,0]),
     inventory: [
         null, null,
         null, null,
@@ -47,6 +51,7 @@ const sally = new Character({
 const gwim = new Character({
     name: "Gwimin",
     portrait: sprites.gwim_portrait,
+    stats: new CharacterStats([10,10],[10,10],[10,20]),
     inventory: [
         null, null,
         null, null,

@@ -6,11 +6,14 @@ import { NarrativeMessage } from "../game-classes/NarrativeMessage";
 import { PlayerVantage } from "../game-classes/PlayerVantage";
 import { RelativeDirection } from "../game-classes/RelativeDirection";
 
+import { CharacterStats } from "./CharacterStats"
+
 interface CharacterConfig {
     name?: string
     inventory: Array<Item | null>
     equipmentSlots?: Map<string, Item | null>
     portrait: Sprite
+    stats: CharacterStats
 }
 
 class Character {
