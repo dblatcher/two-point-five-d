@@ -43,7 +43,7 @@ const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, req
 
 const level1: Level = new Level({
     height: 10, width: 15,
-    startingVantage: { x: 7, y: 3, direction: Direction.south },
+    startingVantage: { x: 6, y: 5, direction: Direction.east },
 
     sky: new Sky({
         skyBaseColor: new Color(140,150,250),

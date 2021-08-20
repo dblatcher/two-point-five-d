@@ -5,7 +5,7 @@ import { Actor } from "@/game-classes/Actor";
 import { Color } from "../canvas/Color";
 import { Controller } from "./Controller";
 import { Direction } from "./Direction";
-import { Game } from "./Game";
+import { Game, ticksPerMinute } from "./Game";
 import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
 import { RelativeDirection } from "./RelativeDirection";
@@ -39,7 +39,6 @@ interface LevelConfig {
 }
 
 
-
 class Level {
     data: LevelConfig
     tickCount: number
@@ -50,6 +49,12 @@ class Level {
     }
 
     static defaultFloorColor = new Color(80, 80, 80);
+
+    get timeOfDay(): [number, number] {
+        const hour = Math.floor((this.tickCount % (24 * ticksPerMinute)) / ticksPerMinute)
+        const minute = Math.floor((this.tickCount % ticksPerMinute))
+        return [hour, minute]
+    }
 
     isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
         const { squaresWithFeatures = [], walls = [] } = this.data
@@ -143,27 +148,23 @@ class Level {
     drawSightBackground(ctx: CanvasRenderingContext2D, toCanvasCoords: ConvertFunction, vantage: Vantage, aspect: number): void {
         const smallestWallHeight = Wall.baseHeight / (VANISH_RATE ** MAX_VIEW_DISTANCE)
         const floorColor = this.data.floorColor || Level.defaultFloorColor;
-        const skyBaseColor = this.data.sky?.data.skyBaseColor || Color.GRAY
 
         ctx.fillStyle = Color.BLACK.css
         ctx.beginPath()
         ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: 1 }))
 
-        ctx.fillStyle = skyBaseColor.css
-        ctx.beginPath()
-        ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5 - smallestWallHeight / 2 }))
 
-        if (this.data.sky?.data.sun) {
+        const { timeOfDay } = this;
 
-            if (vantage.data.direction == Direction.east) {
-                ctx.fillStyle = Color.YELLOW.lighter(30).css;
-                ctx.beginPath()
-
-                ctx.ellipse(...toCanvasCoords({ x: .3, y: .25 }), ...toCanvasCoords({ x: .05, y: .05 * aspect }), 0, 0, Math.PI * 2)
-                ctx.closePath()
-                ctx.fill()
-            }
+        if (this.data.sky) {
+            this.data.sky.render(ctx, toCanvasCoords,vantage,aspect,smallestWallHeight,timeOfDay)
+        } else {
+            ctx.fillStyle = Color.GRAY.css
+            ctx.beginPath()
+            ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5 - smallestWallHeight / 2 }))
         }
+
+
 
 
         ctx.fillStyle = floorColor.css;

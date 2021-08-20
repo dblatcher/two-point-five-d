@@ -17,6 +17,8 @@ import { Actor } from '@/game-classes/Actor'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
+const ticksPerMinute = 60
+
 interface GameConfig {
     playerVantage: PlayerVantage,
     itemInHand?: Item
@@ -400,4 +402,4 @@ class Game {
     }
 }
 
-export { Game, GameConfig, FeedbackToUI, FigureMap }
+export { Game, GameConfig, FeedbackToUI, FigureMap, ticksPerMinute }
