@@ -18,6 +18,7 @@ import { sprites } from "./sprites";
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { Actor } from "@/game-classes/Actor";
 import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
+import { Sky } from "@/game-classes/Sky";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -43,6 +44,12 @@ const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, req
 const level1: Level = new Level({
     height: 10, width: 15,
     startingVantage: { x: 7, y: 3, direction: Direction.south },
+
+    sky: new Sky({
+        skyBaseColor: new Color(140,150,250),
+        sun:true,
+    }),
+
     walls: [
         new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door3, keyhole], open: true }),
         new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0) }),

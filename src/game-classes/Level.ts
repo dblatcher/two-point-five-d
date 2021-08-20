@@ -9,6 +9,7 @@ import { Game } from "./Game";
 import { Item } from "./Item";
 import { PointerLocator } from "./PointerLocator";
 import { RelativeDirection } from "./RelativeDirection";
+import { Sky } from "./Sky";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall } from "./Wall"
@@ -16,7 +17,7 @@ import { Wall } from "./Wall"
 const renderingZoneFrames = false;
 
 interface VictoryTest {
-    (level:Level, game:Game) : boolean
+    (level: Level, game: Game): boolean
 }
 
 interface LevelConfig {
@@ -26,12 +27,14 @@ interface LevelConfig {
     squaresWithFeatures?: SquareWithFeatures[]
     defaultWallPattern?: Sprite
     floorColor?: Color
+    sky?: Sky
+
     items: Item[]
     actors?: Actor[]
 
     controllers?: Controller[]
     victoryCondition?: VictoryTest
-    victoryMessage?:string
+    victoryMessage?: string
     startingVantage?: VantageConfig
 }
 
@@ -49,7 +52,7 @@ class Level {
     static defaultFloorColor = new Color(80, 80, 80);
 
     isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
-        const {squaresWithFeatures = [], walls =[]} = this.data
+        const { squaresWithFeatures = [], walls = [] } = this.data
         if (targetX < 0) { return true }
         if (targetY < 0) { return true }
         if (targetX >= this.data.width) { return true }
@@ -125,28 +128,44 @@ class Level {
 
         ctx.setLineDash([]);
 
-        const {walls= [], squaresWithFeatures = [], actors = []} = this.data
+        const { walls = [], squaresWithFeatures = [], actors = [] } = this.data
 
         walls.forEach(wall => { wall.drawInMap(ctx, gridSize) });
         squaresWithFeatures.forEach(thing => { thing.drawInMap(ctx, gridSize) })
 
-        actors.filter(npc=>npc.figure).forEach(npc => npc.figure?.drawInMap(ctx, gridSize))
+        actors.filter(npc => npc.figure).forEach(npc => npc.figure?.drawInMap(ctx, gridSize))
 
         if (vantage) {
             vantage.drawInMap(ctx, gridSize);
         }
     }
 
-    drawSightBackground(ctx: CanvasRenderingContext2D, toCanvasCoords: ConvertFunction): void {
+    drawSightBackground(ctx: CanvasRenderingContext2D, toCanvasCoords: ConvertFunction, vantage: Vantage, aspect: number): void {
         const smallestWallHeight = Wall.baseHeight / (VANISH_RATE ** MAX_VIEW_DISTANCE)
         const floorColor = this.data.floorColor || Level.defaultFloorColor;
+        const skyBaseColor = this.data.sky?.data.skyBaseColor || Color.GRAY
 
+        ctx.fillStyle = Color.BLACK.css
         ctx.beginPath()
-        ctx.fillStyle = 'black';
         ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: 1 }))
-        ctx.fillStyle = 'grey';
+
+        ctx.fillStyle = skyBaseColor.css
         ctx.beginPath()
         ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5 - smallestWallHeight / 2 }))
+
+        if (this.data.sky?.data.sun) {
+
+            if (vantage.data.direction == Direction.east) {
+                ctx.fillStyle = Color.YELLOW.lighter(30).css;
+                ctx.beginPath()
+
+                ctx.ellipse(...toCanvasCoords({ x: .3, y: .25 }), ...toCanvasCoords({ x: .05, y: .05 * aspect }), 0, 0, Math.PI * 2)
+                ctx.closePath()
+                ctx.fill()
+            }
+        }
+
+
         ctx.fillStyle = floorColor.css;
         ctx.beginPath()
         ctx.fillRect(...toCanvasCoords({ x: 0, y: .5 + smallestWallHeight / 2 }), ...toCanvasCoords({ x: 1, y: 1 }))
@@ -168,14 +187,14 @@ class Level {
     }
 
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
-        const {items = [], squaresWithFeatures = [], actors=[], walls =[]} = this.data
+        const { items = [], squaresWithFeatures = [], actors = [], walls = [] } = this.data
 
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
         const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-        this.drawSightBackground(ctx, toCanvasCoords);
+        this.drawSightBackground(ctx, toCanvasCoords, vantage, viewWidth / viewHeight);
 
         const placesInSight = getPlacesInSight(vantage);
         let renderInstructions: RenderInstruction[] = [];
