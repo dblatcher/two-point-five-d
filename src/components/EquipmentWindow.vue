@@ -1,5 +1,5 @@
 <template>
-  <section :timeStamp="timeStamp.toString()" :class="{'hands-only': handsOnly}">
+  <section :class="{'hands-only': handsOnly}">
     <div class='hand-holder'>
       <item-slot
         @click.stop="handleEquipSlotClick('LEFT_HAND')"
@@ -42,7 +42,6 @@
 </template>
 
 <script lang="ts">
-import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 
 import ItemSlot from "./ItemSlot.vue";
@@ -66,13 +65,8 @@ export default class EquipmentWindow extends Vue {
   $store!: typeof gameStore;
   character!: Character;
 
-  // maintains reactivity - change to the store value triggers updated()
-  get timeStamp(): number {
-    const store = useStore() as typeof gameStore;
-    return store.state.timestamp;
-  }
-
   getEquipment(slotName: string): Item | null {
+    this.$store.getters.timestamp;
     return toRaw(this.character.data.equipmentSlots?.get(slotName)) || null;
   }
 

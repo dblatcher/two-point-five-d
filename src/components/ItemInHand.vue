@@ -1,5 +1,5 @@
 <template>
-  <figure :timeStamp="timeStamp.toString()">
+  <figure>
     <item-slot :item="item || null" :size="3" />
     <figcaption>
       {{ item ? item.data.type.name : "" }}
@@ -8,18 +8,10 @@
 </template>
 
 <script lang="ts">
-import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
-
-import ItemSlot from "./ItemSlot.vue";
-
 import gameStore from "@/store";
+import ItemSlot from "./ItemSlot.vue";
 import { Item } from "@/game-classes/Item";
-import { toRaw } from "@vue/reactivity";
-
-interface ItemInHandData {
-  item: Item | undefined;
-}
 
 @Options({
   components: {
@@ -27,31 +19,11 @@ interface ItemInHandData {
   },
 })
 export default class ItemInHand extends Vue {
-  declare $data: ItemInHandData;
-  item!: Item | undefined;
+  $store!: typeof gameStore;
 
-  data(): ItemInHandData {
-    return {
-      item: undefined,
-    };
-  }
-
-  get timeStamp(): number {
-    const store = useStore() as typeof gameStore;
-    return store.state.timestamp;
-  }
-
-  mounted(): void {
-    this.updateItemInHand();
-  }
-
-  updated(): void {
-    this.updateItemInHand();
-  }
-
-  updateItemInHand(): void {
-    const store = useStore() as typeof gameStore;
-    this.item = toRaw(store.state.game.data.itemInHand);
+  get item(): Item | undefined {
+    this.$store.getters.timestamp;
+    return this.$store.state.game.data.itemInHand;
   }
 }
 </script>
@@ -66,7 +38,7 @@ figure {
   figcaption {
     min-width: 6rem;
     text-align: left;
-    padding-left: .2rem;
+    padding-left: 0.2rem;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <section :timeStamp="timeStamp.toString()">
+  <section>
     <div class="bag">
       <item-slot
         v-for="(item, index) in inventory"
@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts">
-import { useStore } from "vuex";
 import { Options, Vue } from "vue-class-component";
 
 import ItemSlot from "./ItemSlot.vue";
@@ -32,17 +31,11 @@ import { Character } from "@/rpg-classes/Character";
   },
 })
 export default class InventoryWindow extends Vue {
-  caption!: string;
   $store!: typeof gameStore;
   character!: Character;
 
-  // maintains reactivity - change to the store value triggers updated()
-  get timeStamp(): number {
-    const store = useStore() as typeof gameStore;
-    return store.state.timestamp;
-  }
-
   get inventory(): Array<Item | null> {
+    this.$store.getters.timestamp
     return toRaw(this.character.data.inventory);
   }
 

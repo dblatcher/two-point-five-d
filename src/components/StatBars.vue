@@ -25,13 +25,13 @@ export default class StatBars extends Vue {
   character!: Character;
 
   get health(): PointBar {
-    return this.character.data.stats.health;
+    return this.statSet[0];
   }
   get stamina(): PointBar {
-    return this.character.data.stats.stamina;
+    return this.statSet[1];
   }
   get mana(): PointBar {
-    return this.character.data.stats.mana;
+    return this.statSet[2];
   }
 
   get statSet(): PointBar[] {

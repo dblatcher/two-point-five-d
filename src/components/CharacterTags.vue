@@ -1,5 +1,5 @@
 <template>
-  <article :timeStamp="timeStamp.toString()">
+  <article>
     <section
       v-for="(character, index) in characters"
       :key="index"
@@ -8,7 +8,7 @@
       :class="{
         tag: true,
         'open-tag': index === open,
-        'active-tag': index === active,
+        'active-tag': index === activeCharacterIndex,
       }"
       :style="CharacterTagstyle(index)"
     >
@@ -25,11 +25,7 @@
           :handsOnly="true"
         />
 
-        <stat-bars
-          v-if="index !== open"
-          :character="character"
-        />
-
+        <stat-bars v-if="index !== open" :character="character" />
       </div>
     </section>
   </article>
@@ -43,7 +39,6 @@ import StatBars from "./StatBars.vue";
 import { Character } from "@/rpg-classes/Character";
 import { toRaw } from "@vue/reactivity";
 import { Game } from "@/game-classes/Game";
-import { useStore } from "vuex";
 
 interface styleObject {
   backgroundColor: string;
@@ -53,44 +48,34 @@ interface styleObject {
   props: {
     open: Number,
   },
-  components: { EquipmentWindow , StatBars},
+  components: { EquipmentWindow, StatBars },
   emits: ["chooseOpen"],
 })
 export default class CharacterTags extends Vue {
   $store!: typeof gameStore;
   open!: number;
-  active!: number | undefined;
   declare $refs: { canvas: HTMLCanvasElement };
-
-  data(): { active: number | undefined } {
-    const store = useStore() as typeof gameStore;
-    return {
-      active: store.state.game.data.activeCharacterIndex,
-    };
-  }
 
   handleChooseOpenCharacter(index: number): void {
     this.$emit("chooseOpen", index);
   }
 
   characterNameClick(index: number): void {
-    this.$store.dispatch("setActiveCharacter", index).then(
+    this.$store
+      .dispatch("setActiveCharacter", index)
+      .then
       // feedback => {console.log(feedback)}
-    );
-  }
-
-  get timeStamp(): number {
-    const store = useStore() as typeof gameStore;
-    return store.state.timestamp;
+      ();
   }
 
   get characters(): Character[] {
+    this.$store.getters.timestamp;
     return toRaw(this.$store.state.game.data.characters);
   }
 
-  updated(): void {
-    const store = useStore() as typeof gameStore;
-    this.active = store.state.game.data.activeCharacterIndex;
+  get activeCharacterIndex(): number | undefined {
+    this.$store.getters.timestamp;
+    return this.$store.state.game.data.activeCharacterIndex;
   }
 
   CharacterTagstyle(index: number): styleObject {
