@@ -84,7 +84,7 @@ class Wall extends Position {
         const strokeStyle = Color.BLACK.css 
 
         if (patternSprite) {
-            fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints) || fillStyle
+            fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints, undefined, "repeat") || fillStyle
         }
         plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle, fillStyle })
 

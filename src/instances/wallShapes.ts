@@ -24,6 +24,18 @@ const doorway: Point[] = [
     { x: 0, y: .0 },
 ]
 
+const vaultDoorway: Point[] = [
+    { x: 0, y: 1 },
+    { x: .5, y: 1.25 },
+    { x: 1, y: 1 },
+    { x: 1, y: 0 },
+    { x: .9, y: 0 },
+    { x: .9, y: .9 },
+    { x: .1, y: .9 },
+    { x: .1, y: .0 },
+    { x: 0, y: .0 },
+]
+
 const spikey: Point[] = [
     { x: 0, y: 0 },
     { x: 0, y: .2 },
@@ -42,4 +54,11 @@ const tower: Point[] = [
     { x: 1, y: 0 },
 ]
 
-export { lowWall, doorway, spikey, tower }
+const towerUpper: Point[] = [
+    { x: 0, y: 1 },
+    { x: 0, y: 2 },
+    { x: 1, y: 2 },
+    { x: 1, y: 1 },
+]
+
+export { lowWall, doorway, spikey, tower, vaultDoorway, towerUpper }

@@ -11,7 +11,8 @@ function getPatternFill(
     ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction,
     tickCount: number,
     sprite: Sprite, animationName: string, fullWallPoints: Point[],
-    transitionPhase?:number
+    transitionPhase?:number,
+    repeat?:string
 ): CanvasPattern | null {
 
     const { topLeft, convertedWallDimensions } = getMeasurements(fullWallPoints, convertFunction);
@@ -24,7 +25,7 @@ function getPatternFill(
         return null
     }
 
-    return convertToPattern(image, convertedWallDimensions, topLeft, ctx)
+    return convertToPattern(image, convertedWallDimensions, topLeft, ctx, repeat)
 }
 
 function getTextPatternFill(
@@ -70,10 +71,11 @@ function convertToPattern(
     image: CanvasImageSource,
     convertedWallDimensions: [number, number],
     topLeft: [number, number],
-    ctx: CanvasRenderingContext2D
+    ctx: CanvasRenderingContext2D,
+    repeat?: string
 ): CanvasPattern | null {
     image = scaleTo(image, convertedWallDimensions[0], convertedWallDimensions[1]);
-    const pattern = ctx.createPattern(image, "no-repeat")
+    const pattern = ctx.createPattern(image, repeat || "no-repeat")
 
     if (self.DOMMatrix && pattern) {
         const matrix = new DOMMatrix();
