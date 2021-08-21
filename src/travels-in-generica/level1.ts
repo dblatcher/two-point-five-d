@@ -80,9 +80,6 @@ const level1: Level = new Level({
         new Wall({ x: 4, y: 0, place: Direction.east, patternSprite: sharedSprites.brickWall2, }),
         new Wall({ x: 4, y: 1, place: Direction.east, patternSprite: sharedSprites.brickWall2, }),
 
-
-
-
         new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [globalFeatures.painting1] }),
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [globalFeatures.staircaseA.down] }),
 
@@ -154,14 +151,14 @@ const level1: Level = new Level({
 
         new NonPlayerCharacter({
             sprite: sprites.guardSprite,
-            vantage: new Vantage({ x: 4.25, y: 5.25, direction: Direction.north }),
+            vantage: new Vantage({ x: 5.25, y: 7.25, direction: Direction.north }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
         }),
 
         new NonPlayerCharacter({
             sprite: sprites.guardSprite,
-            vantage: new Vantage({ x: 3.5, y: 3.5, direction: Direction.north }),
+            vantage: new Vantage({ x: 4.5, y: 3.5, direction: Direction.south }),
             talkMessage: "I'm just a guard.",
             name: "Corporal Colin",
         }),
@@ -181,7 +178,7 @@ const level1: Level = new Level({
         }),
         new Controller({ inputs: [keyhole], subject: door3, statusChangeOnInputTrigger: "OPEN" }),
     ]
-})
+}).withWallsAround({color:Color.GREEN, shape:spikey})
 
 
 

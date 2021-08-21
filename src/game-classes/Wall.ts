@@ -17,8 +17,8 @@ interface WallConfig {
     place: Direction
     color?: Color
     patternSprite?: Sprite
-    features?: WallFeature[]
     shape?: Point[]
+    features?: WallFeature[]
     open?: boolean
 }
 

@@ -1,4 +1,4 @@
-import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, VANISH_RATE } from "@/canvas/canvas-utility";
+import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, Point, VANISH_RATE } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Actor } from "@/game-classes/Actor";
@@ -12,7 +12,7 @@ import { RelativeDirection } from "./RelativeDirection";
 import { Sky } from "./Sky";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
-import { Wall } from "./Wall"
+import { Wall, WallConfig } from "./Wall"
 
 const renderingZoneFrames = false;
 
@@ -157,7 +157,7 @@ class Level {
         const { timeOfDay } = this;
 
         if (this.data.sky) {
-            this.data.sky.render(ctx, toCanvasCoords,vantage,aspect,smallestWallHeight,timeOfDay)
+            this.data.sky.render(ctx, toCanvasCoords, vantage, aspect, smallestWallHeight, timeOfDay)
         } else {
             ctx.fillStyle = Color.GRAY.css
             ctx.beginPath()
@@ -305,30 +305,34 @@ class Level {
         ])
     }
 
-    withWallsAround(): Level {
+
+
+    withWallsAround(config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): Level {
         const { walls, width, height } = this.data;
+        const {color, patternSprite, shape}= config;
+
         let x = 0, y = 0;
         for (x = 0; x < width; x++) {
             if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.north)) {
-                walls.push(new Wall({ x, y, place: Direction.north }))
+                walls.push(new Wall({ x, y, place: Direction.north, color, patternSprite, shape }))
             }
         }
         x = 0;
         for (y = 0; y < height; y++) {
             if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.west)) {
-                walls.push(new Wall({ x, y, place: Direction.west }))
+                walls.push(new Wall({ x, y, place: Direction.west, color, patternSprite, shape }))
             }
         }
         y = height - 1;
         for (x = 0; x < width; x++) {
             if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.south)) {
-                walls.push(new Wall({ x, y, place: Direction.south }))
+                walls.push(new Wall({ x, y, place: Direction.south, color, patternSprite, shape }))
             }
         }
         x = width - 1;
         for (y = 0; y < height; y++) {
             if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.east)) {
-                walls.push(new Wall({ x, y, place: Direction.east }))
+                walls.push(new Wall({ x, y, place: Direction.east, color, patternSprite, shape }))
             }
         }
         return this
