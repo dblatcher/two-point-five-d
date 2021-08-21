@@ -10,7 +10,7 @@ class Action {
     action: string
     duration: number
     tickCount: number
-    somethingHappensOnFinish:boolean
+    somethingHappensOnFinish: boolean
 
     constructor(action: string) {
         this.action = action
@@ -113,17 +113,23 @@ class NpcInterAction extends Action {
     }
 }
 
+interface ActionCallback {
+    (actor:Vantage|Actor, game: Game): void
+}
+
 class DoAction extends Action {
     action: "DO"
     animation: string
     duration: number
+    callBack?: ActionCallback
 
-    constructor(animation: string, duration: number) {
+    constructor(animation: string, duration: number, callback?:ActionCallback) {
         super("DO")
         this.action = "DO"
         this.animation = animation
         this.duration = duration
         this.somethingHappensOnFinish = true
+        this.callBack = callback
     }
 
     perform(actor: Vantage | Actor, game: Game): void {
@@ -131,7 +137,9 @@ class DoAction extends Action {
     }
 
     onFinish(actor: Vantage | Actor, game: Game): void {
-        console.log(`Actor has finished ${this.animation}`);
+        if (this.callBack) {
+            this.callBack(actor, game)
+        }
     }
 }
 

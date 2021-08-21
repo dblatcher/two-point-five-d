@@ -69,6 +69,10 @@ class Character {
         return Game.CHARACTER_COLORS[game.data.characters.indexOf(this)]
     }
 
+    damage(amount: number): number {
+        return this.data.stats.health.down(amount);
+    }
+
     say(message: string, game: Game): void {
 
         game.narrativeMessages.push(new NarrativeMessage({
