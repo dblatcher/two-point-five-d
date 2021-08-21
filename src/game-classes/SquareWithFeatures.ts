@@ -7,12 +7,14 @@ import { Figure } from "./Figure";
 import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
 import { Vantage } from "./Vantage";
+import { CeilingFeature } from "./CeilingFeature";
 
 
 interface SquareWithFeaturesData {
     x: number
     y: number
     floorFeatures: FloorFeature[]
+    ceilingFeatures?: CeilingFeature[]
     direction: Direction
 }
 
@@ -33,7 +35,12 @@ class SquareWithFeatures extends Vantage {
     get squareY(): number { return .5 }
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
-        this.data.floorFeatures.forEach(feature => {
+        const {floorFeatures=[], ceilingFeatures=[]} = this.data;
+
+        floorFeatures.forEach(feature => {
+            feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount)
+        })
+        ceilingFeatures.forEach(feature => {
             feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount)
         })
     }
@@ -63,11 +70,11 @@ class SquareWithFeatures extends Vantage {
         })
 
         items.filter(item => !item.data.altitude)
-        .forEach(item => {
-            if (item.figure && item.figure.isInSameSquareAs(this)) {
-                this.itemsOnThisSquareNow.push(item)
-            }
-        })
+            .forEach(item => {
+                if (item.figure && item.figure.isInSameSquareAs(this)) {
+                    this.itemsOnThisSquareNow.push(item)
+                }
+            })
     }
 }
 

@@ -19,6 +19,7 @@ import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { Actor } from "@/game-classes/Actor";
 import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
 import { Sky } from "@/game-classes/Sky";
+import { CeilingFeature } from "@/game-classes/CeilingFeature";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -35,6 +36,8 @@ const redSquare = new FloorFeature({
     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
 })
 
+const redCeiling = new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle:Color.YELLOW.css } });
+
 const door1 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
 const door2 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
 const door3 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
@@ -46,8 +49,8 @@ const level1: Level = new Level({
     startingVantage: { x: 6, y: 5, direction: Direction.east },
 
     sky: new Sky({
-        skyBaseColor: new Color(140,150,250),
-        sun:true,
+        skyBaseColor: new Color(140, 150, 250),
+        sun: true,
     }),
 
     walls: [
@@ -66,12 +69,14 @@ const level1: Level = new Level({
 
         new Wall({ x: 1, y: 5, place: Direction.south, color: new Color(120, 40, 20), shape: doorway, open: true, features: [door1] }),
         new Wall({ x: 2, y: 4, place: Direction.south, color: new Color(120, 40, 20), features: [lever1] }),
-        new Wall({ x: 8, y: 6, place: Direction.south}),
+        new Wall({ x: 8, y: 6, place: Direction.south }),
 
     ],
     squaresWithFeatures: [
-        new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare] }),
-        new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare] }),
+        new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare], ceilingFeatures: [redCeiling] }),
+        new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare], ceilingFeatures: [redCeiling] }),
+        new SquareWithFeatures({ x: 8, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [redCeiling] }),
+        new SquareWithFeatures({ x: 7, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [redCeiling] }),
         new SquareWithFeatures({
             x: 4, y: 8, direction: Direction.north, floorFeatures: [
                 new Pit({}),
@@ -94,36 +99,36 @@ const level1: Level = new Level({
 
     actors: [
         new Actor({
-            sprite:sprites.skeletonSprite,
+            sprite: sprites.skeletonSprite,
             behaviour: new Behaviour(decisionFunctions.moveAntiClockwise),
             vantage: new Vantage({ x: 7.2, y: 6.2, direction: Direction.north })
         }),
 
         new NonPlayerCharacter({
-            sprite:sprites.farmerSprite,
+            sprite: sprites.farmerSprite,
             // behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
-            vantage: new Vantage({x:8.25, y:4.25, direction:Direction.north}),
+            vantage: new Vantage({ x: 8.25, y: 4.25, direction: Direction.north }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",
         }),
 
         new NonPlayerCharacter({
-            sprite:sprites.fighterSprite,
-            vantage: new Vantage({x:4.75, y:5.75, direction:Direction.north}),
+            sprite: sprites.fighterSprite,
+            vantage: new Vantage({ x: 4.75, y: 5.75, direction: Direction.north }),
             talkMessage: "They aren't offering enough money for me to fight any monsters.",
             name: "Harry Longblade",
         }),
 
         new NonPlayerCharacter({
-            sprite:sprites.guardSprite,
-            vantage: new Vantage({x:4.25, y:5.25, direction:Direction.north}),
+            sprite: sprites.guardSprite,
+            vantage: new Vantage({ x: 4.25, y: 5.25, direction: Direction.north }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
         }),
 
         new NonPlayerCharacter({
-            sprite:sprites.guardSprite,
-            vantage: new Vantage({x:3.5, y:2.5, direction:Direction.north}),
+            sprite: sprites.guardSprite,
+            vantage: new Vantage({ x: 3.5, y: 2.5, direction: Direction.north }),
             talkMessage: "I'm just a guard.",
             name: "Corporal Colin",
         }),
