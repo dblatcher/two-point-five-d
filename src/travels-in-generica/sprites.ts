@@ -14,6 +14,9 @@ const sheets = {
     fighter_walk: new SpriteSheet("fighter_walk", require("../assets/sprites/fighter/walk.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 4 }),
     fighter_slash: new SpriteSheet("fighter_slash", require("../assets/sprites/fighter/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
 
+    orc: new SpriteSheet("orc", require("./assets/orc.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
+    smith: new SpriteSheet("smith", require("./assets/smith.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
+
     //https://opengameart.org/content/39-portraits-pixel-art-pack
     portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png"), spriteSheets),
     portrait2: new SpriteSheet("portrait2", require("../assets/sprites/portraits/Icons_02.png"), spriteSheets),
@@ -119,12 +122,63 @@ function makeLpcSprite(name: string, walkSheet: SpriteSheet, slashSheet: SpriteS
     })
 }
 
+function makeULpcSprite(name: string, sheet: SpriteSheet): Sprite {
+
+    function makeRow(row:number, lastCol:number, firstCol=0):Frame[] {
+        const output:Frame[] = []
+        for (let index = firstCol; index < lastCol; index++) {
+            output.push ({sheet, row, col:index})
+        }
+        return output
+    }
+
+    return new Sprite(name, {
+        baseline: .26,
+        shadow: { x: 1 / 10, y: 1 / 26 },
+        size: { x: .5, y: .5 },
+        transforms: ["RESIZE_CENTER", "CROP_BASE"],
+        animations: new Map<string, Frame[]>()
+            .set("STAND_FORWARD", [
+                { sheet: sheet, col: 0, row: 8 },
+            ])
+            .set("STAND_LEFT", [
+                { sheet: sheet, col: 0, row: 9 },
+            ])
+            .set("STAND_BACK", [
+                { sheet: sheet, col: 0, row: 10 },
+            ])
+            .set("STAND_RIGHT", [
+                { sheet: sheet, col: 0, row: 11 },
+            ])
+            .set("WALK_FORWARD", makeRow(8,8,1))
+            .set("WALK_LEFT", makeRow(9,8,1))
+            .set("WALK_BACK", makeRow(10,8,1))
+            .set("WALK_RIGHT", makeRow(11,8,1))
+            .set("ATTACK_FORWARD", makeRow(4,7))
+            .set("ATTACK_LEFT", makeRow(5,7))
+            .set("ATTACK_BACK", makeRow(6,7))
+            .set("ATTACK_RIGHT", makeRow(7,7))
+            .set("DIE", [
+                { sheet: sheet, col: 0, row: 20 },
+                { sheet: sheet, col: 1, row: 20 },
+                { sheet: sheet, col: 2, row: 20 },
+                { sheet: sheet, col: 3, row: 20 },
+                { sheet: sheet, col: 4, row: 20 },
+                { sheet: sheet, col: 4, row: 20 },
+                { sheet: sheet, col: 4, row: 20 },
+            ])
+    })
+}
+
 
 const sprites = {
     skeletonSprite: makeLpcSprite("SKELETON", sheets.skeleton_walk, sheets.skeleton_slash),
     farmerSprite: makeLpcSprite("FARMER", sheets.farmer_walk, sheets.farmer_slash),
     guardSprite: makeLpcSprite("GUARD", sheets.guard_walk, sheets.guard_slash),
     fighterSprite: makeLpcSprite("FIGHTER", sheets.fighter_walk, sheets.fighter_slash),
+
+    orc: makeULpcSprite("ORC", sheets.orc),
+    smith: makeULpcSprite("SMITH", sheets.smith),
 
     drake_portrait: Sprite.portraitSprite("drake", sheets.portrait1),
     sally_portrait: Sprite.portraitSprite("sally", sheets.portrait2),

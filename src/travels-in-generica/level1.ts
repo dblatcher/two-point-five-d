@@ -20,6 +20,8 @@ import { Actor } from "@/game-classes/Actor";
 import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
 import { Sky } from "@/game-classes/Sky";
 import { CeilingFeature } from "@/game-classes/CeilingFeature";
+import { Monster } from "@/rpg-classes/Monster";
+import { CharacterStats } from "@/rpg-classes/CharacterStats";
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -134,12 +136,25 @@ const level1: Level = new Level({
             vantage: new Vantage({ x: 7.2, y: 6.2, direction: Direction.north })
         }),
 
+        new Monster({
+            sprite: sprites.orc,
+            vantage: new Vantage({x:3.5, y:0.5, direction:Direction.south}),
+            stats: new CharacterStats([10,10],[10,10]),
+        }),
+
         new NonPlayerCharacter({
             sprite: sprites.farmerSprite,
             // behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
             vantage: new Vantage({ x: 8.25, y: 4.25, direction: Direction.north }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",
+        }),
+        new NonPlayerCharacter({
+            sprite: sprites.smith,
+            behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
+            vantage: new Vantage({ x: 6.25, y: 6.25, direction: Direction.west }),
+            talkMessage: "Wanna buy a hammer?",
+            name: "Roger the smith",
         }),
 
         new NonPlayerCharacter({
