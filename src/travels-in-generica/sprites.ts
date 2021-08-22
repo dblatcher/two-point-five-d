@@ -158,15 +158,11 @@ function makeULpcSprite(name: string, sheet: SpriteSheet): Sprite {
             .set("ATTACK_LEFT", makeRow(5,7))
             .set("ATTACK_BACK", makeRow(6,7))
             .set("ATTACK_RIGHT", makeRow(7,7))
-            .set("DIE", [
-                { sheet: sheet, col: 0, row: 20 },
-                { sheet: sheet, col: 1, row: 20 },
-                { sheet: sheet, col: 2, row: 20 },
-                { sheet: sheet, col: 3, row: 20 },
-                { sheet: sheet, col: 4, row: 20 },
+            .set("DIE", [ ...makeRow(20,4),
                 { sheet: sheet, col: 4, row: 20 },
                 { sheet: sheet, col: 4, row: 20 },
             ])
+            .set("hurt", [ ...makeRow(20,3)])
     })
 }
 

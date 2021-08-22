@@ -33,13 +33,13 @@ class Monster extends Actor {
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
+    }
 
-        const health = this.data.stats.health.down(3);
+    damage(amount:number, game:Game):number {
+        this.actionQueue.push( new DoAction('hurt',8))
+        const health = this.data.stats.health.down(amount);
         game.narrativeMessages.push(new NarrativeMessage({ content: `It has ${health} health left.`, color: Color.TRANSPARENT }))
-
-        if (this.actionQueue.length == 0) {
-            this.actionQueue.push(new DoAction('WALK', 5))
-        }
+        return health;
     }
 
     tick(game: Game): void {

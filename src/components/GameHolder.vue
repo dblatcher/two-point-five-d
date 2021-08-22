@@ -25,6 +25,7 @@
 
       <section class="sidebar">
         <map-canvas />
+        <attack-buttons v-if="hasCharacters"/>
         <controls />
       </section>
     </main>
@@ -53,6 +54,7 @@ import ItemInHand from "./ItemInHand.vue";
 import CharacterTags from "./CharacterTags.vue";
 import IntersitialWindow from "./IntersitialWindow.vue";
 import MessageBox from "./MessageBox.vue";
+import AttackButtons from "./AttackButtons.vue";
 
 
 interface GameHolderData {
@@ -74,6 +76,7 @@ interface GameHolderData {
     CharacterTags,
     IntersitialWindow,
     MessageBox,
+    AttackButtons,
   },
 })
 export default class GameHolder extends Vue {

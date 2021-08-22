@@ -7,6 +7,7 @@ import { PlayerVantage } from "../game-classes/PlayerVantage";
 import { RelativeDirection } from "../game-classes/RelativeDirection";
 
 import { CharacterStats } from "./CharacterStats"
+import { Monster } from "./Monster";
 
 interface CharacterConfig {
     name?: string
@@ -17,6 +18,25 @@ interface CharacterConfig {
 }
 
 class Character {
+    attack(monster: Monster, option: string, game:Game): FeedbackToUI {
+
+        const hit = Math.random() > .3
+        if (!hit) {
+            return new FeedbackToUI({
+                success: false,
+                message: `${this.data.name} failed to hit ${monster.data.sprite.name} with a ${option}!`
+            })
+        }
+        const damage = 3
+        monster.damage(damage, game);
+        return new FeedbackToUI({
+            success: false,
+            message: `${this.data.name} hit ${monster.data.sprite.name} with a ${option}, doing ${damage} damage!`,
+            propertyList: [
+                ['damage', damage]
+            ]
+        })
+    }
     data: CharacterConfig
     constructor(config: CharacterConfig) {
         this.data = config
@@ -43,6 +63,11 @@ class Character {
             console.warn(error.message)
         }
         return document.createElement('img');
+    }
+
+    get attackOptions(): string[] {
+
+        return ["swing", "jab"]
     }
 
     drawAsIcon(canvas: HTMLCanvasElement): void {

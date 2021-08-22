@@ -49,10 +49,18 @@ export default createStore({
       }
     },
 
-    selfClick({ state }, clickInfo: { buttonName: string, character: Character }) {
+    attackButtonClick({state}, clickInfo:{ character: Character, option:string }):FeedbackToUI {
+      if (!this.getters.gameIsPaused) {
+        return toRaw(state.game).handleAttackButton(toRaw(clickInfo))
+      }
+      return FeedbackToUI.empty
+    },
+
+    selfClick({ state }, clickInfo: { buttonName: string, character: Character }):FeedbackToUI {
       if (!this.getters.gameIsPaused) {
         return toRaw(state.game).handleSelfClick(toRaw(clickInfo))
       }
+      return FeedbackToUI.empty
     },
 
     setActiveCharacter({ state }, characterIndex: number): FeedbackToUI {

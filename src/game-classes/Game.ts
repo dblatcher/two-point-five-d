@@ -14,6 +14,7 @@ import { Color } from '@/canvas/Color'
 import { Intersitial } from './Intersitial'
 import { NarrativeMessage } from './NarrativeMessage'
 import { Actor } from '@/game-classes/Actor'
+import { Monster } from '@/rpg-classes/Monster'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -105,16 +106,16 @@ class Game {
     }
 
     get figureMaps(): FigureMap[] {
-        const { items=[], actors=[] } = this.data.level.data
+        const { items = [], actors = [] } = this.data.level.data
         const output: FigureMap[] = [];
         items.forEach(item => {
             if (item.figure) {
-                output.push({ figure: item.figure, subject: item, subjectClass: Item, canInteractWith:true })
+                output.push({ figure: item.figure, subject: item, subjectClass: Item, canInteractWith: true })
             }
         })
         actors.forEach(actor => {
             if (actor.figure) {
-                output.push({ figure: actor.figure, subject: actor, subjectClass: Actor, canInteractWith:!!actor.data.canInteractWith })
+                output.push({ figure: actor.figure, subject: actor, subjectClass: Actor, canInteractWith: !!actor.data.canInteractWith })
             }
         })
         return output
@@ -122,13 +123,13 @@ class Game {
 
     tick(): void {
 
-        if (this.data.intersitial?.data.pausesTime) {return}
+        if (this.data.intersitial?.data.pausesTime) { return }
 
         this.tickCount++;
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { walls=[], items=[], squaresWithFeatures=[], actors=[], victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
+        const { walls = [], items = [], squaresWithFeatures = [], actors = [], victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
 
         const allControllers = [...this.data.controllers, ...levelControllers];
 
@@ -147,7 +148,7 @@ class Game {
 
 
         //TO DO - use FigureMap
-        const npcFigures = actors.filter(npc=>npc.figure).map(npc=>npc.figure) as Figure[];
+        const npcFigures = actors.filter(npc => npc.figure).map(npc => npc.figure) as Figure[];
 
         // TODO: make copy of items and figures array that the method can splice from
         // So square don't have to check if things already assigned are on them too
@@ -401,6 +402,38 @@ class Game {
                 break
         }
         return FeedbackToUI.empty
+    }
+
+    handleAttackButton(clickInfo: { character: Character, option: string }): FeedbackToUI {
+        const {character, option} = clickInfo
+        const { playerVantage, level } = this.data
+        const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerVantage)
+        const { actors = [] } = level.data
+
+        // to do - amount lost depends on option
+        // attack cooldowns
+        character.data.stats.stamina.down(2);
+
+        if (squareAheadIsBlocked) {
+            // to do - hit walls?
+            return FeedbackToUI.empty
+        }
+
+        const squareAhead = playerVantage.translate(playerVantage.data.direction)
+
+        const actorsInTargetSquare = actors.filter(actor=> actor.data.vantage?.isInSameSquareAs(squareAhead))
+        const monsters = actorsInTargetSquare.filter(actor => {
+            return Object.getPrototypeOf(actor).constructor === Monster
+        }).map(actor => {
+            return actor as Monster
+        })
+
+        if (monsters.length === 0) {
+            return FeedbackToUI.empty
+        }
+        const monster = monsters[0]
+
+        return clickInfo.character.attack(monster, option, this);
     }
 }
 
