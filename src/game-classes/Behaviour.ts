@@ -14,16 +14,17 @@ function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action|n
     const { vantage } = actor.data;
     if (!vantage) { return null }
 
-    const distance = .1
-    const placeAhead = vantage.translate({
-        x: vantage.data.direction.x * distance,
-        y: vantage.data.direction.y * distance,
+    const distanceToMove = .05
+    const howCloseToGet = .5
+    const whereToLookForBlockage = vantage.translate({
+        x: vantage.data.direction.x * howCloseToGet,
+        y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...placeAhead.coords)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor)) {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
-        return new MovementByAction(distance, RelativeDirection.FORWARD)
+        return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
     }
 }
 
@@ -39,7 +40,7 @@ function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Acti
         y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
@@ -58,7 +59,7 @@ function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Act
         y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor)) {
         return new MovementAction("TURN", RelativeDirection.BACK)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)

@@ -275,6 +275,7 @@ class PointerLocator {
 
         function identifyClickedFigureInSquare(viewedFrom: Direction, figureMaps: FigureMap[], clickInfo: Point, forward = 0): FigureMap | null {
             return figureMaps.find(figureMap => {
+                if (!figureMap.canInteractWith) {return false}
                 const { figure } = figureMap
                 if (!figure) { return false }
                 const renderParams = figure.getRenderParams(viewedFrom, forward, 0)

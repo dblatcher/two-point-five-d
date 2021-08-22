@@ -12,7 +12,8 @@ import { RelativeDirection } from "./RelativeDirection";
 import { Sky } from "./Sky";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
-import { Wall, WallConfig } from "./Wall"
+import { Wall } from "./Wall"
+import { Position } from "./Position"
 
 const renderingZoneFrames = false;
 
@@ -56,8 +57,8 @@ class Level {
         return [hour, minute]
     }
 
-    isBlocked(startX: number, startY: number, targetX: number, targetY: number): boolean {
-        const { squaresWithFeatures = [], walls = [] } = this.data
+    isBlocked(startX: number, startY: number, targetX: number, targetY: number, movingActor?: Actor | Position): boolean {
+        const { squaresWithFeatures = [], walls = [], actors = [] } = this.data
         if (targetX < 0) { return true }
         if (targetY < 0) { return true }
         if (targetX >= this.data.width) { return true }
@@ -67,11 +68,17 @@ class Level {
         const dY = targetY - startY
 
         if (squaresWithFeatures.find(
-            item => {
-                if (item.gridX != targetX || item.gridY != targetY) { return false }
-                return item.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
+            squareWithFeature => {
+                if (squareWithFeature.gridX != targetX || squareWithFeature.gridY != targetY) { return false }
+                return squareWithFeature.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
             }
 
+        )) { return true }
+
+        if (actors.find(
+            actor => {
+                return actor != movingActor && actor.data.blocksSquare && actor.data.vantage?.gridX == targetX && actor.data.vantage?.gridY == targetY
+            }
         )) { return true }
 
         if (walls.find(
@@ -96,10 +103,11 @@ class Level {
     }
 
     hasSquareAheadBlocked(vantage: Vantage): boolean {
-        const wall1 = this.data.walls.find(wall =>
+        const { walls = [] } = this.data
+        const wall1 = walls.find(wall =>
             wall.isInSameSquareAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasBlockingFeature)
         )
-        const wall2 = this.data.walls.find(wall =>
+        const wall2 = walls.find(wall =>
             wall.isInSameSquareAs(vantage.translate(vantage.data.direction)) && wall.isFacing(vantage.data.direction.behind) && (wall.isBlocking || wall.hasBlockingFeature)
         )
         return !!(wall1 || wall2)
@@ -309,7 +317,7 @@ class Level {
 
     withWallsAround(config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): Level {
         const { walls, width, height } = this.data;
-        const {color, patternSprite, shape}= config;
+        const { color, patternSprite, shape } = config;
 
         let x = 0, y = 0;
         for (x = 0; x < width; x++) {

@@ -63,6 +63,7 @@ class FeedbackToUI {
 interface FigureMap {
     figure: Figure
     subject: Item | Actor
+    canInteractWith: boolean
     subjectClass: typeof Item | typeof Actor
 }
 
@@ -108,12 +109,12 @@ class Game {
         const output: FigureMap[] = [];
         items.forEach(item => {
             if (item.figure) {
-                output.push({ figure: item.figure, subject: item, subjectClass: Item })
+                output.push({ figure: item.figure, subject: item, subjectClass: Item, canInteractWith:true })
             }
         })
-        actors.forEach(npc => {
-            if (npc.figure) {
-                output.push({ figure: npc.figure, subject: npc, subjectClass: Actor })
+        actors.forEach(actor => {
+            if (actor.figure) {
+                output.push({ figure: actor.figure, subject: actor, subjectClass: Actor, canInteractWith:!!actor.data.canInteractWith })
             }
         })
         return output
@@ -145,6 +146,7 @@ class Game {
         })
 
 
+        //TO DO - use FigureMap
         const npcFigures = actors.filter(npc=>npc.figure).map(npc=>npc.figure) as Figure[];
 
         // TODO: make copy of items and figures array that the method can splice from

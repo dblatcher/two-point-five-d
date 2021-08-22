@@ -13,6 +13,8 @@ interface ActorData {
     behaviour?: Behaviour
     height?: number
     width?: number
+    blocksSquare?:boolean
+    canInteractWith?:boolean
 }
 
 class Actor {

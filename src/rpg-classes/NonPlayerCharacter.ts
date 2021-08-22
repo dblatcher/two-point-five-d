@@ -15,9 +15,10 @@ interface NonPlayerCharacterData {
     behaviour?: Behaviour
     height?: number
     width?: number
-
+    blocksSquare?:boolean
     talkMessage?: string
     name?:string
+    canInteractWith?:boolean
 }
 
 class NonPlayerCharacter extends Actor {
@@ -26,6 +27,8 @@ class NonPlayerCharacter extends Actor {
     constructor(data: NonPlayerCharacterData) {
         super(data)
         this.data = data
+        this.data.blocksSquare = true
+        this.data.canInteractWith = typeof data.canInteractWith == 'undefined' ? true : data.canInteractWith
     }
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {

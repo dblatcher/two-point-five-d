@@ -64,7 +64,7 @@ class Position {
         const targetY = this.gridY + (direction.y);
 
         if (!ignoreWalls) {
-            if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY)) { return }
+            if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY, this)) { return }
         }
 
         this.changePosition({ x: targetX + this.squareX, y: targetY + this.squareY }, game)
@@ -95,6 +95,7 @@ class Position {
                 if (game.data.level.isBlocked(
                     squaresCovered[i].gridX, squaresCovered[i].gridY,
                     squaresCovered[i + 1].gridX, squaresCovered[i + 1].gridY,
+                    this
                 )) { return }
             }
         }

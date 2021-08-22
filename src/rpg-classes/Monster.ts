@@ -16,6 +16,7 @@ interface MonsterData {
     behaviour?: Behaviour
     height?: number
     width?: number
+    blocksSquare?:boolean
     stats: CharacterStats
 }
 
@@ -26,6 +27,7 @@ class Monster extends Actor {
     constructor(data: MonsterData) {
         super(data)
         this.data = data
+        this.data.blocksSquare = true
         this.isDying = false
     }
 
@@ -48,10 +50,9 @@ class Monster extends Actor {
 
             this.isDying = true
 
-            this.actionQueue = [
-            ]
+            this.actionQueue = []
             this.currentAction = new DoAction("DIE", 15, function (actor, game) {
-                (actor as Monster).data.vantage = undefined
+                (actor as Actor).data.vantage = undefined
             })
 
         }
