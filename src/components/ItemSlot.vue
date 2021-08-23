@@ -1,5 +1,5 @@
 <template>
-  <figure :title="item?.data.type.description">
+  <figure :title="item?.data.type.description" :class="{noBorder, grayScale}">
     <span v-if="glyphIcon" :style="glyphIconComputedStyle">{{ glyphIcon }}</span>
     <img v-if="imgIcon" :src="imgIcon" :style="imgIconComputedStyle"/>
     <canvas
@@ -29,6 +29,8 @@ interface ItemSlotData {
     imgIcon: String,
     size: Number,
     unit: String,
+    noBorder: Boolean,
+    grayScale: Boolean,
   },
 })
 export default class ItemSlot extends Vue {
@@ -36,6 +38,8 @@ export default class ItemSlot extends Vue {
   size!: number;
   unit!: string;
   oldItem!: Item;
+  noBorder!: boolean;
+  grayScale!: boolean;
   declare $refs: { canvas: HTMLCanvasElement };
 
   data(): ItemSlotData {
@@ -118,6 +122,17 @@ figure {
     box-sizing: border-box;
     z-index: 2;
     position: relative;
+  }
+
+  &.noBorder {
+    canvas {
+      border:none;
+    }
+  }
+  &.grayScale {
+    canvas {
+     filter: grayscale(1);
+    }
   }
 }
 </style>

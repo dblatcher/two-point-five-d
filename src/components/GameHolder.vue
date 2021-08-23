@@ -125,7 +125,7 @@ export default class GameHolder extends Vue {
 
   main {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
 
     section {
@@ -144,6 +144,7 @@ export default class GameHolder extends Vue {
   .sidebar {
     flex: 1;
     padding-left: 0.25rem;
+    max-width: 400px;
   }
 
   .menu .sidebar {

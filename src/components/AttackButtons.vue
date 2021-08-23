@@ -8,7 +8,13 @@
         :style="getButtonStyleObject(index)"
         @click="handleCharacterClick(index)"
       >
-        {{ character.data.name }}
+
+      <item-slot
+        :imgIcon="'/img/hand-right.png'"
+        :item="getEquipment(character)"
+        :size="4" :noBorder="true" :grayScale="true"
+      />
+
       </button>
     </section>
     <section class="option-buttons" v-if="characterSelected">
@@ -26,16 +32,24 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Options, Vue } from "vue-class-component";
+import ItemSlot from "./ItemSlot.vue"
+
 import store from "@/store";
 import { Character } from "@/rpg-classes/Character";
 import { toRaw } from "vue";
 import { Game } from "@/game-classes/Game";
+import { Item } from "@/game-classes/Item";
 
 interface ButtonStyleObject {
   backgroundColor: string;
 }
 
+@Options ({
+  components: {
+    ItemSlot
+  }
+})
 export default class AttackButtons extends Vue {
   $store!: typeof store;
   selectedIndex!: number | undefined;
@@ -69,6 +83,11 @@ export default class AttackButtons extends Vue {
     });
 
     this.selectedIndex = undefined;
+  }
+
+  getEquipment(character:Character): Item | null {
+    this.$store.getters.timestamp;
+    return toRaw(character.data.equipmentSlots?.get("RIGHT_HAND")) || null;
   }
 
   get characterSelected(): Character | null {
@@ -125,6 +144,7 @@ nav {
   .button {
     flex-basis: 25%;
     transition: filter 0.5s, color 0.5s;
+    padding: 0;
   }
 
   &.not-paused {
