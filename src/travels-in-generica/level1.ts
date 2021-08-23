@@ -12,9 +12,9 @@ import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFe
 
 import { doorway, spikey, tower, towerUpper, vaultDoorway } from "@/instances/wallShapes"
 import { sprites as sharedSprites } from "@/instances/sprites";
-import { itemTypes } from "@/instances/itemTypes"
 import * as globalFeatures from "@/travels-in-generica/features"
 import { sprites } from "./sprites";
+import { itemTypes } from "./itemTypes"
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { Actor } from "@/game-classes/Actor";
 import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";

@@ -1,5 +1,5 @@
 import { Character } from '@/rpg-classes/Character';
-import { itemTypes } from '../instances/itemTypes';
+import { itemTypes } from './itemTypes';
 import { Item } from '@/game-classes/Item';
 import { sprites } from './sprites';
 import { CharacterStats } from '@/rpg-classes/CharacterStats';
@@ -16,7 +16,9 @@ const boblin = new Character({
         null, null,
     ],
     equipmentSlots: Character.emptyEquipmentSlots()
-        .set("HEAD", new Item({ type: itemTypes.bardHat })),
+        .set("HEAD", new Item({ type: itemTypes.bardHat }))
+        .set("RIGHT_HAND", new Item({ type: itemTypes.stick })),
+        
 });
 
 const drake = new Character({
@@ -31,6 +33,7 @@ const drake = new Character({
         null, null,
     ],
     equipmentSlots: Character.emptyEquipmentSlots()
+    .set("RIGHT_HAND", new Item({ type: itemTypes.hammer })),
 });
 
 const sally = new Character({

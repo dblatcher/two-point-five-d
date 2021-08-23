@@ -23,6 +23,9 @@ const sheets = {
     portrait3: new SpriteSheet("portrait3", require("../assets/sprites/portraits/Icons_03.png"), spriteSheets),
     portrait13: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_13.png"), spriteSheets),
     portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png"), spriteSheets),
+
+    //https://opengameart.org/content/32-weapon-icons
+    weapons: new  SpriteSheet("weapons", require("./assets/new-weapons.png"), spriteSheets, { pattern: "GRID", cols: 17, rows: 2 }),
 }
 
 function makeLpcSprite(name: string, walkSheet: SpriteSheet, slashSheet: SpriteSheet): Sprite {
@@ -180,6 +183,10 @@ const sprites = {
     sally_portrait: Sprite.portraitSprite("sally", sheets.portrait2),
     boblin_portrait: Sprite.portraitSprite("boblin", sheets.portrait3),
     gwim_portrait: Sprite.portraitSprite("gwim", sheets.portrait13),
+
+    silverSword: Sprite.itemSpriteOneFrame("silverSword",{sheet:sheets.weapons, col:1, row:0}),
+    hammer: Sprite.itemSpriteOneFrame("hammer",{sheet:sheets.weapons, col:14, row:0}),
+    stick: Sprite.itemSpriteOneFrame("stick",{sheet:sheets.weapons, col:3, row:1}),
 }
 
 export {

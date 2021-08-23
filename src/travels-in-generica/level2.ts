@@ -10,11 +10,11 @@ import { TeleportReaction } from "@/game-classes/Reaction";
 import { InteractableWallFeature } from "@/game-classes/WallFeature";
 
 import { sprites } from "@/instances/sprites";
-import { itemTypes } from "@/instances/itemTypes"
 import { lowWall, doorway } from "@/instances/wallShapes"
 import * as globalFeatures from "@/travels-in-generica/features"
 import { Actor } from "@/game-classes/Actor";
 
+import { itemTypes } from "./itemTypes"
 
 const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
 const button1 = new InteractableWallFeature({ sprite: sprites.buttonSprite, reactions: [teleportToCorner] })
