@@ -1,5 +1,6 @@
 import { Color } from "@/canvas/Color";
 import { ItemType } from "@/game-classes/ItemType";
+import { AttackOption } from "@/rpg-classes/AttackOption";
 import { sprites as commonSprites } from "../instances/sprites";
 import { sprites } from "./sprites";
 
@@ -21,29 +22,56 @@ const bean = new ItemType({
 
 const helmet = new ItemType({
     name: "helmet", sprite: commonSprites.helmet, figureDimensions: { height: .225, width: .18 },
-    equipable: {slotName:'HEAD'},
+    equipable: { slotName: 'HEAD' },
     weight: 3,
 })
 
 const bardHat = new ItemType({
     name: "bard's hat", sprite: commonSprites.bardHat, figureDimensions: { height: .2, width: .25 },
-    equipable: {slotName:'HEAD'},
+    equipable: { slotName: 'HEAD' },
     weight: 1,
 })
 
 const silverSword = new ItemType({
     name: "silver sword", sprite: sprites.silverSword, figureDimensions: { height: .2, width: .25 },
     weight: 3,
+    wieldable: {
+        attackOptions: [
+            new AttackOption(
+                { name: 'swing', damage: 4, staminaCost: 3, cooldown: 10 },
+            ),
+            new AttackOption(
+                { name: 'stab', damage: 5, staminaCost: 2, cooldown: 14 },
+            ),
+        ]
+    }
 })
 
 const hammer = new ItemType({
     name: "hammer", sprite: sprites.hammer, figureDimensions: { height: .2, width: .25 },
     weight: 4,
+    wieldable: {
+        attackOptions: [
+            new AttackOption(
+                { name: 'bash', damage: 5, staminaCost: 4, cooldown: 10 },
+            ),
+        ]
+    }
 })
 
 const stick = new ItemType({
     name: "stick", sprite: sprites.stick, figureDimensions: { height: .2, width: .25 },
     weight: 2,
+    wieldable: {
+        attackOptions: [
+            new AttackOption(
+                { name: 'poke', damage: 1, staminaCost: 1, cooldown: 5 },
+            ),
+            new AttackOption(
+                { name: 'bash', damage: 3, staminaCost: 2, cooldown: 10 },
+            ),
+        ]
+    }
 })
 
 const itemTypes = {

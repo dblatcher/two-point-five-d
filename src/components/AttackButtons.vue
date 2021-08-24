@@ -8,13 +8,13 @@
         :style="getButtonStyleObject(index)"
         @click="handleCharacterClick(index)"
       >
-
-      <item-slot
-        :imgIcon="'/img/hand-right.png'"
-        :item="getEquipment(character)"
-        :size="4" :noBorder="true" :grayScale="true"
-      />
-
+        <item-slot
+          :imgIcon="'/img/hand-right.png'"
+          :item="getEquipment(character)"
+          :size="4"
+          :noBorder="true"
+          :grayScale="true"
+        />
       </button>
     </section>
     <section class="option-buttons" v-if="characterSelected">
@@ -25,7 +25,7 @@
         :style="getButtonStyleObject(selectedIndex)"
         @click="handleOptionClick(index)"
       >
-        {{ option }}
+        {{ option.data.name }}
       </button>
     </section>
   </nav>
@@ -33,22 +33,23 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import ItemSlot from "./ItemSlot.vue"
+import ItemSlot from "./ItemSlot.vue";
 
 import store from "@/store";
 import { Character } from "@/rpg-classes/Character";
 import { toRaw } from "vue";
 import { Game } from "@/game-classes/Game";
 import { Item } from "@/game-classes/Item";
+import { AttackOption } from "@/rpg-classes/AttackOption";
 
 interface ButtonStyleObject {
   backgroundColor: string;
 }
 
-@Options ({
+@Options({
   components: {
-    ItemSlot
-  }
+    ItemSlot,
+  },
 })
 export default class AttackButtons extends Vue {
   $store!: typeof store;
@@ -74,18 +75,20 @@ export default class AttackButtons extends Vue {
       return;
     }
 
-    this.$store.dispatch("attackButtonClick", {
+    this.$store
+      .dispatch("attackButtonClick", {
         option: toRaw(this.attackOptions[index]),
-      character: toRaw(this.characterSelected),
-    }).then(feedback => {
-        console.log(feedback)
+        character: toRaw(this.characterSelected),
+      })
+      .then((feedback) => {
+        console.log(feedback);
         // to do - display damage amount.
-    });
+      });
 
     this.selectedIndex = undefined;
   }
 
-  getEquipment(character:Character): Item | null {
+  getEquipment(character: Character): Item | null {
     this.$store.getters.timestamp;
     return toRaw(character.data.equipmentSlots?.get("RIGHT_HAND")) || null;
   }
@@ -103,7 +106,7 @@ export default class AttackButtons extends Vue {
     return toRaw(this.$store.state.game.data.characters);
   }
 
-  get attackOptions(): string[] {
+  get attackOptions(): AttackOption[] {
     return this.characterSelected?.attackOptions || [];
   }
 

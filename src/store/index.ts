@@ -5,6 +5,7 @@ import { Character } from '@/rpg-classes/Character'
 import { FeedbackToUI } from '@/game-classes/Game'
 
 import { game, spriteSheets } from '@/travels-in-generica'
+import { AttackOption } from '@/rpg-classes/AttackOption'
 // import { game, spriteSheets } from '@/duck-puzzle'
 
 
@@ -49,7 +50,7 @@ export default createStore({
       }
     },
 
-    attackButtonClick({state}, clickInfo:{ character: Character, option:string }):FeedbackToUI {
+    attackButtonClick({state}, clickInfo:{ character: Character, option:AttackOption }):FeedbackToUI {
       if (!this.getters.gameIsPaused) {
         return toRaw(state.game).handleAttackButton(toRaw(clickInfo))
       }

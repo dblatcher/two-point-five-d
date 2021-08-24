@@ -5,6 +5,7 @@ import { Item } from "../game-classes/Item";
 import { NarrativeMessage } from "../game-classes/NarrativeMessage";
 import { PlayerVantage } from "../game-classes/PlayerVantage";
 import { RelativeDirection } from "../game-classes/RelativeDirection";
+import { AttackOption } from "./AttackOption";
 
 import { CharacterStats } from "./CharacterStats"
 import { Monster } from "./Monster";
@@ -18,28 +19,55 @@ interface CharacterConfig {
 }
 
 class Character {
-    attack(monster: Monster, option: string, game:Game): FeedbackToUI {
 
+    data: CharacterConfig
+    constructor(config: CharacterConfig) {
+        this.data = config
+    }
+
+    tick(game: Game): void {
+        if (game.tickCount % 20 == 0) {
+            this.data.stats.stamina.up(1)
+        }
+    }
+
+    attack(monster: Monster | null, option: AttackOption, game: Game): FeedbackToUI {
+        const { staminaCost, damage, name: attackName, cooldown } = option.data;
+
+        if (this.data.stats.stamina.current < staminaCost) {
+            return new FeedbackToUI({
+                success: false,
+                message: `${this.data.name} is too exhausted to ${attackName}!`
+            })
+        }
+
+        // to do: attack cooldowns
+        this.data.stats.stamina.down(staminaCost);
+
+        if (!monster) {
+            return new FeedbackToUI({
+                success: false,
+                message: `${this.data.name} attacked the air or a wall with a ${attackName}!`
+            })
+        }
+
+        // to do: to hit rolls
         const hit = Math.random() > .3
         if (!hit) {
             return new FeedbackToUI({
                 success: false,
-                message: `${this.data.name} failed to hit ${monster.data.sprite.name} with a ${option}!`
+                message: `${this.data.name} failed to hit ${monster.data.sprite.name} with a ${attackName}!`
             })
         }
-        const damage = 3
+
         monster.damage(damage, game);
         return new FeedbackToUI({
             success: false,
-            message: `${this.data.name} hit ${monster.data.sprite.name} with a ${option}, doing ${damage} damage!`,
+            message: `${this.data.name} hit ${monster.data.sprite.name} with a ${attackName}, doing ${damage} damage!`,
             propertyList: [
                 ['damage', damage]
             ]
         })
-    }
-    data: CharacterConfig
-    constructor(config: CharacterConfig) {
-        this.data = config
     }
 
     static emptyEquipmentSlots(): Map<string, Item | null> {
@@ -65,9 +93,15 @@ class Character {
         return document.createElement('img');
     }
 
-    get attackOptions(): string[] {
+    get attackOptions(): AttackOption[] {
 
-        return ["swing", "jab"]
+        const item = this.data.equipmentSlots?.get("RIGHT_HAND");
+
+        if (item && item.data.type.isWieldable) {
+            return item.data.type.data.wieldable?.attackOptions || []
+        }
+
+        return AttackOption.unarmedAttacks
     }
 
     drawAsIcon(canvas: HTMLCanvasElement): void {

@@ -15,6 +15,8 @@ import { Intersitial } from './Intersitial'
 import { NarrativeMessage } from './NarrativeMessage'
 import { Actor } from '@/game-classes/Actor'
 import { Monster } from '@/rpg-classes/Monster'
+import { AttackOption } from '@/rpg-classes/AttackOption'
+import { characters } from '@/travels-in-generica/characters'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -129,7 +131,11 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { walls = [], items = [], squaresWithFeatures = [], actors = [], victoryCondition, controllers: levelControllers = [] } = this.data.level.data;
+        const { 
+            walls = [], items = [], squaresWithFeatures = [], actors = [], 
+            victoryCondition, 
+            controllers: levelControllers = [] 
+        } = this.data.level.data;
 
         const allControllers = [...this.data.controllers, ...levelControllers];
 
@@ -179,6 +185,8 @@ class Game {
                 controller.reactToTriggers(this.featuresTriggeredThisTick)
             })
         }
+
+        this.data.characters.forEach(character => character.tick(this))
 
         allControllers.forEach(controller => {
             controller.reactToInputStatus()
@@ -404,36 +412,32 @@ class Game {
         return FeedbackToUI.empty
     }
 
-    handleAttackButton(clickInfo: { character: Character, option: string }): FeedbackToUI {
-        const {character, option} = clickInfo
+    handleAttackButton(clickInfo: { character: Character, option: AttackOption }): FeedbackToUI {
+        const { character, option } = clickInfo
         const { playerVantage, level } = this.data
         const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerVantage)
         const { actors = [] } = level.data
 
-        // to do - amount lost depends on option
-        // attack cooldowns
-        character.data.stats.stamina.down(2);
+        let targetMonster: Monster | null = null
 
-        if (squareAheadIsBlocked) {
-            // to do - hit walls?
-            return FeedbackToUI.empty
+        if (!squareAheadIsBlocked) {
+            //to do - attacking walls
+            const squareAhead = playerVantage.translate(playerVantage.data.direction)
+            const actorsInTargetSquare = actors.filter(actor => actor.data.vantage?.isInSameSquareAs(squareAhead))
+            const monsters = actorsInTargetSquare.filter(actor => {
+                return Object.getPrototypeOf(actor).constructor === Monster
+            }).map(actor => {
+                return actor as Monster
+            })
+
+            if (monsters.length > 0) {
+                targetMonster = monsters[0]
+            }
         }
 
-        const squareAhead = playerVantage.translate(playerVantage.data.direction)
 
-        const actorsInTargetSquare = actors.filter(actor=> actor.data.vantage?.isInSameSquareAs(squareAhead))
-        const monsters = actorsInTargetSquare.filter(actor => {
-            return Object.getPrototypeOf(actor).constructor === Monster
-        }).map(actor => {
-            return actor as Monster
-        })
 
-        if (monsters.length === 0) {
-            return FeedbackToUI.empty
-        }
-        const monster = monsters[0]
-
-        return clickInfo.character.attack(monster, option, this);
+        return character.attack(targetMonster, option, this);
     }
 }
 
