@@ -65,6 +65,7 @@ class Character {
         // to do: to hit rolls
         const hit = Math.random() > .3
         if (!hit) {
+            this.say("I missed!", game)
             return new FeedbackToUI({
                 success: false,
                 message: `${this.data.name} failed to hit ${monster.data.sprite.name} with a ${attackName}!`
@@ -72,6 +73,7 @@ class Character {
         }
 
         monster.damage(damage, game);
+        this.say("I hit it!", game)
         return new FeedbackToUI({
             success: false,
             message: `${this.data.name} hit ${monster.data.sprite.name} with a ${attackName}, doing ${damage} damage!`,
