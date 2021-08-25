@@ -21,13 +21,18 @@ interface CharacterConfig {
 class Character {
 
     data: CharacterConfig
+    attackCooldown: number
     constructor(config: CharacterConfig) {
         this.data = config
+        this.attackCooldown = 0
     }
 
     tick(game: Game): void {
         if (game.tickCount % 20 == 0) {
             this.data.stats.stamina.up(1)
+        }
+        if (this.attackCooldown > 0 && game.tickCount % 5 == 0) {
+            this.attackCooldown--
         }
     }
 
@@ -40,8 +45,14 @@ class Character {
                 message: `${this.data.name} is too exhausted to ${attackName}!`
             })
         }
+        if (this.attackCooldown > 0) {
+            return new FeedbackToUI({
+                success: false,
+                message: `${this.data.name} is on cooldown`
+            })
+        }
 
-        // to do: attack cooldowns
+        this.attackCooldown = cooldown;
         this.data.stats.stamina.down(staminaCost);
 
         if (!monster) {

@@ -19,7 +19,14 @@
     </section>
     <section class="option-buttons" v-if="characterSelected">
       <button
-        class="button"
+        class="button button--list button--cancel"
+        :style="getButtonStyleObject(selectedIndex)"
+        @click="handleCancelClick()"
+      >
+        &times;
+      </button>
+      <button
+        class="button button--list"
         v-for="(option, index) in attackOptions"
         v-bind:key="index"
         :style="getButtonStyleObject(selectedIndex)"
@@ -41,6 +48,7 @@ import { toRaw } from "vue";
 import { Game } from "@/game-classes/Game";
 import { Item } from "@/game-classes/Item";
 import { AttackOption } from "@/rpg-classes/AttackOption";
+import { Color } from "@/canvas/Color";
 
 interface ButtonStyleObject {
   backgroundColor: string;
@@ -63,11 +71,20 @@ export default class AttackButtons extends Vue {
     };
   }
 
-  handleCharacterClick(index: number): void {
+  handleCharacterClick(characterIndex: number): void {
     if (this.$store.getters.gameIsPaused) {
       return;
     }
-    this.selectedIndex = index;
+
+    if (this.characters[characterIndex]?.attackCooldown > 0) {
+      return;
+    }
+
+    this.selectedIndex = characterIndex;
+  }
+
+  handleCancelClick():void {
+    this.selectedIndex = undefined
   }
 
   handleOptionClick(index: number): void {
@@ -110,9 +127,15 @@ export default class AttackButtons extends Vue {
     return this.characterSelected?.attackOptions || [];
   }
 
-  getButtonStyleObject(index: number): ButtonStyleObject {
+  getButtonStyleObject(characterIndex: number): ButtonStyleObject {
+    if (this.characters[characterIndex]?.attackCooldown > 0) {
+      return {
+        backgroundColor: Color.GRAY.css,
+      };
+    }
+
     return {
-      backgroundColor: Game.CHARACTER_COLORS[index].lighter(30).css,
+      backgroundColor: Game.CHARACTER_COLORS[characterIndex].lighter(30).css,
     };
   }
 }
@@ -148,6 +171,15 @@ nav {
     flex-basis: 25%;
     transition: filter 0.5s, color 0.5s;
     padding: 0;
+
+    &--list {
+      flex-basis: 1.75rem;
+    }
+
+    &--cancel {
+      color: white;
+      font-size: 125%;
+    }
   }
 
   &.not-paused {

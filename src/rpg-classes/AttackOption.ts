@@ -14,7 +14,7 @@ class AttackOption {
 
     static unarmedAttacks = [
         new AttackOption(
-            { name: 'punch', damage: 1, staminaCost: 1, cooldown: 10 },
+            { name: 'punch', damage: 1, staminaCost: 1, cooldown: 3 },
         ),
     ]
 }
