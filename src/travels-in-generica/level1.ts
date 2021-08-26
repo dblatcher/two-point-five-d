@@ -23,6 +23,7 @@ import { CeilingFeature } from "@/game-classes/CeilingFeature";
 import { Monster } from "@/rpg-classes/Monster";
 import { CharacterStats } from "@/rpg-classes/CharacterStats";
 
+import * as monsterDecisionFunctions from "./monsterBehaviour";
 
 const bigSquareOnFloor: [number, number][] = [
     [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
@@ -138,6 +139,7 @@ const level1: Level = new Level({
 
         new Monster({
             sprite: sprites.orc,
+            behaviour:new Behaviour(monsterDecisionFunctions.beMonster),
             vantage: new Vantage({x:3.5, y:0.5, direction:Direction.south}),
             stats: new CharacterStats([10,10],[10,10]),
         }),

@@ -70,22 +70,6 @@ class Monster extends Actor {
     tick(game: Game): void {
         Actor.prototype.tick.apply(this, [game])
 
-        if (this.hasPlayerInFront(game) && this.actionQueue.length == 0 && !this.currentAction) {
-            this.actionQueue.push(
-                new DoAction('ATTACK', 10, function (actor, game) {
-                    const monster = actor as Monster;
-
-                    console.log(
-                        `The ${monster.data.sprite.name} has finished its attack, is the player there?`,
-                        monster.hasPlayerInFront(game)
-                    )
-                    if (monster.hasPlayerInFront(game)) {
-                        monster.attackPlayers(game)
-                    }
-                })
-            )
-        }
-
         if (!this.isDying && this.data.stats.isDead) {
             game.narrativeMessages.push(new NarrativeMessage({ content: `It has died!`, color: Color.TRANSPARENT }))
 
