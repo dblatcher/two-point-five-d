@@ -10,20 +10,19 @@ import { Controller } from "@/game-classes/Controller";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
 
 
-import { doorway, spikey, tower, towerUpper, vaultDoorway } from "@/instances/wallShapes"
+import { doorway, spikey } from "@/instances/wallShapes"
 import { sprites as sharedSprites } from "@/instances/sprites";
-import * as globalFeatures from "@/travels-in-generica/features"
+import * as features from "@/travels-in-generica/features"
 import { sprites } from "./sprites";
 import { itemTypes } from "./itemTypes"
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
-import { Actor } from "@/game-classes/Actor";
 import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
 import { Sky } from "@/game-classes/Sky";
-import { CeilingFeature } from "@/game-classes/CeilingFeature";
 import { Monster } from "@/rpg-classes/Monster";
 import { CharacterStats } from "@/rpg-classes/CharacterStats";
 
 import * as monsterDecisionFunctions from "./monsterBehaviour";
+import { church } from "./buildings/church";
 
 const bigSquareOnFloor: [number, number][] = [
     [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
@@ -39,9 +38,8 @@ const redSquare = new FloorFeature({
     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
 })
 
-const redCeiling = new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } });
-const brownCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'saddlebrown', strokeStyle: 'sandybrown' } });
-const grayCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } });
+
+
 
 const door1 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
 const door2 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
@@ -59,32 +57,11 @@ const level1: Level = new Level({
     }),
 
     walls: [
+        ...church.walls,
         new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door3, keyhole], open: true }),
         new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0) }),
-
-        new Wall({ x: 2, y: 3, place: Direction.north, features: [globalFeatures.poemBoard], shape: tower, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 2, y: 2, place: Direction.west, shape: tower, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 2, y: 2, place: Direction.east, shape: tower, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 2, y: 2, place: Direction.north, shape: towerUpper, open:true, patternSprite: sharedSprites.brickWall2, }),
-
-        new Wall({ x: 3, y: 2, place: Direction.north, features: [], shape: doorway, open: true, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 3, y: 3, place: Direction.north, features: [], shape: vaultDoorway, open: true, patternSprite: sharedSprites.brickWall2, }),
-
-        new Wall({ x: 4, y: 3, place: Direction.north, shape: tower, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 4, y: 2, place: Direction.west, shape: tower, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 4, y: 2, place: Direction.east, shape: tower, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 4, y: 2, place: Direction.north, shape: towerUpper, open:true, patternSprite: sharedSprites.brickWall2, }),
-
-        new Wall({ x: 2, y: 1, place: Direction.west, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 2, y: 0, place: Direction.west, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 2, y: 0, place: Direction.north, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 3, y: 0, place: Direction.north, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 4, y: 0, place: Direction.north, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 4, y: 0, place: Direction.east, patternSprite: sharedSprites.brickWall2, }),
-        new Wall({ x: 4, y: 1, place: Direction.east, patternSprite: sharedSprites.brickWall2, }),
-
-        new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [globalFeatures.painting1] }),
-        new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [globalFeatures.staircaseA.down] }),
+        new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [features.painting1] }),
+        new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [features.staircaseA.down] }),
 
         new Wall({ x: 10, y: 4, place: Direction.east, color: new Color(120, 40, 20), shape: doorway, open: true, features: [door2] }),
 
@@ -94,10 +71,11 @@ const level1: Level = new Level({
 
     ],
     squaresWithFeatures: [
-        new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare], ceilingFeatures: [redCeiling] }),
-        new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare], ceilingFeatures: [redCeiling] }),
-        new SquareWithFeatures({ x: 8, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [redCeiling] }),
-        new SquareWithFeatures({ x: 7, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [redCeiling] }),
+        ...church.ceilings,
+        new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare], ceilingFeatures: [features.redCeiling] }),
+        new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare], ceilingFeatures: [features.redCeiling] }),
+        new SquareWithFeatures({ x: 8, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [features.redCeiling] }),
+        new SquareWithFeatures({ x: 7, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [features.redCeiling] }),
         new SquareWithFeatures({
             x: 4, y: 8, direction: Direction.north, floorFeatures: [
                 new Pit({}),
@@ -109,16 +87,7 @@ const level1: Level = new Level({
             ]
         }),
 
-        new SquareWithFeatures({ x: 2, y: 0, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
-        new SquareWithFeatures({ x: 3, y: 0, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
-        new SquareWithFeatures({ x: 4, y: 0, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
-        new SquareWithFeatures({ x: 2, y: 1, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
-        new SquareWithFeatures({ x: 3, y: 1, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
-        new SquareWithFeatures({ x: 4, y: 1, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
 
-        new SquareWithFeatures({ x: 2, y: 2, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
-        new SquareWithFeatures({ x: 3, y: 2, direction: Direction.north, floorFeatures: [], ceilingFeatures: [grayCeiling] }),
-        new SquareWithFeatures({ x: 4, y: 2, direction: Direction.north, floorFeatures: [], ceilingFeatures: [brownCeiling] }),
 
     ],
     items: [
@@ -131,11 +100,6 @@ const level1: Level = new Level({
     ],
 
     actors: [
-        new Actor({
-            sprite: sprites.skeletonSprite,
-            behaviour: new Behaviour(decisionFunctions.moveAntiClockwise),
-            vantage: new Vantage({ x: 7.2, y: 6.2, direction: Direction.north })
-        }),
 
         new Monster({
             sprite: sprites.orc,
