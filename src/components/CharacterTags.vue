@@ -9,6 +9,7 @@
         tag: true,
         'open-tag': index === open,
         'active-tag': index === activeCharacterIndex,
+        'dead-tag': character.data.stats.isDead,
       }"
       :style="CharacterTagstyle(index)"
     >
@@ -17,7 +18,11 @@
       </header>
 
       <div class="main">
-        <img v-if="index === open" :src="character.portraitSrc" />
+        <img
+          class="portait"
+          v-if="index === open"
+          :src="character.portraitSrc"
+        />
 
         <equipment-window
           v-if="index !== open"
@@ -25,7 +30,15 @@
           :handsOnly="true"
         />
 
-        <stat-bars v-if="index !== open" :character="character" />
+        <stat-bars
+          v-show="index !== open && !character.data.stats.isDead"
+          :character="character"
+        />
+        <span
+          class="dead-mark"
+          v-show="index !== open && character.data.stats.isDead"
+          >Dead</span
+        >
       </div>
     </section>
   </article>
@@ -111,7 +124,7 @@ article {
       flex: 1;
       align-items: center;
 
-      img {
+      .portait {
         width: auto;
         height: 90%;
       }
@@ -121,6 +134,21 @@ article {
   .active-tag {
     header {
       font-weight: 700;
+    }
+  }
+
+  .dead-tag {
+    .portait {
+      filter: grayscale(1);
+    }
+
+    .dead-mark {
+      width: 4rem;
+      color: whitesmoke;
+      background-color: black;
+      border-radius: 1rem;
+      display: inline-block;
+      
     }
   }
 }

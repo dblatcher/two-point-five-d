@@ -35,7 +35,7 @@ class Monster extends Actor {
         console.log('handleInteraction', game.tickCount)
     }
 
-    damage(amount: number, game: Game): number {
+    takeDamage(amount: number, game: Game): number {
         this.actionQueue.push(new DoAction('hurt', 8))
         const health = this.data.stats.health.down(amount);
         game.narrativeMessages.push(new NarrativeMessage({ content: `It has ${health} health left.`, color: Color.TRANSPARENT }))
@@ -44,7 +44,7 @@ class Monster extends Actor {
 
     attackPlayers(game: Game):void {
         const hit = Math.random() > .5;
-        const attackedCharacter = game.activeCharacter;
+        const attackedCharacter = game.getRandomLivingCharacter();
 
         if (!attackedCharacter) { return }
 
@@ -54,7 +54,7 @@ class Monster extends Actor {
         }
 
         attackedCharacter.say("ouch!",game)
-        attackedCharacter.damage(1)
+        attackedCharacter.takeDamage(1)
     }
 
     hasPlayerInFront(game: Game): boolean {

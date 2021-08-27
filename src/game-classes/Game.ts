@@ -16,7 +16,7 @@ import { NarrativeMessage } from './NarrativeMessage'
 import { Actor } from '@/game-classes/Actor'
 import { Monster } from '@/rpg-classes/Monster'
 import { AttackOption } from '@/rpg-classes/AttackOption'
-import { characters } from '@/travels-in-generica/characters'
+
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
@@ -107,6 +107,25 @@ class Game {
         return this.data.characters[this.data.activeCharacterIndex] || null
     }
 
+    set activeCharacter(character: Character | null) {
+        if (!character) {
+            this.data.activeCharacterIndex = undefined;
+            return
+        }
+        const index = this.data.characters.indexOf(character)
+        if (index == -1) {
+            this.data.activeCharacterIndex = undefined;
+            return
+        }
+        this.data.activeCharacterIndex = index
+    }
+
+    getRandomLivingCharacter():Character|null {
+        const livingCharacters = this.data.characters.filter(character => !character.data.stats.isDead)
+        if (livingCharacters.length === 0) {return null}
+        return livingCharacters[Math.floor(Math.random() * livingCharacters.length)]
+    }
+
     get figureMaps(): FigureMap[] {
         const { items = [], actors = [] } = this.data.level.data
         const output: FigureMap[] = [];
@@ -186,6 +205,7 @@ class Game {
             })
         }
 
+        // TO DO - game over when all characters are dead
         this.data.characters.forEach(character => character.tick(this))
 
         allControllers.forEach(controller => {

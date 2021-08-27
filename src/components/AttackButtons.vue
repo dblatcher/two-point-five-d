@@ -75,8 +75,9 @@ export default class AttackButtons extends Vue {
     if (this.$store.getters.gameIsPaused) {
       return;
     }
+    const character = this.characters[characterIndex];
 
-    if (this.characters[characterIndex]?.attackCooldown > 0) {
+    if (character?.attackCooldown > 0 || !character.canAct) {
       return;
     }
 
@@ -128,7 +129,8 @@ export default class AttackButtons extends Vue {
   }
 
   getButtonStyleObject(characterIndex: number): ButtonStyleObject {
-    if (this.characters[characterIndex]?.attackCooldown > 0) {
+    const character = this.characters[characterIndex];
+    if (character?.attackCooldown > 0 || !character.canAct) {
       return {
         backgroundColor: Color.GRAY.css,
       };

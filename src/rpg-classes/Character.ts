@@ -27,7 +27,56 @@ class Character {
         this.attackCooldown = 0
     }
 
+    static emptyEquipmentSlots(): Map<string, Item | null> {
+        return new Map<string, Item | null>()
+            .set("HEAD", null)
+            .set("TORSO", null)
+            .set("LEGS", null)
+            .set("FEET", null)
+            .set("RIGHT_HAND", null)
+            .set("LEFT_HAND", null)
+    }
+
+
+    get portraitSrc(): string | null {
+        return this.data.portrait.provideSrc(Sprite.defaultPortraitAnimation)
+    }
+
+    get icon(): CanvasImageSource {
+        try {
+            return this.data.portrait.provideImage(Sprite.defaultPortraitAnimation, RelativeDirection.BACK, 0)
+        } catch (error) {
+            console.warn(error.message)
+        }
+        return document.createElement('img');
+    }
+
+    get attackOptions(): AttackOption[] {
+
+        const item = this.data.equipmentSlots?.get("RIGHT_HAND");
+
+        if (item && item.data.type.isWieldable) {
+            return item.data.type.data.wieldable?.attackOptions || []
+        }
+
+        return AttackOption.unarmedAttacks
+    }
+
+
+    get canAct(): boolean {
+        if (this.data.stats.isDead) { return false }
+        return true
+    }
+
     tick(game: Game): void {
+
+        if (!this.canAct) {
+            if (game.activeCharacter == this) {
+                game.activeCharacter = game.getRandomLivingCharacter()
+            }
+            return
+        }
+
         if (game.tickCount % 20 == 0) {
             this.data.stats.stamina.up(1)
         }
@@ -37,6 +86,13 @@ class Character {
     }
 
     attack(monster: Monster | null, option: AttackOption, game: Game): FeedbackToUI {
+        if (!this.canAct) {
+            return new FeedbackToUI({ 
+                success: false,
+                message: `${this.data.name} cannot attak!`
+            })
+        }
+
         const { staminaCost, damage, name: attackName, cooldown } = option.data;
 
         if (this.data.stats.stamina.current < staminaCost) {
@@ -72,7 +128,7 @@ class Character {
             })
         }
 
-        monster.damage(damage, game);
+        monster.takeDamage(damage, game);
         this.say("I hit it!", game)
         return new FeedbackToUI({
             success: false,
@@ -81,40 +137,6 @@ class Character {
                 ['damage', damage]
             ]
         })
-    }
-
-    static emptyEquipmentSlots(): Map<string, Item | null> {
-        return new Map<string, Item | null>()
-            .set("HEAD", null)
-            .set("TORSO", null)
-            .set("LEGS", null)
-            .set("FEET", null)
-            .set("RIGHT_HAND", null)
-            .set("LEFT_HAND", null)
-    }
-
-    get portraitSrc(): string | null {
-        return this.data.portrait.provideSrc(Sprite.defaultPortraitAnimation)
-    }
-
-    get icon(): CanvasImageSource {
-        try {
-            return this.data.portrait.provideImage(Sprite.defaultPortraitAnimation, RelativeDirection.BACK, 0)
-        } catch (error) {
-            console.warn(error.message)
-        }
-        return document.createElement('img');
-    }
-
-    get attackOptions(): AttackOption[] {
-
-        const item = this.data.equipmentSlots?.get("RIGHT_HAND");
-
-        if (item && item.data.type.isWieldable) {
-            return item.data.type.data.wieldable?.attackOptions || []
-        }
-
-        return AttackOption.unarmedAttacks
     }
 
     drawAsIcon(canvas: HTMLCanvasElement): void {
@@ -137,16 +159,20 @@ class Character {
 
 
     getMyColor(game: Game): Color {
-        if (game.data.characters.indexOf(this) == -1) { return Color.BLACK }
+        if (game.data.characters.indexOf(this) == -1) { return Color.TRANSPARENT }
         return Game.CHARACTER_COLORS[game.data.characters.indexOf(this)]
     }
 
-    damage(amount: number): number {
+    takeDamage(amount: number): number {
         return this.data.stats.health.down(amount);
     }
 
-    say(message: string, game: Game): void {
+    beHealed(amount: number): number {
+        if (this.data.stats.isDead) { return 0 }
+        return this.data.stats.health.up(amount)
+    }
 
+    say(message: string, game: Game): void {
         game.narrativeMessages.push(new NarrativeMessage({
             content: `${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`,
             color: this.getMyColor(game),
@@ -156,6 +182,9 @@ class Character {
     }
 
     consume(item: Item, game: Game): FeedbackToUI {
+        if (!this.canAct) {
+            return new FeedbackToUI({ message: `${this.data.name} cannot eat!` })
+        }
         if (!item.data.type.data.consumable) {
             this.say(`I want to eat this ${item.data.type.name}, but I cannot!`, game);
             return new FeedbackToUI({ message: `${item.data.type.name} is not consumable!` })
@@ -201,6 +230,7 @@ class Character {
     }
 
     throw(item: Item, clickPoint: { x: number; y: number; }, playerVantage: PlayerVantage, game: Game): void {
+        if (!this.canAct) { return }
         item.launch(clickPoint, playerVantage, game);
         this.say(`I threw the ${item.data.type.name}`, game)
     }
