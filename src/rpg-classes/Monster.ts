@@ -4,7 +4,6 @@ import { DoAction } from "@/game-classes/Action"
 import { Actor } from "@/game-classes/Actor"
 import { Behaviour } from "@/game-classes/Behaviour"
 import { Game } from "@/game-classes/Game"
-import { Intersitial } from "@/game-classes/Intersitial"
 import { NarrativeMessage } from "@/game-classes/NarrativeMessage"
 import { Vantage } from "@/game-classes/Vantage"
 import { CharacterStats } from "./CharacterStats"
@@ -38,7 +37,7 @@ class Monster extends Actor {
     takeDamage(amount: number, game: Game): number {
         this.actionQueue.push(new DoAction('hurt', 8))
         const health = this.data.stats.health.down(amount);
-        game.narrativeMessages.push(new NarrativeMessage({ content: `It has ${health} health left.`, color: Color.TRANSPARENT }))
+        // game.narrativeMessages.push(new NarrativeMessage({ content: `It has ${health} health left.`, color: Color.TRANSPARENT }))
         return health;
     }
 
@@ -49,7 +48,10 @@ class Monster extends Actor {
         if (!attackedCharacter) { return }
 
         if (!hit) {
-            game.narrativeMessages.push(new NarrativeMessage({ content: "missed", color: Color.TRANSPARENT }))
+            game.narrativeMessages.push(new NarrativeMessage({ 
+                content: `The ${this.data.sprite.name} missed ${attackedCharacter.data.name}`, 
+                color: Color.TRANSPARENT
+             }))
             return
         }
 
@@ -71,7 +73,7 @@ class Monster extends Actor {
         Actor.prototype.tick.apply(this, [game])
 
         if (!this.isDying && this.data.stats.isDead) {
-            game.narrativeMessages.push(new NarrativeMessage({ content: `It has died!`, color: Color.TRANSPARENT }))
+            // game.narrativeMessages.push(new NarrativeMessage({ content: `It has died!`, color: Color.TRANSPARENT }))
 
             this.isDying = true
 

@@ -9,12 +9,17 @@
         @click="handleCharacterClick(index)"
       >
         <item-slot
+          v-show="!getFeedback(index).time"
           :imgIcon="'/img/hand-right.png'"
           :item="getEquipment(character)"
           :size="4"
           :noBorder="true"
           :grayScale="true"
         />
+
+        <span class="feedback" v-show="getFeedback(index).time"
+          >{{ getFeedback(index).message }}</span
+        >
       </button>
     </section>
     <section class="option-buttons" v-if="characterSelected">
@@ -45,7 +50,7 @@ import ItemSlot from "./ItemSlot.vue";
 import store from "@/store";
 import { Character } from "@/rpg-classes/Character";
 import { toRaw } from "vue";
-import { Game } from "@/game-classes/Game";
+import { FeedbackToUI, Game } from "@/game-classes/Game";
 import { Item } from "@/game-classes/Item";
 import { AttackOption } from "@/rpg-classes/AttackOption";
 import { Color } from "@/canvas/Color";
@@ -62,12 +67,18 @@ interface ButtonStyleObject {
 export default class AttackButtons extends Vue {
   $store!: typeof store;
   selectedIndex!: number | undefined;
+  feedbackMessages!: Map<number, string>;
+  feedbackFadeTick!: Map<number, number>;
 
   data(): {
     selectedIndex: number | undefined;
+    feedbackMessages: Map<number, string>;
+    feedbackFadeTick: Map<number, number>;
   } {
     return {
       selectedIndex: undefined,
+      feedbackMessages: new Map<number, string>(),
+      feedbackFadeTick: new Map<number, number>(),
     };
   }
 
@@ -84,8 +95,8 @@ export default class AttackButtons extends Vue {
     this.selectedIndex = characterIndex;
   }
 
-  handleCancelClick():void {
-    this.selectedIndex = undefined
+  handleCancelClick(): void {
+    this.selectedIndex = undefined;
   }
 
   handleOptionClick(index: number): void {
@@ -93,14 +104,27 @@ export default class AttackButtons extends Vue {
       return;
     }
 
+    const character = toRaw(this.characterSelected);
+    const option = toRaw(this.attackOptions[index]);
+    const characterIndex = toRaw(this.characters).indexOf(
+      character as Character
+    );
+
     this.$store
-      .dispatch("attackButtonClick", {
-        option: toRaw(this.attackOptions[index]),
-        character: toRaw(this.characterSelected),
-      })
-      .then((feedback) => {
+      .dispatch("attackButtonClick", { option, character })
+      .then((feedback:FeedbackToUI) => {
         console.log(feedback);
         // to do - display damage amount.
+
+        const damageProp = feedback.propertyList?.find(item => item[0]="damage")
+
+        const text = damageProp ? damageProp[1].toString() : "miss"
+
+        this.feedbackMessages.set(characterIndex, text);
+        this.feedbackFadeTick.set(
+          characterIndex,
+          this.$store.getters.tickCount + 10
+        );
       });
 
     this.selectedIndex = undefined;
@@ -109,6 +133,25 @@ export default class AttackButtons extends Vue {
   getEquipment(character: Character): Item | null {
     this.$store.getters.timestamp;
     return toRaw(character.data.equipmentSlots?.get("RIGHT_HAND")) || null;
+  }
+
+  getFeedback(characterIndex: number): { message: string; time: number } {
+    const currentTickCount = this.$store.getters.tickCount;
+    const messageFadesAt = this.feedbackFadeTick.get(characterIndex);
+    let time = 0;
+
+    if (typeof messageFadesAt == "number") {
+      if (messageFadesAt < currentTickCount) {
+        this.feedbackFadeTick.delete(characterIndex);
+      } else {
+        time = messageFadesAt - currentTickCount;
+      }
+    }
+
+    return {
+      message: this.feedbackMessages.get(characterIndex) || "",
+      time,
+    };
   }
 
   get characterSelected(): Character | null {
@@ -181,6 +224,16 @@ nav {
     &--cancel {
       color: white;
       font-size: 125%;
+    }
+
+    .feedback {
+      display: inline-block;
+      padding: .5rem;
+      color: red;
+      background-color: black;
+      border-radius: .8rem;
+      border: .2rem dotted red;
+      font-size: 120%;
     }
   }
 

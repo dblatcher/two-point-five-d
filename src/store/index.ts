@@ -19,6 +19,7 @@ export default createStore({
   getters: {
     gameIsPaused: state => state.timer == 0,
     intersitial: state => state.game.data.intersitial || null,
+    tickCount: state => state.game.tickCount,
     timestamp: state => state.timestamp,
     narrativeMessages: state => state.game.narrativeMessages
   },
