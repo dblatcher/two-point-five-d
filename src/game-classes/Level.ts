@@ -57,15 +57,14 @@ class Level {
         return [hour, minute]
     }
 
-    isBlocked(startX: number, startY: number, targetX: number, targetY: number, movingActor?: Actor | Position): boolean {
+    isBlocked(startX: number, startY: number, targetX: number, targetY: number, movingActor: Actor | Position, game: Game): boolean {
         const { squaresWithFeatures = [], walls = [], actors = [] } = this.data
+        const { playerBlocksPassage } = game.rules
+
         if (targetX < 0) { return true }
         if (targetY < 0) { return true }
         if (targetX >= this.data.width) { return true }
         if (targetY >= this.data.height) { return true }
-
-        const dX = targetX - startX
-        const dY = targetY - startY
 
         if (squaresWithFeatures.find(
             squareWithFeature => {
@@ -80,6 +79,13 @@ class Level {
                 return actor != movingActor && actor.data.blocksSquare && actor.data.vantage?.gridX == targetX && actor.data.vantage?.gridY == targetY
             }
         )) { return true }
+
+        if (movingActor !== game.data.playerVantage && playerBlocksPassage) {
+            if (game.data.playerVantage.gridX == targetX && game.data.playerVantage.gridY == targetY) { return true }
+        }
+
+        const dX = targetX - startX
+        const dY = targetY - startY
 
         if (walls.find(
             wall => wall.gridX == startX && wall.gridY == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking

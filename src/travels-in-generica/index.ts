@@ -25,7 +25,8 @@ const game = new Game({
     activeCharacterIndex: 0,
     characters: [characters.sally, characters.boblin, characters.drake, characters.gwim],
 }, {
-    needCharacterToPickUpItems: true
+    needCharacterToPickUpItems: true,
+    playerBlocksPassage: true,
 })
 
 export { game, spriteSheets }

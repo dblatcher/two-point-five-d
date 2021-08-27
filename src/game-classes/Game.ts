@@ -37,6 +37,7 @@ interface GameConfig {
 interface GameRules {
     needCharacterToPickUpItems?: boolean
     noCharacters?: boolean
+    playerBlocksPassage?: boolean
 }
 
 class FeedbackToUI {

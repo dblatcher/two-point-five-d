@@ -64,7 +64,7 @@ class Position {
         const targetY = this.gridY + (direction.y);
 
         if (!ignoreWalls) {
-            if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY, this)) { return }
+            if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY, this, game)) { return }
         }
 
         this.changePosition({ x: targetX + this.squareX, y: targetY + this.squareY }, game)
@@ -95,7 +95,7 @@ class Position {
                 if (game.data.level.isBlocked(
                     squaresCovered[i].gridX, squaresCovered[i].gridY,
                     squaresCovered[i + 1].gridX, squaresCovered[i + 1].gridY,
-                    this
+                    this, game
                 )) { return }
             }
         }
@@ -136,26 +136,26 @@ class Position {
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
         const { gridX, gridY } = this;
 
-        const convert = ( p:Point) => [
+        const convert = (p: Point) => [
             (gridX + .5 + p.x) * gridSize,
             (gridY + .5 + p.y) * gridSize,
         ] as [number, number]
 
         this.drawInMapPoints.forEach(polygon => {
             plotPolygon(
-                ctx, convert, 
+                ctx, convert,
                 polygon,
                 this.drawInMapConfig)
         })
     }
 
 
-    drawInMapConfig:PlotConfig = { noClose: true, noFill:true }
+    drawInMapConfig: PlotConfig = { noClose: true, noFill: true }
 
-    get drawInMapPoints():Point[][] {
-        const arm1 = [{x:-.2, y:.2},{x:.2,y:-.2}];
-        const arm2 = [{x:-.2, y:-.2},{x:.2,y:.2}];
-        return [arm1,arm2]
+    get drawInMapPoints(): Point[][] {
+        const arm1 = [{ x: -.2, y: .2 }, { x: .2, y: -.2 }];
+        const arm2 = [{ x: -.2, y: -.2 }, { x: .2, y: .2 }];
+        return [arm1, arm2]
     }
 
     static roundCoordinate(value: number): number {

@@ -105,7 +105,7 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Beha
         y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
@@ -276,7 +276,7 @@ const duckPuzzleLevel3 = new Level({
             x: 3, y: 0, direction: Direction.north, floorFeatures: [floorSwitch]
         }),
     ],
-    actors: [ 
+    actors: [
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
         duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],

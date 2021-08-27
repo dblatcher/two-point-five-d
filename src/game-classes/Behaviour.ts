@@ -9,7 +9,7 @@ interface DecisionFunction {
     (actor: Actor, game: Game, behaviour: Behaviour): Action | null
 }
 
-function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action|null {
+function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -21,14 +21,14 @@ function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action|n
         y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
     }
 }
 
-function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action|null {
+function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -40,14 +40,14 @@ function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Acti
         y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
     }
 }
 
-function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Action|null {
+function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -59,7 +59,7 @@ function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Act
         y: vantage.data.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor)) {
+    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.BACK)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
