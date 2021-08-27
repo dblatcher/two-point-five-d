@@ -4,10 +4,8 @@ import { Level } from "@/game-classes/Level";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Item } from "@/game-classes/Item";
-import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Controller } from "@/game-classes/Controller";
-import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 
 
 import { doorway, spikey } from "@/instances/wallShapes"
@@ -22,30 +20,23 @@ import { Monster } from "@/rpg-classes/Monster";
 import { CharacterStats } from "@/rpg-classes/CharacterStats";
 
 import * as monsterDecisionFunctions from "./monsterBehaviour";
-import { church } from "./buildings/church";
-
-const bigSquareOnFloor: [number, number][] = [
-    [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
-]
-
-const blueSquare = new FloorFeature({
-    blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor
-})
-
-const redSquare = new FloorFeature({
-    blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
-})
+import { makeChurch } from "./buildings/church";
+import { makeHut } from "./buildings/hut";
 
 
 
 
-const door1 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
+
+
+
+
 const door3 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const lever1 = new WallSwitch({ sprite: sharedSprites.leverSprite, })
+
 const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
+
+const church = makeChurch(0,0)
+const hut1 = makeHut(6,0, new Color(120,90,90))
+const hut2 = makeHut(9,6, new Color(120,120,90))
 
 const level1: Level = new Level({
     height: 10, width: 15,
@@ -58,37 +49,17 @@ const level1: Level = new Level({
 
     walls: [
         ...church.walls,
-        new Wall({ x: 8, y: 2, place: Direction.south, color: new Color(200, 255, 0), shape: doorway, features: [door3, keyhole], open: true }),
-        new Wall({ x: 7, y: 2, place: Direction.south, color: new Color(200, 255, 0) }),
-        new Wall({ x: 9, y: 2, place: Direction.east, color: new Color(120, 40, 20), features: [features.painting1] }),
+        new Wall({ x: 2, y: 2, place: Direction.north, patternSprite:sharedSprites.brickWall, shape: doorway, features: [door3, keyhole], open: true }),
+        ...hut1.walls,
+        ...hut2.walls,
+
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [features.staircaseA.down] }),
-
-        new Wall({ x: 10, y: 4, place: Direction.east, color: new Color(120, 40, 20), shape: doorway, open: true, features: [door2] }),
-
-        new Wall({ x: 1, y: 5, place: Direction.south, color: new Color(120, 40, 20), shape: doorway, open: true, features: [door1] }),
-        new Wall({ x: 1, y: 5, place: Direction.west, color: new Color(120, 40, 20), features: [lever1] }),
-        new Wall({ x: 7, y: 6, place: Direction.south }),
 
     ],
     squaresWithFeatures: [
         ...church.ceilings,
-        new SquareWithFeatures({ x: 8, y: 4, direction: Direction.north, floorFeatures: [blueSquare], ceilingFeatures: [features.redCeiling] }),
-        new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatures: [redSquare], ceilingFeatures: [features.redCeiling] }),
-        new SquareWithFeatures({ x: 8, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [features.redCeiling] }),
-        new SquareWithFeatures({ x: 7, y: 3, direction: Direction.north, floorFeatures: [], ceilingFeatures: [features.redCeiling] }),
-        new SquareWithFeatures({
-            x: 4, y: 8, direction: Direction.north, floorFeatures: [
-                new Pit({}),
-            ]
-        }),
-        new SquareWithFeatures({
-            x: 2, y: 8, direction: Direction.north, floorFeatures: [
-                new Pit({ status: "CLOSED" }),
-            ]
-        }),
-
-
-
+        ...hut1.ceilings,
+        ...hut2.ceilings,
     ],
     items: [
         new Item({
@@ -104,7 +75,7 @@ const level1: Level = new Level({
         new Monster({
             sprite: sprites.orc,
             behaviour:new Behaviour(monsterDecisionFunctions.beMonster),
-            vantage: new Vantage({x:3.5, y:0.5, direction:Direction.south}),
+            vantage: new Vantage({x:10.5, y:0.5, direction:Direction.south}),
             stats: new CharacterStats([10,10],[10,10]),
         }),
 
@@ -144,19 +115,17 @@ const level1: Level = new Level({
             name: "Corporal Colin",
         }),
 
+        new NonPlayerCharacter({
+            sprite: sprites.skeletonSprite,
+            vantage: new Vantage({x:3.5,y:0.5,direction:Direction.south}),
+            name: "Father Dunlaw",
+            talkMessage: "I have a quest for you!",
+        })
+
     ],
 
     controllers: [
-        new Controller({
-            inputs: [lever1], subject: door1, defaultSubjectState: "CLOSED", statusMap: [
-                [["ON"], "OPEN"],
-            ]
-        }),
-        new Controller({
-            inputs: [blueSquare, redSquare], subject: door2, defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, statusMap: [
-                [[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "OPEN"],
-            ]
-        }),
+
         new Controller({ inputs: [keyhole], subject: door3, statusChangeOnInputTrigger: "OPEN" }),
     ]
 }).withWallsAround({color:Color.GREEN, shape:spikey})
