@@ -25,18 +25,14 @@ import { makeHut } from "./buildings/hut";
 
 
 
-
-
-
-
-
 const door3 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-
 const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
 
 const church = makeChurch(0,0)
 const hut1 = makeHut(6,0, new Color(120,90,90))
-const hut2 = makeHut(9,6, new Color(120,120,90))
+const hut2 = makeHut(9,6, new Color(120,120,90), Direction.north)
+const hut3 = makeHut(1,6, new Color(128,90,90), Direction.east)
+const hut4 = makeHut(6,8, new Color(128,90,90), Direction.north)
 
 const level1: Level = new Level({
     height: 10, width: 15,
@@ -52,6 +48,8 @@ const level1: Level = new Level({
         new Wall({ x: 2, y: 2, place: Direction.north, patternSprite:sharedSprites.brickWall, shape: doorway, features: [door3, keyhole], open: true }),
         ...hut1.walls,
         ...hut2.walls,
+        ...hut3.walls,
+        ...hut4.walls,
 
         new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [features.staircaseA.down] }),
 
@@ -60,6 +58,8 @@ const level1: Level = new Level({
         ...church.ceilings,
         ...hut1.ceilings,
         ...hut2.ceilings,
+        ...hut3.ceilings,
+        ...hut4.ceilings,
     ],
     items: [
         new Item({
@@ -106,6 +106,7 @@ const level1: Level = new Level({
             vantage: new Vantage({ x: 5.25, y: 7.25, direction: Direction.north }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
+            behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
         }),
 
         new NonPlayerCharacter({
@@ -116,11 +117,17 @@ const level1: Level = new Level({
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.skeletonSprite,
+            sprite: sprites.redMonk,
             vantage: new Vantage({x:3.5,y:0.5,direction:Direction.south}),
             name: "Father Dunlaw",
             talkMessage: "I have a quest for you!",
-        })
+        }),
+        new NonPlayerCharacter({
+            sprite: sprites.innKeeper,
+            vantage: new Vantage({x:6.5,y:2.25,direction:Direction.south}),
+            name: "Widow Elsa",
+            talkMessage: "No rooms for the likes of you!",
+        }),
 
     ],
 
