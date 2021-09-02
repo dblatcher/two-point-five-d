@@ -9,6 +9,9 @@
       </section>
       <section class="sidebar">
         <item-in-hand />
+
+        <button v-if="hasQuests" @click="() => {questWindowOpen = !questWindowOpen}">Quests</button>
+
         <pause-button />
       </section>
     </nav>
@@ -21,6 +24,8 @@
           :index="indexOfCharacterWithScreenOpen"
           @close="handleChooseOpenCharacter(null)"
         ></character-screen>
+
+        <quest-window :show="questWindowOpen" @close="()=>{questWindowOpen=false}"/>
       </section>
 
       <section class="sidebar">
@@ -53,12 +58,14 @@ import CharacterScreen from "./CharacterScreen.vue";
 import ItemInHand from "./ItemInHand.vue";
 import CharacterTags from "./CharacterTags.vue";
 import IntersitialWindow from "./IntersitialWindow.vue";
+import QuestWindow from "./QuestWindow.vue";
 import MessageBox from "./MessageBox.vue";
 import AttackButtons from "./AttackButtons.vue";
 
 
 interface GameHolderData {
   characterScreenOpen: boolean;
+  questWindowOpen:boolean;
   indexOfCharacterWithScreenOpen: number | null;
   spritesLoaded: boolean;
 }
@@ -75,6 +82,7 @@ interface GameHolderData {
     CharacterScreen,
     CharacterTags,
     IntersitialWindow,
+    QuestWindow,
     MessageBox,
     AttackButtons,
   },
@@ -82,12 +90,14 @@ interface GameHolderData {
 export default class GameHolder extends Vue {
   $store!: typeof gameStore;
   spritesLoaded!: boolean;
+  questWindowOpen!: boolean;
   indexOfCharacterWithScreenOpen!: number | null;
 
   data(): GameHolderData {
     return {
       characterScreenOpen: true,
       spritesLoaded: false,
+      questWindowOpen: false,
       indexOfCharacterWithScreenOpen: null,
     };
   }
@@ -107,6 +117,10 @@ export default class GameHolder extends Vue {
 
   get hasCharacters():boolean {
     return !this.$store.state.game.rules.noCharacters
+  }
+
+  get hasQuests():boolean {
+    return !!this.$store.state.game.data.quests
   }
 }
 </script>
@@ -139,6 +153,7 @@ export default class GameHolder extends Vue {
   .primary {
     flex: 3;
     max-width: 800px;
+    position: relative;
   }
 
   .sidebar {
