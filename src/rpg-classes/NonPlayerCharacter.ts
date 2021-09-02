@@ -7,6 +7,7 @@ import { Game } from "@/game-classes/Game"
 import { Intersitial } from "@/game-classes/Intersitial"
 import { NarrativeMessage } from "@/game-classes/NarrativeMessage"
 import { Vantage } from "@/game-classes/Vantage"
+import { Quest, QuestHook } from "./Quest"
 
 
 interface NonPlayerCharacterData {
@@ -15,10 +16,11 @@ interface NonPlayerCharacterData {
     behaviour?: Behaviour
     height?: number
     width?: number
-    blocksSquare?:boolean
+    blocksSquare?: boolean
     talkMessage?: string
-    name?:string
-    canInteractWith?:boolean
+    name?: string
+    canInteractWith?: boolean
+    questHooks?: QuestHook[]
 }
 
 class NonPlayerCharacter extends Actor {
@@ -31,23 +33,46 @@ class NonPlayerCharacter extends Actor {
         this.data.canInteractWith = typeof data.canInteractWith == 'undefined' ? true : data.canInteractWith
     }
 
-    handleInteraction(actor: Vantage | Actor, game: Game): void {
-        console.log('handleInteraction', game.tickCount)
-        this.actionQueue.push(new DoAction("WALK", 8))
-
+    say(content: string, game: Game): void {
         game.narrativeMessages.push(new NarrativeMessage({
-            content: `${this.data.name || "NAMELESS_CHARACTER"}: "${this.data.talkMessage}"`,
+            content: `${this.data.name || "NAMELESS_CHARACTER"}: "${content}"`,
             color: Color.GRAY
         }))
+    }
 
-        game.data.intersitial = new Intersitial({
-            role: "MESSAGE",
-            content: (this.data.talkMessage || 'I say nothing.'),
-            options: [
-                { buttonText: 'done', response: Intersitial.clearIntersitial }
-            ],
-            pausesTime: true
+    doAnimation(animationName: string, time: number): void {
+        this.actionQueue.push(new DoAction(animationName, time))
+    }
+
+    getQuestsICanGive(game: Game): Quest[] {
+        const { questHooks = [] } = this.data
+        const { quests = [] } = game.data;
+        const myQuests: Quest[] = [];
+
+        questHooks.filter(hook => hook.data.action == "GIVE").forEach(questHook => {
+            const matchingQuest = quests.find(quest => quest.data.id === questHook.data.questId)
+            if (matchingQuest) {
+                myQuests.push(matchingQuest)
+            }
         })
+
+        return myQuests.filter(quest => quest.data.state === "NOT_TAKEN")
+    }
+
+    handleInteraction(actor: Vantage | Actor, game: Game): void {
+
+        const questsAvailable = this.getQuestsICanGive(game)
+
+
+        if (questsAvailable.length > 0) {
+            const questOnOffer = questsAvailable[0] // to do - choose multiple quests
+            game.data.intersitial = questOnOffer.createOfferItersitial(this);
+
+        } else if (this.data.talkMessage) {
+            this.doAnimation("WALK", 8);
+            this.say(this.data.talkMessage, game)
+        }
+
     }
 
 }

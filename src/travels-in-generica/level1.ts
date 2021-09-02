@@ -22,17 +22,18 @@ import { CharacterStats } from "@/rpg-classes/CharacterStats";
 import * as monsterDecisionFunctions from "./monsterBehaviour";
 import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
+import { QuestHook } from "@/rpg-classes/Quest";
 
 
 
 const door3 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
 const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
 
-const church = makeChurch(0,0)
-const hut1 = makeHut(6,0, new Color(120,90,90))
-const hut2 = makeHut(9,6, new Color(120,120,90), Direction.north)
-const hut3 = makeHut(1,6, new Color(128,90,90), Direction.east)
-const hut4 = makeHut(6,8, new Color(128,90,90), Direction.north)
+const church = makeChurch(0, 0)
+const hut1 = makeHut(6, 0, new Color(120, 90, 90))
+const hut2 = makeHut(9, 6, new Color(120, 120, 90), Direction.north)
+const hut3 = makeHut(1, 6, new Color(128, 90, 90), Direction.east)
+const hut4 = makeHut(6, 8, new Color(128, 90, 90), Direction.north)
 
 const level1: Level = new Level({
     height: 10, width: 15,
@@ -45,7 +46,7 @@ const level1: Level = new Level({
 
     walls: [
         ...church.walls,
-        new Wall({ x: 2, y: 2, place: Direction.north, patternSprite:sharedSprites.brickWall, shape: doorway, features: [door3, keyhole], open: true }),
+        new Wall({ x: 2, y: 2, place: Direction.north, patternSprite: sharedSprites.brickWall, shape: doorway, features: [door3, keyhole], open: true }),
         ...hut1.walls,
         ...hut2.walls,
         ...hut3.walls,
@@ -74,9 +75,9 @@ const level1: Level = new Level({
 
         new Monster({
             sprite: sprites.orc,
-            behaviour:new Behaviour(monsterDecisionFunctions.beMonster),
-            vantage: new Vantage({x:10.5, y:0.5, direction:Direction.south}),
-            stats: new CharacterStats([10,10],[10,10]),
+            behaviour: new Behaviour(monsterDecisionFunctions.beMonster),
+            vantage: new Vantage({ x: 10.5, y: 0.5, direction: Direction.south }),
+            stats: new CharacterStats([10, 10], [10, 10]),
         }),
 
         new NonPlayerCharacter({
@@ -88,7 +89,7 @@ const level1: Level = new Level({
         }),
         new NonPlayerCharacter({
             sprite: sprites.smith,
-            behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
+            behaviour: new Behaviour(decisionFunctions.moveBackAndForward),
             vantage: new Vantage({ x: 6.25, y: 6.25, direction: Direction.west }),
             talkMessage: "Wanna buy a hammer?",
             name: "Roger the smith",
@@ -106,7 +107,7 @@ const level1: Level = new Level({
             vantage: new Vantage({ x: 5.25, y: 7.25, direction: Direction.north }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
-            behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
+            behaviour: new Behaviour(decisionFunctions.moveBackAndForward),
         }),
 
         new NonPlayerCharacter({
@@ -118,13 +119,17 @@ const level1: Level = new Level({
 
         new NonPlayerCharacter({
             sprite: sprites.redMonk,
-            vantage: new Vantage({x:3.5,y:0.5,direction:Direction.south}),
+            vantage: new Vantage({ x: 3.5, y: 0.5, direction: Direction.south }),
             name: "Father Dunlaw",
             talkMessage: "I have a quest for you!",
+            questHooks: [new QuestHook({
+                questId: "questOne",
+                action: "GIVE",
+            })]
         }),
         new NonPlayerCharacter({
             sprite: sprites.innKeeper,
-            vantage: new Vantage({x:6.5,y:2.25,direction:Direction.south}),
+            vantage: new Vantage({ x: 6.5, y: 2.25, direction: Direction.south }),
             name: "Widow Elsa",
             talkMessage: "No rooms for the likes of you!",
         }),
@@ -135,7 +140,7 @@ const level1: Level = new Level({
 
         new Controller({ inputs: [keyhole], subject: door3, statusChangeOnInputTrigger: "OPEN" }),
     ]
-}).withWallsAround({color:Color.GREEN, shape:spikey})
+}).withWallsAround({ color: Color.GREEN, shape: spikey })
 
 
 

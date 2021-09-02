@@ -16,6 +16,7 @@ import { NarrativeMessage } from './NarrativeMessage'
 import { Actor } from '@/game-classes/Actor'
 import { Monster } from '@/rpg-classes/Monster'
 import { AttackOption } from '@/rpg-classes/AttackOption'
+import { Quest } from '@/rpg-classes/Quest'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -29,6 +30,7 @@ interface GameConfig {
     levels: Level[]
     controllers: Controller[]
     characters: Character[]
+    quests?: Quest[]
     activeCharacterIndex: number | undefined
     intersitial?: Intersitial
     gameCompleteMessage?: string

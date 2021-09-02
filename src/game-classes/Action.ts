@@ -133,7 +133,7 @@ class DoAction extends Action {
     }
 
     perform(actor: Vantage | Actor, game: Game): void {
-        console.log(`Actor should DO :  ${this.animation}`);
+        // console.log(`Actor should DO :  ${this.animation}`);
     }
 
     onFinish(actor: Vantage | Actor, game: Game): void {

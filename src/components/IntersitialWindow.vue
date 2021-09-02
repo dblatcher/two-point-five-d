@@ -1,9 +1,9 @@
 <template>
   <div class="frame" v-if="intersitial">
     <article>
-      <p>{{ intersitial.data.content }}</p>
-      <div v-for="(option, index) in intersitial.data.options" :key="index">
-        <button @click="dispatchOptionClick(index)">
+      <p class="content">{{ intersitial.data.content }}</p>
+      <div class="options" >
+        <button @click="dispatchOptionClick(index)" v-for="(option, index) in intersitial.data.options" :key="index">
           {{ option.buttonText }}
         </button>
       </div>
@@ -46,9 +46,22 @@ export default class IntersitialWindow extends Vue {
   justify-content: center;
   width: 100%;
   height: 100%;
+  z-index: 10;
 }
 
 article {
-  background-color: aquamarine;
+  background-color: rgba($color: #000000, $alpha: 0.75);
+  color: antiquewhite;
+  padding: 1rem;
+  box-sizing: border-box;
+
+  .content {
+    max-width: 20rem;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-around;
+  }
 }
 </style>
