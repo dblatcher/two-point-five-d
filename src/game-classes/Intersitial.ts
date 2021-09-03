@@ -10,6 +10,7 @@ interface IntersitialOptionFunction {
 
 interface IntersitialData {
     role: "END_OF_LEVEL" | "END_OF_GAME" | "MESSAGE"
+    heading?: string
     content: string
     options: { buttonText: string, response: IntersitialOptionFunction }[]
     pausesTime?: boolean

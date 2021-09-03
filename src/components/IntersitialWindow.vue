@@ -1,9 +1,16 @@
 <template>
   <div class="frame" v-if="intersitial">
     <article>
+      <h2 v-if="intersitial.data.heading">
+        {{ intersitial.data.heading || "" }}
+      </h2>
       <p class="content">{{ intersitial.data.content }}</p>
-      <div class="options" >
-        <button @click="dispatchOptionClick(index)" v-for="(option, index) in intersitial.data.options" :key="index">
+      <div class="options">
+        <button
+          @click="dispatchOptionClick(index)"
+          v-for="(option, index) in intersitial.data.options"
+          :key="index"
+        >
           {{ option.buttonText }}
         </button>
       </div>
@@ -30,7 +37,7 @@ export default class IntersitialWindow extends Vue {
       return;
     }
 
-    this.$store.dispatch('interstitialOptionClick', optionIndex)
+    this.$store.dispatch("interstitialOptionClick", optionIndex);
   }
 }
 </script>

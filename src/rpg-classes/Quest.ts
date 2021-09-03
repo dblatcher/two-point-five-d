@@ -23,7 +23,8 @@ class Quest {
 
         return new Intersitial({
             role: "MESSAGE",
-            content: `${npc.data.name}: ${this.data.description}`,
+            heading: npc.data.name,
+            content: this.data.description,
             options: [
                 {
                     buttonText: 'Accept Quest', response: (game) => {
