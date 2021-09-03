@@ -8,6 +8,7 @@ import { characters } from "./characters";
 import { spriteSheets as sharedSheets } from "@/instances/sprites";
 import { spriteSheets as localSheets } from "./sprites";
 import { Quest } from "@/rpg-classes/Quest";
+import { itemTypes } from "./itemTypes";
 
 const spriteSheets = [
     ...sharedSheets,
@@ -26,6 +27,12 @@ const questOne = new Quest({
     description:"The dead have risen in the church crypt. Rather embarassing, actually. Please put them to rest by smashing their bones.",
     acceptMessage: "Thank you - I should give you the key to the crypt...",
     refuseMessage: "Oh well... maybe someone braver will come along. hopefully before the bishop's inspection.",
+    itemsGivenOnAccept: [
+        itemTypes.key,
+        itemTypes.silverSword,
+        itemTypes.apple,
+        itemTypes.apple,
+    ]
 })
 
 const game = new Game({

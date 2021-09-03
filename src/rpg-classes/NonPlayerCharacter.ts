@@ -66,7 +66,7 @@ class NonPlayerCharacter extends Actor {
 
         if (questsAvailable.length > 0) {
             const questOnOffer = questsAvailable[0] // to do - choose multiple quests
-            game.data.intersitial = questOnOffer.createOfferItersitial(this);
+            game.data.intersitial = questOnOffer.createOfferDialogue(this);
 
         } else if (this.data.talkMessage) {
             this.doAnimation("WALK", 8);

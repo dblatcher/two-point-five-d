@@ -17,6 +17,7 @@ import { Actor } from '@/game-classes/Actor'
 import { Monster } from '@/rpg-classes/Monster'
 import { AttackOption } from '@/rpg-classes/AttackOption'
 import { Quest } from '@/rpg-classes/Quest'
+import { ItemType } from './ItemType'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -123,9 +124,9 @@ class Game {
         this.data.activeCharacterIndex = index
     }
 
-    getRandomLivingCharacter():Character|null {
+    getRandomLivingCharacter(): Character | null {
         const livingCharacters = this.data.characters.filter(character => !character.data.stats.isDead)
-        if (livingCharacters.length === 0) {return null}
+        if (livingCharacters.length === 0) { return null }
         return livingCharacters[Math.floor(Math.random() * livingCharacters.length)]
     }
 
@@ -153,10 +154,10 @@ class Game {
         this.data.level.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
-        const { 
-            walls = [], items = [], squaresWithFeatures = [], actors = [], 
-            victoryCondition, 
-            controllers: levelControllers = [] 
+        const {
+            walls = [], items = [], squaresWithFeatures = [], actors = [],
+            victoryCondition,
+            controllers: levelControllers = []
         } = this.data.level.data;
 
         const allControllers = [...this.data.controllers, ...levelControllers];
@@ -288,6 +289,22 @@ class Game {
         } else {
             return FeedbackToUI.no
         }
+    }
+
+    createItemInfrontOfPlayer(itemType: ItemType, distanceRightOfCenter = 0, dropHeight = 0): void {
+        const { playerVantage } = this.data
+        const { direction,x ,y } = playerVantage.data
+        const inFrontOfPlayer = {
+            x: x + .5 + (.5 * direction.x),
+            y: y + .5 + (.5 * direction.y)
+        }
+
+        inFrontOfPlayer.x += (distanceRightOfCenter * direction.rightOf.x)
+        inFrontOfPlayer.y += (distanceRightOfCenter * direction.rightOf.y)
+
+        this.data.level.data.items.push(
+            new Item({ type: itemType, vantage: new Vantage({ ...inFrontOfPlayer, direction }), altitude: dropHeight })
+        )
     }
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
