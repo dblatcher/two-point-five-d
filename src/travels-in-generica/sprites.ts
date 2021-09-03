@@ -18,6 +18,8 @@ const sheets = {
     smith: new SpriteSheet("smith", require("./assets/smith.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
     redMonk: new SpriteSheet("monk", require("./assets/red-monk.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
     innKeeper: new SpriteSheet("innKeeper", require("./assets/innkeeper.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
+    skeletonArcher: new SpriteSheet("skeletonArcher", require("./assets/skeleton-archer.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
+    skeletonSpearman: new SpriteSheet("skeletonSpearman", require("./assets/skeleton-spearman.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
 
     //https://opengameart.org/content/39-portraits-pixel-art-pack
     portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png"), spriteSheets),
@@ -182,6 +184,8 @@ const sprites = {
     smith: makeULpcSprite("SMITH", sheets.smith),
     redMonk: makeULpcSprite("REDMONK", sheets.redMonk),
     innKeeper: makeULpcSprite("innKeeper", sheets.innKeeper),
+    skeletonArcher: makeULpcSprite("skeletonArcher", sheets.skeletonArcher),
+    skeletonSpearman: makeULpcSprite("skeletonSpearman", sheets.skeletonSpearman),
 
     drake_portrait: Sprite.portraitSprite("drake", sheets.portrait1),
     sally_portrait: Sprite.portraitSprite("sally", sheets.portrait2),

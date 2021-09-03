@@ -34,6 +34,9 @@ const hut1 = makeHut(6, 0, new Color(120, 90, 90))
 const hut2 = makeHut(9, 6, new Color(120, 120, 90), Direction.north)
 const hut3 = makeHut(1, 6, new Color(128, 90, 90), Direction.east)
 const hut4 = makeHut(6, 8, new Color(128, 90, 90), Direction.north)
+const hut5 = makeHut(10, 3, new Color(128, 90, 90), Direction.west)
+
+church.walls[0].data.features = [features.staircaseA.down]
 
 const level1: Level = new Level({
     height: 10, width: 15,
@@ -51,17 +54,19 @@ const level1: Level = new Level({
         ...hut2.walls,
         ...hut3.walls,
         ...hut4.walls,
-
-        new Wall({ x: 9, y: 3, place: Direction.east, color: new Color(120, 40, 20), features: [features.staircaseA.down] }),
+        ...hut5.walls,
 
     ],
+
     squaresWithFeatures: [
         ...church.ceilings,
         ...hut1.ceilings,
         ...hut2.ceilings,
         ...hut3.ceilings,
         ...hut4.ceilings,
+        ...hut5.ceilings,
     ],
+
     items: [
         new Item({
             type: itemTypes.bardHat, vantage: new Vantage({ x: 8.2, y: 6.2, direction: Direction.north })
@@ -75,7 +80,7 @@ const level1: Level = new Level({
 
         new Monster({
             sprite: sprites.orc,
-            behaviour: new Behaviour(monsterDecisionFunctions.beMonster),
+            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
             vantage: new Vantage({ x: 10.5, y: 0.5, direction: Direction.south }),
             stats: new CharacterStats([10, 10], [10, 10]),
         }),

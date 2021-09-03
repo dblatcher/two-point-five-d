@@ -16,7 +16,8 @@ const spriteSheets = [
 ]
 
 const levels = [
-    level1, level2
+    level1, 
+    level2,
 ]
 
 
@@ -25,12 +26,10 @@ const questOne = new Quest({
     state:'NOT_TAKEN',
     title:"Purge the crypt",
     description:"The dead have risen in the church crypt. Rather embarassing, actually. Please put them to rest by smashing their bones.",
-    acceptMessage: "Thank you - I should give you the key to the crypt...",
+    acceptMessage: "Thank you - here is the key to the crypt. The stairs down are behind the door over there.",
     refuseMessage: "Oh well... maybe someone braver will come along. hopefully before the bishop's inspection.",
     itemsGivenOnAccept: [
         itemTypes.key,
-        itemTypes.silverSword,
-        itemTypes.apple,
         itemTypes.apple,
     ]
 })

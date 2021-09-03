@@ -17,7 +17,11 @@ import { itemTypes } from "./itemTypes"
 import { Controller } from "@/game-classes/Controller";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-
+import { Monster } from "@/rpg-classes/Monster";
+import { sprites } from "./sprites";
+import { CharacterStats } from "@/rpg-classes/CharacterStats";
+import { Behaviour } from "@/game-classes/Behaviour";
+import * as monsterDecisionFunctions from "./monsterBehaviour";
 
 const bigSquareOnFloor: [number, number][] = [
     [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
@@ -90,7 +94,28 @@ const level2: Level = new Level({
             vantage: new Vantage({ x: 5.5, y: 3.5, direction: Direction.west }),
             sprite: sharedSprites.dinoSprite,
             height: .5, width: .5,
-        })
+        }),
+
+        new Monster({
+            vantage: new Vantage({ x: 4.5, y: 2.5, direction: Direction.south }),
+            sprite: sprites.skeletonArcher,
+            stats: new CharacterStats([10, 10], [10, 10]),
+            behaviour: new Behaviour(monsterDecisionFunctions.standAndFight),
+        }),
+
+        new Monster({
+            vantage: new Vantage({ x: 0.5, y: 6.5, direction: Direction.north }),
+            sprite: sprites.skeletonSpearman,
+            stats: new CharacterStats([10, 10], [10, 10]),
+            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveClockwise),
+        }),
+
+        new Monster({
+            vantage: new Vantage({ x: 4.5, y: 6.5, direction: Direction.north }),
+            sprite: sprites.skeletonSpearman,
+            stats: new CharacterStats([10, 10], [10, 10]),
+            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
+        }),
 
     ],
     items: [
