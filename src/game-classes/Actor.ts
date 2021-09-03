@@ -92,7 +92,6 @@ class Actor {
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
-        // this.actionQueue.push(new DoAction("ATTACK", 8))
     }
 
     move(relativeDirection: RelativeDirection, game: Game): void {

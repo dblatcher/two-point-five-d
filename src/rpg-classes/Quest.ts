@@ -32,7 +32,7 @@ class Quest {
                         if (this.data.acceptMessage) {
                             npc.say(this.data.acceptMessage, game)
                         }
-                        npc.doAnimation("WALK", 8);
+                        npc.doAnimation("TALK", 16);
 
                         const { itemsGivenOnAccept = [] } = this.data
                         itemsGivenOnAccept.forEach((itemType,index) => { 
@@ -47,7 +47,7 @@ class Quest {
                         if (this.data.refuseMessage) {
                             npc.say(this.data.refuseMessage, game)
                         }
-                        npc.doAnimation("WALK", 8);
+                        npc.doAnimation("TALK", 16);
                         Intersitial.clearIntersitial(game)
                     }
                 }

@@ -99,6 +99,7 @@ const level2: Level = new Level({
         new Monster({
             vantage: new Vantage({ x: 4.5, y: 2.5, direction: Direction.south }),
             sprite: sprites.skeletonArcher,
+            defaultAttackAnimation: "ATTACK_SWING",
             stats: new CharacterStats([10, 10], [10, 10]),
             behaviour: new Behaviour(monsterDecisionFunctions.standAndFight),
         }),

@@ -14,12 +14,12 @@ const sheets = {
     fighter_walk: new SpriteSheet("fighter_walk", require("../assets/sprites/fighter/walk.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 4 }),
     fighter_slash: new SpriteSheet("fighter_slash", require("../assets/sprites/fighter/slash.png"), spriteSheets, { pattern: "GRID", cols: 6, rows: 4 }),
 
-    orc: new SpriteSheet("orc", require("./assets/orc.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
-    smith: new SpriteSheet("smith", require("./assets/smith.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
-    redMonk: new SpriteSheet("monk", require("./assets/red-monk.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
-    innKeeper: new SpriteSheet("innKeeper", require("./assets/innkeeper.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
-    skeletonArcher: new SpriteSheet("skeletonArcher", require("./assets/skeleton-archer.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
-    skeletonSpearman: new SpriteSheet("skeletonSpearman", require("./assets/skeleton-spearman.png"), spriteSheets, {pattern:"GRID", cols:13, rows:21}),
+    orc: new SpriteSheet("orc", require("./assets/orc.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
+    smith: new SpriteSheet("smith", require("./assets/smith.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
+    redMonk: new SpriteSheet("monk", require("./assets/red-monk.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
+    innKeeper: new SpriteSheet("innKeeper", require("./assets/innkeeper.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
+    skeletonArcher: new SpriteSheet("skeletonArcher", require("./assets/skeleton-archer.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
+    skeletonSpearman: new SpriteSheet("skeletonSpearman", require("./assets/skeleton-spearman.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
 
     //https://opengameart.org/content/39-portraits-pixel-art-pack
     portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png"), spriteSheets),
@@ -29,7 +29,7 @@ const sheets = {
     portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png"), spriteSheets),
 
     //https://opengameart.org/content/32-weapon-icons
-    weapons: new  SpriteSheet("weapons", require("./assets/new-weapons.png"), spriteSheets, { pattern: "GRID", cols: 17, rows: 2 }),
+    weapons: new SpriteSheet("weapons", require("./assets/new-weapons.png"), spriteSheets, { pattern: "GRID", cols: 17, rows: 2 }),
 }
 
 function makeLpcSprite(name: string, walkSheet: SpriteSheet, slashSheet: SpriteSheet): Sprite {
@@ -131,10 +131,18 @@ function makeLpcSprite(name: string, walkSheet: SpriteSheet, slashSheet: SpriteS
 
 function makeULpcSprite(name: string, sheet: SpriteSheet): Sprite {
 
-    function makeRow(row:number, lastCol:number, firstCol=0):Frame[] {
-        const output:Frame[] = []
+    function makeRow(row: number, lastCol: number, firstCol = 0): Frame[] {
+        const output: Frame[] = []
         for (let index = firstCol; index < lastCol; index++) {
-            output.push ({sheet, row, col:index})
+            output.push({ sheet, row, col: index })
+        }
+        return output
+    }
+
+    function makeMixedRow(row: number, columnList: number[], sheet: SpriteSheet): Frame[] {
+        const output: Frame[] = []
+        for (let index = 0; index < columnList.length; index++) {
+            output.push({ sheet, row, col: columnList[index] })
         }
         return output
     }
@@ -157,19 +165,28 @@ function makeULpcSprite(name: string, sheet: SpriteSheet): Sprite {
             .set("STAND_RIGHT", [
                 { sheet: sheet, col: 0, row: 11 },
             ])
-            .set("WALK_FORWARD", makeRow(8,8,1))
-            .set("WALK_LEFT", makeRow(9,8,1))
-            .set("WALK_BACK", makeRow(10,8,1))
-            .set("WALK_RIGHT", makeRow(11,8,1))
-            .set("ATTACK_FORWARD", makeRow(4,7))
-            .set("ATTACK_LEFT", makeRow(5,7))
-            .set("ATTACK_BACK", makeRow(6,7))
-            .set("ATTACK_RIGHT", makeRow(7,7))
-            .set("DIE", [ ...makeRow(20,4),
-                { sheet: sheet, col: 4, row: 20 },
-                { sheet: sheet, col: 4, row: 20 },
+            .set("WALK_FORWARD", makeRow(8, 8, 1))
+            .set("WALK_LEFT", makeRow(9, 8, 1))
+            .set("WALK_BACK", makeRow(10, 8, 1))
+            .set("WALK_RIGHT", makeRow(11, 8, 1))
+            .set("ATTACK_FORWARD", makeRow(4, 7))
+            .set("ATTACK_LEFT", makeRow(5, 7))
+            .set("ATTACK_BACK", makeRow(6, 7))
+            .set("ATTACK_RIGHT", makeRow(7, 7))
+            .set("ATTACK_SWING_FORWARD", makeRow(12, 5))
+            .set("ATTACK_SWING_LEFT", makeRow(13, 5))
+            .set("ATTACK_SWING_BACK", makeRow(14, 5))
+            .set("ATTACK_SWING_RIGHT", makeRow(15, 5))
+            .set("DIE", [...makeRow(20, 4),
+            { sheet: sheet, col: 4, row: 20 },
+            { sheet: sheet, col: 4, row: 20 },
             ])
-            .set("hurt", [ ...makeRow(20,3)])
+            .set("hurt", [...makeRow(20, 3)])
+            .set("TALK_FORWARD", makeMixedRow(0, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], sheet))
+            .set("TALK_LEFT", makeMixedRow(1, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], sheet))
+            .set("TALK_BACK", makeMixedRow(2, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], sheet))
+            .set("TALK_RIGHT", makeMixedRow(3, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], sheet))
+            
     })
 }
 
@@ -179,7 +196,7 @@ const sprites = {
     farmerSprite: makeLpcSprite("FARMER", sheets.farmer_walk, sheets.farmer_slash),
     guardSprite: makeLpcSprite("GUARD", sheets.guard_walk, sheets.guard_slash),
     fighterSprite: makeLpcSprite("FIGHTER", sheets.fighter_walk, sheets.fighter_slash),
-    
+
     orc: makeULpcSprite("ORC", sheets.orc),
     smith: makeULpcSprite("SMITH", sheets.smith),
     redMonk: makeULpcSprite("REDMONK", sheets.redMonk),
@@ -192,9 +209,9 @@ const sprites = {
     boblin_portrait: Sprite.portraitSprite("boblin", sheets.portrait3),
     gwim_portrait: Sprite.portraitSprite("gwim", sheets.portrait13),
 
-    silverSword: Sprite.itemSpriteOneFrame("silverSword",{sheet:sheets.weapons, col:1, row:0}),
-    hammer: Sprite.itemSpriteOneFrame("hammer",{sheet:sheets.weapons, col:14, row:0}),
-    stick: Sprite.itemSpriteOneFrame("stick",{sheet:sheets.weapons, col:3, row:1}),
+    silverSword: Sprite.itemSpriteOneFrame("silverSword", { sheet: sheets.weapons, col: 1, row: 0 }),
+    hammer: Sprite.itemSpriteOneFrame("hammer", { sheet: sheets.weapons, col: 14, row: 0 }),
+    stick: Sprite.itemSpriteOneFrame("stick", { sheet: sheets.weapons, col: 3, row: 1 }),
 }
 
 export {

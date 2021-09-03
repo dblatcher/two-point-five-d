@@ -10,7 +10,7 @@ function makeAttack(monster: Monster): Action | null {
         return null
     }
 
-    return new DoAction('ATTACK', 10, function (actor, game) {
+    return new DoAction(monster.data.defaultAttackAnimation || 'ATTACK', 10, function (actor, game) {
         const monster = actor as Monster;
         if (monster.hasPlayerInFront(game)) {
             monster.attackPlayers(game)

@@ -17,6 +17,7 @@ interface MonsterData {
     width?: number
     blocksSquare?: boolean
     stats: CharacterStats
+    defaultAttackAnimation?: string
 }
 
 class Monster extends Actor {

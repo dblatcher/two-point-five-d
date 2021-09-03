@@ -69,7 +69,7 @@ class NonPlayerCharacter extends Actor {
             game.data.intersitial = questOnOffer.createOfferDialogue(this);
 
         } else if (this.data.talkMessage) {
-            this.doAnimation("WALK", 8);
+            this.doAnimation("TALK", 16);
             this.say(this.data.talkMessage, game)
         }
 
