@@ -148,19 +148,19 @@ class DoAction extends Action {
     }
 }
 
-class OneForward extends Action {
-    declare action: "ONE_FORWARD"
+class WalkForward extends Action {
+    declare action: "WALK_FORWARD"
     destination: Position | null
     location: Position | null
     shouldCancel: boolean
+    distance: number
 
-    constructor() {
-        super("ONE_FORWARD");
+    constructor(distance = 1) {
+        super("WALK_FORWARD");
         this.destination = null
         this.location = null
         this.shouldCancel = false
-
-        console.log('one forward created')
+        this.distance = distance
     }
 
 
@@ -200,4 +200,5 @@ class OneForward extends Action {
 
 }
 
-export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction, DoAction, OneForward }
+
+export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction, DoAction, WalkForward }

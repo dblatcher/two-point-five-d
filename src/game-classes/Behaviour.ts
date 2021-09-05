@@ -1,5 +1,5 @@
 import { Game } from './Game';
-import { Action, MovementAction, MovementByAction, OneForward, ShiftAction } from './Action';
+import { Action, MovementAction, WalkForward, ShiftAction } from './Action';
 import { RelativeDirection } from './RelativeDirection';
 import { Actor } from '@/game-classes/Actor';
 
@@ -14,17 +14,15 @@ function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action |
     const { vantage } = actor.data;
     if (!vantage) { return null }
 
-    const distanceToMove = .05
-    const howCloseToGet = .5
     const whereToLookForBlockage = vantage.translate({
-        x: vantage.data.direction.x * howCloseToGet,
-        y: vantage.data.direction.y * howCloseToGet,
+        ...vantage.data.direction
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
+    if (actor.currentAction) { return null }
+    else if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
-        return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
+        return new WalkForward();
     }
 }
 
@@ -33,17 +31,15 @@ function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Acti
     const { vantage } = actor.data;
     if (!vantage) { return null }
 
-    const distanceToMove = .05
-    const howCloseToGet = .5
     const whereToLookForBlockage = vantage.translate({
-        x: vantage.data.direction.x * howCloseToGet,
-        y: vantage.data.direction.y * howCloseToGet,
+        ...vantage.data.direction
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
+    if (actor.currentAction) { return null }
+    else if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
-        return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
+        return new WalkForward();
     }
 }
 
@@ -60,7 +56,7 @@ function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Act
     else if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.BACK)
     } else {
-        return new OneForward();
+        return new WalkForward();
     }
 }
 
@@ -72,7 +68,7 @@ function shiftAround(actor: Actor, game: Game, behaviour: Behaviour): Action | n
 function wanderForward(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
     if (actor.currentAction) { return null }
     if (game.tickCount % 10 > 1 ) {return null}
-    return new OneForward();
+    return new WalkForward();
 }
 
 const decisionFunctions = {

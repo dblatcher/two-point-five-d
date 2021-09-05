@@ -43,7 +43,7 @@ class Actor {
 
     get animation(): string {
         if (!this.currentAction) { return Sprite.defaultFigureAnimation }
-        if (this.currentAction.action == "MOVEBY" || this.currentAction.action == "ONE_FORWARD") { return 'WALK' }
+        if (this.currentAction.action == "MOVEBY" || this.currentAction.action == "WALK_FORWARD") { return 'WALK' }
         if (this.currentAction.action == "DO") {
             const doAction = (this.currentAction as DoAction);
             if (this.data.sprite.keyArray.some(animationKey => animationKey.indexOf(doAction.animation) != -1)) {

@@ -80,14 +80,14 @@ const level1: Level = new Level({
 
         new Monster({
             sprite: sprites.orc,
-            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
+            behaviour: new Behaviour(decisionFunctions.moveClockwise),
             vantage: new Vantage({ x: 10.5, y: 0.5, direction: Direction.south }),
             stats: new CharacterStats([10, 10], [10, 10]),
         }),
 
         new NonPlayerCharacter({
             sprite: sprites.farmerSprite,
-            // behaviour:new Behaviour(decisionFunctions.moveBackAndForward),
+            behaviour:new Behaviour(decisionFunctions.moveAntiClockwise),
             vantage: new Vantage({ x: 8.25, y: 4.25, direction: Direction.north }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",

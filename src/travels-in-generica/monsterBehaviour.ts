@@ -1,4 +1,4 @@
-import { Action, DoAction, ShiftAction } from "@/game-classes/Action"
+import { Action, DoAction } from "@/game-classes/Action"
 import { Actor } from "@/game-classes/Actor"
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour"
 import { Game } from "@/game-classes/Game"
