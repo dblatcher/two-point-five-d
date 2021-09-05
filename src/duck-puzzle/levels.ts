@@ -1,12 +1,7 @@
-import { TextBoard } from "@/canvas/TextBoard"
 import { Color } from "@/canvas/Color";
 
-import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
-import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { Action, MovementAction, MovementByAction } from "@/game-classes/Action";
+import { FloorFeature } from "@/game-classes/FloorFeature";
 import { Behaviour } from "@/game-classes/Behaviour";
-import { Game } from "@/game-classes/Game";
-import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Direction } from "@/game-classes/Direction";
 import { Level } from "@/game-classes/Level";
@@ -20,114 +15,14 @@ import { Item } from "@/game-classes/Item";
 import { duck } from "@/duck-puzzle/figureFactory";
 import { sprites } from "@/instances/sprites";
 
-import { sprites as mySprites } from "./sprites";
 import * as itemTypes from "./itemTypes";
-import { Actor } from "@/game-classes/Actor";
-
-
-function makeSign(text: string[]): WallFeature {
-    return new WallFeature({
-        clipToWall: true,
-        textBoard: new TextBoard({
-            content: text,
-            size: { x: .8, y: .5 },
-            textScale: 3.5,
-            font: 'arial',
-            textColor: Color.BLUE,
-            backgroundColor: Color.YELLOW,
-        }),
-    })
-}
+import { areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
+import { makeSign, lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed } from "./features";
 
 
 const hintForLevel1 = makeSign(["Help the duck", "reach the", "blue star!",])
 const hintForLevel2 = makeSign(["Use both plates", "to open", "the door"])
 
-const lever1 = new WallSwitch({ sprite: sprites.leverSprite, })
-const door1 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-
-
-const bigSquareOnFloor: [number, number][] = [
-    [-.4, -.4], [.4, -.4], [.4, .4], [-.4, .4]
-]
-
-const starOnFloor: [number, number][] = [
-    [0, 0.5],
-    [0.1, 0.1],
-    [0.5, 0],
-    [0.1, -0.1],
-    [0, -0.5],
-    [-0.1, -0.1],
-    [-0.5, 0],
-    [-0.1, 0.1],
-]
-
-
-const blueStar = new FloorFeature({
-    blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'blue' }, shape: starOnFloor
-})
-
-const floorSwitch = new FloorFeature({
-    blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
-})
-const floorSwitch2 = new FloorFeature({
-    blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
-})
-
-const pit1 = new Pit({ status: "OPEN" })
-const pitClosed = new Pit({ status: "CLOSED" })
-
-
-
-function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
-
-    const { vantage } = actor.data;
-    if (!vantage) return null
-
-    const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
-        .find(square => {
-            return square.data.floorFeatures.includes(blueStar)
-        })
-
-    if (squareWithStar && squareWithStar.isInSameSquareAs(vantage)) {
-        return null
-    }
-
-    const distanceToMove = .1
-
-    const howCloseToGet = .5
-    const whereToLookForBlockage = vantage.translate({
-        x: vantage.data.direction.x * howCloseToGet,
-        y: vantage.data.direction.y * howCloseToGet,
-    })
-
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
-        return new MovementAction("TURN", RelativeDirection.LEFT)
-    } else {
-        return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
-    }
-}
-
-
-const areAllDucksOnTheStar = (level: Level, game: Game) => {
-
-    const ducks: Actor[] = (level.data.actors || [])
-        .filter(npc => npc.data.sprite === mySprites.duckSprite)
-        .filter(npc => npc.data.vantage)
-
-    const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
-        .find(square => {
-            return square.data.floorFeatures.includes(blueStar)
-        })
-
-    if (!squareWithStar) { return false }
-
-    return ducks.every(duck => duck.data.vantage && duck.data.vantage.isInSameSquareAs(squareWithStar))
-}
 
 
 const duckPuzzleLevel1 = new Level({
@@ -186,7 +81,6 @@ const duckPuzzleLevel1 = new Level({
     victoryCondition: areAllDucksOnTheStar,
     victoryMessage: "Well done! But there are more ducks who need your help..."
 }).withWallsAround()
-
 
 const duckPuzzleLevel2 = new Level({
     height: 6,
