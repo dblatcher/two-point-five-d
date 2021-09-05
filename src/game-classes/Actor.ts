@@ -43,7 +43,7 @@ class Actor {
 
     get animation(): string {
         if (!this.currentAction) { return Sprite.defaultFigureAnimation }
-        if (this.currentAction.action == "MOVEBY") { return 'WALK' }
+        if (this.currentAction.action == "MOVEBY" || this.currentAction.action == "ONE_FORWARD") { return 'WALK' }
         if (this.currentAction.action == "DO") {
             const doAction = (this.currentAction as DoAction);
             if (this.data.sprite.keyArray.some(animationKey => animationKey.indexOf(doAction.animation) != -1)) {
@@ -71,7 +71,7 @@ class Actor {
 
         if (this.currentAction) {
             this.currentAction.tickCount++
-
+            this.currentAction.onContinue(this,game)
             if (this.currentAction.isFinished) {
                 if (this.currentAction.somethingHappensOnFinish) {
                     this.currentAction.onFinish(this, game);
@@ -84,7 +84,7 @@ class Actor {
         if (!this.currentAction) {
             this.currentAction = this.actionQueue.shift();
             if (this.currentAction) {
-                this.currentAction.perform(this, game);
+                this.currentAction.start(this, game);
             }
         }
 

@@ -164,7 +164,7 @@ class Game {
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
         if (nextPlayerAction) {
-            nextPlayerAction.perform(this.data.playerVantage, this);
+            nextPlayerAction.start(this.data.playerVantage, this);
         }
 
         actors.forEach(npc => {

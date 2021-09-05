@@ -113,6 +113,12 @@ class Position {
         return this.gridX === otherPosition.gridX && this.gridY === otherPosition.gridY
     }
 
+    isAlmostExactlyTheSamePlaceAs(otherPosition: Position): boolean {
+        if (!this.isInSameSquareAs(otherPosition)) {return false}
+        const tolerance = .05;
+        return Math.abs(this.squareX - otherPosition.squareX) < tolerance && Math.abs(this.squareY - otherPosition.squareY) < tolerance
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { place, viewedFrom } = renderInstruction

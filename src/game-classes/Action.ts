@@ -2,6 +2,7 @@ import { Point } from "@/canvas/canvas-utility";
 import { Actor } from "@/game-classes/Actor";
 import { Game } from "./Game";
 import { Item } from "./Item";
+import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { WallFeature } from "./WallFeature";
@@ -19,8 +20,12 @@ class Action {
         this.somethingHappensOnFinish = false
     }
 
-    perform(actor: Vantage | Actor, game: Game): void {
-        console.warn(`No perform function defined for Action ${this.action}`, actor);
+    start(actor: Vantage | Actor, game: Game): void {
+        console.warn(`No start function defined for Action ${this.action}`, actor);
+    }
+
+    onContinue(actor: Vantage | Actor, game: Game): void {
+        return
     }
 
     onFinish(actor: Vantage | Actor, game: Game): void {
@@ -42,7 +47,7 @@ class MovementAction extends Action {
         this.direction = direction;
     }
 
-    perform(actor: Vantage | Actor, game: Game): void {
+    start(actor: Vantage | Actor, game: Game): void {
         switch (this.action) {
             case "MOVE": return actor.move(this.direction, game);
             case "TURN": return actor.turn(this.direction);
@@ -62,7 +67,7 @@ class MovementByAction extends Action {
         this.direction = direction;
     }
 
-    perform(actor: Vantage | Actor, game: Game): void {
+    start(actor: Vantage | Actor, game: Game): void {
         return actor.moveBy(this.distance, this.direction, game);
     }
 }
@@ -77,7 +82,7 @@ class ShiftAction extends Action {
         this.position = position;
     }
 
-    perform(actor: Vantage | Actor, game: Game): void {
+    start(actor: Vantage | Actor, game: Game): void {
         actor.shiftWithinSquare(this.position, game)
     }
 
@@ -93,28 +98,28 @@ class InterAction extends Action {
         this.feature = target
     }
 
-    perform(actor: Vantage | Actor, game: Game): void {
+    start(actor: Vantage | Actor, game: Game): void {
         this.feature.handleInteraction(actor, game);
     }
 }
 
 class NpcInterAction extends Action {
     action: "INTERACT"
-    npc: Actor
+    actor: Actor
 
     constructor(target: Actor) {
         super("INTERACT")
         this.action = "INTERACT"
-        this.npc = target
+        this.actor = target
     }
 
-    perform(actor: Vantage | Actor, game: Game): void {
-        this.npc.handleInteraction(actor, game);
+    start(actor: Vantage | Actor, game: Game): void {
+        this.actor.handleInteraction(actor, game);
     }
 }
 
 interface ActionCallback {
-    (actor:Vantage|Actor, game: Game): void
+    (actor: Vantage | Actor, game: Game): void
 }
 
 class DoAction extends Action {
@@ -123,7 +128,7 @@ class DoAction extends Action {
     duration: number
     callBack?: ActionCallback
 
-    constructor(animation: string, duration: number, callback?:ActionCallback) {
+    constructor(animation: string, duration: number, callback?: ActionCallback) {
         super("DO")
         this.action = "DO"
         this.animation = animation
@@ -132,7 +137,7 @@ class DoAction extends Action {
         this.callBack = callback
     }
 
-    perform(actor: Vantage | Actor, game: Game): void {
+    start(actor: Vantage | Actor, game: Game): void {
         // console.log(`Actor should DO :  ${this.animation}`);
     }
 
@@ -143,4 +148,56 @@ class DoAction extends Action {
     }
 }
 
-export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction, DoAction }
+class OneForward extends Action {
+    declare action: "ONE_FORWARD"
+    destination: Position | null
+    location: Position | null
+    shouldCancel: boolean
+
+    constructor() {
+        super("ONE_FORWARD");
+        this.destination = null
+        this.location = null
+        this.shouldCancel = false
+
+        console.log('one forward created')
+    }
+
+
+    start(actor: Actor, game: Game): void {
+        const { vantage } = actor.data;
+        if (!vantage) {
+            this.shouldCancel = true
+        } else {
+            this.destination = vantage.translate(vantage.data.direction)
+            this.location = vantage 
+        }
+    }
+
+    onContinue(actor: Actor, game: Game): void {
+        const {location, destination} = this
+        if (location && destination) {
+            if (game.data.level.isBlocked(...location.coords, ...destination.coords,actor,game)) {
+                this.shouldCancel = true
+                return
+            }
+        }
+        actor.moveBy(.05, RelativeDirection.FORWARD, game)
+        this.location = actor.data.vantage || null;
+
+    }
+
+    onFinish(actor: Vantage | Actor, game: Game): void {
+        console.warn(`No onFinish function defined for Action ${this.action}`, actor);
+    }
+
+    get isFinished(): boolean {
+        const { destination, location, shouldCancel } = this;
+        if (shouldCancel) { return true }
+        if (!destination || !location) { return true }
+        return destination.isAlmostExactlyTheSamePlaceAs(location);
+    }
+
+}
+
+export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction, DoAction, OneForward }

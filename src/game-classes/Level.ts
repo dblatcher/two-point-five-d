@@ -57,6 +57,16 @@ class Level {
         return [hour, minute]
     }
 
+    /**
+     * Check if a moving actor or position is able to pass from on square to another
+     * @param startX the integer grid X of the starting position
+     * @param startY the integer grid Y of the starting position
+     * @param targetX the integer grid X of the target position
+     * @param targetY the integer grid Y of the target position
+     * @param movingActor 
+     * @param game 
+     * @returns whether the way is blocked
+     */
     isBlocked(startX: number, startY: number, targetX: number, targetY: number, movingActor: Actor | Position, game: Game): boolean {
         const { squaresWithFeatures = [], walls = [], actors = [] } = this.data
         const { playerBlocksPassage } = game.rules
