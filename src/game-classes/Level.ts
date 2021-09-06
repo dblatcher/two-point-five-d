@@ -14,6 +14,7 @@ import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall } from "./Wall"
 import { Position } from "./Position"
+import { PlayerVantage } from "./PlayerVantage";
 
 const renderingZoneFrames = false;
 
@@ -58,7 +59,7 @@ class Level {
     }
 
     /**
-     * Check if a moving actor or position is able to pass from on square to another
+     * Check if a moving actor or position is able to pass from one square to an adjacent square
      * @param startX the integer grid X of the starting position
      * @param startY the integer grid Y of the starting position
      * @param targetX the integer grid X of the target position
@@ -108,6 +109,91 @@ class Level {
         return false
     }
 
+/**
+ * Find what is stopping a moving actor from passing from one square to an adjacent square
+ * @param startX the integer grid X of the starting position
+ * @param startY the integer grid Y of the starting position
+ * @param targetX the integer grid X of the target position
+ * @param targetY the integer grid Y of the target position
+ * @param movingActor 
+ * @param game 
+ * @returns whether the way is blocked
+ */
+    findBlockage(startX: number, startY: number, targetX: number, targetY: number, movingActor: Actor | Position, game: Game): {
+        edgeOfLevel?: boolean
+        wall?: Wall
+        squareWithFeature?: SquareWithFeatures
+        actor?: Actor
+        playerVantage?: PlayerVantage
+        blockageClass?: typeof Wall | typeof SquareWithFeatures | typeof Actor | typeof PlayerVantage
+    } | null {
+        const { squaresWithFeatures = [], walls = [], actors = [] } = this.data
+        const { playerBlocksPassage } = game.rules
+
+        if (targetX < 0 || targetY < 0 || targetX >= this.data.width || targetY >= this.data.height) { return { edgeOfLevel: true } }
+
+        const blockingSquare = squaresWithFeatures.find(
+            squareWithFeature => {
+                if (squareWithFeature.gridX != targetX || squareWithFeature.gridY != targetY) { return false }
+                return squareWithFeature.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
+            });
+
+        if (blockingSquare) {
+            return {
+                squareWithFeature: blockingSquare,
+                blockageClass: SquareWithFeatures,
+            }
+        }
+
+        const blockingActor = (actors.find(
+            actor => {
+                return actor != movingActor && actor.data.blocksSquare && actor.data.vantage?.gridX == targetX && actor.data.vantage?.gridY == targetY
+            }
+        ))
+
+        if (blockingActor) {
+            return {
+                actor: blockingActor,
+                blockageClass: Actor,
+            }
+        }
+
+
+        if (movingActor !== game.data.playerVantage && playerBlocksPassage) {
+            if (game.data.playerVantage.gridX == targetX && game.data.playerVantage.gridY == targetY) {
+                return {
+                    playerVantage: game.data.playerVantage,
+                    blockageClass: PlayerVantage
+                }
+            }
+        }
+
+        const dX = targetX - startX
+        const dY = targetY - startY
+
+        const blockingWall1 = walls.find(
+            wall => wall.gridX == startX && wall.gridY == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
+        );
+        if (blockingWall1) {
+            return {
+                wall: blockingWall1,
+                blockageClass: Wall,
+            }
+        }
+
+        const blockingWall2 = walls.find(
+            wall => wall.gridX == targetX && wall.gridY == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY && wall.isBlocking
+        )
+        if (blockingWall2) {
+            return {
+                wall: blockingWall2,
+                blockageClass: Wall,
+            }
+        }
+
+        return null
+    }
+
     hasWallInFace(vantage: Vantage): boolean {
         const wall1 = this.data.walls.find(wall =>
             wall.isInSameSquareAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasInteractableFeature)
@@ -118,7 +204,7 @@ class Level {
         return !!(wall1 || wall2)
     }
 
-    hasSquareAheadBlocked(vantage: Vantage): boolean {
+    hasSquareAheadBlockedByWall(vantage: Vantage): boolean {
         const { walls = [] } = this.data
         const wall1 = walls.find(wall =>
             wall.isInSameSquareAs(vantage) && wall.isFacing(vantage.data.direction) && (wall.isBlocking || wall.hasBlockingFeature)

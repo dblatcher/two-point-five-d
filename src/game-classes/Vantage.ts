@@ -1,5 +1,5 @@
 import { Direction } from './Direction'
-import { Position } from './Position'
+import { Position, PositionConfig } from './Position'
 import { Game } from './Game'
 import { RelativeDirection } from './RelativeDirection'
 import { ConvertFunction, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility'
@@ -31,6 +31,10 @@ class Vantage extends Position {
 
     turn(direction: RelativeDirection): void {
         this.data.direction = direction.getAbsoluteDirection(this.data.direction);
+    }
+
+    translateToVantage(vector: PositionConfig): Vantage {
+        return new Vantage({ x: this.data.x + vector.x, y: this.data.y + vector.y, direction:this.data.direction });
     }
 
 

@@ -313,7 +313,7 @@ class Game {
         const { pointerLocator, activeCharacter } = this
         const { walls } = level.data
         const playerHasWallInFace = level.hasWallInFace(playerVantage)
-        const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerVantage)
+        const squareAheadIsBlocked = level.hasSquareAheadBlockedByWall(playerVantage)
         const locations = pointerLocator.locate(clickInfo, playerHasWallInFace)
         if (locations.length == 0) { return }
 
@@ -455,7 +455,7 @@ class Game {
     handleAttackButton(clickInfo: { character: Character, option: AttackOption }): FeedbackToUI {
         const { character, option } = clickInfo
         const { playerVantage, level } = this.data
-        const squareAheadIsBlocked = level.hasSquareAheadBlocked(playerVantage)
+        const squareAheadIsBlocked = level.hasSquareAheadBlockedByWall(playerVantage)
         const { actors = [] } = level.data
 
         let targetMonster: Monster | null = null

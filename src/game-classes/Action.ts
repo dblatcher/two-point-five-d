@@ -150,8 +150,8 @@ class DoAction extends Action {
 
 class WalkForward extends Action {
     declare action: "WALK_FORWARD"
-    destination: Position | null
-    location: Position | null
+    destination: Vantage | null
+    location: Vantage | null
     shouldCancel: boolean
     distance: number
 
@@ -169,7 +169,10 @@ class WalkForward extends Action {
         if (!vantage) {
             this.shouldCancel = true
         } else {
-            this.destination = vantage.translate(vantage.data.direction)
+            this.destination = vantage.translateToVantage({
+                x: vantage.data.direction.x * this.distance, 
+                y: vantage.data.direction.y * this.distance,
+            })
             this.location = vantage 
         }
     }
@@ -177,7 +180,7 @@ class WalkForward extends Action {
     onContinue(actor: Actor, game: Game): void {
         const {location, destination} = this
         if (location && destination) {
-            if (game.data.level.isBlocked(...location.coords, ...destination.coords,actor,game)) {
+            if (game.data.level.hasSquareAheadBlockedByWall(location)) {
                 this.shouldCancel = true
                 return
             }

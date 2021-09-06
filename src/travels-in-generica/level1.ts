@@ -19,7 +19,6 @@ import { Sky } from "@/game-classes/Sky";
 import { Monster } from "@/rpg-classes/Monster";
 import { CharacterStats } from "@/rpg-classes/CharacterStats";
 
-import * as monsterDecisionFunctions from "./monsterBehaviour";
 import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
 import { QuestHook } from "@/rpg-classes/Quest";
@@ -78,11 +77,11 @@ const level1: Level = new Level({
 
     actors: [
 
-        new Monster({
+        new NonPlayerCharacter({
             sprite: sprites.orc,
             behaviour: new Behaviour(decisionFunctions.moveClockwise),
             vantage: new Vantage({ x: 10.5, y: 0.5, direction: Direction.south }),
-            stats: new CharacterStats([10, 10], [10, 10]),
+            name:"Roger the orc",
         }),
 
         new NonPlayerCharacter({
@@ -94,7 +93,7 @@ const level1: Level = new Level({
         }),
         new NonPlayerCharacter({
             sprite: sprites.smith,
-            behaviour: new Behaviour(decisionFunctions.moveBackAndForward),
+            behaviour: new Behaviour(decisionFunctions.walkInCircle),
             vantage: new Vantage({ x: 6.25, y: 6.25, direction: Direction.west }),
             talkMessage: "Wanna buy a hammer?",
             name: "Roger the smith",
@@ -102,7 +101,7 @@ const level1: Level = new Level({
 
         new NonPlayerCharacter({
             sprite: sprites.fighterSprite,
-            vantage: new Vantage({ x: 4.75, y: 5.75, direction: Direction.north }),
+            vantage: new Vantage({ x: 10.75, y: 5.75, direction: Direction.north }),
             talkMessage: "They aren't offering enough money for me to fight any monsters.",
             name: "Harry Longblade",
         }),
