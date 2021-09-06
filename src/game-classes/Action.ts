@@ -154,13 +154,15 @@ class WalkForward extends Action {
     location: Vantage | null
     shouldCancel: boolean
     distance: number
+    speed: number
 
-    constructor(distance = 1) {
+    constructor(distance = 1, speed = .05) {
         super("WALK_FORWARD");
         this.destination = null
         this.location = null
         this.shouldCancel = false
         this.distance = distance
+        this.speed = speed
     }
 
 
@@ -170,22 +172,22 @@ class WalkForward extends Action {
             this.shouldCancel = true
         } else {
             this.destination = vantage.translateToVantage({
-                x: vantage.data.direction.x * this.distance, 
+                x: vantage.data.direction.x * this.distance,
                 y: vantage.data.direction.y * this.distance,
             })
-            this.location = vantage 
+            this.location = vantage
         }
     }
 
     onContinue(actor: Actor, game: Game): void {
-        const {location, destination} = this
+        const { location, destination, speed } = this
         if (location && destination) {
             if (game.data.level.hasSquareAheadBlockedByWall(location)) {
                 this.shouldCancel = true
                 return
             }
         }
-        actor.moveBy(.05, RelativeDirection.FORWARD, game)
+        actor.moveBy(speed, RelativeDirection.FORWARD, game)
         this.location = actor.data.vantage || null;
 
     }
@@ -195,10 +197,10 @@ class WalkForward extends Action {
     }
 
     get isFinished(): boolean {
-        const { destination, location, shouldCancel } = this;
+        const { destination, location, shouldCancel, speed } = this;
         if (shouldCancel) { return true }
         if (!destination || !location) { return true }
-        return destination.isAlmostExactlyTheSamePlaceAs(location);
+        return destination.isAlmostExactlyTheSamePlaceAs(location, speed);
     }
 
 }

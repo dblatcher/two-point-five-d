@@ -113,9 +113,8 @@ class Position {
         return this.gridX === otherPosition.gridX && this.gridY === otherPosition.gridY
     }
 
-    isAlmostExactlyTheSamePlaceAs(otherPosition: Position): boolean {
+    isAlmostExactlyTheSamePlaceAs(otherPosition: Position, tolerance = .05): boolean {
         if (!this.isInSameSquareAs(otherPosition)) {return false}
-        const tolerance = .05;
         return Math.abs(this.squareX - otherPosition.squareX) < tolerance && Math.abs(this.squareY - otherPosition.squareY) < tolerance
     }
 

@@ -86,7 +86,7 @@ const level1: Level = new Level({
 
         new NonPlayerCharacter({
             sprite: sprites.farmerSprite,
-            behaviour:new Behaviour(decisionFunctions.moveAntiClockwise),
+            behaviour:new Behaviour(decisionFunctions.wanderAround),
             vantage: new Vantage({ x: 8.25, y: 4.25, direction: Direction.north }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",

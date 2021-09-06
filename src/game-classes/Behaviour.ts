@@ -65,10 +65,17 @@ function shiftAround(actor: Actor, game: Game, behaviour: Behaviour): Action | n
     return new ShiftAction({ x: Math.random(), y: Math.random() })
 }
 
-function wanderForward(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function wanderAround(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
     if (actor.currentAction) { return null }
-    if (game.tickCount % 10 > 1) { return null }
-    return new WalkForward();
+
+    const d6 = Math.ceil(Math.random() * 6);
+
+    if (behaviour.history[0]?.action === "WALK_FORWARD") {
+        return new MovementAction("TURN", d6 > 3 ? RelativeDirection.LEFT : RelativeDirection.RIGHT)
+    } else if (d6 >= 5) {
+        return new ShiftAction({ x: .5, y: .5 })
+    }
+    return new WalkForward(d6, .025);
 }
 
 function walkInCircle(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
@@ -80,16 +87,16 @@ function walkInCircle(actor: Actor, game: Game, behaviour: Behaviour): Action | 
     if (behaviour.history[0]?.action === "WALK_FORWARD") {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
-        if (game.data.level.isBlocked(...vantage.coords, ...vantage.translate(vantage.data.direction).coords, actor, game)){
-            return new DoAction('STAND',8);
+        if (game.data.level.isBlocked(...vantage.coords, ...vantage.translate(vantage.data.direction).coords, actor, game)) {
+            return new DoAction('STAND', 8);
         } else {
-            return new WalkForward(2);
+            return new WalkForward(1.5, .06);
         }
     }
 }
 
 const decisionFunctions = {
-    moveClockwise, moveAntiClockwise, shiftAround, wanderForward, moveBackAndForward, walkInCircle
+    moveClockwise, moveAntiClockwise, shiftAround, wanderAround, moveBackAndForward, walkInCircle
 }
 
 class Behaviour {
