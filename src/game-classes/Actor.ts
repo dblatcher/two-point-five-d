@@ -21,6 +21,8 @@ class Actor {
     data: ActorData
     actionQueue: Action[]
     currentAction: Action | undefined
+    get isMonster(): boolean { return false }
+
     static MAX_QUEUE_LENGTH = 10
 
     constructor(data: ActorData) {

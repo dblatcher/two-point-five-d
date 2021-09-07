@@ -31,6 +31,8 @@ class Monster extends Actor {
         this.isDying = false
     }
 
+    get isMonster(): boolean { return true }
+
     handleInteraction(actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
     }
@@ -42,21 +44,21 @@ class Monster extends Actor {
         return health;
     }
 
-    attackPlayers(game: Game):void {
+    attackPlayers(game: Game): void {
         const hit = Math.random() > .5;
         const attackedCharacter = game.getRandomLivingCharacter();
 
         if (!attackedCharacter) { return }
 
         if (!hit) {
-            game.narrativeMessages.push(new NarrativeMessage({ 
-                content: `The ${this.data.sprite.name} missed ${attackedCharacter.data.name}`, 
+            game.narrativeMessages.push(new NarrativeMessage({
+                content: `The ${this.data.sprite.name} missed ${attackedCharacter.data.name}`,
                 color: Color.TRANSPARENT
-             }))
+            }))
             return
         }
 
-        attackedCharacter.say("ouch!",game)
+        attackedCharacter.say("ouch!", game)
         attackedCharacter.takeDamage(1)
     }
 

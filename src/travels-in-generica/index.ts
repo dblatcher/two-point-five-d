@@ -7,7 +7,7 @@ import { level2 } from "./level2"
 import { characters } from "./characters";
 import { spriteSheets as sharedSheets } from "@/instances/sprites";
 import { spriteSheets as localSheets } from "./sprites";
-import { Quest } from "@/rpg-classes/Quest";
+import { Quest, QuestGoal } from "@/rpg-classes/Quest";
 import { itemTypes } from "./itemTypes";
 
 const spriteSheets = [
@@ -31,6 +31,12 @@ const questOne = new Quest({
     itemsGivenOnAccept: [
         itemTypes.key,
         itemTypes.apple,
+    ],
+    goals: [
+        new QuestGoal({
+            narrative: "kill everything in level two",
+            allMonstersKilled: level2
+        }),
     ]
 })
 

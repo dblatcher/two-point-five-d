@@ -11,6 +11,11 @@
       >
         <summary>{{ quest.data.title }}</summary>
         {{ quest.data.description }}
+        <ul>
+          <li v-for="(goal, index) in quest.data.goals" :key="index" :class="{'done': checkQuestFinished(goal)}">
+              {{goal.data.narrative}}
+          </li>
+        </ul>
       </details>
     </article>
   </div>
@@ -19,7 +24,7 @@
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import gameStore from "@/store";
-import { Quest } from "@/rpg-classes/Quest";
+import { Quest, QuestGoal } from "@/rpg-classes/Quest";
 
 @Options({
   components: {},
@@ -35,6 +40,10 @@ export default class QuestWindow extends Vue {
     this.$store.getters.timestamp;
     const { quests: allQuests = [] } = this.$store.state.game.data;
     return allQuests.filter((quest) => quest.data.state === "TAKEN");
+  }
+
+  checkQuestFinished(goal:QuestGoal): boolean {
+    return goal.testComplete(this.$store.state.game)
   }
 }
 </script>
@@ -71,6 +80,31 @@ export default class QuestWindow extends Vue {
     width: 100%;
     box-sizing: border-box;
     text-align: left;
+
+    summary {
+      color: aqua;
+    }
+
+    ul {
+      padding-inline-start: 20px;
+      margin: 0;
+    }
+
+    li {
+      list-style-type: '\2610';
+        padding-inline-start: 10px;
+
+      &::marker{
+        color: aqua;
+        font-size: 150%;
+        font-weight: bold;
+        display: inline-block;
+      }
+    }
+
+    li.done {
+      list-style-type: '\2611';
+    }
   }
 
   summary {
