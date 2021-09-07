@@ -4,7 +4,6 @@ import { Frame, Sprite, SpriteSheet } from "@/canvas/Sprite"
 const spriteSheets: SpriteSheet[] = []
 
 const sheets = {
-    //https://opengameart.org/content/lpc-medieval-fantasy-character-sprites
 
     orc: new SpriteSheet("orc", require("./assets/orc.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
     smith: new SpriteSheet("smith", require("./assets/smith.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 21 }),
