@@ -16,8 +16,6 @@ import { itemTypes } from "./itemTypes"
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
 import { Sky } from "@/game-classes/Sky";
-import { Monster } from "@/rpg-classes/Monster";
-import { CharacterStats } from "@/rpg-classes/CharacterStats";
 
 import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
@@ -85,29 +83,35 @@ const level1: Level = new Level({
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.farmerSprite,
+            sprite: sprites.smith,
+            vantage: new Vantage({ x: 1.5, y: 7.5, direction: Direction.east }),
+            talkMessage: "Wanna buy a hammer?",
+            name: "George the blacksmith",
+        }),
+        new NonPlayerCharacter({
+            sprite: sprites.farmer2,
             behaviour:new Behaviour(decisionFunctions.wanderAround),
             vantage: new Vantage({ x: 8.25, y: 4.25, direction: Direction.north }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",
         }),
         new NonPlayerCharacter({
-            sprite: sprites.smith,
+            sprite: sprites.farmer,
             behaviour: new Behaviour(decisionFunctions.walkInCircle),
             vantage: new Vantage({ x: 6.25, y: 6.25, direction: Direction.west }),
-            talkMessage: "Wanna buy a hammer?",
-            name: "Roger the smith",
+            talkMessage: "I should get back to the cows.",
+            name: "Roger the herdsman",
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.fighterSprite,
+            sprite: sprites.armedMan,
             vantage: new Vantage({ x: 10.75, y: 5.75, direction: Direction.north }),
             talkMessage: "They aren't offering enough money for me to fight any monsters.",
             name: "Harry Longblade",
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.guardSprite,
+            sprite: sprites.guard2,
             vantage: new Vantage({ x: 5.25, y: 7.25, direction: Direction.north }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
@@ -115,7 +119,7 @@ const level1: Level = new Level({
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.guardSprite,
+            sprite: sprites.guard3,
             vantage: new Vantage({ x: 4.5, y: 3.5, direction: Direction.south }),
             talkMessage: "I'm just a guard.",
             name: "Corporal Colin",
