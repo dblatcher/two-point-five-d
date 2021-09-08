@@ -44,28 +44,32 @@ class NonPlayerCharacter extends Actor {
         this.actionQueue.push(new DoAction(animationName, time))
     }
 
-    getQuestsICanGive(game: Game): Quest[] {
+    getQuestsWhichICan(hookAction: string, questState: string, game: Game): Quest[] {
         const { questHooks = [] } = this.data
         const { quests = [] } = game.data;
         const myQuests: Quest[] = [];
 
-        questHooks.filter(hook => hook.data.action == "GIVE").forEach(questHook => {
+        questHooks.filter(hook => hook.data.action == hookAction).forEach(questHook => {
             const matchingQuest = quests.find(quest => quest.data.id === questHook.data.questId)
             if (matchingQuest) {
                 myQuests.push(matchingQuest)
             }
         })
 
-        return myQuests.filter(quest => quest.data.state === "NOT_TAKEN")
+        return myQuests.filter(quest => quest.data.state === questState)
     }
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {
 
-        const questsAvailable = this.getQuestsICanGive(game)
+        const questsAvailable = this.getQuestsWhichICan("GIVE", "NOT_TAKEN", game)
+        const questsGiven = this.getQuestsWhichICan("REWARD", "TAKEN", game)
+        const questCompleted = questsGiven.filter(quest => quest.checkIfFinished(game))[0];
 
-
-        if (questsAvailable.length > 0) {
-            const questOnOffer = questsAvailable[0] // to do - choose multiple quests
+        // to do - handle multiple quests
+        if (questCompleted) {
+            game.data.intersitial = questCompleted.markComplete().createCompleteDialogue(this);
+        } else if (questsAvailable.length > 0) {
+            const questOnOffer = questsAvailable[0]
             game.data.intersitial = questOnOffer.createOfferDialogue(this);
 
         } else if (this.data.talkMessage) {

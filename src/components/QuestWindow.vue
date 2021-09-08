@@ -9,10 +9,10 @@
         :key="quest.data.id"
         class="content"
       >
-        <summary>{{ quest.data.title }}</summary>
+        <summary>{{ quest.data.title }} ( {{countFinishedGoals(quest)}} / {{quest.data.goals.length}})</summary>
         {{ quest.data.description }}
         <ul>
-          <li v-for="(goal, index) in quest.data.goals" :key="index" :class="{'done': checkQuestFinished(goal)}">
+          <li v-for="(goal, index) in quest.data.goals" :key="index" :class="{'done': checkGoalFinished(goal)}">
               {{goal.data.narrative}}
           </li>
         </ul>
@@ -42,8 +42,12 @@ export default class QuestWindow extends Vue {
     return allQuests.filter((quest) => quest.data.state === "TAKEN");
   }
 
-  checkQuestFinished(goal:QuestGoal): boolean {
+  checkGoalFinished(goal:QuestGoal): boolean {
     return goal.testComplete(this.$store.state.game)
+  }
+
+  countFinishedGoals(quest:Quest):number {
+    return quest.data.goals.filter(goal => this.checkGoalFinished(goal)).length
   }
 }
 </script>

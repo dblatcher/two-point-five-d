@@ -25,16 +25,17 @@ const questOne = new Quest({
     id: 'questOne',
     state:'NOT_TAKEN',
     title:"Purge the crypt",
-    description:"The dead have risen in the church crypt. Rather embarassing, actually. Please put them to rest by smashing their bones.",
-    acceptMessage: "Thank you - here is the key to the crypt. The stairs down are behind the door over there.",
-    refuseMessage: "Oh well... maybe someone braver will come along. hopefully before the bishop's inspection.",
+    description:"clear the crypt of Saint Bernard's chapel of undead and report back to Father Dunlaw.",
     itemsGivenOnAccept: [
         itemTypes.key,
         itemTypes.apple,
     ],
+    itemsGivenOnComplete: [
+        itemTypes.silverSword
+    ],
     goals: [
         new QuestGoal({
-            narrative: "kill everything in level two",
+            narrative: "destroy skeletons",
             allMonstersKilled: level2
         }),
     ]

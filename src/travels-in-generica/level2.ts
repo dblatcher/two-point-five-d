@@ -97,26 +97,26 @@ const level2: Level = new Level({
         }),
 
         new Monster({
-            vantage: new Vantage({ x: 4.5, y: 2.5, direction: Direction.south }),
+            vantage: new Vantage({ x: 0.5, y: 2.5, direction: Direction.south }),
             sprite: sprites.skeletonArcher,
             defaultAttackAnimation: "ATTACK_SWING",
-            stats: new CharacterStats([10, 10], [10, 10]),
+            stats: new CharacterStats([1, 10], [10, 10]),
             behaviour: new Behaviour(monsterDecisionFunctions.standAndFight),
         }),
 
-        new Monster({
-            vantage: new Vantage({ x: 0.5, y: 6.5, direction: Direction.north }),
-            sprite: sprites.skeletonSpearman,
-            stats: new CharacterStats([10, 10], [10, 10]),
-            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveClockwise),
-        }),
+        // new Monster({
+        //     vantage: new Vantage({ x: 0.5, y: 6.5, direction: Direction.north }),
+        //     sprite: sprites.skeletonSpearman,
+        //     stats: new CharacterStats([10, 10], [10, 10]),
+        //     behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveClockwise),
+        // }),
 
-        new Monster({
-            vantage: new Vantage({ x: 4.5, y: 6.5, direction: Direction.north }),
-            sprite: sprites.skeletonSpearman,
-            stats: new CharacterStats([10, 10], [10, 10]),
-            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
-        }),
+        // new Monster({
+        //     vantage: new Vantage({ x: 4.5, y: 6.5, direction: Direction.north }),
+        //     sprite: sprites.skeletonSpearman,
+        //     stats: new CharacterStats([10, 10], [10, 10]),
+        //     behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
+        // }),
 
     ],
     items: [

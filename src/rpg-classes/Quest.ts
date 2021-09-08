@@ -46,9 +46,9 @@ interface QuestData {
     title: string
     description: string
     id: string
-    acceptMessage?: string
-    refuseMessage?: string
+
     itemsGivenOnAccept?: ItemType[]
+    itemsGivenOnComplete?: ItemType[]
     goals: QuestGoal[]
 }
 
@@ -59,18 +59,61 @@ class Quest {
         this.data = data
     }
 
-    createOfferDialogue(npc: NonPlayerCharacter): Intersitial {
+    checkIfFinished(game: Game): boolean {
+        return !this.data.goals.find(goal => !goal.testComplete(game))
+    }
+
+    markComplete():Quest {
+        this.data.state = "SUCCESS"
+        return this
+    }
+
+    createCompleteDialogue(npc: NonPlayerCharacter): Intersitial {
+
+        const {questHooks = []} = npc.data
+        const hook = questHooks.find(hook => hook.data.questId === this.data.id && hook.data.action === "REWARD");
+
+        const content = hook?.data.message || `You have finished : ${this.data.title}!`
 
         return new Intersitial({
             role: "MESSAGE",
             heading: npc.data.name,
-            content: this.data.description,
+            content,
+            options: [{
+                buttonText:"ok",
+                response: game => {
+
+                    const { itemsGivenOnComplete = [] } = this.data
+                    itemsGivenOnComplete.forEach((itemType, index) => {
+                        const distanceRightOfCenter = (index / itemsGivenOnComplete.length) - .5
+                        game.createItemInfrontOfPlayer(itemType, distanceRightOfCenter, .3)
+                    })
+
+                    Intersitial.clearIntersitial(game)
+                }
+            }]
+        })
+    }
+
+    createOfferDialogue(npc: NonPlayerCharacter): Intersitial {
+
+        const {questHooks = []} = npc.data
+        const hook = questHooks.find(hook => hook.data.questId === this.data.id && hook.data.action === "GIVE");
+
+        const content = hook?.data.message || this.data.description
+        const acceptMessage = hook?.data.acceptMessage
+        const refuseMessage = hook?.data.refuseMessage
+
+        return new Intersitial({
+            role: "MESSAGE",
+            heading: npc.data.name,
+            content,
             options: [
                 {
                     buttonText: 'Accept Quest', response: (game) => {
                         this.data.state = "TAKEN"
-                        if (this.data.acceptMessage) {
-                            npc.say(this.data.acceptMessage, game)
+                        if (acceptMessage) {
+                            npc.say(acceptMessage, game)
                         }
                         npc.doAnimation("TALK", 16);
 
@@ -84,8 +127,8 @@ class Quest {
                 },
                 {
                     buttonText: 'Refuse Quest', response: (game) => {
-                        if (this.data.refuseMessage) {
-                            npc.say(this.data.refuseMessage, game)
+                        if (refuseMessage) {
+                            npc.say(refuseMessage, game)
                         }
                         npc.doAnimation("TALK", 16);
                         Intersitial.clearIntersitial(game)
@@ -99,7 +142,10 @@ class Quest {
 
 interface QuestHookData {
     questId: string
-    action: "GIVE" | "COMPLETE"
+    action: "GIVE" | "REWARD"
+    message?: string
+    acceptMessage?: string
+    refuseMessage?: string
 }
 
 class QuestHook {
