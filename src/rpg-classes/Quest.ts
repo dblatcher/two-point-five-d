@@ -63,24 +63,19 @@ class Quest {
         return !this.data.goals.find(goal => !goal.testComplete(game))
     }
 
-    markComplete():Quest {
+    markComplete(): Quest {
         this.data.state = "SUCCESS"
         return this
     }
 
-    createCompleteDialogue(npc: NonPlayerCharacter): Intersitial {
-
-        const {questHooks = []} = npc.data
-        const hook = questHooks.find(hook => hook.data.questId === this.data.id && hook.data.action === "REWARD");
-
-        const content = hook?.data.message || `You have finished : ${this.data.title}!`
-
+    createCompleteDialogue(npc: NonPlayerCharacter, questHook: QuestHook): Intersitial {
+        const { message } = questHook.data
         return new Intersitial({
             role: "MESSAGE",
             heading: npc.data.name,
-            content,
+            content: message,
             options: [{
-                buttonText:"ok",
+                buttonText: "ok",
                 response: game => {
 
                     const { itemsGivenOnComplete = [] } = this.data
@@ -91,23 +86,17 @@ class Quest {
 
                     Intersitial.clearIntersitial(game)
                 }
-            }]
+            }],
+            pausesTime: true
         })
     }
 
-    createOfferDialogue(npc: NonPlayerCharacter): Intersitial {
-
-        const {questHooks = []} = npc.data
-        const hook = questHooks.find(hook => hook.data.questId === this.data.id && hook.data.action === "GIVE");
-
-        const content = hook?.data.message || this.data.description
-        const acceptMessage = hook?.data.acceptMessage
-        const refuseMessage = hook?.data.refuseMessage
-
+    createOfferDialogue(npc: NonPlayerCharacter, questHook: QuestHook): Intersitial {
+        const { message, acceptMessage, refuseMessage } = questHook.data
         return new Intersitial({
             role: "MESSAGE",
             heading: npc.data.name,
-            content,
+            content: message,
             options: [
                 {
                     buttonText: 'Accept Quest', response: (game) => {
@@ -142,8 +131,8 @@ class Quest {
 
 interface QuestHookData {
     questId: string
-    action: "GIVE" | "REWARD"
-    message?: string
+    action: "GIVE" | "REWARD" | "REMIND"
+    message: string
     acceptMessage?: string
     refuseMessage?: string
 }

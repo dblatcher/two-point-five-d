@@ -149,6 +149,11 @@ const level1: Level = new Level({
                 }),
                 new QuestHook({
                     questId: "questOne",
+                    action: "REMIND",
+                    message: "How are you getting on in the crypt?"
+                }),
+                new QuestHook({
+                    questId: "questOne",
                     action: "REWARD",
                     message: "Bless you, my children. Now the dead can sleep easy again... as can I."
                 }),
