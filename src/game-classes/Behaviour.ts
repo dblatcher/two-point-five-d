@@ -56,7 +56,7 @@ function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Act
     else if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.BACK)
     } else {
-        return new WalkForward();
+        return new WalkForward(1,.05,false);
     }
 }
 
@@ -75,7 +75,7 @@ function wanderAround(actor: Actor, game: Game, behaviour: Behaviour): Action | 
     } else if (d6 >= 5) {
         return new ShiftAction({ x: .5, y: .5 })
     }
-    return new WalkForward(d6, .025);
+    return new WalkForward(d6, .025, false);
 }
 
 function walkInCircle(actor: Actor, game: Game, behaviour: Behaviour): Action | null {

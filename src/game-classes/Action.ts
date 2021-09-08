@@ -155,14 +155,16 @@ class WalkForward extends Action {
     shouldCancel: boolean
     distance: number
     speed: number
+    stubborn: boolean
 
-    constructor(distance = 1, speed = .05) {
+    constructor(distance = 1, speed = .05, stubborn = true) {
         super("WALK_FORWARD");
         this.destination = null
         this.location = null
         this.shouldCancel = false
         this.distance = distance
         this.speed = speed
+        this.stubborn = stubborn
     }
 
 
@@ -180,11 +182,21 @@ class WalkForward extends Action {
     }
 
     onContinue(actor: Actor, game: Game): void {
-        const { location, destination, speed } = this
+        const { location, destination, speed, stubborn } = this
         if (location && destination) {
-            if (game.data.level.hasSquareAheadBlockedByWall(location)) {
-                this.shouldCancel = true
-                return
+
+
+            if (stubborn) { // will only cancel if blocked by wall
+                if (game.data.level.hasSquareAheadBlockedByWall(location)) {
+                    this.shouldCancel = true
+                    return
+                }
+            } else { //will cancel if blocked by other anything, including other actors
+                const blockage = game.data.level.findBlockage(...location.coords, ...location.translate(location.data.direction).coords, actor, game)
+                if (blockage) {
+                    this.shouldCancel = true
+                    return
+                }
             }
         }
         actor.moveBy(speed, RelativeDirection.FORWARD, game)
