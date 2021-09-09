@@ -10,21 +10,55 @@
       <button @click="move('BACK')">&darr;</button>
       <button @click="move('RIGHT')">&rarr;</button>
     </div>
+    <key-watcher @keydown="handleKey" />
   </nav>
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { Vue, Options } from "vue-class-component";
+import KeyWatcher from "./KeyWatcher.vue";
 import store from "@/store";
 
+@Options({
+  components: {
+    KeyWatcher,
+  },
+})
 export default class Controls extends Vue {
   $store!: typeof store;
 
-  move(direction: string):void {
-    this.$store.dispatch("sendPlayerMovement", { action: "MOVE", direction: direction });
+  handleKey(key: string): void {
+    switch (key) {
+      case "w":
+      case "ArrowUp":
+        return this.move("FORWARD");
+      case "s":
+      case "ArrowDown":
+        return this.move("BACK");
+      case "a":
+        return this.move("LEFT");
+      case "d":
+        return this.move("RIGHT");
+      case "q":
+      case "ArrowLeft":
+        return this.turn("LEFT");
+      case "e":
+      case "ArrowRight":
+        return this.turn("RIGHT");
+    }
   }
-  turn(direction: string):void {
-    this.$store.dispatch("sendPlayerMovement", { action: "TURN", direction: direction });
+
+  move(direction: string): void {
+    this.$store.dispatch("sendPlayerMovement", {
+      action: "MOVE",
+      direction: direction,
+    });
+  }
+  turn(direction: string): void {
+    this.$store.dispatch("sendPlayerMovement", {
+      action: "TURN",
+      direction: direction,
+    });
   }
 }
 </script>
@@ -32,7 +66,7 @@ export default class Controls extends Vue {
 <style scoped lang="scss">
 nav {
   display: block;
-  margin:0;
+  margin: 0;
 
   div {
     display: flex;
