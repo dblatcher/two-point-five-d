@@ -41,6 +41,7 @@
         >
       </div>
     </section>
+    <key-watcher @keydown="handleKey" />
   </article>
 </template>
 
@@ -49,6 +50,7 @@ import { Options, Vue } from "vue-class-component";
 import gameStore from "@/store";
 import EquipmentWindow from "./EquipmentWindow.vue";
 import StatBars from "./StatBars.vue";
+import KeyWatcher from "./KeyWatcher.vue";
 import { Character } from "@/rpg-classes/Character";
 import { toRaw } from "@vue/reactivity";
 import { Game } from "@/game-classes/Game";
@@ -61,7 +63,7 @@ interface styleObject {
   props: {
     open: Number,
   },
-  components: { EquipmentWindow, StatBars },
+  components: { EquipmentWindow, StatBars, KeyWatcher },
   emits: ["chooseOpen"],
 })
 export default class CharacterTags extends Vue {
@@ -69,7 +71,17 @@ export default class CharacterTags extends Vue {
   open!: number;
   declare $refs: { canvas: HTMLCanvasElement };
 
-  handleChooseOpenCharacter(index: number): void {
+  handleKey(key: string): void {
+    const keyValue = Number(key);
+    if (isNaN(keyValue) || keyValue < 1 || keyValue > this.characters.length) {
+      return;
+    }
+
+    const index = keyValue - 1;
+    this.handleChooseOpenCharacter(this.open === index ? null : index);
+  }
+
+  handleChooseOpenCharacter(index: number | null): void {
     this.$emit("chooseOpen", index);
   }
 
@@ -148,7 +160,6 @@ article {
       background-color: black;
       border-radius: 1rem;
       display: inline-block;
-      
     }
   }
 }
