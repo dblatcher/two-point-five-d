@@ -3,10 +3,11 @@ import { createStore } from 'vuex'
 import { Item } from '@/game-classes/Item'
 import { Character } from '@/rpg-classes/Character'
 import { FeedbackToUI } from '@/game-classes/Game'
+import { AttackOption } from '@/rpg-classes/AttackOption'
 
 import { game, spriteSheets } from '@/travels-in-generica'
-import { AttackOption } from '@/rpg-classes/AttackOption'
 // import { game, spriteSheets } from '@/duck-puzzle'
+// import { game, spriteSheets } from '@/test-world'
 
 
 export default createStore({
