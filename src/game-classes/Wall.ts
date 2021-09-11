@@ -1,5 +1,5 @@
 import { ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
-import { getPatternFill } from "@/canvas/patterns";
+import { getPatternFill, getUpperLevelPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "../canvas/Color";
@@ -75,18 +75,34 @@ class Wall extends Position {
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, defaultSprite?: Sprite): void {
 
         const { place, relativeDirection = RelativeDirection.BACK, isReverseOfWall } = renderInstruction
-        const { patternSprite = defaultSprite, features = [] } = this.data
-        const wallShapePoints: Point[] = getMappedPoints(relativeDirection, this.data.shape || Wall.defaultShape, place);
-        const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place)
-
+        const { patternSprite = defaultSprite, features = [], shape = Wall.defaultShape } = this.data
+        const wallShapePoints = getMappedPoints(relativeDirection, shape, place);
+        const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place);
 
         let fillStyle: CanvasPattern | string = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
-        const strokeStyle = Color.BLACK.css 
+
+
+        const isDoubleHeight = shape.some(point => point.y > 1);
+        if (patternSprite && isDoubleHeight) {
+            const mappedUpperLevel = getMappedPoints(relativeDirection, Wall.upperLevel, place);
+            const upperLevelFillStyle = getUpperLevelPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, mappedUpperLevel, undefined, "no-repeat") || fillStyle
+
+            const topHalfShape = shape.map(point => {
+                return { x: point.x, y: Math.max(1, point.y) }
+            })
+
+            const mappedTopHalfShape = getMappedPoints(relativeDirection, topHalfShape, place)
+            plotPolygon(ctx, convertFunction, mappedTopHalfShape, { strokeStyle: 'transparent', fillStyle: upperLevelFillStyle })
+        }
+
+        const strokeStyle = Color.BLACK.css
 
         if (patternSprite) {
-            fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints, undefined, "repeat") || fillStyle
+            fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints, undefined, "no-repeat") || fillStyle
         }
+
         plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle, fillStyle })
+
 
         features.forEach(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return }
@@ -137,7 +153,7 @@ class Wall extends Position {
         const featureToDraw = features.find(feature => feature.isDrawnInMap);
 
         if (featureToDraw) {
-            featureToDraw.drawInMap(ctx,gridSize,this,this.data.place)
+            featureToDraw.drawInMap(ctx, gridSize, this, this.data.place)
         } else {
 
             const convert: ConvertFunction = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];
@@ -168,6 +184,14 @@ class Wall extends Position {
             { x: 1, y: 1 },
             { x: 1, y: 0 },
             { x: 0, y: 0 },
+        ]
+    }
+    static get upperLevel(): Point[] {
+        return [
+            { x: 0, y: 2 },
+            { x: 1, y: 2 },
+            { x: 1, y: 1 },
+            { x: 0, y: 1 },
         ]
     }
 

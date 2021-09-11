@@ -14,6 +14,19 @@ function flipImage(source: CanvasImageSource): HTMLCanvasElement {
     return board
 }
 
+function flipImageVertically(source: CanvasImageSource): HTMLCanvasElement {
+    const board = document.createElement('canvas')
+    if (!source.width || !source.height) { return board }
+    if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
+
+    const ctx = board.getContext('2d') as CanvasRenderingContext2D
+    board.setAttribute('width', source.width.toString())
+    board.setAttribute('height', source.height.toString())
+    ctx.scale(1, -1);
+    ctx.drawImage(source, 0, -source.height)
+    return board
+}
+
 function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: number, rows: number, cols: number): HTMLCanvasElement {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
@@ -181,5 +194,5 @@ function transformSpriteImage(image: HTMLImageElement | HTMLCanvasElement, trans
 }
 
 export {
-    flipImage, cutFrameFromGridSheet, scaleTo, perspectiveSkew, resizeFrame, transformSpriteImage
+    flipImage, flipImageVertically, cutFrameFromGridSheet, scaleTo, perspectiveSkew, resizeFrame, transformSpriteImage
 }

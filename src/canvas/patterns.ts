@@ -2,7 +2,7 @@ import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Sprite } from "@/canvas/Sprite";
 import { Wall } from "@/game-classes/Wall";
 import { ConvertFunction, Point } from "./canvas-utility";
-import { perspectiveSkew, resizeFrame, scaleTo } from "./manipulations";
+import { flipImage, flipImageVertically, perspectiveSkew, resizeFrame, scaleTo } from "./manipulations";
 import { RenderInstruction } from "./RenderInstruction";
 import { TextBoard } from "./TextBoard";
 
@@ -20,6 +20,28 @@ function getPatternFill(
     let image: CanvasImageSource;
     try {
         image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
+    } catch (error) {
+        console.warn(error.message)
+        return null
+    }
+
+    return convertToPattern(image, convertedWallDimensions, topLeft, ctx, repeat)
+}
+
+function getUpperLevelPatternFill(
+    ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction,
+    tickCount: number,
+    sprite: Sprite, animationName: string, fullWallPoints: Point[],
+    transitionPhase?:number,
+    repeat?:string
+): CanvasPattern | null {
+
+    const { topLeft, convertedWallDimensions } = getMeasurements(fullWallPoints, convertFunction);
+
+    let image: CanvasImageSource;
+    try {
+        image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
+        image = flipImage (flipImageVertically(image))
     } catch (error) {
         console.warn(error.message)
         return null
@@ -122,4 +144,4 @@ function drawTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFu
 }
 
 
-export { getPatternFill, drawTextImage, getTextPatternFill }
+export { getPatternFill, drawTextImage, getTextPatternFill,getUpperLevelPatternFill }
