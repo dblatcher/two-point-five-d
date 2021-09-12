@@ -223,6 +223,31 @@ class Sprite {
         return new Sprite(name, config)
     }
 
+    static animatedPatternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}, gridCells?: { row?: number, col?: number }[]): Sprite {
+
+        if (!gridCells) {
+            gridCells = []
+            for (let i = 0; i < (sheet.config.cols || 1); i++) {
+                for (let j = 0; j < (sheet.config.rows || 1); j++) {
+                    gridCells.push({ row: j, col: i })
+                }
+            }
+        }
+
+        config.animations = new Map<string, Frame[]>()
+            .set(`${Sprite.defaultWallAnimation}`,
+                gridCells.map(gridCell => { return { sheet, transforms: ["RESIZE_CENTER"], row: gridCell.row, col: gridCell.col } })
+            )
+            .set(`${Sprite.defaultWallAnimation}_LEFT`,
+                gridCells.map(gridCell => { return { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"], row: gridCell.row, col: gridCell.col } })
+            )
+            .set(`${Sprite.defaultWallAnimation}_RIGHT`,
+                gridCells.map(gridCell => { return { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], row: gridCell.row, col: gridCell.col } })
+            );
+
+        return new Sprite(name, config)
+    }
+
     static itemSpriteOneFrame(name: string, frames: Frame[] | Frame, config: SpriteConfig = {}): Sprite {
 
         const framesInArray = Array.isArray(frames) ? frames : [frames];

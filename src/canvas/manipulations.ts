@@ -33,8 +33,8 @@ function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: numb
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
 
     const ctx = board.getContext('2d') as CanvasRenderingContext2D
-    const frameWidth = source.height / rows;
-    const frameHeight = source.width / cols;
+    const frameHeight = source.height / rows;
+    const frameWidth = source.width / cols;
     board.setAttribute('width', frameWidth.toString())
     board.setAttribute('height', frameHeight.toString())
     ctx.drawImage(source, frameWidth * col, frameHeight * row, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight)

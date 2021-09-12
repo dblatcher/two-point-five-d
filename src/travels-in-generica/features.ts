@@ -1,4 +1,5 @@
 import { sprites, textBoards } from "@/instances/sprites";
+import { sprites as mySprites } from "./sprites";
 import { InteractableWallFeature, WallFeature } from "@/game-classes/WallFeature";
 import { makeTunnel } from "@/game-classes/Reaction";
 import { Color } from "@/canvas/Color";
@@ -29,6 +30,10 @@ const brownCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'saddlebrown'
 const grayCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } });
 const redCeiling = new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } });
 
+const torch = new WallFeature({
+    sprite: mySprites.torch,
+})
+
 export {
-    painting1, staircaseA, paintingClipped, poemBoard, advertBoard, brownCeiling, grayCeiling, redCeiling
+    painting1, staircaseA, paintingClipped, poemBoard, advertBoard, brownCeiling, grayCeiling, redCeiling,torch
 }

@@ -34,6 +34,14 @@ const hut4 = makeHut(6, 8, new Color(128, 90, 90), Direction.north)
 const hut5 = makeHut(10, 3, new Color(128, 90, 90), Direction.west)
 
 church.walls[0].data.features = [features.staircaseA.down]
+hut3.walls[0].data.features = [features.torch]
+hut3.walls[1].data.features = [features.torch]
+hut3.walls[2].data.features = [features.torch]
+hut3.walls[2].data.features = [features.torch]
+hut3.walls[3].data.features = [features.torch]
+hut3.walls[4].data.features = [features.torch]
+hut3.walls[5].data.features = [features.torch]
+
 
 const level1: Level = new Level({
     height: 10, width: 15,

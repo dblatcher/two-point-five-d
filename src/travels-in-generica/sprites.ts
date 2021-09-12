@@ -26,6 +26,10 @@ const sheets = {
 
     //https://opengameart.org/content/32-weapon-icons
     weapons: new SpriteSheet("weapons", require("./assets/new-weapons.png"), spriteSheets, { pattern: "GRID", cols: 17, rows: 2 }),
+
+    //https://opengameart.org/content/lpc-animated-torch
+    torch: new SpriteSheet("torch", require("./assets/animated_torch.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 1, }),
+
 }
 
 
@@ -86,7 +90,7 @@ function makeULpcSprite(name: string, sheet: SpriteSheet): Sprite {
             .set("TALK_LEFT", makeMixedRow(1, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], sheet))
             .set("TALK_BACK", makeMixedRow(2, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], sheet))
             .set("TALK_RIGHT", makeMixedRow(3, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], sheet))
-            
+
     })
 }
 
@@ -112,6 +116,8 @@ const sprites = {
     silverSword: Sprite.itemSpriteOneFrame("silverSword", { sheet: sheets.weapons, col: 1, row: 0 }),
     hammer: Sprite.itemSpriteOneFrame("hammer", { sheet: sheets.weapons, col: 14, row: 0 }),
     stick: Sprite.itemSpriteOneFrame("stick", { sheet: sheets.weapons, col: 3, row: 1 }),
+
+    torch: Sprite.animatedPatternSprite('torch', sheets.torch, { size: { x: .25, y: .5 } })
 }
 
 export {
