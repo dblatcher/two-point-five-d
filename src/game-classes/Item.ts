@@ -8,6 +8,7 @@ import { Vantage } from "./Vantage";
 import { ItemType } from "./ItemType";
 import { Point } from "@/canvas/canvas-utility";
 import { Actor } from "@/game-classes/Actor";
+import { Blockage } from "./Level";
 
 
 interface ItemConfig {
@@ -72,7 +73,7 @@ class Item {
         ctx.clearRect(0, 0, width, height)
     }
 
-    handleInteraction(actor: Vantage|Actor, game: Game): void {
+    handleInteraction(actor: Vantage | Actor, game: Game): void {
         const { items } = game.data.level.data;
         if (!game.data.itemInHand) {
             this.takeIntoHand(items, game)
@@ -145,9 +146,23 @@ class Item {
             this.data.altitude = Math.max(0, this.data.altitude - .05)
         }
         if (this.data.momentum && this.data.momentum > 0) {
-            this.data.vantage?.moveAbsoluteBy(.15, this.data.vantage.data.direction, game)
             this.data.momentum = Math.max(0, this.data.momentum - 1)
+            const blockage = this.data.vantage?.moveAbsoluteBy(.15, this.data.vantage.data.direction, game)
+
+            if (blockage) { this.handleImpactWith(blockage, game) }
         }
+    }
+
+    handleImpactWith(blockage: Blockage, game:Game): void {
+        console.log(blockage)
+
+        switch (blockage.blockageClass) {
+            case Actor: 
+                blockage.actor?.handleBeingHitByFlyingItem(this,game);
+                break;
+        }
+
+        this.data.momentum = 0
     }
 }
 

@@ -2,6 +2,7 @@ import { Direction } from './Direction'
 import { ConvertFunction, mapPointOnFloor, PlotConfig, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility';
 import { Game } from './Game';
 import { RenderInstruction } from '@/canvas/RenderInstruction';
+import { Blockage } from './Level';
 
 
 interface PositionConfig {
@@ -58,19 +59,20 @@ class Position {
         this.data.y = Position.roundCoordinate(place.y)
     }
 
-    moveAbsolute(direction: Direction, game: Game, ignoreWalls = false): void {
+    moveAbsolute(direction: Direction, game: Game, ignoreWalls = false): Blockage | undefined {
 
         const targetX = this.gridX + (direction.x);
         const targetY = this.gridY + (direction.y);
 
         if (!ignoreWalls) {
-            if (game.data.level.isBlocked(this.gridX, this.gridY, targetX, targetY, this, game)) { return }
+            const blockage = game.data.level.findBlockage(this.gridX, this.gridY, targetX, targetY, this, game);
+            if (blockage) { return blockage }
         }
 
         this.changePosition({ x: targetX + this.squareX, y: targetY + this.squareY }, game)
     }
 
-    moveAbsoluteBy(distance: number, direction: Direction, game: Game, ignoreWalls = false): void {
+    moveAbsoluteBy(distance: number, direction: Direction, game: Game, ignoreWalls = false): Blockage | undefined {
         const target = new Position({
             x: this.data.x + distance * direction.x,
             y: this.data.y + distance * direction.y
@@ -91,12 +93,16 @@ class Position {
             } while (!nextPositionInPath.isInSameSquareAs(target) && failsafe < 100);
 
             let i = 0;
+            let blockage;
             for (i = 0; i < squaresCovered.length - 1; i++) {
-                if (game.data.level.isBlocked(
+                blockage = (game.data.level.findBlockage(
                     squaresCovered[i].gridX, squaresCovered[i].gridY,
                     squaresCovered[i + 1].gridX, squaresCovered[i + 1].gridY,
                     this, game
-                )) { return }
+                ));
+                if (blockage) {
+                    return blockage
+                }
             }
         }
 
@@ -114,7 +120,7 @@ class Position {
     }
 
     isAlmostExactlyTheSamePlaceAs(otherPosition: Position, tolerance = .05): boolean {
-        if (!this.isInSameSquareAs(otherPosition)) {return false}
+        if (!this.isInSameSquareAs(otherPosition)) { return false }
         return Math.abs(this.squareX - otherPosition.squareX) < tolerance && Math.abs(this.squareY - otherPosition.squareY) < tolerance
     }
 

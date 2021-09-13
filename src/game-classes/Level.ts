@@ -22,6 +22,15 @@ interface VictoryTest {
     (level: Level, game: Game): boolean
 }
 
+interface Blockage {
+    edgeOfLevel?: boolean
+    wall?: Wall
+    squareWithFeature?: SquareWithFeatures
+    actor?: Actor
+    playerVantage?: PlayerVantage
+    blockageClass?: typeof Wall | typeof SquareWithFeatures | typeof Actor | typeof PlayerVantage
+}
+
 interface LevelConfig {
     width: number
     height: number
@@ -117,16 +126,9 @@ class Level {
  * @param targetY the integer grid Y of the target position
  * @param movingActor 
  * @param game 
- * @returns whether the way is blocked
+ * @returns the blockage, or null
  */
-    findBlockage(startX: number, startY: number, targetX: number, targetY: number, movingActor: Actor | Position, game: Game): {
-        edgeOfLevel?: boolean
-        wall?: Wall
-        squareWithFeature?: SquareWithFeatures
-        actor?: Actor
-        playerVantage?: PlayerVantage
-        blockageClass?: typeof Wall | typeof SquareWithFeatures | typeof Actor | typeof PlayerVantage
-    } | null {
+    findBlockage(startX: number, startY: number, targetX: number, targetY: number, movingActor: Actor | Position, game: Game): Blockage | undefined {
         const { squaresWithFeatures = [], walls = [], actors = [] } = this.data
         const { playerBlocksPassage } = game.rules
 
@@ -191,7 +193,7 @@ class Level {
             }
         }
 
-        return null
+        return undefined
     }
 
     hasWallInFace(vantage: Vantage): boolean {
@@ -450,4 +452,4 @@ class Level {
 }
 
 
-export { Level, LevelConfig }
+export { Level, LevelConfig, Blockage }

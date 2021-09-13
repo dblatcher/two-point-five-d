@@ -6,6 +6,8 @@ import { Game } from "@/game-classes/Game"
 import { RelativeDirection } from "@/game-classes/RelativeDirection"
 import { Vantage } from "@/game-classes/Vantage"
 import { Action, DoAction } from "./Action"
+import { Item } from "./Item"
+import { Blockage } from "./Level"
 
 interface ActorData {
     vantage?: Vantage
@@ -13,8 +15,8 @@ interface ActorData {
     behaviour?: Behaviour
     height?: number
     width?: number
-    blocksSquare?:boolean
-    canInteractWith?:boolean
+    blocksSquare?: boolean
+    canInteractWith?: boolean
 }
 
 class Actor {
@@ -73,7 +75,7 @@ class Actor {
 
         if (this.currentAction) {
             this.currentAction.tickCount++
-            this.currentAction.onContinue(this,game)
+            this.currentAction.onContinue(this, game)
             if (this.currentAction.isFinished) {
                 if (this.currentAction.somethingHappensOnFinish) {
                     this.currentAction.onFinish(this, game);
@@ -96,7 +98,11 @@ class Actor {
         console.log('handleInteraction', game.tickCount)
     }
 
-    move(relativeDirection: RelativeDirection, game: Game): void {
+    handleBeingHitByFlyingItem(item:Item, game:Game):void {
+        console.log(`${this.data.sprite.name} was hit by a ${item.data.type.name} going ${item.data.vantage?.data.direction.name}.`)
+    }
+
+    move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined {
         return this.data.vantage?.move(relativeDirection, game)
     }
     shiftWithinSquare(point: Point, game: Game): void {
@@ -105,7 +111,7 @@ class Actor {
     turn(relativeDirection: RelativeDirection): void {
         return this.data.vantage?.turn(relativeDirection)
     }
-    moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): void {
+    moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): Blockage | undefined {
         return this.data.vantage?.moveBy(distance, relativeDirection, game)
     }
 }

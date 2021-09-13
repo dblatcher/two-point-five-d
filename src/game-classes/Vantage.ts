@@ -4,6 +4,7 @@ import { Game } from './Game'
 import { RelativeDirection } from './RelativeDirection'
 import { ConvertFunction, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility'
 import { RenderInstruction } from '@/canvas/RenderInstruction'
+import { Blockage } from './Level'
 
 interface VantageConfig {
     x: number
@@ -21,12 +22,12 @@ class Vantage extends Position {
 
     get isVantage(): boolean { return true }
 
-    move(relativeDirection: RelativeDirection, game: Game): void {
-        this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
+    move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined  {
+        return this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
-    moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): void {
-        this.moveAbsoluteBy(distance, relativeDirection.getAbsoluteDirection(this.data.direction), game)
+    moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): Blockage | undefined  {
+        return this.moveAbsoluteBy(distance, relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
     turn(direction: RelativeDirection): void {

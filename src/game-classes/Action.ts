@@ -49,8 +49,8 @@ class MovementAction extends Action {
 
     start(actor: Vantage | Actor, game: Game): void {
         switch (this.action) {
-            case "MOVE": return actor.move(this.direction, game);
-            case "TURN": return actor.turn(this.direction);
+            case "MOVE": actor.move(this.direction, game); break
+            case "TURN": actor.turn(this.direction); break
         }
     }
 }
@@ -68,7 +68,7 @@ class MovementByAction extends Action {
     }
 
     start(actor: Vantage | Actor, game: Game): void {
-        return actor.moveBy(this.distance, this.direction, game);
+        actor.moveBy(this.distance, this.direction, game);
     }
 }
 
