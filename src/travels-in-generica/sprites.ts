@@ -30,6 +30,11 @@ const sheets = {
     //https://opengameart.org/content/lpc-animated-torch
     torch: new SpriteSheet("torch", require("./assets/animated_torch.png"), spriteSheets, { pattern: "GRID", cols: 9, rows: 1, }),
 
+    //https://opengameart.org/content/wall-tileset
+    woodenWalls: new SpriteSheet("woodenWalls", require("./assets/woodenwalls.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 3 }),
+
+    //https://opengameart.org/content/wooden-fence-2d
+    fence: new SpriteSheet("fence", require("./assets/fence_112x56.png"), spriteSheets),
 }
 
 
@@ -117,7 +122,11 @@ const sprites = {
     hammer: Sprite.itemSpriteOneFrame("hammer", { sheet: sheets.weapons, col: 14, row: 0 }),
     stick: Sprite.itemSpriteOneFrame("stick", { sheet: sheets.weapons, col: 3, row: 1 }),
 
-    torch: Sprite.animatedPatternSprite('torch', sheets.torch, { size: { x: .25, y: .5 } })
+    torch: Sprite.animatedPatternSprite('torch', sheets.torch, { size: { x: .25, y: .5 } }),
+
+    brownWoodWallOne: Sprite.patternSprite('brownWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 0 }),
+    yellowWoodWallOne: Sprite.patternSprite('yellowWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 1 }),
+    grayWoodWallOne: Sprite.patternSprite('grayWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 2 }),
 }
 
 export {

@@ -27,11 +27,12 @@ const door3 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', can
 const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
 
 const church = makeChurch(0, 0)
-const hut1 = makeHut(6, 0, new Color(120, 90, 90))
-const hut2 = makeHut(9, 6, new Color(120, 120, 90), Direction.north)
-const hut3 = makeHut(1, 6, new Color(128, 90, 90), Direction.east)
-const hut4 = makeHut(6, 8, new Color(128, 90, 90), Direction.north)
-const hut5 = makeHut(10, 3, new Color(128, 90, 90), Direction.west)
+const hut1 = makeHut(6, 0, Direction.south, sprites.grayWoodWallOne)
+const hut2 = makeHut(9, 6, Direction.north, sprites.brownWoodWallOne)
+const hut3 = makeHut(1, 6, Direction.east, sprites.yellowWoodWallOne)
+const hut4 = makeHut(6, 8, Direction.north, sprites.grayWoodWallOne)
+const hut5 = makeHut(10, 3, Direction.west, sprites.yellowWoodWallOne)
+const hut6 = makeHut(13, 7, Direction.west, sprites.brownWoodWallOne)
 
 church.walls[0].data.features = [features.staircaseA.down]
 hut3.walls[0].data.features = [features.torch]
@@ -60,6 +61,7 @@ const level1: Level = new Level({
         ...hut3.walls,
         ...hut4.walls,
         ...hut5.walls,
+        ...hut6.walls,
 
     ],
 
@@ -70,6 +72,7 @@ const level1: Level = new Level({
         ...hut3.ceilings,
         ...hut4.ceilings,
         ...hut5.ceilings,
+        ...hut6.ceilings,
     ],
 
     items: [
@@ -135,7 +138,7 @@ const level1: Level = new Level({
                 new QuestHook({
                     questId: "questOne",
                     action: "GIVE",
-                    message:"Old Father Dunlaw in there messed up the last rites on dead wizard and now the crypt is full of skeletons. Can you smash them up for him?",
+                    message: "Old Father Dunlaw in there messed up the last rites on dead wizard and now the crypt is full of skeletons. Can you smash them up for him?",
                     acceptMessage: "Great. This is key to the crypt, just go into the chapel and down the stair. Speak to Father Dunlaw when you're done.",
                     refuseMessage: "Whatever... I'm not going down there.",
                 }),
@@ -151,7 +154,7 @@ const level1: Level = new Level({
                 new QuestHook({
                     questId: "questOne",
                     action: "GIVE",
-                    message:"The dead have risen in the church crypt. Rather embarassing, actually. Please put them to rest by smashing their bones.",
+                    message: "The dead have risen in the church crypt. Rather embarassing, actually. Please put them to rest by smashing their bones.",
                     acceptMessage: "Thank you - here is the key to the crypt. The stairs down are behind the door over there.",
                     refuseMessage: "Oh well... maybe someone braver will come along. hopefully before the bishop's inspection.",
                 }),
