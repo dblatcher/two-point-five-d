@@ -95,13 +95,11 @@ class Wall extends Position {
             plotPolygon(ctx, convertFunction, mappedTopHalfShape, { strokeStyle: 'transparent', fillStyle: upperLevelFillStyle })
         }
 
-        const strokeStyle = Color.BLACK.css
-
         if (patternSprite) {
             fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints, undefined, "no-repeat") || fillStyle
         }
 
-        plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle, fillStyle })
+        plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle:fillStyle, fillStyle })
 
 
         features.forEach(feature => {

@@ -8,7 +8,7 @@ import { Controller } from "@/game-classes/Controller";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 
 
-import { doorway, spikey } from "@/instances/wallShapes"
+import { doorway, halfWall, spikey } from "@/instances/wallShapes"
 import { sprites as sharedSprites } from "@/instances/sprites";
 import * as features from "@/travels-in-generica/features"
 import { sprites } from "./sprites";
@@ -46,7 +46,7 @@ hut3.walls[5].data.features = [features.torch]
 
 const level1: Level = new Level({
     height: 10, width: 15,
-    startingVantage: { x: 3, y: 7, direction: Direction.north },
+    startingVantage: { x: 3, y: 7, direction: Direction.south },
 
     sky: new Sky({
         skyBaseColor: new Color(140, 150, 250),
@@ -183,7 +183,7 @@ const level1: Level = new Level({
 
         new Controller({ inputs: [keyhole], subject: door3, statusChangeOnInputTrigger: "OPEN" }),
     ]
-}).withWallsAround({ color: Color.GREEN, shape: spikey })
+}).withWallsAround({ patternSprite:sprites.fence,  })
 
 
 

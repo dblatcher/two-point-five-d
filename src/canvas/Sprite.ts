@@ -211,13 +211,13 @@ class Sprite {
 
         config.animations = new Map<string, Frame[]>()
             .set(`${Sprite.defaultWallAnimation}`, [
-                { sheet, transforms: ["RESIZE_CENTER"], ...gridCell },
+                { sheet, transforms: ["RESIZE_OFFSET"], ...gridCell },
             ])
             .set(`${Sprite.defaultWallAnimation}_LEFT`, [
-                { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"], ...gridCell },
+                { sheet, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"], ...gridCell },
             ])
             .set(`${Sprite.defaultWallAnimation}_RIGHT`, [
-                { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], ...gridCell },
+                { sheet, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"], ...gridCell },
             ]);
 
         return new Sprite(name, config)

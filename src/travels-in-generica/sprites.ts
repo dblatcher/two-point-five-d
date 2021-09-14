@@ -127,6 +127,7 @@ const sprites = {
     brownWoodWallOne: Sprite.patternSprite('brownWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 0 }),
     yellowWoodWallOne: Sprite.patternSprite('yellowWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 1 }),
     grayWoodWallOne: Sprite.patternSprite('grayWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 2 }),
+    fence: Sprite.patternSprite('fence', sheets.fence, { size: { x: 1, y: .5 }, offset: { x: 0.5, y: 0.75 } },),
 }
 
 export {
