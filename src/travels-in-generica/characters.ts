@@ -27,13 +27,15 @@ const drake = new Character({
     portrait: sprites.drake_portrait,
     inventory: [
         null, null,
-        null, null,
+        null, new Item({type:itemTypes.plateArmour}),
         null, null,
         null, null,
         null, null,
     ],
     equipmentSlots: Character.emptyEquipmentSlots()
-    .set("RIGHT_HAND", new Item({ type: itemTypes.hammer })),
+    .set("RIGHT_HAND", new Item({ type: itemTypes.hammer }))
+    .set("TORSO", new Item({ type: itemTypes.mailShirt }))
+    ,
 });
 
 const sally = new Character({

@@ -21,6 +21,8 @@ interface ConsumeableData {
 
 interface EquipableData {
     slotName: string
+    defenseBonus?: number
+    encumberance?: number
 }
 
 

@@ -68,6 +68,15 @@ class Character {
         return true
     }
 
+    get encumberance(): number {
+        let amount = 0
+        this.data.equipmentSlots?.forEach(item => {
+            if (!item) { return }
+            amount += item.data.type.data.equipable?.encumberance || 0
+        })
+        return amount;
+    }
+
     tick(game: Game): void {
 
         if (!this.canAct) {
@@ -87,15 +96,18 @@ class Character {
 
     attack(monster: Monster | null, option: AttackOption, game: Game): FeedbackToUI {
         if (!this.canAct) {
-            return new FeedbackToUI({ 
+            return new FeedbackToUI({
                 success: false,
                 message: `${this.data.name} cannot attak!`
             })
         }
 
-        const { staminaCost, damage, name: attackName, cooldown } = option.data;
+        const { staminaCost: baseStaminaCost, damage, name: attackName, cooldown } = option.data;
 
-        if (this.data.stats.stamina.current < staminaCost) {
+        const { encumberance } = this;
+        const totalStaminaCost = baseStaminaCost + encumberance;
+
+        if (this.data.stats.stamina.current < totalStaminaCost) {
             return new FeedbackToUI({
                 success: false,
                 message: `${this.data.name} is too exhausted to ${attackName}!`
@@ -109,7 +121,7 @@ class Character {
         }
 
         this.attackCooldown = cooldown;
-        this.data.stats.stamina.down(staminaCost);
+        this.data.stats.stamina.down(totalStaminaCost);
 
         if (!monster) {
             return new FeedbackToUI({

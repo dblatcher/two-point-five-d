@@ -37,7 +37,10 @@ const sheets = {
     fence: new SpriteSheet("fence", require("./assets/fence_112x56.png"), spriteSheets),
 
     //https://opengameart.org/content/lpc-tree-recolors
-    trees: new SpriteSheet("trees", require("./assets/green-trees.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 1 })
+    trees: new SpriteSheet("trees", require("./assets/green-trees.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 1 }),
+
+    //https://opengameart.org/content/loyalty-lies-equipment-upper-body-armour
+    armour: new SpriteSheet("armour", require("./assets/gear_armor.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 1 }),
 }
 
 
@@ -124,6 +127,8 @@ const sprites = {
     silverSword: Sprite.itemSpriteOneFrame("silverSword", { sheet: sheets.weapons, col: 1, row: 0 }),
     hammer: Sprite.itemSpriteOneFrame("hammer", { sheet: sheets.weapons, col: 14, row: 0 }),
     stick: Sprite.itemSpriteOneFrame("stick", { sheet: sheets.weapons, col: 3, row: 1 }),
+    mailShirt: Sprite.itemSpriteOneFrame("mailShirt", { sheet: sheets.armour, col: 7, row: 0 }),
+    plateArmour: Sprite.itemSpriteOneFrame("plateArmour", { sheet: sheets.armour, col: 8, row: 0 }),
 
     torch: Sprite.animatedPatternSprite('torch', sheets.torch, { size: { x: .25, y: .5 } }),
 
@@ -135,18 +140,18 @@ const sprites = {
         plotShift: { x: -0.1, y: 0.175 },
         size: { x: 1, y: 1 },
         animations: new Map<string, Frame[]>()
-            .set("STAND_FORWARD", [{ sheet: sheets.trees, col:1 }])
-            .set("STAND_BACK", [{ sheet: sheets.trees, col:1, transforms:["FLIP_H"] }])
-            .set("STAND_LEFT", [{ sheet: sheets.trees, col:0 }])
-            .set("STAND_RIGHT", [{ sheet: sheets.trees, col:0, transforms:["FLIP_H"] }])
+            .set("STAND_FORWARD", [{ sheet: sheets.trees, col: 1 }])
+            .set("STAND_BACK", [{ sheet: sheets.trees, col: 1, transforms: ["FLIP_H"] }])
+            .set("STAND_LEFT", [{ sheet: sheets.trees, col: 0 }])
+            .set("STAND_RIGHT", [{ sheet: sheets.trees, col: 0, transforms: ["FLIP_H"] }])
     }),
     treeTwo: new Sprite('treeTwo', {
         plotShift: { x: -0.025, y: 0.175 },
         size: { x: .7, y: .7 },
         animations: new Map<string, Frame[]>()
             .set("STAND", [{ sheet: sheets.trees, col: 1 }])
-            .set("STAND_BACK", [{ sheet: sheets.trees, col:1, transforms:["FLIP_H"] }])
-            .set("STAND_LEFT", [{ sheet: sheets.trees, col:1, transforms:["FLIP_H"] }])
+            .set("STAND_BACK", [{ sheet: sheets.trees, col: 1, transforms: ["FLIP_H"] }])
+            .set("STAND_LEFT", [{ sheet: sheets.trees, col: 1, transforms: ["FLIP_H"] }])
     })
 }
 

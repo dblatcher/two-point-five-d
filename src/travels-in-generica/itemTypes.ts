@@ -32,6 +32,18 @@ const bardHat = new ItemType({
     weight: 1,
 })
 
+const mailShirt = new ItemType({
+    name: "mail shirt", sprite: sprites.mailShirt,
+    weight: 8,
+    equipable: { slotName: 'TORSO', defenseBonus: 4, encumberance: 2 },
+})
+
+const plateArmour = new ItemType({
+    name: "plate armour", sprite: sprites.plateArmour,
+    weight: 14,
+    equipable: { slotName: 'TORSO', defenseBonus: 6, encumberance: 3 },
+})
+
 const silverSword = new ItemType({
     name: "silver sword", sprite: sprites.silverSword, figureDimensions: { height: .2, width: .25 },
     weight: 3,
@@ -78,8 +90,8 @@ const itemTypes = {
     apple,
     bean,
     key,
-    helmet, bardHat,
-    silverSword, hammer, stick
+    helmet, bardHat, mailShirt, plateArmour,
+    silverSword, hammer, stick,
 }
 
 export {
