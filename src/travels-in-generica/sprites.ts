@@ -35,6 +35,9 @@ const sheets = {
 
     //https://opengameart.org/content/wooden-fence-2d
     fence: new SpriteSheet("fence", require("./assets/fence_112x56.png"), spriteSheets),
+
+    //https://opengameart.org/content/lpc-tree-recolors
+    trees: new SpriteSheet("trees", require("./assets/green-trees.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 1 })
 }
 
 
@@ -128,6 +131,23 @@ const sprites = {
     yellowWoodWallOne: Sprite.patternSprite('yellowWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 1 }),
     grayWoodWallOne: Sprite.patternSprite('grayWoodWallOne', sheets.woodenWalls, {}, { row: 2, col: 2 }),
     fence: Sprite.patternSprite('fence', sheets.fence, { size: { x: 1, y: .5 }, offset: { x: 0.5, y: 0.75 } },),
+    treeOne: new Sprite('treeOne', {
+        plotShift: { x: -0.1, y: 0.175 },
+        size: { x: 1, y: 1 },
+        animations: new Map<string, Frame[]>()
+            .set("STAND_FORWARD", [{ sheet: sheets.trees, col:1 }])
+            .set("STAND_BACK", [{ sheet: sheets.trees, col:1, transforms:["FLIP_H"] }])
+            .set("STAND_LEFT", [{ sheet: sheets.trees, col:0 }])
+            .set("STAND_RIGHT", [{ sheet: sheets.trees, col:0, transforms:["FLIP_H"] }])
+    }),
+    treeTwo: new Sprite('treeTwo', {
+        plotShift: { x: -0.025, y: 0.175 },
+        size: { x: .7, y: .7 },
+        animations: new Map<string, Frame[]>()
+            .set("STAND", [{ sheet: sheets.trees, col: 1 }])
+            .set("STAND_BACK", [{ sheet: sheets.trees, col:1, transforms:["FLIP_H"] }])
+            .set("STAND_LEFT", [{ sheet: sheets.trees, col:1, transforms:["FLIP_H"] }])
+    })
 }
 
 export {

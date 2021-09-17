@@ -8,7 +8,7 @@ import { Controller } from "@/game-classes/Controller";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 
 
-import { doorway, halfWall, spikey } from "@/instances/wallShapes"
+import { doorway, spikey } from "@/instances/wallShapes"
 import { sprites as sharedSprites } from "@/instances/sprites";
 import * as features from "@/travels-in-generica/features"
 import { sprites } from "./sprites";
@@ -20,6 +20,7 @@ import { Sky } from "@/game-classes/Sky";
 import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
 import { QuestHook } from "@/rpg-classes/Quest";
+import { Figure } from "@/game-classes/Figure";
 
 
 
@@ -46,7 +47,7 @@ hut3.walls[5].data.features = [features.torch]
 
 const level1: Level = new Level({
     height: 10, width: 15,
-    startingVantage: { x: 3, y: 7, direction: Direction.south },
+    startingVantage: { x: 3, y: 7, direction: Direction.north },
 
     sky: new Sky({
         skyBaseColor: new Color(140, 150, 250),
@@ -63,6 +64,18 @@ const level1: Level = new Level({
         ...hut5.walls,
         ...hut6.walls,
 
+        new Wall({x:3, y:15, place:Direction.south, shape:spikey,color:Color.GREEN}),
+        new Wall({x:4, y:15, place:Direction.south, shape:spikey,color:Color.GREEN}),
+        new Wall({x:5, y:15, place:Direction.south, shape:spikey,color:Color.GREEN}),
+
+        new Wall({x:5, y:12, place:Direction.south, shape:spikey,color:Color.GREEN}),
+        new Wall({x:6, y:12, place:Direction.south, shape:spikey,color:Color.GREEN}),
+        new Wall({x:7, y:12, place:Direction.south, shape:spikey,color:Color.GREEN}),
+
+    ],
+
+    staticFigures:[
+        new Figure({x:4, y:7, direction:Direction.south, sprite:sprites.treeOne}),
     ],
 
     squaresWithFeatures: [
@@ -85,14 +98,6 @@ const level1: Level = new Level({
     ],
 
     actors: [
-
-        new NonPlayerCharacter({
-            sprite: sprites.orc,
-            behaviour: new Behaviour(decisionFunctions.moveClockwise),
-            vantage: new Vantage({ x: 10.5, y: 0.5, direction: Direction.south }),
-            name: "Roger the orc",
-        }),
-
         new NonPlayerCharacter({
             sprite: sprites.smith,
             vantage: new Vantage({ x: 1.5, y: 7.5, direction: Direction.east }),

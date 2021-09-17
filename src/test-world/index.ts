@@ -4,8 +4,15 @@ import { Level } from "@/game-classes/Level";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 import { Wall } from "@/game-classes/Wall";
 
-import { spriteSheets, sprites } from "@/instances/sprites";
+import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
+import { spriteSheets as gSpriteSheets, sprites as gSprites } from "@/travels-in-generica/sprites";
 import { tower, vaultDoorway } from "@/instances/wallShapes";
+import { Figure } from "@/game-classes/Figure";
+
+const spriteSheets = [
+    ...sharedSpriteSheets,
+    ...gSpriteSheets
+]
 
 const levels = [ 
     new Level({
@@ -19,6 +26,12 @@ const levels = [
         ],
         items:[
 
+        ],
+        staticFigures: [
+            new Figure({x:6.5, y:2.5, direction:Direction.south, sprite:gSprites.treeOne}),
+            new Figure({x:7.5, y:3.5, direction:Direction.south, sprite:gSprites.treeTwo}),
+            new Figure({x:8.5, y:4.5, direction:Direction.south, sprite:gSprites.treeOne}),
+            // new Figure({x:6.5, y:2.5, direction:Direction.south, sprite:sprites.testSprite}),
         ]
     })
 ]
@@ -27,7 +40,7 @@ const game = new Game(
     {
         level: levels[0],
         levels: levels,
-        playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 5, y: 0, direction: Direction.south }),
+        playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 7, y: 0, direction: Direction.south }),
         controllers: [],
         characters: [],
         activeCharacterIndex: undefined,

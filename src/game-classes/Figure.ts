@@ -18,7 +18,7 @@ interface FigureConfig {
 
     initialAnimation?: string
     altitude?: number
-    transitionPhase?:number
+    transitionPhase?: number
 }
 
 class Figure extends Vantage {
@@ -75,9 +75,11 @@ class Figure extends Vantage {
             ctx.fill()
         }
 
+        const bottomPastBaseline = sprite.plotShift?.y || 0
+
         const relativeDimensions: Dimensions = {
             x: topRight.x - topLeft.x,
-            y: centerOnFloor.y - topLeft.y
+            y: (centerOnFloor.y - topLeft.y) * (1 + bottomPastBaseline)
         }
 
         const topLeftAtAltitude: Point = {

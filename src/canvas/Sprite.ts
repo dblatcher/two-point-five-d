@@ -36,6 +36,7 @@ interface SpriteConfig {
     shadow?: Dimensions
     size?: Dimensions
     offset?: Point
+    plotShift?:Point
     animations?: Map<string, Frame[]>
     transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
 }
@@ -47,6 +48,7 @@ class Sprite {
     shadow?: Dimensions
     size?: Dimensions
     offset?: Point
+    plotShift?:Point
     transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
     loadedFrames: Map<string, CanvasImageSource>
 
@@ -61,6 +63,7 @@ class Sprite {
         this.shadow = config.shadow
         this.size = config.size
         this.offset = config.offset
+        this.plotShift = config.plotShift
         this.transforms = config.transforms
         this.loadedFrames = new Map<string, CanvasImageSource>();
     }

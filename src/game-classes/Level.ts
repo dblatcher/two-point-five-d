@@ -15,6 +15,7 @@ import { Vantage, VantageConfig } from "./Vantage";
 import { Wall } from "./Wall"
 import { Position } from "./Position"
 import { PlayerVantage } from "./PlayerVantage";
+import { Figure } from "./Figure";
 
 const renderingZoneFrames = false;
 
@@ -34,14 +35,15 @@ interface Blockage {
 interface LevelConfig {
     width: number
     height: number
-    walls: Wall[]
-    squaresWithFeatures?: SquareWithFeatures[]
     defaultWallPattern?: Sprite
     floorColor?: Color
     sky?: Sky
 
+    walls: Wall[]
+    squaresWithFeatures?: SquareWithFeatures[]
     items: Item[]
     actors?: Actor[]
+    staticFigures?: Figure[]
 
     controllers?: Controller[]
     victoryCondition?: VictoryTest
@@ -300,7 +302,7 @@ class Level {
     }
 
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
-        const { items = [], squaresWithFeatures = [], actors = [], walls = [] } = this.data
+        const { items = [], squaresWithFeatures = [], actors = [], walls = [], staticFigures=[] } = this.data
 
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
@@ -329,6 +331,14 @@ class Level {
 
             renderInstructions.push(new RenderInstruction({
                 place, observer: vantage, subject: thing, level: this,
+            }))
+        })
+
+        staticFigures.forEach(figure => {
+            const place = placesInSight.find(place => place.position.isInSameSquareAs(figure))
+            if (!place) { return }
+            renderInstructions.push(new RenderInstruction({
+                place, observer: vantage, subject: figure, level: this,
             }))
         })
 
