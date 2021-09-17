@@ -45,10 +45,14 @@ function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunc
     if (!config.noClose) { ctx.closePath() }
 
 
-    ctx.strokeStyle = config.strokeStyle || 'black'
-    if (!config.noStroke) { ctx.stroke() }
-    if (config.fillStyle) { ctx.fillStyle = config.fillStyle }
-    if (!config.noFill) { ctx.fill() }
+    if (!config.noStroke) { 
+        ctx.strokeStyle = config.strokeStyle || 'black'
+        ctx.stroke() 
+    }
+    if (!config.noFill) { 
+        ctx.fillStyle = config.fillStyle || 'transparent'
+        ctx.fill() 
+    }
 }
 
 
@@ -81,21 +85,22 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
         }))
 
         const newRow = matrix[matrix.length - 1]
-        const leftItem = newRow[0]
 
+        if (index%3 != 0) {
+            const leftItem = newRow[0]
+            newRow.unshift({
+                forward: leftItem.forward,
+                right: leftItem.right - 1,
+                position: leftItem.position.translate(facing.leftOf)
+            })
 
-        newRow.unshift({
-            forward: leftItem.forward,
-            right: leftItem.right - 1,
-            position: leftItem.position.translate(facing.leftOf)
-        })
-
-        const rightItem = newRow[newRow.length - 1]
-        newRow.push({
-            forward: rightItem.forward,
-            right: rightItem.right + 1,
-            position: rightItem.position.translate(facing.rightOf)
-        })
+            const rightItem = newRow[newRow.length - 1]
+            newRow.push({
+                forward: rightItem.forward,
+                right: rightItem.right + 1,
+                position: rightItem.position.translate(facing.rightOf)
+            })
+        }
     }
 
     return matrix.flat()

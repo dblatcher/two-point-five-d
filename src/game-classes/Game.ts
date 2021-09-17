@@ -81,6 +81,7 @@ class Game {
     narrativeMessages: NarrativeMessage[]
     tickCount: number
     pointerLocator: PointerLocator
+    debugElement?: HTMLElement
 
     featuresTriggeredThisTick: AbstractFeature[]
 
@@ -102,6 +103,11 @@ class Game {
         this.featuresTriggeredThisTick = []
 
         this.setActiveCharacter(config.activeCharacterIndex);
+
+        // this.debugElement = document.createElement("div");
+        // document.body.appendChild(this.debugElement)
+        // this.debugElement.innerText += "first line \n";
+        // this.debugElement.innerText += "Second line \n";
     }
 
     get activeCharacter(): Character | null {
@@ -149,6 +155,8 @@ class Game {
     tick(): void {
 
         if (this.data.intersitial?.data.pausesTime) { return }
+
+        const startTime = Date.now();
 
         this.tickCount++;
         this.data.level.tickCount = this.tickCount
@@ -220,6 +228,9 @@ class Game {
             this.handleVictory(this.data.level)
         }
 
+        const endTime = Date.now()
+
+        if (this.debugElement) {this.debugElement.innerText = `tick ${this.tickCount}: ${endTime-startTime}ms`}
     }
 
     handleVictory(level: Level): void {
@@ -293,7 +304,7 @@ class Game {
 
     createItemInfrontOfPlayer(itemType: ItemType, distanceRightOfCenter = 0, dropHeight = 0): void {
         const { playerVantage } = this.data
-        const { direction,x ,y } = playerVantage.data
+        const { direction, x, y } = playerVantage.data
         const inFrontOfPlayer = {
             x: x + .5 + (.5 * direction.x),
             y: y + .5 + (.5 * direction.y)

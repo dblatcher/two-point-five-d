@@ -55,10 +55,14 @@ interface LevelConfig {
 class Level {
     data: LevelConfig
     tickCount: number
+    debugElement?:HTMLElement
+
 
     constructor(config: LevelConfig) {
         this.data = config
         this.tickCount = 0
+        // this.debugElement = document.createElement('div')
+        // document.body.appendChild(this.debugElement)
     }
 
     static defaultFloorColor = new Color(80, 80, 80);
@@ -302,6 +306,7 @@ class Level {
     }
 
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
+        const startTime=Date.now()
         const { items = [], squaresWithFeatures = [], actors = [], walls = [], staticFigures=[] } = this.data
 
         canvas.setAttribute('width', viewWidth.toString());
@@ -313,6 +318,11 @@ class Level {
 
         const placesInSight = getPlacesInSight(vantage);
         let renderInstructions: RenderInstruction[] = [];
+
+        //TO DO - copy each list of entities, and eliminate any entity that can't be in sight
+        // because forward distance > max view or < 0 (behind playerVantage)
+        // or Abs(right distance) > max view/2 (?) 
+        // then run the forEach loops on the copies
 
         walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isInSameSquareAs(wall))
@@ -366,6 +376,8 @@ class Level {
 
         renderInstructions = RenderInstruction.putInOrder(renderInstructions);
 
+        const gatherTime = Date.now();
+
         renderInstructions.forEach(renderInstruction => {
             if (renderInstruction.wall) {
                 renderInstruction.wall.drawInSight(ctx, toCanvasCoords, renderInstruction, this.tickCount, this.data.defaultWallPattern)
@@ -379,6 +391,10 @@ class Level {
             this.renderZoneFrames(ctx, vantage, toCanvasCoords);
         }
 
+        const endTime = Date.now();
+        if (this.debugElement){
+            this.debugElement.innerText = `gather:${gatherTime-startTime}ms render: ${endTime-gatherTime}ms, ${renderInstructions.length}ri, ${placesInSight.length} pis`
+        }
     }
 
     renderZoneFrames(ctx: CanvasRenderingContext2D, vantage: Vantage, toCanvasCoords: ConvertFunction): void {
