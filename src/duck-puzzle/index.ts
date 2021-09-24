@@ -25,6 +25,7 @@ const game = new Game({
     controllers:[],
     activeCharacterIndex: 0,
     characters: [],
+    spriteSheets,
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,

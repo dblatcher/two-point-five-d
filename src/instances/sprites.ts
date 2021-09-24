@@ -4,41 +4,36 @@ import { SpriteSheet } from "@/canvas/SpriteSheet"
 import { TextBoard } from "@/canvas/TextBoard"
 
 
-const spriteSheets: SpriteSheet[] = []
-
-const sheets = {
+const sheets:{[index:string]:SpriteSheet} = {
 
     //https://opengameart.org/content/dinosaur-0
-    dinosaur: new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
+    dinosaur: new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur.png"), { pattern: "GRID", cols: 3, rows: 4 }),
 
     //https://opengameart.org/content/old-school-dungeon-crawler-pack
-    bricks: new SpriteSheet("bricks", require("../assets/sprites/brick.png"), spriteSheets),
-    window: new SpriteSheet("window", require("../assets/sprites/open-window.png"), spriteSheets),
+    bricks: new SpriteSheet("bricks", require("../assets/sprites/brick.png")),
+    window: new SpriteSheet("window", require("../assets/sprites/open-window.png")),
 
     //https://opengameart.org/content/weird-fruits-16x16
-    fruits: new SpriteSheet("fruit", require("../assets/sprites/fruit.png"), spriteSheets, { pattern: "GRID", cols: 4, rows: 4 }),
+    fruits: new SpriteSheet("fruit", require("../assets/sprites/fruit.png"), { pattern: "GRID", cols: 4, rows: 4 }),
 
 
     //https://opengameart.org/content/wooden-stairs-ns
-    stairs: new SpriteSheet("stairs", require("../assets/sprites/wooden_stairs-ns-crop.png"), spriteSheets, { pattern: "GRID", cols: 1, rows: 5 }),
+    stairs: new SpriteSheet("stairs", require("../assets/sprites/wooden_stairs-ns-crop.png"), { pattern: "GRID", cols: 1, rows: 5 }),
 
     //https://opengameart.org/content/brick-wall-0
-    brickWall2: new SpriteSheet("brickWall", require("../assets/sprites/brick_wall.png"), spriteSheets),
+    brickWall2: new SpriteSheet("brickWall", require("../assets/sprites/brick_wall.png")),
 
     //https://opengameart.org/content/helmets-64x64
-    bardHat: new SpriteSheet("bardHat", require("../assets/sprites/bard-hat.png"), spriteSheets),
-    helmet: new SpriteSheet("helmet", require("../assets/sprites/helmet.png"), spriteSheets),
+    bardHat: new SpriteSheet("bardHat", require("../assets/sprites/bard-hat.png")),
+    helmet: new SpriteSheet("helmet", require("../assets/sprites/helmet.png")),
 
-    testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png"), spriteSheets),
-    painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg"), spriteSheets),
-    leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), spriteSheets, { pattern: "GRID", cols: 3, rows: 4 }),
-    woodenDoor: new SpriteSheet("woodenDoor", require("../assets/sprites/door.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 3 }),
-
-
-
+    testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png")),
+    painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg")),
+    leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), { pattern: "GRID", cols: 3, rows: 4 }),
+    woodenDoor: new SpriteSheet("woodenDoor", require("../assets/sprites/door.png"), { pattern: "GRID", cols: 2, rows: 3 }),
 }
 
-
+const spriteSheets = Object.keys(sheets).map(key => sheets[key])
 
 const dinoSprite = new Sprite("DINOSAUR", {
     baseline: .25,

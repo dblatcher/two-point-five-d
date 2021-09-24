@@ -44,6 +44,7 @@ const game = new Game(
         controllers: [],
         characters: [],
         activeCharacterIndex: undefined,
+        spriteSheets,
     },
     { noCharacters: true }
 )

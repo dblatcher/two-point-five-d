@@ -4,37 +4,37 @@ import { SpriteSheet } from "@/canvas/SpriteSheet"
 
 
 
-const spriteSheets: SpriteSheet[] = []
 
-const sheets = {
+const sheets:{[index:string]:SpriteSheet} = {
     //https://opengameart.org/content/cute-duck-animated-set
-    duck_front: new SpriteSheet("duck-front", require("./assets/duck/walk/front/1.png"), spriteSheets),
-    duck_side: new SpriteSheet("duck-side", require("./assets/duck/walk/side/1.png"), spriteSheets),
-    duck_back: new SpriteSheet("duck-back", require("./assets/duck/walk/back/1.png"), spriteSheets),
-    duck_walk_front_1: new SpriteSheet("duck-front-walk-1", require("./assets/duck/walk/front/1.png"), spriteSheets),
-    duck_walk_front_2: new SpriteSheet("duck-front-walk-2", require("./assets/duck/walk/front/2.png"), spriteSheets),
-    duck_walk_front_3: new SpriteSheet("duck-front-walk-3", require("./assets/duck/walk/front/3.png"), spriteSheets),
-    duck_walk_front_4: new SpriteSheet("duck-front-walk-4", require("./assets/duck/walk/front/4.png"), spriteSheets),
-    duck_walk_back_1: new SpriteSheet("duck-back-walk-1", require("./assets/duck/walk/back/1.png"), spriteSheets),
-    duck_walk_back_2: new SpriteSheet("duck-back-walk-2", require("./assets/duck/walk/back/2.png"), spriteSheets),
-    duck_walk_back_3: new SpriteSheet("duck-back-walk-3", require("./assets/duck/walk/back/3.png"), spriteSheets),
-    duck_walk_back_4: new SpriteSheet("duck-back-walk-4", require("./assets/duck/walk/back/4.png"), spriteSheets),
-    duck_walk_side_1: new SpriteSheet("duck-side-walk-1", require("./assets/duck/walk/side/1.png"), spriteSheets),
-    duck_walk_side_2: new SpriteSheet("duck-side-walk-2", require("./assets/duck/walk/side/2.png"), spriteSheets),
-    duck_walk_side_3: new SpriteSheet("duck-side-walk-3", require("./assets/duck/walk/side/3.png"), spriteSheets),
-    duck_walk_side_4: new SpriteSheet("duck-side-walk-4", require("./assets/duck/walk/side/4.png"), spriteSheets),
-    duck_walk_side_5: new SpriteSheet("duck-side-walk-5", require("./assets/duck/walk/side/5.png"), spriteSheets),
-    duck_walk_side_6: new SpriteSheet("duck-side-walk-6", require("./assets/duck/walk/side/6.png"), spriteSheets),
-    duck_walk_side_7: new SpriteSheet("duck-side-walk-7", require("./assets/duck/walk/side/7.png"), spriteSheets),
+    duck_front: new SpriteSheet("duck-front", require("./assets/duck/walk/front/1.png")),
+    duck_side: new SpriteSheet("duck-side", require("./assets/duck/walk/side/1.png")),
+    duck_back: new SpriteSheet("duck-back", require("./assets/duck/walk/back/1.png")),
+    duck_walk_front_1: new SpriteSheet("duck-front-walk-1", require("./assets/duck/walk/front/1.png")),
+    duck_walk_front_2: new SpriteSheet("duck-front-walk-2", require("./assets/duck/walk/front/2.png")),
+    duck_walk_front_3: new SpriteSheet("duck-front-walk-3", require("./assets/duck/walk/front/3.png")),
+    duck_walk_front_4: new SpriteSheet("duck-front-walk-4", require("./assets/duck/walk/front/4.png")),
+    duck_walk_back_1: new SpriteSheet("duck-back-walk-1", require("./assets/duck/walk/back/1.png")),
+    duck_walk_back_2: new SpriteSheet("duck-back-walk-2", require("./assets/duck/walk/back/2.png")),
+    duck_walk_back_3: new SpriteSheet("duck-back-walk-3", require("./assets/duck/walk/back/3.png")),
+    duck_walk_back_4: new SpriteSheet("duck-back-walk-4", require("./assets/duck/walk/back/4.png")),
+    duck_walk_side_1: new SpriteSheet("duck-side-walk-1", require("./assets/duck/walk/side/1.png")),
+    duck_walk_side_2: new SpriteSheet("duck-side-walk-2", require("./assets/duck/walk/side/2.png")),
+    duck_walk_side_3: new SpriteSheet("duck-side-walk-3", require("./assets/duck/walk/side/3.png")),
+    duck_walk_side_4: new SpriteSheet("duck-side-walk-4", require("./assets/duck/walk/side/4.png")),
+    duck_walk_side_5: new SpriteSheet("duck-side-walk-5", require("./assets/duck/walk/side/5.png")),
+    duck_walk_side_6: new SpriteSheet("duck-side-walk-6", require("./assets/duck/walk/side/6.png")),
+    duck_walk_side_7: new SpriteSheet("duck-side-walk-7", require("./assets/duck/walk/side/7.png")),
 
 
     //https://opengameart.org/content/old-school-dungeon-crawler-pack
-    bricks: new SpriteSheet("bricks", require("../assets/sprites/brick.png"), spriteSheets),
-    window: new SpriteSheet("window", require("../assets/sprites/open-window.png"), spriteSheets),
-    weight: new SpriteSheet("weight", require("./assets/weight.png"), spriteSheets, { pattern: "GRID", cols: 2, rows: 2 }),
+    bricks: new SpriteSheet("bricks", require("../assets/sprites/brick.png")),
+    window: new SpriteSheet("window", require("../assets/sprites/open-window.png")),
+    weight: new SpriteSheet("weight", require("./assets/weight.png"), { pattern: "GRID", cols: 2, rows: 2 }),
 
 }
 
+const spriteSheets = Object.keys(sheets).map(key => sheets[key])
 
 const duckSprite = new Sprite("DUCK", {
     shadow: { x: 1 / 4, y: 1 / 12 },
