@@ -41,6 +41,10 @@ const sheets = {
 
     //https://opengameart.org/content/loyalty-lies-equipment-upper-body-armour
     armour: new SpriteSheet("armour", require("./assets/gear_armor.png"), spriteSheets, { pattern: "GRID", cols: 13, rows: 1 }),
+
+
+    //https://opengameart.org/content/gemmed-items
+    rubyKey: new SpriteSheet("rubyKey", require("./assets/ruby_key.png"),spriteSheets),
 }
 
 
@@ -129,6 +133,7 @@ const sprites = {
     stick: Sprite.itemSpriteOneFrame("stick", { sheet: sheets.weapons, col: 3, row: 1 }),
     mailShirt: Sprite.itemSpriteOneFrame("mailShirt", { sheet: sheets.armour, col: 7, row: 0 }),
     plateArmour: Sprite.itemSpriteOneFrame("plateArmour", { sheet: sheets.armour, col: 8, row: 0 }),
+    rubyKey: Sprite.itemSpriteOneFrame("rubyKey",{sheet:sheets.rubyKey}),
 
     torch: Sprite.animatedPatternSprite('torch', sheets.torch, { size: { x: .25, y: .5 } }),
 

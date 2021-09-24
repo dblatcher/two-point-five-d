@@ -11,7 +11,7 @@ const apple = new ItemType({
 })
 
 const key = new ItemType({
-    name: "key", sprite: commonSprites.key, figureDimensions: { height: .2, width: .2 },
+    name: "key", sprite: sprites.rubyKey, figureDimensions: { height: .2, width: .2 },
 })
 
 const bean = new ItemType({
