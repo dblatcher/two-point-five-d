@@ -10,8 +10,8 @@ class SpriteSheet {
     // eslint-disable-next-line
     src: any
     config: SpriteSheetConfig
-    // eslint-disable-next-line 
     bitmap?: ImageBitmap
+    // eslint-disable-next-line 
     constructor(id: string, src: any, config?: SpriteSheetConfig) {
         this.id = id
         this.src = src
