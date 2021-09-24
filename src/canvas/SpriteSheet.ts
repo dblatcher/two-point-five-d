@@ -31,6 +31,22 @@ class SpriteSheet {
         }
     }
 
+    provideFrame(col = 0, row = 0): CanvasImageSource {
+        if (!this.bitmap) { return new Image() }
+        const { rows = 0, cols = 0, pattern } = this.config
+        if (pattern == "SINGLE") { return this.bitmap }
+
+        const frameHeight = this.bitmap.height / rows;
+        const frameWidth = this.bitmap.width / cols;
+
+        const board = document.createElement('canvas')
+        const ctx = board.getContext('2d') as CanvasRenderingContext2D
+        board.setAttribute('width', frameWidth.toString())
+        board.setAttribute('height', frameHeight.toString())
+        ctx.drawImage(this.bitmap, frameWidth * col, frameHeight * row, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight)
+        return board
+    }
+
     static async loadAll(spriteSheets: SpriteSheet[]): Promise<number> {
         console.log(`Loading ${spriteSheets.length} sheets!`);
         const results = await Promise.all(spriteSheets.map(spriteSheet => spriteSheet.load()))

@@ -27,20 +27,6 @@ function flipImageVertically(source: CanvasImageSource): CanvasImageSource {
     return board
 }
 
-function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: number, rows: number, cols: number): CanvasImageSource {
-    const board = document.createElement('canvas')
-    if (!source.width || !source.height) { return board }
-    if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
-
-    const ctx = board.getContext('2d') as CanvasRenderingContext2D
-    const frameHeight = source.height / rows;
-    const frameWidth = source.width / cols;
-    board.setAttribute('width', frameWidth.toString())
-    board.setAttribute('height', frameHeight.toString())
-    ctx.drawImage(source, frameWidth * col, frameHeight * row, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight)
-    return board
-}
-
 function scaleTo(source: CanvasImageSource, width: number, height: number): CanvasImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
@@ -194,5 +180,5 @@ function transformSpriteImage(image: CanvasImageSource, transforms: string[], sp
 }
 
 export {
-    flipImage, flipImageVertically, cutFrameFromGridSheet, scaleTo, perspectiveSkew, resizeFrame, transformSpriteImage
+    flipImage, flipImageVertically, scaleTo, perspectiveSkew, resizeFrame, transformSpriteImage
 }

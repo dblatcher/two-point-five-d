@@ -1,4 +1,4 @@
-import { cutFrameFromGridSheet, transformSpriteImage } from "@/canvas/manipulations"
+import { transformSpriteImage } from "@/canvas/manipulations"
 import { Dimensions, Point } from "./canvas-utility"
 import { RelativeDirection } from "../game-classes/RelativeDirection"
 import { SpriteSheet } from "./SpriteSheet"
@@ -71,7 +71,7 @@ class Sprite {
         let image: CanvasImageSource = bitmap;
 
         if (frame.sheet.config.pattern === 'GRID') {
-            image = cutFrameFromGridSheet(image, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
+            image = frame.sheet.provideFrame(frame.col, frame.row)
         }
 
         if (frame.transforms || this.transforms) {
