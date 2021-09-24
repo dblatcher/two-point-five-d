@@ -1,5 +1,5 @@
-import { Frame, Sprite, SpriteSheet } from "@/canvas/Sprite"
-
+import { Frame, Sprite } from "@/canvas/Sprite"
+import { SpriteSheet } from "@/canvas/SpriteSheet"
 
 const spriteSheets: SpriteSheet[] = []
 

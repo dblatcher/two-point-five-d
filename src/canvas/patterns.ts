@@ -21,7 +21,7 @@ function getPatternFill(
     try {
         image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
     } catch (error) {
-        console.warn(error.message)
+        console.warn(error)
         return null
     }
 
@@ -43,7 +43,7 @@ function getUpperLevelPatternFill(
         image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
         image = flipImage (flipImageVertically(image))
     } catch (error) {
-        console.warn(error.message)
+        console.warn(error)
         return null
     }
 

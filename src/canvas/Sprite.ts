@@ -1,28 +1,9 @@
 import { cutFrameFromGridSheet, transformSpriteImage } from "@/canvas/manipulations"
 import { Dimensions, Point } from "./canvas-utility"
 import { RelativeDirection } from "../game-classes/RelativeDirection"
-
-interface SpriteSheetConfig {
-    pattern: "SINGLE" | "GRID"
-    rows?: number
-    cols?: number
-}
+import { SpriteSheet } from "./SpriteSheet"
 
 
-
-class SpriteSheet {
-    id: string
-    // eslint-disable-next-line
-    src: any
-    config: SpriteSheetConfig
-    // eslint-disable-next-line 
-    constructor(id: string, src: any, collection?: SpriteSheet[], config?: SpriteSheetConfig) {
-        this.id = id
-        this.src = src
-        this.config = config || { pattern: "SINGLE" }
-        if (collection) { collection.push(this) }
-    }
-}
 
 interface Frame {
     sheet: SpriteSheet
@@ -289,5 +270,5 @@ class Sprite {
 }
 
 export {
-    SpriteSheet, Sprite, Frame, SpriteConfig
+    Sprite, Frame, SpriteConfig
 }

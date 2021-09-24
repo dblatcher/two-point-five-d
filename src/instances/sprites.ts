@@ -1,5 +1,6 @@
 import { Color } from "@/canvas/Color"
-import { Frame, Sprite, SpriteSheet } from "@/canvas/Sprite"
+import { Frame, Sprite } from "@/canvas/Sprite"
+import { SpriteSheet } from "@/canvas/SpriteSheet"
 import { TextBoard } from "@/canvas/TextBoard"
 
 
