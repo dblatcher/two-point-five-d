@@ -58,7 +58,7 @@ function getTextPatternFill(
     const fullWallPoints = renderInstruction.mapWallShape(Wall.defaultShape);
     const { topLeft, convertedWallDimensions } = getMeasurements(fullWallPoints, convertFunction);
 
-    let image: HTMLCanvasElement | HTMLImageElement = textBoard.storedCanvas
+    let image: CanvasImageSource = textBoard.storedCanvas
     const { size = Sprite.DEFAULT_SIZE } = textBoard.data
     image = resizeFrame(image, size)
     const facingDirection = renderInstruction.wallFacingDirection
@@ -117,7 +117,7 @@ function convertToPattern(
 function drawTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, textBoard: TextBoard): void {
 
     const { size = Sprite.DEFAULT_SIZE, offset = { x: .25, y: .25 } } = textBoard.data
-    let image: HTMLCanvasElement | HTMLImageElement = textBoard.storedCanvas
+    let image: CanvasImageSource = textBoard.storedCanvas
 
     const fullWallPoints = renderInstruction.mapWallShape(Wall.defaultShape);
 

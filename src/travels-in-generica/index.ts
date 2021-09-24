@@ -51,6 +51,7 @@ const game = new Game({
         questOne
     ],
     characters: [characters.sally, characters.boblin, characters.drake, characters.gwim],
+    spriteSheets,
 }, {
     needCharacterToPickUpItems: true,
     playerBlocksPassage: true,

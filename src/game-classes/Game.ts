@@ -18,6 +18,7 @@ import { Monster } from '@/rpg-classes/Monster'
 import { AttackOption } from '@/rpg-classes/AttackOption'
 import { Quest } from '@/rpg-classes/Quest'
 import { ItemType } from './ItemType'
+import { SpriteSheet } from '@/canvas/SpriteSheet'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -35,6 +36,7 @@ interface GameConfig {
     activeCharacterIndex: number | undefined
     intersitial?: Intersitial
     gameCompleteMessage?: string
+    spriteSheets: SpriteSheet[]
 }
 
 interface GameRules {
@@ -82,7 +84,6 @@ class Game {
     tickCount: number
     pointerLocator: PointerLocator
     debugElement?: HTMLElement
-
     featuresTriggeredThisTick: AbstractFeature[]
 
     static MAX_QUEUE_LENGTH: 10
@@ -108,6 +109,10 @@ class Game {
         // document.body.appendChild(this.debugElement)
         // this.debugElement.innerText += "first line \n";
         // this.debugElement.innerText += "Second line \n";
+    }
+
+    async loadImages() {
+        return SpriteSheet.loadAll(this.data.spriteSheets)
     }
 
     get activeCharacter(): Character | null {

@@ -43,7 +43,6 @@
   </div>
 
   <p v-if="!spritesLoaded">loading...</p>
-  <sprite-loader @all-sprite-sheets-loaded="handleAllSpriteSheetsLoaded" />
 </template>
 
 <script lang="ts">
@@ -52,7 +51,6 @@ import gameStore from "@/store";
 import MapCanvas from "./MapCanvas.vue";
 import SightCanvas from "./SightCanvas.vue";
 import Controls from "./Controls.vue";
-import SpriteLoader from "./SpriteLoader.vue";
 import PauseButton from "./PauseButton.vue";
 import CharacterScreen from "./CharacterScreen.vue";
 import ItemInHand from "./ItemInHand.vue";
@@ -76,7 +74,6 @@ interface GameHolderData {
     MapCanvas,
     Controls,
     SightCanvas,
-    SpriteLoader,
     PauseButton,
     ItemInHand,
     CharacterScreen,
@@ -100,6 +97,14 @@ export default class GameHolder extends Vue {
       questWindowOpen: false,
       indexOfCharacterWithScreenOpen: null,
     };
+  }
+
+  mounted():void {
+    this.$store.state.game.loadImages()
+      .then(() => {
+        this.$store.dispatch("startTimer");
+        this.spritesLoaded = true;
+      })
   }
 
   handleChooseOpenCharacter(index: number): void {

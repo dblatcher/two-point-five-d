@@ -1,7 +1,7 @@
 import { Dimensions, Point, VANISH_RATE } from "./canvas-utility"
 import { Sprite } from "./Sprite"
 
-function flipImage(source: CanvasImageSource): HTMLCanvasElement {
+function flipImage(source: CanvasImageSource): CanvasImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -14,7 +14,7 @@ function flipImage(source: CanvasImageSource): HTMLCanvasElement {
     return board
 }
 
-function flipImageVertically(source: CanvasImageSource): HTMLCanvasElement {
+function flipImageVertically(source: CanvasImageSource): CanvasImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -27,7 +27,7 @@ function flipImageVertically(source: CanvasImageSource): HTMLCanvasElement {
     return board
 }
 
-function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: number, rows: number, cols: number): HTMLCanvasElement {
+function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: number, rows: number, cols: number): CanvasImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -41,7 +41,7 @@ function cutFrameFromGridSheet(source: CanvasImageSource, row: number, col: numb
     return board
 }
 
-function scaleTo(source: CanvasImageSource, width: number, height: number): HTMLCanvasElement {
+function scaleTo(source: CanvasImageSource, width: number, height: number): CanvasImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -57,7 +57,7 @@ function scaleTo(source: CanvasImageSource, width: number, height: number): HTML
 }
 
 // NEEDS WORK!
-function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, size: Dimensions, isOnObserversRight: boolean): HTMLCanvasElement | HTMLImageElement {
+function perspectiveSkew(source: CanvasImageSource, size: Dimensions, isOnObserversRight: boolean): CanvasImageSource {
     // return source
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return source }
@@ -119,7 +119,7 @@ function perspectiveSkew(source: HTMLCanvasElement | HTMLImageElement, size: Dim
     return board
 }
 
-function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size: Dimensions, offset = { x: .5, y: .5 }): HTMLCanvasElement {
+function resizeFrame(source: CanvasImageSource, size: Dimensions, offset = { x: .5, y: .5 }): CanvasImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -144,7 +144,7 @@ function resizeFrame(source: HTMLCanvasElement | HTMLImageElement, size: Dimensi
     return board;
 }
 
-function cropBase(source: HTMLCanvasElement | HTMLImageElement, baseline: number): HTMLCanvasElement | HTMLImageElement {
+function cropBase(source: CanvasImageSource, baseline: number): CanvasImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -161,7 +161,7 @@ function cropBase(source: HTMLCanvasElement | HTMLImageElement, baseline: number
     return board;
 }
 
-function transformSpriteImage(image: HTMLImageElement | HTMLCanvasElement, transforms: string[], sprite: Sprite): HTMLImageElement | HTMLCanvasElement {
+function transformSpriteImage(image: CanvasImageSource, transforms: string[], sprite: Sprite):  CanvasImageSource {
 
     transforms.forEach(transform => {
         switch (transform) {

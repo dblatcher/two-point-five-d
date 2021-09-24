@@ -17,7 +17,7 @@ interface SpriteConfig {
     shadow?: Dimensions
     size?: Dimensions
     offset?: Point
-    plotShift?:Point
+    plotShift?: Point
     animations?: Map<string, Frame[]>
     transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
 }
@@ -29,7 +29,7 @@ class Sprite {
     shadow?: Dimensions
     size?: Dimensions
     offset?: Point
-    plotShift?:Point
+    plotShift?: Point
     transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
     loadedFrames: Map<string, CanvasImageSource>
 
@@ -51,7 +51,7 @@ class Sprite {
 
     /**
      * Load the CanvasImageSource for a frame of the sprite.
-     * The image is loaded from the DOM, manipulated as required,
+     * The image is taken from the SpriteSheet, manipulated as required,
      * then saved in the sprite's loadedFrames map property for
      * subsequent calls to provideImage.
      * 
@@ -62,20 +62,16 @@ class Sprite {
      */
     loadImage(frame: Frame, animationFrameKey: string): CanvasImageSource {
 
-        const selector = this.getFrameSelector(frame)
+        const { bitmap } = frame.sheet;
 
-        const source = document.querySelector(selector) as HTMLImageElement
-        if (!source) {
-            throw new Error(`no image element found for [${this.name}, ${animationFrameKey}]`);
-        }
-        if (!source.complete) {
-            throw new Error(`source image[${this.name}, ${animationFrameKey}] not loaded yet`);
+        if (!bitmap) {
+            throw new Error(`SpriteSheet ${frame.sheet.id} has no bitmap`)
         }
 
-        let image: HTMLImageElement | HTMLCanvasElement = source;
+        let image: CanvasImageSource = bitmap;
 
         if (frame.sheet.config.pattern === 'GRID') {
-            image = cutFrameFromGridSheet(source, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
+            image = cutFrameFromGridSheet(image, frame.row || 0, frame.col || 0, frame.sheet.config.rows || 1, frame.sheet.config.cols || 1)
         }
 
         if (frame.transforms || this.transforms) {

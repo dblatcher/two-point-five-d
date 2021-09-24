@@ -9,7 +9,6 @@ import { game, spriteSheets } from '@/travels-in-generica'
 // import { game, spriteSheets } from '@/duck-puzzle'
 // import { game, spriteSheets } from '@/test-world'
 
-
 export default createStore({
   state: {
     game: markRaw(game),
