@@ -175,10 +175,6 @@ class Sprite {
         return list
     }
 
-    getFrameSelector(frame: Frame): string {
-        return `img[sheet-id=${frame.sheet.id}]`
-    }
-
     /**
      * clear the loaded frames - may be needed for memory saving
      * if a sprite has loaded, but won't be required again
