@@ -86,6 +86,12 @@ function getMeasurements(fullWallPoints: Point[], convertFunction: ConvertFuncti
         y: Math.max(...yValues) - Math.min(...yValues),
     })
 
+    // stretch the pattern by 1 pixel in all directions to avoid a gap where the stroke line would be.
+    topLeft[0]--
+    topLeft[1]--
+    convertedWallDimensions[0]+=2
+    convertedWallDimensions[1]+=2
+
     return { topLeft, convertedWallDimensions }
 }
 
