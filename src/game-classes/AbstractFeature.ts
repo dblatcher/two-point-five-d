@@ -14,6 +14,7 @@ import { Vantage } from "./Vantage"
 
 
 interface AbstractFeatureData {
+    id?:string
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite

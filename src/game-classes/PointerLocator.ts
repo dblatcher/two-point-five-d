@@ -2,6 +2,7 @@ import { mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/ca
 import { Direction } from "./Direction";
 import { FigureMap } from "./Game";
 import { Item } from "./Item";
+import { Level } from "./Level";
 import { PlayerVantage } from "./PlayerVantage";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
@@ -225,8 +226,8 @@ class PointerLocator {
         return wallClicked;
     }
 
-    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall: boolean): WallFeature | null {
-        const { features = [] } = wall.data;
+    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall: boolean, level:Level): WallFeature | null {
+        const features = wall.getFeatures();
         return features.find(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return false }
 

@@ -14,6 +14,7 @@ import { Direction } from "./Direction";
 import { Color } from "@/canvas/Color";
 
 interface FloorFeatureConfig {
+    id?: string
     reactions?: Reaction[]
     blocksByDefault?: boolean
     sprite?: Sprite

@@ -8,30 +8,42 @@ import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites
 import { spriteSheets as gSpriteSheets, sprites as gSprites } from "@/travels-in-generica/sprites";
 import { tower, vaultDoorway } from "@/instances/wallShapes";
 import { Figure } from "@/game-classes/Figure";
+import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { Controller } from "@/game-classes/Controller";
 
 const spriteSheets = [
     ...sharedSpriteSheets,
     ...gSpriteSheets
 ]
 
+const features = {
+    painting: new WallFeature({sprite:sprites.paintingWall}),
+    switch: new WallSwitch({sprite:sprites.leverSprite}),
+    door: new Door({sprite:sprites.doorSprite, status:"CLOSED"}),
+}
+
 const levels = [ 
     new Level({
         height:10,
         width:10,
         walls:[
-            new Wall({ x: 6, y: 4, place: Direction.west, shape: vaultDoorway, patternSprite: sprites.brickWall, }),
-            new Wall({ x: 6, y: 3, place: Direction.west, patternSprite: sprites.brickWall2, }),
-            new Wall({ x: 3, y: 5, place: Direction.west, shape: tower, patternSprite: sprites.testPattern, }),
-            new Wall({ x: 5, y: 7, place: Direction.north, shape: tower, patternSprite: sprites.testPattern, }),
+            // new Wall({ x: 6, y: 4, place: Direction.west, shape: vaultDoorway, patternSprite: sprites.brickWall, }),
+            new Wall({ x: 6, y: 3, place: Direction.west, patternSprite: sprites.brickWall2, featureIds: ["switch"] }),
+            new Wall({ x: 6, y: 5, place: Direction.north, shape: vaultDoorway, featureIds:["door"], open: true }),
+            // new Wall({ x: 5, y: 7, place: Direction.north, shape: tower, patternSprite: sprites.testPattern, }),
         ],
         items:[
 
         ],
         staticFigures: [
-            new Figure({x:6.5, y:2.5, direction:Direction.south, sprite:gSprites.treeOne}),
-            new Figure({x:7.5, y:3.5, direction:Direction.south, sprite:gSprites.treeTwo}),
-            new Figure({x:8.5, y:4.5, direction:Direction.south, sprite:gSprites.treeOne}),
-            // new Figure({x:6.5, y:2.5, direction:Direction.south, sprite:sprites.testSprite}),
+            new Figure({x:9.5, y:2.5, direction:Direction.south, sprite:gSprites.treeOne}),
+        ],
+        features,
+        controllers: [
+            new Controller({inputs:[features.switch],subject:features.door, statusMap:[
+                [["ON"],"OPEN"], 
+                [["OFF"],"CLOSED"], 
+            ]})
         ]
     })
 ]

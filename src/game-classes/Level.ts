@@ -16,6 +16,7 @@ import { Wall } from "./Wall"
 import { Position } from "./Position"
 import { PlayerVantage } from "./PlayerVantage";
 import { Figure } from "./Figure";
+import { AbstractFeature } from "./AbstractFeature";
 
 const renderingZoneFrames = false;
 
@@ -44,6 +45,7 @@ interface LevelConfig {
     items: Item[]
     actors?: Actor[]
     staticFigures?: Figure[]
+    features?: { [index: string]: AbstractFeature }
 
     controllers?: Controller[]
     victoryCondition?: VictoryTest
@@ -53,16 +55,17 @@ interface LevelConfig {
 
 
 class Level {
+
     data: LevelConfig
     tickCount: number
-    debugElement?:HTMLElement
+    debugElement?: HTMLElement
 
 
     constructor(config: LevelConfig) {
         this.data = config
         this.tickCount = 0
-        // this.debugElement = document.createElement('div')
-        // document.body.appendChild(this.debugElement)
+
+        this.data.walls.forEach(wall => wall.level = this)
     }
 
     static defaultFloorColor = new Color(80, 80, 80);
@@ -124,16 +127,16 @@ class Level {
         return false
     }
 
-/**
- * Find what is stopping a moving actor from passing from one square to an adjacent square
- * @param startX the integer grid X of the starting position
- * @param startY the integer grid Y of the starting position
- * @param targetX the integer grid X of the target position
- * @param targetY the integer grid Y of the target position
- * @param movingActor 
- * @param game 
- * @returns the blockage, or null
- */
+    /**
+     * Find what is stopping a moving actor from passing from one square to an adjacent square
+     * @param startX the integer grid X of the starting position
+     * @param startY the integer grid Y of the starting position
+     * @param targetX the integer grid X of the target position
+     * @param targetY the integer grid Y of the target position
+     * @param movingActor 
+     * @param game 
+     * @returns the blockage, or null
+     */
     findBlockage(startX: number, startY: number, targetX: number, targetY: number, movingActor: Actor | Position, game: Game): Blockage | undefined {
         const { squaresWithFeatures = [], walls = [], actors = [] } = this.data
         const { playerBlocksPassage } = game.rules
@@ -306,8 +309,8 @@ class Level {
     }
 
     drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
-        const startTime=Date.now()
-        const { items = [], squaresWithFeatures = [], actors = [], walls = [], staticFigures=[] } = this.data
+        const startTime = Date.now()
+        const { items = [], squaresWithFeatures = [], actors = [], walls = [], staticFigures = [] } = this.data
 
         canvas.setAttribute('width', viewWidth.toString());
         canvas.setAttribute('height', viewHeight.toString());
@@ -392,8 +395,8 @@ class Level {
         }
 
         const endTime = Date.now();
-        if (this.debugElement){
-            this.debugElement.innerText = `gather:${gatherTime-startTime}ms render: ${endTime-gatherTime}ms, ${renderInstructions.length}ri, ${placesInSight.length} pis`
+        if (this.debugElement) {
+            this.debugElement.innerText = `gather:${gatherTime - startTime}ms render: ${endTime - gatherTime}ms, ${renderInstructions.length}ri, ${placesInSight.length} pis`
         }
     }
 

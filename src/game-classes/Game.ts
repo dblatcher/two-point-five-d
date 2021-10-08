@@ -211,7 +211,7 @@ class Game {
         })
 
         walls.forEach(wall => {
-            wall.data.features?.forEach(wallFeature => {
+            wall.getFeatures().forEach(wallFeature => {
                 wallFeature.tick(this)
             })
         })
@@ -370,7 +370,7 @@ class Game {
                 const wallClicked = pointerLocator.identifyClickedWall(location, walls, playerVantage);
                 if (!wallClicked) { continue }
                 const isReverseOfWall = wallClicked.reverseSideShowingfrom(this.data.playerVantage)
-                const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall);
+                const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall, this.data.level);
 
                 if (!featureClicked) {
                     if (wallClicked.isBlocking) { break }

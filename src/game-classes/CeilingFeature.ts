@@ -8,6 +8,7 @@ import { AbstractFeature } from './AbstractFeature'
 import { Sprite } from "@/canvas/Sprite";
 
 interface CeilingFeatureConfig {
+    id?: string
     blocksByDefault?: boolean
     sprite?: Sprite
     status?: string

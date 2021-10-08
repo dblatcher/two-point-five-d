@@ -4,6 +4,7 @@ import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "../canvas/Color";
 import { Direction } from "./Direction";
+import { Level } from "./Level";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
@@ -20,10 +21,12 @@ interface WallConfig {
     shape?: Point[]
     features?: WallFeature[]
     open?: boolean
+    featureIds?: string[]
 }
 
 class Wall extends Position {
     data: WallConfig
+    level?: Level
 
     constructor(config: WallConfig) {
         super(config)
@@ -34,7 +37,8 @@ class Wall extends Position {
 
 
     get isBlocking(): boolean {
-        const { open, features = [] } = this.data;
+        const { open } = this.data;
+        const features = this.getFeatures()
         return !open || !!features.find(feature => feature.isBlocking);
     }
 
@@ -72,15 +76,33 @@ class Wall extends Position {
         }
     }
 
+    getFeatures(): WallFeature[] {
+
+        const { features: directlyReferencedFeatures = [], featureIds = [] } = this.data
+        const allFeatures = [...directlyReferencedFeatures]
+
+        const levelFeatures = this.level?.data.features || {};
+
+        featureIds.forEach(id => {
+            const match = levelFeatures[id];
+            if (match && match.isWallFeature) {
+                allFeatures.push(match as WallFeature)
+            }
+        })
+
+        return allFeatures
+    }
+
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, defaultSprite?: Sprite): void {
 
         const { place, relativeDirection = RelativeDirection.BACK, isReverseOfWall } = renderInstruction
-        const { patternSprite = defaultSprite, features = [], shape = Wall.defaultShape } = this.data
+        const { patternSprite = defaultSprite, shape = Wall.defaultShape } = this.data
         const wallShapePoints = getMappedPoints(relativeDirection, shape, place);
         const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place);
 
         let fillStyle: CanvasPattern | string = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
 
+        const features = this.getFeatures()
 
         const isDoubleHeight = shape.some(point => point.y > 1);
         if (patternSprite && isDoubleHeight) {
@@ -99,7 +121,7 @@ class Wall extends Position {
             fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints, undefined, "no-repeat") || fillStyle
         }
 
-        plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle:fillStyle, fillStyle })
+        plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle: fillStyle, fillStyle })
 
 
         features.forEach(feature => {
@@ -147,7 +169,8 @@ class Wall extends Position {
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
 
-        const { place, features = [] } = this.data;
+        const { place } = this.data;
+        const features = this.getFeatures();
         const featureToDraw = features.find(feature => feature.isDrawnInMap);
 
         if (featureToDraw) {
