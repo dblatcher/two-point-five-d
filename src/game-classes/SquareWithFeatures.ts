@@ -43,15 +43,10 @@ class SquareWithFeatures extends Vantage {
         const { floorFeatures: directlyReferencedFeatures = [], floorFeatureIds = [] } = this.data
         const allFeatures = [...directlyReferencedFeatures]
 
-        const levelFeatures = this.level?.data.features || {};
-
-        floorFeatureIds.forEach(id => {
-            const match = levelFeatures[id];
-            if (match && match.isFloorFeature) {
-                allFeatures.push(match as FloorFeature)
-            }
-        })
-
+        if (this.level) {
+            const featuresFromKeys = FloorFeature.getFeatureFromKeyString(floorFeatureIds,FloorFeature, this.level) as FloorFeature[];
+            allFeatures.push(...featuresFromKeys)
+        }
         return allFeatures
     }
 
@@ -60,15 +55,10 @@ class SquareWithFeatures extends Vantage {
         const { ceilingFeatures: directlyReferencedFeatures = [], ceilingFeatureIds = [] } = this.data
         const allFeatures = [...directlyReferencedFeatures]
 
-        const levelFeatures = this.level?.data.features || {};
-
-        ceilingFeatureIds.forEach(id => {
-            const match = levelFeatures[id];
-            if (match && match.isCeilingFeature) {
-                allFeatures.push(match as CeilingFeature)
-            }
-        })
-
+        if (this.level) {
+            const featuresFromKeys = CeilingFeature.getFeatureFromKeyString(ceilingFeatureIds,CeilingFeature, this.level) as CeilingFeature[];
+            allFeatures.push(...featuresFromKeys)
+        }
         return allFeatures
     }
 

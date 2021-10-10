@@ -5,6 +5,7 @@ import { AnimationTransition } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { ItemType } from "./ItemType"
+import { Level } from "./Level"
 import { Position } from "./Position"
 import { Reaction } from "./Reaction"
 import { RelativeDirection } from "./RelativeDirection"
@@ -200,6 +201,26 @@ class AbstractFeature {
         reactions.forEach(reaction => {
             reaction.fire(actor, game)
         })
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    static isSubClassOf(feature: AbstractFeature):boolean {
+        return true
+    }
+
+    static getFeatureFromKeyString(featureIds:string[], subClass: typeof AbstractFeature, level:Level):AbstractFeature[] {
+
+        const features: AbstractFeature[] = []
+        const levelFeatures = level.data.features || {};
+
+        featureIds.forEach(id => {
+            const match = levelFeatures[id];
+            if (match && subClass.isSubClassOf(match)) {
+                features.push(match)
+            }
+        })
+
+        return features;
     }
 }
 

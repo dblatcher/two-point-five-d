@@ -73,6 +73,10 @@ class WallFeature extends AbstractFeature {
             plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle: featureImage })
         }
     }
+
+    static isSubClassOf(feature: AbstractFeature):boolean {
+        return feature.isWallFeature
+    }
 }
 
 class InteractableWallFeature extends WallFeature {

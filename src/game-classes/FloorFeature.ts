@@ -101,6 +101,10 @@ class FloorFeature extends AbstractFeature {
     defaultShape: [number, number][] = [
         [0, -.25], [.25, 0], [0, .25], [-.25, 0]
     ]
+
+    static isSubClassOf(feature: AbstractFeature):boolean {
+        return feature.isFloorFeature
+    }
 }
 
 

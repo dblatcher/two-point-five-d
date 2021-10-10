@@ -50,6 +50,10 @@ class CeilingFeature extends AbstractFeature {
     defaultShape: [number, number][] = [
         [-.5, -.5], [.5, -.5], [.5, .5], [-.5, .5]
     ]
+
+    static isSubClassOf(feature: AbstractFeature):boolean {
+        return feature.isCeilingFeature
+    }
 }
 
 

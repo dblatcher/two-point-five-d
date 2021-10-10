@@ -81,15 +81,10 @@ class Wall extends Position {
         const { features: directlyReferencedFeatures = [], featureIds = [] } = this.data
         const allFeatures = [...directlyReferencedFeatures]
 
-        const levelFeatures = this.level?.data.features || {};
-
-        featureIds.forEach(id => {
-            const match = levelFeatures[id];
-            if (match && match.isWallFeature) {
-                allFeatures.push(match as WallFeature)
-            }
-        })
-
+        if (this.level) {
+            const featuresFromKeys = WallFeature.getFeatureFromKeyString(featureIds, WallFeature, this.level) as WallFeature[];
+            allFeatures.push(...featuresFromKeys)
+        }
         return allFeatures
     }
 
