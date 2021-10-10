@@ -27,6 +27,7 @@ class CeilingFeature extends AbstractFeature {
     }
 
     get isFloorFeature(): boolean { return false }
+    isCeilingFeature = true;
     get isDrawnInMap(): boolean { return false }
 
 

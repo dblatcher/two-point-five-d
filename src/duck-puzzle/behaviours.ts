@@ -31,7 +31,7 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Beha
 
     const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
         .find(square => {
-            return square.data.floorFeatures.includes(blueStar)
+            return square.getFloorFeatures().includes(blueStar)
         })
 
     if (squareWithStar && squareWithStar.isInSameSquareAs(vantage)) {
@@ -61,7 +61,7 @@ const areAllDucksOnTheStar = (level: Level, game: Game):boolean => {
 
     const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
         .find(square => {
-            return square.data.floorFeatures.includes(blueStar)
+            return square.getFloorFeatures().includes(blueStar)
         })
 
     if (!squareWithStar) { return false }

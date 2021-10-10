@@ -44,6 +44,7 @@ class AbstractFeature {
     get defaultStatus(): string { return 'NEUTRAL' }
     get isFloorFeature(): boolean { return false }
     get isWallFeature(): boolean { return false }
+    isCeilingFeature = false;
     get isDrawnInMap(): boolean { return false }
     get isBlocking(): boolean { return !!this.data.blocksByDefault }
 

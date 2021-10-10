@@ -66,6 +66,7 @@ class Level {
         this.tickCount = 0
 
         this.data.walls.forEach(wall => wall.level = this)
+        this.data.squaresWithFeatures?.forEach(squaresWithFeature => squaresWithFeature.level = this)
     }
 
     static defaultFloorColor = new Color(80, 80, 80);
@@ -98,7 +99,7 @@ class Level {
         if (squaresWithFeatures.find(
             squareWithFeature => {
                 if (squareWithFeature.gridX != targetX || squareWithFeature.gridY != targetY) { return false }
-                return squareWithFeature.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
+                return squareWithFeature.data.floorFeatures?.some(floorFeature => floorFeature.isBlocking)
             }
 
         )) { return true }
@@ -146,7 +147,7 @@ class Level {
         const blockingSquare = squaresWithFeatures.find(
             squareWithFeature => {
                 if (squareWithFeature.gridX != targetX || squareWithFeature.gridY != targetY) { return false }
-                return squareWithFeature.data.floorFeatures.some(floorFeature => floorFeature.isBlocking)
+                return squareWithFeature.getFloorFeatures().some(floorFeature => floorFeature.isBlocking)
             });
 
         if (blockingSquare) {
