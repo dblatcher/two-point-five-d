@@ -97,10 +97,10 @@ const duckPuzzleLevel2 = new Level({
     walls: [
         new Wall({ x: 5, y: 2, place: Direction.north, shape: lowWall, }),
         new Wall({ x: 5, y: 2, place: Direction.south, shape: lowWall, }),
-        new Wall({ x: 5, y: 3, place: Direction.east, features: [hintForLevel2] }),
+        new Wall({ x: 5, y: 3, place: Direction.east, featureIds: ["hintForLevel2"] }),
         new Wall({ x: 4, y: 2, place: Direction.north, shape: lowWall, }),
         new Wall({ x: 4, y: 2, place: Direction.south, shape: lowWall, }),
-        new Wall({ x: 4, y: 2, place: Direction.west, features: [door1], open: true, shape: doorway }),
+        new Wall({ x: 4, y: 2, place: Direction.west, featureIds: ["door1"], open: true, shape: doorway }),
     ],
     squaresWithFeatures: [
         new SquareWithFeatures({

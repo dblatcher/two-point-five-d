@@ -75,7 +75,7 @@ const level2: Level = new Level({
         new Wall({ x: 0, y: 5, place: Direction.north }),
         new Wall({ x: 1, y: 5, place: Direction.north }),
         new Wall({ x: 2, y: 5, place: Direction.north }),
-        new Wall({ x: 2, y: 5, place: Direction.east, features: [lever1] }),
+        new Wall({ x: 2, y: 5, place: Direction.east, featureIds: ["lever1"] }),
         new Wall({ x: 2, y: 6, place: Direction.east, shape: doorway, open: true, featureIds: ["door1"] }),
         new Wall({ x: 2, y: 7, place: Direction.east }),
         new Wall({ x: 2, y: 7, place: Direction.south }),
