@@ -93,7 +93,7 @@ class TunnelReaction extends Reaction {
 
             for (wallIndex = 0; wallIndex < level.data.walls.length; wallIndex++) {
                 const wall = level.data.walls[wallIndex];
-                if (wall.getFeatures().find(feature => feature.data.reactions?.includes(this.otherEnd))) {
+                if (wall.features.find(feature => feature.data.reactions?.includes(this.otherEnd))) {
                     foundPair = true
                     break;
                 }

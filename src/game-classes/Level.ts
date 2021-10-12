@@ -65,7 +65,10 @@ class Level {
         this.data = config
         this.tickCount = 0
 
-        this.data.walls.forEach(wall => wall.level = this)
+        this.data.walls.forEach(wall => {
+            wall.level = this;
+            wall.features = wall.getFeatures();
+        })
         this.data.squaresWithFeatures?.forEach(squaresWithFeature => squaresWithFeature.level = this)
         this.data.controllers?.forEach(controller => controller.level = this)
     }

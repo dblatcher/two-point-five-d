@@ -19,7 +19,6 @@ interface WallConfig {
     color?: Color
     patternSprite?: Sprite
     shape?: Point[]
-    features?: WallFeature[]
     open?: boolean
     featureIds?: string[]
 }
@@ -27,28 +26,29 @@ interface WallConfig {
 class Wall extends Position {
     data: WallConfig
     level?: Level
+    features: WallFeature[]
 
     constructor(config: WallConfig) {
         super(config)
         this.data = config
-        this.data.features = this.data.features || [];
         this.data.open = !!this.data.open
+        this.features = []
     }
 
 
     get isBlocking(): boolean {
         const { open } = this.data;
-        const features = this.getFeatures()
+        const { features } = this
         return !open || !!features.find(feature => feature.isBlocking);
     }
 
     get hasInteractableFeature(): boolean {
-        const { features = [] } = this.data;
+        const { features } = this
         return !!features.find(feature => feature.canInteract);
     }
 
     get hasBlockingFeature(): boolean {
-        const { features = [] } = this.data;
+        const { features } = this
         return !!features.find(feature => feature.isBlocking);
     }
 
@@ -78,8 +78,8 @@ class Wall extends Position {
 
     getFeatures(): WallFeature[] {
 
-        const { features: directlyReferencedFeatures = [], featureIds = [] } = this.data
-        const allFeatures = [...directlyReferencedFeatures]
+        const { featureIds = [] } = this.data
+        const allFeatures = []
 
         if (this.level) {
             const featuresFromKeys = WallFeature.getFeaturesFromKeyArray(featureIds, WallFeature, this.level) as WallFeature[];
@@ -97,7 +97,7 @@ class Wall extends Position {
 
         let fillStyle: CanvasPattern | string = getColorFill(relativeDirection, this.data.color || Wall.defaultColor)
 
-        const features = this.getFeatures()
+        const { features } = this
 
         const isDoubleHeight = shape.some(point => point.y > 1);
         if (patternSprite && isDoubleHeight) {
@@ -165,7 +165,7 @@ class Wall extends Position {
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
 
         const { place } = this.data;
-        const features = this.getFeatures();
+        const { features } = this;
         const featureToDraw = features.find(feature => feature.isDrawnInMap);
 
         if (featureToDraw) {

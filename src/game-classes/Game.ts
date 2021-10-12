@@ -211,7 +211,7 @@ class Game {
         })
 
         walls.forEach(wall => {
-            wall.getFeatures().forEach(wallFeature => {
+            wall.features.forEach(wallFeature => {
                 wallFeature.tick(this)
             })
         })

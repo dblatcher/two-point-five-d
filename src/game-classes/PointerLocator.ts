@@ -226,8 +226,8 @@ class PointerLocator {
         return wallClicked;
     }
 
-    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall: boolean, level:Level): WallFeature | null {
-        const features = wall.getFeatures();
+    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall: boolean, level: Level): WallFeature | null {
+        const { features } = wall;
         return features.find(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return false }
 
@@ -276,7 +276,7 @@ class PointerLocator {
 
         function identifyClickedFigureInSquare(viewedFrom: Direction, figureMaps: FigureMap[], clickInfo: Point, forward = 0): FigureMap | null {
             return figureMaps.find(figureMap => {
-                if (!figureMap.canInteractWith) {return false}
+                if (!figureMap.canInteractWith) { return false }
                 const { figure } = figureMap
                 if (!figure) { return false }
                 const renderParams = figure.getRenderParams(viewedFrom, forward, 0)
