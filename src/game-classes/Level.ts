@@ -67,6 +67,7 @@ class Level {
 
         this.data.walls.forEach(wall => wall.level = this)
         this.data.squaresWithFeatures?.forEach(squaresWithFeature => squaresWithFeature.level = this)
+        this.data.controllers?.forEach(controller => controller.level = this)
     }
 
     static defaultFloorColor = new Color(80, 80, 80);
@@ -99,7 +100,7 @@ class Level {
         if (squaresWithFeatures.find(
             squareWithFeature => {
                 if (squareWithFeature.gridX != targetX || squareWithFeature.gridY != targetY) { return false }
-                return squareWithFeature.data.floorFeatures?.some(floorFeature => floorFeature.isBlocking)
+                return squareWithFeature.getFloorFeatures().some(floorFeature => floorFeature.isBlocking)
             }
 
         )) { return true }

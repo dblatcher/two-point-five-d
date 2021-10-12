@@ -1,10 +1,11 @@
 import { AbstractFeature } from "./AbstractFeature";
 import { FloorFeature } from "./FloorFeature";
+import { Level } from "./Level";
 
 
 interface ControllerData {
-    inputs: AbstractFeature[]
-    subject: AbstractFeature
+    inputIds: string[]
+    subjectId: string
     useWeightAsStatusForFloorFeatures?: boolean
     statusChangeOnInputTrigger?: string
     statusMap?: [string[], string][]
@@ -14,13 +15,31 @@ interface ControllerData {
 
 class Controller {
     data: ControllerData
+    level?: Level
 
     constructor(config: ControllerData) {
         this.data = config
     }
 
+    get subject(): AbstractFeature | undefined {
+        if (!this.level) { return }
+        return AbstractFeature.getFeatureFromKey(this.data.subjectId, AbstractFeature, this.level)
+    }
+
+    get inputs(): Array<AbstractFeature | undefined> {
+        const { inputIds } = this.data;
+        const { level } = this
+        if (!level) { return inputIds.map(() => undefined) }
+
+        return inputIds.map(
+            id => AbstractFeature.getFeatureFromKey(id, AbstractFeature, level)
+        )
+    }
+
     get inputStatus(): string[] {
-        const status: string[] = this.data.inputs.map(feature => {
+        const status: string[] = this.inputs.map(feature => {
+
+            if (!feature) { return "" }
 
             if (this.data.useWeightAsStatusForFloorFeatures && feature.isFloorFeature) {
                 return (feature as FloorFeature).hadWeightOnItLastTick ? FloorFeature.WEIGHED : FloorFeature.NOT_WEIGHED
@@ -32,13 +51,14 @@ class Controller {
     }
 
     reactToTriggers(featuresTriggeredThisTurn: AbstractFeature[]): void {
-        const { inputs, statusChangeOnInputTrigger, subject } = this.data;
+        const { statusChangeOnInputTrigger } = this.data;
+        const { subject, inputs } = this
 
         if (statusChangeOnInputTrigger) {
             const inputsTriggered = featuresTriggeredThisTurn.filter(feature => inputs.includes(feature))
 
             if (inputsTriggered.length > 0) {
-                subject.setStatus(statusChangeOnInputTrigger)
+                subject?.setStatus(statusChangeOnInputTrigger)
             }
         }
 
@@ -46,7 +66,8 @@ class Controller {
 
     reactToInputStatus(): void {
         const { inputStatus } = this
-        const { statusMap, subject, defaultSubjectState } = this.data;
+        const { statusMap, defaultSubjectState } = this.data;
+        const { subject } = this
 
         if (statusMap) {
             const matchingEntry = statusMap.find(entry => {
@@ -59,9 +80,9 @@ class Controller {
             })
 
             if (matchingEntry) {
-                subject.setStatus(matchingEntry[1])
+                subject?.setStatus(matchingEntry[1])
             } else if (defaultSubjectState) {
-                subject.setStatus(defaultSubjectState)
+                subject?.setStatus(defaultSubjectState)
             }
         }
     }

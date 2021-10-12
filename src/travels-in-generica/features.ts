@@ -21,10 +21,10 @@ const advertBoard = new WallFeature({
 
 const tunnel = makeTunnel();
 
-const staircaseA = {
-    up: new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[0]] }),
-    down: new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[1]] })
-}
+const staircaseAUp = new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[0]] })
+
+const staircaseAdown =  new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[1]] })
+
 
 const brownCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'saddlebrown', strokeStyle: 'sandybrown' } });
 const grayCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } });
@@ -35,5 +35,5 @@ const torch = new WallFeature({
 })
 
 export {
-    painting1, staircaseA, paintingClipped, poemBoard, advertBoard, brownCeiling, grayCeiling, redCeiling,torch
+    painting1, staircaseAUp, staircaseAdown, paintingClipped, poemBoard, advertBoard, brownCeiling, grayCeiling, redCeiling,torch
 }

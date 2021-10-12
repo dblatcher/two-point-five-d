@@ -82,7 +82,7 @@ class Wall extends Position {
         const allFeatures = [...directlyReferencedFeatures]
 
         if (this.level) {
-            const featuresFromKeys = WallFeature.getFeatureFromKeyString(featureIds, WallFeature, this.level) as WallFeature[];
+            const featuresFromKeys = WallFeature.getFeaturesFromKeyArray(featureIds, WallFeature, this.level) as WallFeature[];
             allFeatures.push(...featuresFromKeys)
         }
         return allFeatures

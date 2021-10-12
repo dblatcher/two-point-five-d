@@ -44,7 +44,7 @@ class SquareWithFeatures extends Vantage {
         const allFeatures = [...directlyReferencedFeatures]
 
         if (this.level) {
-            const featuresFromKeys = FloorFeature.getFeatureFromKeyString(floorFeatureIds,FloorFeature, this.level) as FloorFeature[];
+            const featuresFromKeys = FloorFeature.getFeaturesFromKeyArray(floorFeatureIds,FloorFeature, this.level) as FloorFeature[];
             allFeatures.push(...featuresFromKeys)
         }
         return allFeatures
@@ -56,7 +56,7 @@ class SquareWithFeatures extends Vantage {
         const allFeatures = [...directlyReferencedFeatures]
 
         if (this.level) {
-            const featuresFromKeys = CeilingFeature.getFeatureFromKeyString(ceilingFeatureIds,CeilingFeature, this.level) as CeilingFeature[];
+            const featuresFromKeys = CeilingFeature.getFeaturesFromKeyArray(ceilingFeatureIds,CeilingFeature, this.level) as CeilingFeature[];
             allFeatures.push(...featuresFromKeys)
         }
         return allFeatures

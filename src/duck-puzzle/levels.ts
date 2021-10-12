@@ -23,7 +23,9 @@ import { makeSign, lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClo
 const hintForLevel1 = makeSign(["Help the duck", "reach the", "blue star!",])
 const hintForLevel2 = makeSign(["Use both plates", "to open", "the door"])
 
-
+const features = {
+    lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed, hintForLevel1, hintForLevel2, blueStar
+}
 
 const duckPuzzleLevel1 = new Level({
     height: 6,
@@ -33,13 +35,14 @@ const duckPuzzleLevel1 = new Level({
     },
     defaultWallPattern: sprites.brickWall,
     floorColor: new Color(100, 40, 40),
+    features,
     walls: [
         new Wall({ x: 0, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
-        new Wall({ x: 1, y: 3, place: Direction.north, features: [hintForLevel1] }),
+        new Wall({ x: 1, y: 3, place: Direction.north, featureIds: ["hintForLevel1"] }),
         new Wall({ x: 2, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
         new Wall({ x: 3, y: 3, place: Direction.north, patternSprite: sprites.windowWall }),
-        new Wall({ x: 4, y: 2, place: Direction.west, shape: doorway, open: true, features: [door1] }),
-        new Wall({ x: 4, y: 1, place: Direction.west, features: [lever1] }),
+        new Wall({ x: 4, y: 2, place: Direction.west, shape: doorway, open: true, featureIds: ["door1"] }),
+        new Wall({ x: 4, y: 1, place: Direction.west, featureIds: ["lever1"] }),
         new Wall({ x: 4, y: 0, place: Direction.west }),
         new Wall({ x: 6, y: 0, place: Direction.west }),
         new Wall({ x: 6, y: 1, place: Direction.west }),
@@ -49,15 +52,15 @@ const duckPuzzleLevel1 = new Level({
     ],
     squaresWithFeatures: [
         new SquareWithFeatures({
-            x: 7, y: 5, direction: Direction.north, floorFeatures: [blueStar]
+            x: 7, y: 5, direction: Direction.north, floorFeatureIds: ["blueStar"]
         }),
 
         new SquareWithFeatures({
-            x: 7, y: 2, direction: Direction.north, floorFeatures: [pit1]
+            x: 7, y: 2, direction: Direction.north, floorFeatureIds: ["pit1"]
         }),
 
         new SquareWithFeatures({
-            x: 5, y: 2, direction: Direction.north, floorFeatures: [floorSwitch]
+            x: 5, y: 2, direction: Direction.north, floorFeatureIds: ["floorSwitch"]
         }),
 
     ],
@@ -68,12 +71,12 @@ const duckPuzzleLevel1 = new Level({
     ],
     controllers: [
         new Controller({
-            inputs: [lever1], defaultSubjectState: "CLOSED", subject: door1,
+            inputIds: ["lever1"], defaultSubjectState: "CLOSED", subjectId: "door1",
             statusMap: [[["ON"], "OPEN"]]
         }),
 
         new Controller({
-            inputs: [floorSwitch], subject: pit1, defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
+            inputIds: ["floorSwitch"], subjectId: "pit1", defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
                 [[FloorFeature.WEIGHED], "CLOSED"],
             ]
         }),
@@ -85,6 +88,7 @@ const duckPuzzleLevel1 = new Level({
 const duckPuzzleLevel2 = new Level({
     height: 6,
     width: 6,
+    features,
     startingVantage: {
         x: 1, y: 2, direction: Direction.east,
     },
@@ -100,15 +104,15 @@ const duckPuzzleLevel2 = new Level({
     ],
     squaresWithFeatures: [
         new SquareWithFeatures({
-            x: 1, y: 2, direction: Direction.north, floorFeatures: [blueStar]
+            x: 1, y: 2, direction: Direction.north, floorFeatureIds: ["blueStar"]
         }),
 
         new SquareWithFeatures({
-            x: 3, y: 1, direction: Direction.north, floorFeatures: [floorSwitch2]
+            x: 3, y: 1, direction: Direction.north, floorFeatureIds: ["floorSwitch2"]
         }),
 
         new SquareWithFeatures({
-            x: 3, y: 3, direction: Direction.north, floorFeatures: [floorSwitch]
+            x: 3, y: 3, direction: Direction.north, floorFeatureIds: ["floorSwitch"]
         }),
 
     ],
@@ -122,7 +126,7 @@ const duckPuzzleLevel2 = new Level({
     ],
     controllers: [
         new Controller({
-            inputs: [floorSwitch, floorSwitch2], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subject: door1,
+            inputIds: ["floorSwitch", "floorSwitch2"], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subjectId: "door1",
             statusMap: [[[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "OPEN"]]
         }),
     ],
@@ -133,6 +137,7 @@ const duckPuzzleLevel2 = new Level({
 const duckPuzzleLevel3 = new Level({
     height: 7,
     width: 7,
+    features,
     startingVantage: {
         x: 0, y: 0, direction: Direction.east,
     },
@@ -140,34 +145,34 @@ const duckPuzzleLevel3 = new Level({
     walls: [
 
         new Wall({ x: 2, y: 2, place: Direction.north, }),
-        new Wall({ x: 3, y: 2, place: Direction.north, shape: doorway, open: true, features: [door1] }),
+        new Wall({ x: 3, y: 2, place: Direction.north, shape: doorway, open: true, featureIds: ["door1"] }),
         new Wall({ x: 4, y: 2, place: Direction.north, }),
 
         new Wall({ x: 2, y: 4, place: Direction.south, }),
-        new Wall({ x: 3, y: 4, place: Direction.south, shape: doorway, open: true, features: [door2] }),
+        new Wall({ x: 3, y: 4, place: Direction.south, shape: doorway, open: true, featureIds: ["door2"] }),
         new Wall({ x: 4, y: 4, place: Direction.south, }),
 
         new Wall({ x: 2, y: 2, place: Direction.west, }),
-        new Wall({ x: 2, y: 3, place: Direction.west, features: [lever1] }),
+        new Wall({ x: 2, y: 3, place: Direction.west, featureIds: ["lever1"] }),
         new Wall({ x: 2, y: 4, place: Direction.west, }),
 
         new Wall({ x: 4, y: 2, place: Direction.east, }),
         new Wall({ x: 4, y: 3, place: Direction.east, }),
         new Wall({ x: 4, y: 4, place: Direction.east, }),
 
-        new Wall({ x: 4, y: 6, place: Direction.west, shape: doorway, open: true, features: [door1] }),
+        new Wall({ x: 4, y: 6, place: Direction.west, shape: doorway, open: true, featureIds: ["door1"] }),
     ],
     squaresWithFeatures: [
         new SquareWithFeatures({
-            x: 3, y: 3, direction: Direction.north, floorFeatures: [blueStar]
+            x: 3, y: 3, direction: Direction.north, floorFeatureIds: ["blueStar"]
         }),
 
         new SquareWithFeatures({
-            x: 4, y: 0, direction: Direction.north, floorFeatures: [pitClosed]
+            x: 4, y: 0, direction: Direction.north, floorFeatureIds: ["pitClosed"]
         }),
 
         new SquareWithFeatures({
-            x: 3, y: 0, direction: Direction.north, floorFeatures: [floorSwitch]
+            x: 3, y: 0, direction: Direction.north, floorFeatureIds: ["floorSwitch"]
         }),
     ],
     actors: [
@@ -179,15 +184,15 @@ const duckPuzzleLevel3 = new Level({
     ],
     controllers: [
         new Controller({
-            inputs: [floorSwitch], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subject: pitClosed,
+            inputIds: ["floorSwitch"], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subjectId: "pitClosed",
             statusMap: [[[FloorFeature.WEIGHED], "OPEN"]]
         }),
         new Controller({
-            inputs: [floorSwitch], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subject: door1,
+            inputIds: ["floorSwitch"], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subjectId: "door1",
             statusMap: [[[FloorFeature.WEIGHED], "OPEN"]]
         }),
         new Controller({
-            inputs: [lever1], defaultSubjectState: "CLOSED", subject: door2,
+            inputIds: ["lever1"], defaultSubjectState: "CLOSED", subjectId: "door2",
             statusMap: [[["ON"], "OPEN"]]
         }),
     ],

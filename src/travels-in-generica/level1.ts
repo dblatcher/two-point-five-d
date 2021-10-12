@@ -10,7 +10,7 @@ import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 
 import { doorway, spikey } from "@/instances/wallShapes"
 import { sprites as sharedSprites } from "@/instances/sprites";
-import * as features from "@/travels-in-generica/features"
+import * as globalFeatures from "@/travels-in-generica/features"
 import { sprites } from "./sprites";
 import { itemTypes } from "./itemTypes"
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
@@ -21,11 +21,15 @@ import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
 import { QuestHook } from "@/rpg-classes/Quest";
 import { Figure } from "@/game-classes/Figure";
+import { AbstractFeature } from "@/game-classes/AbstractFeature";
 
 
 
-const door3 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const keyhole = new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true })
+const features:{[index:string]:AbstractFeature} = {
+    ...globalFeatures,
+    door3: new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false }),
+    keyhole: new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true }),
+}
 
 const church = makeChurch(0, 0)
 const hut1 = makeHut(6, 0, Direction.south, sprites.grayWoodWallOne)
@@ -35,14 +39,9 @@ const hut4 = makeHut(6, 8, Direction.north, sprites.grayWoodWallOne)
 const hut5 = makeHut(10, 3, Direction.west, sprites.yellowWoodWallOne)
 const hut6 = makeHut(13, 7, Direction.west, sprites.brownWoodWallOne)
 
-church.walls[0].data.features = [features.staircaseA.down]
-hut3.walls[0].data.features = [features.torch]
-hut3.walls[1].data.features = [features.torch]
-hut3.walls[2].data.features = [features.torch]
-hut3.walls[2].data.features = [features.torch]
-hut3.walls[3].data.features = [features.torch]
-hut3.walls[4].data.features = [features.torch]
-hut3.walls[5].data.features = [features.torch]
+church.walls[0].data.featureIds = ["staircaseAdown"]
+hut3.walls[0].data.featureIds = ["torch"]
+
 
 
 const level1: Level = new Level({
@@ -53,10 +52,10 @@ const level1: Level = new Level({
         skyBaseColor: new Color(140, 150, 250),
         sun: true,
     }),
-
+    features,
     walls: [
         ...church.walls,
-        new Wall({ x: 2, y: 2, place: Direction.north, patternSprite: sharedSprites.brickWall, shape: doorway, features: [door3, keyhole], open: true }),
+        new Wall({ x: 2, y: 2, place: Direction.north, patternSprite: sharedSprites.brickWall, shape: doorway, featureIds: ["door3", "keyhole"], open: true }),
         ...hut1.walls,
         ...hut2.walls,
         ...hut3.walls,
@@ -186,7 +185,7 @@ const level1: Level = new Level({
 
     controllers: [
 
-        new Controller({ inputs: [keyhole], subject: door3, statusChangeOnInputTrigger: "OPEN" }),
+        new Controller({ inputIds: ["keyhole"], subjectId: "door3", statusChangeOnInputTrigger: "OPEN" }),
     ]
 }).withWallsAround({ patternSprite:sprites.fence,  })
 

@@ -53,7 +53,7 @@ const levels = [
         features,
         controllers: [
             new Controller({
-                inputs: [features.switch], subject: features.door, statusMap: [
+                inputIds: ["switch"], subjectId: "door", statusMap: [
                     [["ON"], "OPEN"],
                     [["OFF"], "CLOSED"],
                 ]

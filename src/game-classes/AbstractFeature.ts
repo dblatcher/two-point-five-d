@@ -208,7 +208,16 @@ class AbstractFeature {
         return true
     }
 
-    static getFeatureFromKeyString(featureIds:string[], subClass: typeof AbstractFeature, level:Level):AbstractFeature[] {
+    static getFeatureFromKey(featureId:string, subClass: typeof AbstractFeature, level:Level):AbstractFeature|undefined {
+        const levelFeatures = level.data.features || {};
+        const match = levelFeatures[featureId];
+        if (match && subClass.isSubClassOf(match)) {
+            return match
+        }
+        return undefined
+    }
+
+    static getFeaturesFromKeyArray(featureIds:string[], subClass: typeof AbstractFeature, level:Level):AbstractFeature[] {
 
         const features: AbstractFeature[] = []
         const levelFeatures = level.data.features || {};
