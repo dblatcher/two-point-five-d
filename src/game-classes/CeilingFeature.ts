@@ -4,23 +4,18 @@ import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 
 
-import { AbstractFeature } from './AbstractFeature'
-import { Sprite } from "@/canvas/Sprite";
+import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
 
-interface CeilingFeatureConfig {
-    id?: string
-    blocksByDefault?: boolean
-    sprite?: Sprite
-    status?: string
+interface CeilingFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
 
 
 class CeilingFeature extends AbstractFeature {
-    data: CeilingFeatureConfig
+    data: CeilingFeatureData
 
-    constructor(config: CeilingFeatureConfig) {
+    constructor(config: CeilingFeatureData) {
         super(config)
         this.data = config
         this.data.status = config.status || this.defaultStatus
@@ -51,7 +46,7 @@ class CeilingFeature extends AbstractFeature {
         [-.5, -.5], [.5, -.5], [.5, .5], [-.5, .5]
     ]
 
-    static isSubClassOf(feature: AbstractFeature):boolean {
+    static isSubClassOf(feature: AbstractFeature): boolean {
         return feature.isCeilingFeature
     }
 }
@@ -59,4 +54,4 @@ class CeilingFeature extends AbstractFeature {
 
 
 
-export { CeilingFeature, CeilingFeatureConfig }
+export { CeilingFeature, CeilingFeatureData }

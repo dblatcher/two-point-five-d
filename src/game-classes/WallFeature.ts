@@ -5,30 +5,21 @@ import { TextBoard } from "@/canvas/TextBoard"
 import { Sprite } from "@/canvas/Sprite"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
-import { Reaction } from "./Reaction"
 import { Vantage } from "./Vantage"
-import { AbstractFeature } from './AbstractFeature'
-import { ItemType } from "./ItemType"
+import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
 import { AnimationTransition } from "./AnimationTransition"
 import { Actor } from "@/game-classes/Actor"
 
-interface WallFeatureConfig {
-    reactions?: Reaction[]
-    blocksByDefault?: boolean
-    sprite?: Sprite
-    status?: string
-    requiresItem?: ItemType,
-    consumesItem?: boolean
+interface WallFeatureData extends AbstractFeatureData {
     textBoard?: TextBoard
     onBothSides?: boolean
     clipToWall?: boolean
-    transitions?: AnimationTransition[]
 }
 
 class WallFeature extends AbstractFeature {
-    data: WallFeatureConfig
+    data: WallFeatureData
 
-    constructor(config: WallFeatureConfig) {
+    constructor(config: WallFeatureData) {
         super(config)
         this.data = config
         this.data.status = config.status || this.defaultStatus
@@ -42,7 +33,7 @@ class WallFeature extends AbstractFeature {
     get isWallFeature(): boolean { return true }
     get canInteract(): boolean { return false }
 
-    handleInteraction(actor: Vantage|Actor, game: Game): void {
+    handleInteraction(actor: Vantage | Actor, game: Game): void {
         this.fireTriggers(game)
         this.fireReactions(actor, game)
     }
@@ -74,7 +65,7 @@ class WallFeature extends AbstractFeature {
         }
     }
 
-    static isSubClassOf(feature: AbstractFeature):boolean {
+    static isSubClassOf(feature: AbstractFeature): boolean {
         return feature.isWallFeature
     }
 }

@@ -16,15 +16,12 @@ import { Vantage } from "./Vantage"
 
 interface AbstractFeatureData {
     id?:string
+    status?: string
     reactions?: Reaction[]
     blocksByDefault?: boolean
-    sprite?: Sprite
-
-    status?: string
-
     requiresItem?: ItemType
     consumesItem?: boolean
-
+    sprite?: Sprite
     transitions?: AnimationTransition[]
 }
 
@@ -156,6 +153,7 @@ class AbstractFeature {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     tick(game:Game):void {
         this.advanceTransition()
     }
@@ -172,6 +170,7 @@ class AbstractFeature {
         })
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
         return []
     }

@@ -8,29 +8,23 @@ import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage } from "./Vantage";
 
 
-import { AbstractFeature } from './AbstractFeature'
+import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
 import { Sprite } from "@/canvas/Sprite";
 import { Direction } from "./Direction";
 import { Color } from "@/canvas/Color";
 
-interface FloorFeatureConfig {
-    id?: string
-    reactions?: Reaction[]
-    blocksByDefault?: boolean
-    sprite?: Sprite
-    status?: string
-
+interface FloorFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
 
 
 class FloorFeature extends AbstractFeature {
-    data: FloorFeatureConfig
+    data: FloorFeatureData
     hadWeightOnItLastTick?: boolean
     thingsOnMeLastTick: Array<Item | Vantage>
 
-    constructor(config: FloorFeatureConfig) {
+    constructor(config: FloorFeatureData) {
         super(config)
         this.data = config
         this.data.status = config.status || this.defaultStatus
@@ -194,4 +188,4 @@ class Pit extends FloorFeature {
     }
 }
 
-export { FloorFeature, FloorFeatureConfig, Pit }
+export { FloorFeature, FloorFeatureData, Pit }
