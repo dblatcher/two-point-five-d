@@ -69,7 +69,11 @@ class Level {
             wall.level = this;
             wall.features = wall.getFeatures();
         })
-        this.data.squaresWithFeatures?.forEach(squaresWithFeature => squaresWithFeature.level = this)
+        this.data.squaresWithFeatures?.forEach(squaresWithFeature => {
+            squaresWithFeature.level = this
+            squaresWithFeature.ceilingFeatures = squaresWithFeature.getCeilingFeatures()
+            squaresWithFeature.floorFeatures = squaresWithFeature.getFloorFeatures()
+        })
         this.data.controllers?.forEach(controller => controller.level = this)
     }
 
@@ -103,7 +107,7 @@ class Level {
         if (squaresWithFeatures.find(
             squareWithFeature => {
                 if (squareWithFeature.gridX != targetX || squareWithFeature.gridY != targetY) { return false }
-                return squareWithFeature.getFloorFeatures().some(floorFeature => floorFeature.isBlocking)
+                return squareWithFeature.floorFeatures.some(floorFeature => floorFeature.isBlocking)
             }
 
         )) { return true }
@@ -151,7 +155,7 @@ class Level {
         const blockingSquare = squaresWithFeatures.find(
             squareWithFeature => {
                 if (squareWithFeature.gridX != targetX || squareWithFeature.gridY != targetY) { return false }
-                return squareWithFeature.getFloorFeatures().some(floorFeature => floorFeature.isBlocking)
+                return squareWithFeature.floorFeatures.some(floorFeature => floorFeature.isBlocking)
             });
 
         if (blockingSquare) {

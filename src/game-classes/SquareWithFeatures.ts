@@ -15,9 +15,7 @@ interface SquareWithFeaturesData {
     x: number
     y: number
     direction: Direction
-    floorFeatures?: FloorFeature[]
     floorFeatureIds?: string[]
-    ceilingFeatures?: CeilingFeature[]
     ceilingFeatureIds?: string[]
 }
 
@@ -26,12 +24,17 @@ class SquareWithFeatures extends Vantage {
     vantagesOnThisSquareNow: Vantage[]
     itemsOnThisSquareNow: Item[]
     level?: Level
+    ceilingFeatures: CeilingFeature[]
+    floorFeatures: FloorFeature[]
 
     constructor(config: SquareWithFeaturesData) {
         super(config)
         this.data = config
         this.vantagesOnThisSquareNow = []
         this.itemsOnThisSquareNow = []
+
+        this.ceilingFeatures = []
+        this.floorFeatures = []
     }
 
     get isSquareWithFeatures(): boolean { return true }
@@ -40,8 +43,8 @@ class SquareWithFeatures extends Vantage {
 
     getFloorFeatures(): FloorFeature[] {
 
-        const { floorFeatures: directlyReferencedFeatures = [], floorFeatureIds = [] } = this.data
-        const allFeatures = [...directlyReferencedFeatures]
+        const {  floorFeatureIds = [] } = this.data
+        const allFeatures = []
 
         if (this.level) {
             const featuresFromKeys = FloorFeature.getFeaturesFromKeyArray(floorFeatureIds,FloorFeature, this.level) as FloorFeature[];
@@ -52,8 +55,8 @@ class SquareWithFeatures extends Vantage {
 
     getCeilingFeatures(): CeilingFeature[] {
 
-        const { ceilingFeatures: directlyReferencedFeatures = [], ceilingFeatureIds = [] } = this.data
-        const allFeatures = [...directlyReferencedFeatures]
+        const { ceilingFeatureIds = [] } = this.data
+        const allFeatures = []
 
         if (this.level) {
             const featuresFromKeys = CeilingFeature.getFeaturesFromKeyArray(ceilingFeatureIds,CeilingFeature, this.level) as CeilingFeature[];
@@ -63,16 +66,16 @@ class SquareWithFeatures extends Vantage {
     }
 
     drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
-        this.getFloorFeatures().forEach(feature => {
+        this.floorFeatures.forEach(feature => {
             feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount)
         })
-        this.getCeilingFeatures().forEach(feature => {
+        this.ceilingFeatures.forEach(feature => {
             feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount)
         })
     }
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
-        const featureToDraw = this.getFloorFeatures().find(feature => feature.isDrawnInMap);
+        const featureToDraw = this.floorFeatures.find(feature => feature.isDrawnInMap);
 
         if (featureToDraw) {
             featureToDraw.drawInMap(ctx, gridSize, this, this.data.direction)

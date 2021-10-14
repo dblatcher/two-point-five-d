@@ -200,7 +200,7 @@ class Game {
         })
 
         squaresWithFeatures.forEach(square => {
-            square.getFloorFeatures().forEach(floorFeature => {
+            square.floorFeatures.forEach(floorFeature => {
                 floorFeature.tick(this)
                 const weightChange = floorFeature.checkWeightChange(square)
 
