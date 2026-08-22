@@ -1,47 +1,43 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
-import { game } from '@/test-world/'
+import { game } from '@/travels-in-generica'
+import { DirectionName } from './types'
+import { Arrows } from './components/Arrows'
 
 function App() {
 
-  console.log(game)
+  const gameRef = useRef(game)
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
 
   const renderSight = useCallback(() => {
     if (canvas) {
-      const { playerVantage, level } = game.data;
+      const { playerVantage, level } = gameRef.current.data;
       level.drawAsSight(canvas, playerVantage)
     }
   }, [canvas])
 
-  const move = useCallback((direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") => {
-    game.queuePlayerMovementAction({ action: 'MOVE', direction })
-    game.tick();
+  const move = useCallback((direction: DirectionName) => {
+    gameRef.current.queuePlayerMovementAction({ action: 'MOVE', direction })
+    gameRef.current.tick();
     renderSight()
   }, [renderSight])
 
   const turn = useCallback((direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") => {
-    game.queuePlayerMovementAction({ action: 'TURN', direction })
-    game.tick();
+    gameRef.current.queuePlayerMovementAction({ action: 'TURN', direction })
+    gameRef.current.tick();
     renderSight()
   }, [renderSight])
 
   useEffect(() => {
-    console.log(canvas)
-    game.loadImages().then(() => {
+    gameRef.current.loadImages().then(() => {
       renderSight()
     })
   }, [renderSight])
 
   return (
     <>
-      <p>hello</p>
-      <button onClick={() => { renderSight() }}>render</button>
-      <button onClick={() => { move('FORWARD') }}>forward</button>
-      <button onClick={() => { move('BACK') }}>back</button>
-      <button onClick={() => { turn('LEFT') }}>left</button>
-      <button onClick={() => { turn('RIGHT') }}>right</button>
       <canvas ref={setCanvas}></canvas>
+      <Arrows move={move} turn={turn} />
     </>
   )
 }
