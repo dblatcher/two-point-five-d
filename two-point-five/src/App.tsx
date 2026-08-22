@@ -18,14 +18,10 @@ function App() {
 
   const move = useCallback((direction: DirectionName) => {
     gameRef.current.queuePlayerMovementAction({ action: 'MOVE', direction })
-    gameRef.current.tick();
-    renderSight()
   }, [renderSight])
 
   const turn = useCallback((direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") => {
     gameRef.current.queuePlayerMovementAction({ action: 'TURN', direction })
-    gameRef.current.tick();
-    renderSight()
   }, [renderSight])
 
   useEffect(() => {
@@ -33,6 +29,18 @@ function App() {
       renderSight()
     })
   }, [renderSight])
+
+  useEffect(() => {
+    const runTick = () => {
+      gameRef.current.tick()
+      renderSight()
+    }
+    const interval = setInterval(runTick, 100)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [renderSight])
+
 
   return (
     <>
