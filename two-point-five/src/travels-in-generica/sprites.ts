@@ -3,56 +3,71 @@ import { SpriteSheet } from "@/canvas/SpriteSheet"
 
 import orc from "@/travels-in-generica/assets/orc.png"
 import trees from "@/travels-in-generica/assets/green-trees.png"
+import monk from "@/travels-in-generica/assets/red-monk.png"
+import smith from "@/travels-in-generica/assets/smith.png"
+import innKeeper from "@/travels-in-generica/assets/innkeeper.png"
+import skeletonArcher from "@/travels-in-generica/assets/skeleton-archer.png"
+import skeletonSpearman from "@/travels-in-generica/assets/skeleton-spearman.png"
+import guard2 from "@/travels-in-generica/assets/guard2.png"
+import guard3 from "@/travels-in-generica/assets/guard3.png"
+import armedMan from "@/travels-in-generica/assets/armed-man.png"
+import farmer from "@/travels-in-generica/assets/farmer.png"
+import farmer2 from "@/travels-in-generica/assets/farmer2.png"
+import woodenwalls from "@/travels-in-generica/assets/woodenwalls.png"
+import woodenFence from "@/travels-in-generica/assets/fence_112x56.png"
+import portrait1 from "@/assets/sprites/portraits/Icons_01.png";
+import portrait2 from "@/assets/sprites/portraits/Icons_02.png";
+import portrait3 from "@/assets/sprites/portraits/Icons_03.png";
+import portrait13 from "@/assets/sprites/portraits/Icons_13.png";
+import portrait15 from "@/assets/sprites/portraits/Icons_15.png";
+import weapons from "@/travels-in-generica/assets/new-weapons.png";
+import armour from "@/travels-in-generica/assets/gear_armor.png";
+import torch from "@/travels-in-generica/assets/animated_torch.png";
+import rubyKey from "@/travels-in-generica/assets/ruby_key.png";
 
-const paths: Record<string, string | undefined> = {
-    "./assets/orc.png": orc,
-    "./assets/green-trees.png": trees,
-}
-
-const require = (path: string) => paths[path]
 
 const sheets: { [index: string]: SpriteSheet } = {
 
-    orc: new SpriteSheet("orc", require("./assets/orc.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    smith: new SpriteSheet("smith", require("./assets/smith.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    redMonk: new SpriteSheet("monk", require("./assets/red-monk.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    innKeeper: new SpriteSheet("innKeeper", require("./assets/innkeeper.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    skeletonArcher: new SpriteSheet("skeletonArcher", require("./assets/skeleton-archer.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    skeletonSpearman: new SpriteSheet("skeletonSpearman", require("./assets/skeleton-spearman.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    guard2: new SpriteSheet("guard2", require("./assets/guard2.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    guard3: new SpriteSheet("guard3", require("./assets/guard3.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    armedMan: new SpriteSheet("armedMan", require("./assets/armed-man.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    farmer: new SpriteSheet("farmer", require("./assets/farmer.png"), { pattern: "GRID", cols: 13, rows: 21 }),
-    farmer2: new SpriteSheet("farmer2", require("./assets/farmer2.png"), { pattern: "GRID", cols: 13, rows: 21 }),
+    orc: new SpriteSheet("orc", orc, { pattern: "GRID", cols: 13, rows: 21 }),
+    smith: new SpriteSheet("smith", smith, { pattern: "GRID", cols: 13, rows: 21 }),
+    redMonk: new SpriteSheet("monk", monk, { pattern: "GRID", cols: 13, rows: 21 }),
+    innKeeper: new SpriteSheet("innKeeper", innKeeper, { pattern: "GRID", cols: 13, rows: 21 }),
+    skeletonArcher: new SpriteSheet("skeletonArcher", skeletonArcher, { pattern: "GRID", cols: 13, rows: 21 }),
+    skeletonSpearman: new SpriteSheet("skeletonSpearman", skeletonSpearman, { pattern: "GRID", cols: 13, rows: 21 }),
+    guard2: new SpriteSheet("guard2", guard2, { pattern: "GRID", cols: 13, rows: 21 }),
+    guard3: new SpriteSheet("guard3", guard3, { pattern: "GRID", cols: 13, rows: 21 }),
+    armedMan: new SpriteSheet("armedMan", armedMan, { pattern: "GRID", cols: 13, rows: 21 }),
+    farmer: new SpriteSheet("farmer", farmer, { pattern: "GRID", cols: 13, rows: 21 }),
+    farmer2: new SpriteSheet("farmer2", farmer2, { pattern: "GRID", cols: 13, rows: 21 }),
 
     //https://opengameart.org/content/39-portraits-pixel-art-pack
-    portrait1: new SpriteSheet("portrait1", require("../assets/sprites/portraits/Icons_01.png")),
-    portrait2: new SpriteSheet("portrait2", require("../assets/sprites/portraits/Icons_02.png")),
-    portrait3: new SpriteSheet("portrait3", require("../assets/sprites/portraits/Icons_03.png")),
-    portrait13: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_13.png")),
-    portrait15: new SpriteSheet("portrait15", require("../assets/sprites/portraits/Icons_15.png")),
+    portrait1: new SpriteSheet("portrait1", portrait1),
+    portrait2: new SpriteSheet("portrait2", portrait2),
+    portrait3: new SpriteSheet("portrait3", portrait3),
+    portrait13: new SpriteSheet("portrait15", portrait13),
+    portrait15: new SpriteSheet("portrait15", portrait15),
 
     //https://opengameart.org/content/32-weapon-icons
-    weapons: new SpriteSheet("weapons", require("./assets/new-weapons.png"), { pattern: "GRID", cols: 17, rows: 2 }),
+    weapons: new SpriteSheet("weapons", weapons, { pattern: "GRID", cols: 17, rows: 2 }),
 
     //https://opengameart.org/content/lpc-animated-torch
-    torch: new SpriteSheet("torch", require("./assets/animated_torch.png"), { pattern: "GRID", cols: 9, rows: 1, }),
+    torch: new SpriteSheet("torch", torch, { pattern: "GRID", cols: 9, rows: 1, }),
 
     //https://opengameart.org/content/wall-tileset
-    woodenWalls: new SpriteSheet("woodenWalls", require("./assets/woodenwalls.png"), { pattern: "GRID", cols: 3, rows: 3 }),
+    woodenWalls: new SpriteSheet("woodenWalls", woodenwalls, { pattern: "GRID", cols: 3, rows: 3 }),
 
     //https://opengameart.org/content/wooden-fence-2d
-    fence: new SpriteSheet("fence", require("./assets/fence_112x56.png")),
+    fence: new SpriteSheet("fence", woodenFence),
 
     //https://opengameart.org/content/lpc-tree-recolors
-    trees: new SpriteSheet("trees", require("./assets/green-trees.png"), { pattern: "GRID", cols: 2, rows: 1 }),
+    trees: new SpriteSheet("trees", trees, { pattern: "GRID", cols: 2, rows: 1 }),
 
     //https://opengameart.org/content/loyalty-lies-equipment-upper-body-armour
-    armour: new SpriteSheet("armour", require("./assets/gear_armor.png"), { pattern: "GRID", cols: 13, rows: 1 }),
+    armour: new SpriteSheet("armour", armour, { pattern: "GRID", cols: 13, rows: 1 }),
 
 
     //https://opengameart.org/content/gemmed-items
-    rubyKey: new SpriteSheet("rubyKey", require("./assets/ruby_key.png")),
+    rubyKey: new SpriteSheet("rubyKey", rubyKey),
 }
 
 const spriteSheets = Object.keys(sheets).map(key => sheets[key])
