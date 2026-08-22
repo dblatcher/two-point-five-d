@@ -5,12 +5,16 @@ import { DirectionName } from './types'
 import { Arrows } from './components/Arrows'
 import { Intersitial } from './components/Intersitial'
 import { ItemSlot } from './components/ItemSlot'
+import { GameContext } from './components/GameContext'
+import { SightCanvas } from './components/SightCanvas'
+import { CharacterBar } from './components/CharacterBar'
 
 function App() {
 
   const gameRef = useRef(game)
   const [gameData, setGameData] = useState(gameRef.current.data)
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
+  const [ready, setReady] = useState(false)
 
   const renderSight = useCallback(() => {
     if (canvas) {
@@ -28,10 +32,14 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (ready) {
+      return
+    }
     gameRef.current.loadImages().then(() => {
+      setReady(true)
       renderSight()
     })
-  }, [renderSight])
+  }, [renderSight, ready])
 
   useEffect(() => {
     const runTick = () => {
@@ -47,51 +55,56 @@ function App() {
 
   const getItemInHand = useCallback(() => gameRef.current.data.itemInHand, [])
 
-  return (
-    <main>
-      <section style={{
-        display: 'grid',
-        gridTemplateColumns: "500px 1fr",
-      }}>
-        <canvas
-          style={{
-            maxWidth: 500
-          }}
-          ref={setCanvas}
-          onClick={(event) => {
-            if (!canvas) { return }
-            const rect = canvas.getBoundingClientRect();
-            gameRef.current.handleSightClick({
-              x: event.clientX / rect.width,
-              y: event.clientY / rect.height,
-            })
-          }}></canvas>
+  if (!ready) {
+    return null
+  }
 
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
+  return (
+    <GameContext.Provider value={{
+      game: () => gameRef.current,
+      gameData
+    }}>
+      <main>
+        <CharacterBar />
+        <section style={{
+          display: 'grid',
+          gridTemplateColumns: "1fr 1fr 1fr 1fr",
         }}>
+
+        </section>
+        <section style={{
+          display: 'grid',
+          gridTemplateColumns: "500px 1fr",
+        }}>
+          <SightCanvas canvas={canvas} setCanvas={setCanvas} />
+
           <div style={{
             display: 'flex',
-            padding: 5
+            flexDirection: 'column',
           }}>
-            <ItemSlot
-              itemData={gameData.itemInHand?.data}
-              getItem={getItemInHand}
-            />
-          </div>
-          <div style={{ marginTop: 'auto' }}>
-            <Arrows move={move} turn={turn} />
-          </div>
+            <div style={{
+              display: 'flex',
+              padding: 5
+            }}>
+              <ItemSlot
+                itemData={gameData.itemInHand?.data}
+                getItem={getItemInHand}
+              />
+            </div>
+            <div style={{ marginTop: 'auto' }}>
+              <Arrows move={move} turn={turn} />
+            </div>
 
-        </div>
-      </section>
-      {gameData.intersitial && (
-        <Intersitial
-          intersitialData={gameData.intersitial.data}
-          selectOption={(index) => gameRef.current.handleInterstitialOptionClick(index)} />
-      )}
-    </main>
+          </div>
+        </section>
+        {gameData.intersitial && (
+          <Intersitial
+            intersitialData={gameData.intersitial.data}
+            selectOption={(index) => gameRef.current.handleInterstitialOptionClick(index)} />
+        )}
+      </main>
+
+    </GameContext.Provider>
   )
 }
 

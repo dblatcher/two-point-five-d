@@ -27,7 +27,7 @@ export const ItemSlot = ({ itemData, getItem, size = 50 }: Props) => {
         } else {
             Item.clearIcon(canvas)
         }
-    }, [itemData?.type.name, getItem])
+    }, [itemData?.type.name, getItem, canvas])
 
     return <div title={itemData?.type.name} style={style.frame}>
         <canvas

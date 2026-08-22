@@ -6,7 +6,7 @@ import { CharacterStats } from '@/rpg-classes/CharacterStats';
 
 const boblin = new Character({
     name: "Boblin",
-    stats: new CharacterStats([10,12],[20,20],[5,5]),
+    stats: new CharacterStats([10,12],[2,20],[5,5]),
     portrait: sprites.boblin_portrait,
     inventory: [
         null, null,

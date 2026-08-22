@@ -352,7 +352,6 @@ class Game {
                         break
                 }
             }
-
             if (itemClicked) {
                 if (!needCharacterToPickUpItems || this.activeCharacter) {
                     if (this.queuedPlayerActions.length >= Game.MAX_QUEUE_LENGTH) { break }
