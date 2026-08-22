@@ -3,10 +3,13 @@ import './App.css'
 import { game } from '@/travels-in-generica'
 import { DirectionName } from './types'
 import { Arrows } from './components/Arrows'
+import { Intersitial } from './components/Intersitial'
+import { ItemSlot } from './components/ItemSlot'
 
 function App() {
 
   const gameRef = useRef(game)
+  const [gameData, setGameData] = useState(gameRef.current.data)
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
 
   const renderSight = useCallback(() => {
@@ -18,11 +21,11 @@ function App() {
 
   const move = useCallback((direction: DirectionName) => {
     gameRef.current.queuePlayerMovementAction({ action: 'MOVE', direction })
-  }, [renderSight])
+  }, [])
 
   const turn = useCallback((direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") => {
     gameRef.current.queuePlayerMovementAction({ action: 'TURN', direction })
-  }, [renderSight])
+  }, [])
 
   useEffect(() => {
     gameRef.current.loadImages().then(() => {
@@ -34,6 +37,7 @@ function App() {
     const runTick = () => {
       gameRef.current.tick()
       renderSight()
+      setGameData({ ...gameRef.current.data })
     }
     const interval = setInterval(runTick, 100)
     return () => {
@@ -41,12 +45,53 @@ function App() {
     }
   }, [renderSight])
 
+  const getItemInHand = useCallback(() => gameRef.current.data.itemInHand, [])
 
   return (
-    <>
-      <canvas ref={setCanvas}></canvas>
-      <Arrows move={move} turn={turn} />
-    </>
+    <main>
+      <section style={{
+        display: 'grid',
+        gridTemplateColumns: "500px 1fr",
+      }}>
+        <canvas
+          style={{
+            maxWidth: 500
+          }}
+          ref={setCanvas}
+          onClick={(event) => {
+            if (!canvas) { return }
+            const rect = canvas.getBoundingClientRect();
+            gameRef.current.handleSightClick({
+              x: event.clientX / rect.width,
+              y: event.clientY / rect.height,
+            })
+          }}></canvas>
+
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+          <div style={{
+            display: 'flex',
+            padding: 5
+          }}>
+            <ItemSlot
+              itemData={gameData.itemInHand?.data}
+              getItem={getItemInHand}
+            />
+          </div>
+          <div style={{ marginTop: 'auto' }}>
+            <Arrows move={move} turn={turn} />
+          </div>
+
+        </div>
+      </section>
+      {gameData.intersitial && (
+        <Intersitial
+          intersitialData={gameData.intersitial.data}
+          selectOption={(index) => gameRef.current.handleInterstitialOptionClick(index)} />
+      )}
+    </main>
   )
 }
 
