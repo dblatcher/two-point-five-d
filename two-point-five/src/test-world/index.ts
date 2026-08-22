@@ -4,16 +4,16 @@ import { Level } from "@/game-classes/Level";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 import { Wall } from "@/game-classes/Wall";
 
-import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
-import { spriteSheets as gSpriteSheets, sprites as gSprites } from "@/travels-in-generica/sprites";
-import { tower, vaultDoorway } from "@/instances/wallShapes";
-import { Figure } from "@/game-classes/Figure";
-import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
-import { Controller } from "@/game-classes/Controller";
-import { Pit } from "@/game-classes/FloorFeature";
-import { CeilingFeature } from "@/game-classes/CeilingFeature";
 import { Color } from "@/canvas/Color";
+import { CeilingFeature } from "@/game-classes/CeilingFeature";
+import { Controller } from "@/game-classes/Controller";
+import { Figure } from "@/game-classes/Figure";
+import { Pit } from "@/game-classes/FloorFeature";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
+import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
+import { vaultDoorway } from "@/instances/wallShapes";
+import { spriteSheets as gSpriteSheets, sprites as gSprites } from "@/travels-in-generica/sprites";
 
 const spriteSheets = [
     ...sharedSpriteSheets,
@@ -75,4 +75,4 @@ const game = new Game(
     { noCharacters: true }
 )
 
-export { game, spriteSheets }
+export { game, spriteSheets };

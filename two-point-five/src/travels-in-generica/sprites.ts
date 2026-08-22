@@ -1,8 +1,17 @@
 import { Frame, Sprite } from "@/canvas/Sprite"
 import { SpriteSheet } from "@/canvas/SpriteSheet"
 
+import orc from "@/travels-in-generica/assets/orc.png"
+import trees from "@/travels-in-generica/assets/green-trees.png"
 
-const sheets:{[index:string]:SpriteSheet} = {
+const paths: Record<string, string | undefined> = {
+    "./assets/orc.png": orc,
+    "./assets/green-trees.png": trees,
+}
+
+const require = (path: string) => paths[path]
+
+const sheets: { [index: string]: SpriteSheet } = {
 
     orc: new SpriteSheet("orc", require("./assets/orc.png"), { pattern: "GRID", cols: 13, rows: 21 }),
     smith: new SpriteSheet("smith", require("./assets/smith.png"), { pattern: "GRID", cols: 13, rows: 21 }),
@@ -133,7 +142,7 @@ const sprites = {
     stick: Sprite.itemSpriteOneFrame("stick", { sheet: sheets.weapons, col: 3, row: 1 }),
     mailShirt: Sprite.itemSpriteOneFrame("mailShirt", { sheet: sheets.armour, col: 7, row: 0 }),
     plateArmour: Sprite.itemSpriteOneFrame("plateArmour", { sheet: sheets.armour, col: 8, row: 0 }),
-    rubyKey: Sprite.itemSpriteOneFrame("rubyKey",{sheet:sheets.rubyKey}),
+    rubyKey: Sprite.itemSpriteOneFrame("rubyKey", { sheet: sheets.rubyKey }),
 
     torch: Sprite.animatedPatternSprite('torch', sheets.torch, { size: { x: .25, y: .5 } }),
 

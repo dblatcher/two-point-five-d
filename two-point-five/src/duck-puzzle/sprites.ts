@@ -2,10 +2,13 @@
 import { Frame, Sprite } from "@/canvas/Sprite"
 import { SpriteSheet } from "@/canvas/SpriteSheet"
 
+const paths: Record<string, string | undefined> = {
+}
+
+const require = (path: string) => paths[path]
 
 
-
-const sheets:{[index:string]:SpriteSheet} = {
+const sheets: { [index: string]: SpriteSheet } = {
     //https://opengameart.org/content/cute-duck-animated-set
     duck_front: new SpriteSheet("duck-front", require("./assets/duck/walk/front/1.png")),
     duck_side: new SpriteSheet("duck-side", require("./assets/duck/walk/side/1.png")),

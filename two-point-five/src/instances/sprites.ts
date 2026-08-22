@@ -3,34 +3,47 @@ import { Frame, Sprite } from "@/canvas/Sprite"
 import { SpriteSheet } from "@/canvas/SpriteSheet"
 import { TextBoard } from "@/canvas/TextBoard"
 
+import dinosaur from "@/assets/sprites/dinosaur.png"
+import bricks from "@/assets/sprites/brick_wall.png"
+import window from "@/assets/sprites/open-window.png"
+import fruit from "@/assets/sprites/fruit.png"
+import stairs from "@/assets/sprites/wooden_stairs-ns-crop.png"
 
-const sheets:{[index:string]:SpriteSheet} = {
+import brickWall from "@/assets/sprites/brick_wall.png"
+import bardHat from "@/assets/sprites/bard-hat.png"
+import helmet from "@/assets/sprites/helmet.png"
+import testCard from "@/assets/sprites/test-card.png"
+import painting from "@/assets/sprites/ceiling-small.jpg"
+import leverAndButton from "@/assets/sprites/lever-and-button.png"
+import woodenDoor from "@/assets/sprites/door.png"
+
+const sheets: { [index: string]: SpriteSheet } = {
 
     //https://opengameart.org/content/dinosaur-0
-    dinosaur: new SpriteSheet("dinosaur", require("../assets/sprites/dinosaur.png"), { pattern: "GRID", cols: 3, rows: 4 }),
+    dinosaur: new SpriteSheet("dinosaur", dinosaur, { pattern: "GRID", cols: 3, rows: 4 }),
 
     //https://opengameart.org/content/old-school-dungeon-crawler-pack
-    bricks: new SpriteSheet("bricks", require("../assets/sprites/brick.png")),
-    window: new SpriteSheet("window", require("../assets/sprites/open-window.png")),
+    bricks: new SpriteSheet("bricks", bricks),
+    window: new SpriteSheet("window", window),
 
     //https://opengameart.org/content/weird-fruits-16x16
-    fruits: new SpriteSheet("fruit", require("../assets/sprites/fruit.png"), { pattern: "GRID", cols: 4, rows: 4 }),
+    fruits: new SpriteSheet("fruit", fruit, { pattern: "GRID", cols: 4, rows: 4 }),
 
 
     //https://opengameart.org/content/wooden-stairs-ns
-    stairs: new SpriteSheet("stairs", require("../assets/sprites/wooden_stairs-ns-crop.png"), { pattern: "GRID", cols: 1, rows: 5 }),
+    stairs: new SpriteSheet("stairs", stairs, { pattern: "GRID", cols: 1, rows: 5 }),
 
     //https://opengameart.org/content/brick-wall-0
-    brickWall2: new SpriteSheet("brickWall", require("../assets/sprites/brick_wall.png")),
+    brickWall2: new SpriteSheet("brickWall",brickWall),
 
     //https://opengameart.org/content/helmets-64x64
-    bardHat: new SpriteSheet("bardHat", require("../assets/sprites/bard-hat.png")),
-    helmet: new SpriteSheet("helmet", require("../assets/sprites/helmet.png")),
+    bardHat: new SpriteSheet("bardHat",bardHat),
+    helmet: new SpriteSheet("helmet",helmet),
 
-    testCard: new SpriteSheet("testCard", require("../assets/sprites/test-card.png")),
-    painting: new SpriteSheet("painting", require("../assets/sprites/ceiling-small.jpg")),
-    leverAndButton: new SpriteSheet("lever", require("../assets/sprites/lever-and-button.png"), { pattern: "GRID", cols: 3, rows: 4 }),
-    woodenDoor: new SpriteSheet("woodenDoor", require("../assets/sprites/door.png"), { pattern: "GRID", cols: 2, rows: 3 }),
+    testCard: new SpriteSheet("testCard", testCard),
+    painting: new SpriteSheet("painting", painting),
+    leverAndButton: new SpriteSheet("lever", leverAndButton, { pattern: "GRID", cols: 3, rows: 4 }),
+    woodenDoor: new SpriteSheet("woodenDoor", woodenDoor, { pattern: "GRID", cols: 2, rows: 3 }),
 }
 
 const spriteSheets = Object.keys(sheets).map(key => sheets[key])

@@ -26,7 +26,7 @@ class SpriteSheet {
             this.bitmap = await createImageBitmap(blob);
             return true
         } catch (error) {
-            console.warn(error)
+            console.warn(this.id, error)
             return false
         }
     }
