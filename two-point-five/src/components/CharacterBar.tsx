@@ -1,78 +1,34 @@
-import { useCallback, useEffect, useRef } from "react"
-import { useGame } from "./GameContext"
-import { Character } from "@/rpg-classes/Character";
-import { ItemSlot } from "./ItemSlot";
 import { Game } from "@/game-classes/Game";
+import { EquipmentSlotButton } from "./EquipmentSlotButton";
+import { useCharacter, useGame } from "./GameContext";
+import { StatBars } from "./StatBars";
 
 
 
 const CharacterBlock = ({ index }: { index: number }) => {
-    const { gameData, game } = useGame()
-    const data = gameData.characters.at(index)?.data;
-    const ref = useRef<Character>(undefined)
-
-    useEffect(() => {
-        ref.current = game().data.characters.at(index)
-    }, [index])
-
-    const getRightHandItem = useCallback(() => {
-        return ref.current?.data.equipmentSlots?.get("RIGHT_HAND") ?? undefined
-    }, [])
-    const getLeftHandItem = useCallback(() => {
-        return ref.current?.data.equipmentSlots?.get("LEFT_HAND") ?? undefined
-    }, [])
-
+    const [data, ref] = useCharacter(index)
     if (!data) {
         return <div></div>
     }
 
     return <div style={{
-        display: 'grid',
-        gridTemplateColumns: "3fr 1fr"
+        display: 'flex',
     }}>
-        <div>
+        <StatBars stats={data.stats} />
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <div>
                 <b style={{
                     color: Game.CHARACTER_COLORS[index].css,
                     backgroundColor: 'wheat'
                 }}>{data.name}</b>
             </div>
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: "1fr 1fr"
-            }}>
-                <div>
-                    <progress style={{ maxWidth: 80, display: 'block' }} max={data.stats.health.max} value={data.stats.health.current} />
-                    <progress style={{ maxWidth: 80, display: 'block' }} max={data.stats.stamina.max} value={data.stats.stamina.current} />
-                    <progress style={{ maxWidth: 80, display: 'block' }} max={data.stats.mana.max} value={data.stats.mana.current} />
-                </div>
-                <div>
-                    <button onClick={() => {
-                        game().handleEquipSlotClick({
-                            slotName: 'LEFT_HAND',
-                            character: ref.current,
-                        })
-                    }}>
-                        <ItemSlot size={40}
-                            itemData={data.equipmentSlots?.get("LEFT_HAND")?.data ?? undefined}
-                            getItem={getLeftHandItem} />
-                    </button>
-                    <button onClick={() => {
-                        game().handleEquipSlotClick({
-                            slotName: 'RIGHT_HAND',
-                            character: ref.current,
-                        })
-                    }}>
-                        <ItemSlot size={40}
-                            itemData={data.equipmentSlots?.get("RIGHT_HAND")?.data ?? undefined}
-                            getItem={getRightHandItem} />
-                    </button>
-                </div>
-            </div>
+            <img style={{ height: 40 }} src={ref.current?.portraitSrc ?? undefined} />
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'stretch', alignItems: 'stretch' }}>
-            <img src={ref.current?.portraitSrc ?? undefined} />
+        <div>
+            <EquipmentSlotButton characterIndex={index} equipmentSlot="LEFT_HAND" />
+            <EquipmentSlotButton characterIndex={index} equipmentSlot="RIGHT_HAND" />
         </div>
     </div>
 }

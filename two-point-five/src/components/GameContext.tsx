@@ -1,6 +1,7 @@
 import { Game, GameConfig } from "@/game-classes/Game";
+import { Character, CharacterConfig } from "@/rpg-classes/Character";
 import { game } from "@/test-world";
-import { createContext, useContext } from "react";
+import { createContext, RefObject, useContext, useEffect, useRef } from "react";
 
 export const GameContext = createContext<{
     game: () => Game
@@ -11,3 +12,13 @@ export const GameContext = createContext<{
 })
 
 export const useGame = () => useContext(GameContext)
+
+export const useCharacter = (index: number): [CharacterConfig | undefined, RefObject<Character | undefined>] => {
+    const { gameData, game } = useGame()
+    const characterData = gameData.characters.at(index)?.data;
+    const characterRef = useRef<Character>(undefined)
+    useEffect(() => {
+        characterRef.current = game().data.characters.at(index)
+    }, [index])
+    return [characterData, characterRef]
+}
