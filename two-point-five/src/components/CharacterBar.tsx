@@ -12,21 +12,33 @@ const CharacterBlock = ({ index }: { index: number }) => {
     }
 
     return <div style={{
-        display: 'flex',
+        backgroundColor: Game.CHARACTER_COLORS[index].css,
+        display: 'grid',
+        gridTemplateAreas: `
+            "a b b c"
+            "a d d c"
+            "a d d c"
+        `,
     }}>
-        <StatBars stats={data.stats} />
-
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <div>
-                <b style={{
-                    color: Game.CHARACTER_COLORS[index].css,
-                    backgroundColor: 'wheat'
-                }}>{data.name}</b>
-            </div>
-            <img style={{ height: 40 }} src={ref.current?.portraitSrc ?? undefined} />
+        <div style={{ gridArea: 'a' }}>
+            <StatBars stats={data.stats} />
+        </div>
+        <div style={{
+            gridArea: 'b',
+            color: 'black',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            lineHeight: 1,
+        }}>
+            <b >{data.name}</b>
         </div>
 
-        <div>
+        <div style={{ gridArea: 'c', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <img style={{ height: "100%" }} src={ref.current?.portraitSrc ?? undefined} />
+        </div>
+
+        <div style={{ gridArea: 'd', }}>
             <EquipmentSlotButton characterIndex={index} equipmentSlot="LEFT_HAND" />
             <EquipmentSlotButton characterIndex={index} equipmentSlot="RIGHT_HAND" />
         </div>

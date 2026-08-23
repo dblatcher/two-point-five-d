@@ -66,12 +66,7 @@ function App() {
     }}>
       <main>
         <CharacterBar />
-        <section style={{
-          display: 'grid',
-          gridTemplateColumns: "1fr 1fr 1fr 1fr",
-        }}>
 
-        </section>
         <section style={{
           display: 'grid',
           gridTemplateColumns: "500px 1fr",
@@ -97,6 +92,7 @@ function App() {
 
           </div>
         </section>
+
         {gameData.intersitial && (
           <Intersitial
             intersitialData={gameData.intersitial.data}
