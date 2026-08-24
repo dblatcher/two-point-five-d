@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import './App.css'
+// import './App.css'
 import { game } from '@/travels-in-generica'
-import { DirectionName } from './types'
-import { Arrows } from './components/Arrows'
-import { Intersitial } from './components/Intersitial'
-import { ItemSlot } from './components/ItemSlot'
 import { GameContext } from './components/GameContext'
-import { SightCanvas } from './components/SightCanvas'
-import { CharacterBar } from './components/CharacterBar'
+import { RpgGameLayout } from './components/RpgGameLayout'
 
 function App() {
 
@@ -23,13 +18,7 @@ function App() {
     }
   }, [canvas])
 
-  const move = useCallback((direction: DirectionName) => {
-    gameRef.current.queuePlayerMovementAction({ action: 'MOVE', direction })
-  }, [])
 
-  const turn = useCallback((direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK") => {
-    gameRef.current.queuePlayerMovementAction({ action: 'TURN', direction })
-  }, [])
 
   useEffect(() => {
     if (ready) {
@@ -43,6 +32,9 @@ function App() {
 
   useEffect(() => {
     const runTick = () => {
+      if (!ready) {
+        return
+      }
       gameRef.current.tick()
       renderSight()
       setGameData({ ...gameRef.current.data })
@@ -51,9 +43,8 @@ function App() {
     return () => {
       clearInterval(interval)
     }
-  }, [renderSight])
+  }, [renderSight, ready])
 
-  const getItemInHand = useCallback(() => gameRef.current.data.itemInHand, [])
 
   if (!ready) {
     return null
@@ -64,42 +55,7 @@ function App() {
       game: () => gameRef.current,
       gameData
     }}>
-      <main>
-        <CharacterBar />
-
-        <section style={{
-          display: 'grid',
-          gridTemplateColumns: "500px 1fr",
-        }}>
-          <SightCanvas canvas={canvas} setCanvas={setCanvas} />
-
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
-            <div style={{
-              display: 'flex',
-              padding: 5
-            }}>
-              <ItemSlot
-                itemData={gameData.itemInHand?.data}
-                getItem={getItemInHand}
-              />
-            </div>
-            <div style={{ marginTop: 'auto' }}>
-              <Arrows move={move} turn={turn} />
-            </div>
-
-          </div>
-        </section>
-
-        {gameData.intersitial && (
-          <Intersitial
-            intersitialData={gameData.intersitial.data}
-            selectOption={(index) => gameRef.current.handleInterstitialOptionClick(index)} />
-        )}
-      </main>
-
+      <RpgGameLayout canvas={canvas} setCanvas={setCanvas} />
     </GameContext.Provider>
   )
 }
