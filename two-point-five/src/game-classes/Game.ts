@@ -417,7 +417,7 @@ class Game {
         }
     }
 
-    handleInventoryClick(clickInfo: { item: Item, index: number, character?: Character }): FeedbackToUI {
+    handleInventoryClick(clickInfo: { item?: Item, index: number, character?: Character }): FeedbackToUI {
         const { item, index } = clickInfo
         const character = clickInfo.character || this.data.characters[0];
         const { inventory } = character.data

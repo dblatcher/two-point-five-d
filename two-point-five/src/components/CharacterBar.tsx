@@ -5,7 +5,10 @@ import { StatBars } from "./StatBars";
 
 
 
-const CharacterBlock = ({ index }: { index: number }) => {
+const CharacterBlock = ({ index, setCharacterScreenOpen }: {
+    index: number;
+    setCharacterScreenOpen: { (characterIndex?: number): void }
+}) => {
     const [data, ref] = useCharacter(index)
     if (!data) {
         return <div></div>
@@ -31,7 +34,9 @@ const CharacterBlock = ({ index }: { index: number }) => {
             justifyContent: 'center',
             lineHeight: 1,
         }}>
-            <b >{data.name}</b>
+            <button onClick={() => setCharacterScreenOpen(index)}>
+                <b>{data.name}</b>
+            </button>
         </div>
 
         <div style={{ gridArea: 'c', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -45,7 +50,7 @@ const CharacterBlock = ({ index }: { index: number }) => {
     </div>
 }
 
-export const CharacterBar = () => {
+export const CharacterBar = ({ setCharacterScreenOpen }: { setCharacterScreenOpen: { (characterIndex?: number): void } }) => {
 
     const { gameData } = useGame()
 
@@ -54,8 +59,9 @@ export const CharacterBar = () => {
         gridTemplateColumns: "1fr 1fr 1fr 1fr",
     }}>
         {gameData.characters.map((_character, index) => (
-            <CharacterBlock index={index} key={index} />
+            <CharacterBlock key={index}
+                setCharacterScreenOpen={setCharacterScreenOpen}
+                index={index} />
         ))}
-
     </section>
 }

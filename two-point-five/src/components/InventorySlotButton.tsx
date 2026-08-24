@@ -4,33 +4,31 @@ import { ItemSlot } from "./ItemSlot";
 
 interface Props {
     characterIndex: number
-    equipmentSlot: string
-    gridArea?: string;
+    inventoryIndex: number
 }
 
-export const EquipmentSlotButton = ({ characterIndex, equipmentSlot, gridArea }: Props) => {
+export const InventorySlotButton = ({ characterIndex, inventoryIndex }: Props) => {
 
     const { game } = useGame()
     const [data, ref] = useCharacter(characterIndex)
 
     const getItem = useCallback(() => {
-        return ref.current?.data.equipmentSlots?.get(equipmentSlot) ?? undefined
-    }, [equipmentSlot])
+        return ref.current?.data.inventory?.at(inventoryIndex) ?? undefined
+    }, [inventoryIndex])
 
     return <button
         style={{
             padding: 0,
-            gridArea
         }}
         onClick={() => {
-            game().handleEquipSlotClick({
-                slotName: equipmentSlot,
+            game().handleInventoryClick({
+                item: getItem(),
+                index: inventoryIndex,
                 character: ref.current,
             })
         }}>
         <ItemSlot size={30}
-            itemData={data?.equipmentSlots?.get(equipmentSlot)?.data ?? undefined}
+            itemData={data?.inventory?.at(inventoryIndex)?.data ?? undefined}
             getItem={getItem} />
     </button>
-
 }
