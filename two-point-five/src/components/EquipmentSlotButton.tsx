@@ -14,14 +14,18 @@ export const EquipmentSlotButton = ({ characterIndex, equipmentSlot }: Props) =>
 
     const getItem = useCallback(() => {
         return ref.current?.data.equipmentSlots?.get(equipmentSlot) ?? undefined
-    }, [])
+    }, [equipmentSlot])
 
-    return <button onClick={() => {
-        game().handleEquipSlotClick({
-            slotName: equipmentSlot,
-            character: ref.current,
-        })
-    }}>
+    return <button
+        style={{
+            padding: 0
+        }}
+        onClick={() => {
+            game().handleEquipSlotClick({
+                slotName: equipmentSlot,
+                character: ref.current,
+            })
+        }}>
         <ItemSlot size={30}
             itemData={data?.equipmentSlots?.get(equipmentSlot)?.data ?? undefined}
             getItem={getItem} />

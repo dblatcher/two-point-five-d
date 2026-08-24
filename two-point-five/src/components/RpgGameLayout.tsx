@@ -40,8 +40,11 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                 flexDirection: 'column',
             }}>
                 <div style={{
-                    display: 'flex',
-                    padding: 5
+                    display: 'inline-flex',
+                    alignSelf:'flex-start',
+                    margin: 5,
+                    borderWidth: 1,
+                    borderStyle: 'dashed',
                 }}>
                     <ItemSlot
                         itemData={gameData.itemInHand?.data}

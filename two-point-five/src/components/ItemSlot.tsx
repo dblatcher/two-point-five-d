@@ -10,7 +10,6 @@ interface Props {
 
 const style = {
     frame: {
-        border: "2px dotted whitesmoke",
         display: 'inline-flex',
     }
 } satisfies Record<string, CSSProperties>
