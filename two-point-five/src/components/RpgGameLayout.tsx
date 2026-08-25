@@ -7,6 +7,7 @@ import { ItemSlot } from "./ItemSlot"
 import { SightCanvas } from "./SightCanvas"
 import { DirectionName } from "@/types"
 import { CharacterScreen } from "./CharacterScreen"
+import { AttackButtons } from "./AttackButtons"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -54,6 +55,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                         getItem={getItemInHand}
                     />
                 </div>
+                <AttackButtons />
                 <div style={{ marginTop: 'auto' }}>
                     <Arrows move={move} turn={turn} />
                 </div>
