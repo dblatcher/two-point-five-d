@@ -8,6 +8,7 @@ import { SightCanvas } from "./SightCanvas"
 import { DirectionName } from "@/types"
 import { CharacterScreen } from "./CharacterScreen"
 import { AttackButtons } from "./AttackButtons"
+import { QuestScreen } from "./QuestScreen"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -18,6 +19,7 @@ interface Props {
 export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
     const { gameData, game } = useGame()
     const [characterScreenOpen, setCharacterScreenOpen] = useState<number>()
+    const [questScreenOpen, setQuestScreenOpen] = useState(false)
 
     const move = useCallback((direction: DirectionName) => {
         game().queuePlayerMovementAction({ action: 'MOVE', direction })
@@ -54,6 +56,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                         itemData={gameData.itemInHand?.data}
                         getItem={getItemInHand}
                     />
+                    <button onClick={() => setQuestScreenOpen(true)}>quests</button>
                 </div>
                 <AttackButtons />
                 <div style={{ marginTop: 'auto' }}>
@@ -73,6 +76,10 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
             <CharacterScreen
                 characterIndex={characterScreenOpen}
                 close={() => setCharacterScreenOpen(undefined)} />
+        )}
+
+        {questScreenOpen && (
+            <QuestScreen close={() => setQuestScreenOpen(false)} />
         )}
     </main>
 
