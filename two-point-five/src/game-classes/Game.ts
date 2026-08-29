@@ -85,6 +85,7 @@ class Game {
     pointerLocator: PointerLocator
     debugElement?: HTMLElement
     featuresTriggeredThisTick: AbstractFeature[]
+    spriteSheetMap: Map<string, SpriteSheet>
 
     static MAX_QUEUE_LENGTH: 10
 
@@ -104,6 +105,9 @@ class Game {
         this.featuresTriggeredThisTick = []
 
         this.setActiveCharacter(config.activeCharacterIndex);
+
+        this.spriteSheetMap = new Map<string, SpriteSheet>()
+        config.spriteSheets.forEach(sheet => this.spriteSheetMap.set(sheet.id, sheet))
 
         // this.debugElement = document.createElement("div");
         // document.body.appendChild(this.debugElement)
@@ -235,7 +239,7 @@ class Game {
 
         const endTime = Date.now()
 
-        if (this.debugElement) {this.debugElement.innerText = `tick ${this.tickCount}: ${endTime-startTime}ms`}
+        if (this.debugElement) { this.debugElement.innerText = `tick ${this.tickCount}: ${endTime - startTime}ms` }
     }
 
     handleVictory(level: Level): void {

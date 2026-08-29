@@ -9,6 +9,7 @@ import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { WallFeature } from "./WallFeature";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 
 
@@ -88,7 +89,9 @@ class Wall extends Position {
         return allFeatures
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, defaultSprite?: Sprite): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, defaultSprite?: Sprite): void {
 
         const { place, relativeDirection = RelativeDirection.BACK, isReverseOfWall } = renderInstruction
         const { patternSprite = defaultSprite, shape = Wall.defaultShape } = this.data
@@ -102,7 +105,7 @@ class Wall extends Position {
         const isDoubleHeight = shape.some(point => point.y > 1);
         if (patternSprite && isDoubleHeight) {
             const mappedUpperLevel = getMappedPoints(relativeDirection, Wall.upperLevel, place);
-            const upperLevelFillStyle = getUpperLevelPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, mappedUpperLevel, undefined, "no-repeat") || fillStyle
+            const upperLevelFillStyle = getUpperLevelPatternFill(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, mappedUpperLevel, undefined, "no-repeat") || fillStyle
 
             const topHalfShape = shape.map(point => {
                 return { x: point.x, y: Math.max(1, point.y) }
@@ -113,7 +116,7 @@ class Wall extends Position {
         }
 
         if (patternSprite) {
-            fillStyle = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints, undefined, "no-repeat") || fillStyle
+            fillStyle = getPatternFill(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, patternSprite, Sprite.defaultWallAnimation, fullWallPoints, undefined, "no-repeat") || fillStyle
         }
 
         plotPolygon(ctx, convertFunction, wallShapePoints, { strokeStyle: fillStyle, fillStyle })
@@ -121,7 +124,7 @@ class Wall extends Position {
 
         features.forEach(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return }
-            feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount, fullWallPoints, wallShapePoints)
+            feature.drawInSight(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, fullWallPoints, wallShapePoints)
         })
 
 

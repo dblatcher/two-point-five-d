@@ -5,6 +5,7 @@ import { Vantage } from "./Vantage";
 
 
 import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 interface CeilingFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
@@ -27,7 +28,9 @@ class CeilingFeature extends AbstractFeature {
 
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { shape = this.defaultShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data
         const { place, viewedFrom, relativeDirection = RelativeDirection.FORWARD } = renderInstruction
 

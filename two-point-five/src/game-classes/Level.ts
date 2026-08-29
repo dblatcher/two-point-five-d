@@ -17,6 +17,7 @@ import { Position } from "./Position"
 import { PlayerVantage } from "./PlayerVantage";
 import { Figure } from "./Figure";
 import { AbstractFeature } from "./AbstractFeature";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 const renderingZoneFrames = false;
 
@@ -317,7 +318,9 @@ class Level {
         }
     }
 
-    drawAsSight(canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
+    drawAsSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
         const startTime = Date.now()
         const { items = [], squaresWithFeatures = [], actors = [], walls = [], staticFigures = [] } = this.data
 
@@ -392,10 +395,10 @@ class Level {
 
         renderInstructions.forEach(renderInstruction => {
             if (renderInstruction.wall) {
-                renderInstruction.wall.drawInSight(ctx, toCanvasCoords, renderInstruction, this.tickCount, this.data.defaultWallPattern)
+                renderInstruction.wall.drawInSight(spriteSheetMap, ctx, toCanvasCoords, renderInstruction, this.tickCount, this.data.defaultWallPattern)
             }
             if (renderInstruction.thing) {
-                renderInstruction.thing.drawInSight(ctx, toCanvasCoords, renderInstruction, this.tickCount)
+                renderInstruction.thing.drawInSight(spriteSheetMap, ctx, toCanvasCoords, renderInstruction, this.tickCount)
             }
         })
 

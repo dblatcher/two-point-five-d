@@ -60,10 +60,12 @@ class Sprite {
      * @throws an Error is the image is not loaded on not found in the Dom
      * @returns the CanvasImageSource of the sprite frame
      */
-    loadImage(frame: Frame, animationFrameKey: string): CanvasImageSource {
-
-        const { bitmap } = frame.sheet;
-
+    private loadImage(frame: Frame, animationFrameKey: string, spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
+        const sheet = spriteSheetMap.get(frame.sheet.id);
+        if (!sheet) {
+            throw new Error(`No spriteSheet ${frame.sheet.id} `)
+        }
+        const { bitmap } = sheet;
         if (!bitmap) {
             throw new Error(`SpriteSheet ${frame.sheet.id} has no bitmap`)
         }
@@ -93,7 +95,7 @@ class Sprite {
      * @param direction 
      * @returns the src path for the first frame of the animation, or null if there is none
      */
-    provideSrc(actionName: string, direction: RelativeDirection = RelativeDirection.BACK): string | null {
+    provideSrc(spriteSheetMap: Map<string, SpriteSheet>, actionName: string, direction: RelativeDirection = RelativeDirection.BACK): string | null {
         const animation = this.getFrameList(actionName, direction);
 
         if (animation == null) {
@@ -106,7 +108,9 @@ class Sprite {
             return null
         }
 
-        return animation[0].sheet.src;
+        const spritesheetId = animation[0].sheet.id
+        const sheet = spriteSheetMap.get(spritesheetId)
+        return sheet?.src ?? null;
     }
 
 
@@ -146,8 +150,13 @@ class Sprite {
      * @throws an error is there is no animation for the action and direction, or if that animation is empty
      * @returns the image to draw
      */
-    provideImage(actionName: string, direction: RelativeDirection, tickCount: number, transitionPhase?: number): CanvasImageSource {
-
+    provideImage(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        actionName: string,
+        direction: RelativeDirection,
+        tickCount: number,
+        transitionPhase?: number
+    ): CanvasImageSource {
         const animation = this.getFrameList(actionName, direction);
 
         if (animation === null) {
@@ -166,7 +175,7 @@ class Sprite {
             return this.loadedFrames.get(animationFrameKey) as CanvasImageSource;
         }
 
-        return this.loadImage(animation[frameIndex], animationFrameKey);
+        return this.loadImage(animation[frameIndex], animationFrameKey, spriteSheetMap);
     }
 
     get keyArray(): string[] {

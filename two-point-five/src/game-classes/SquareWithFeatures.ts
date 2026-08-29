@@ -9,6 +9,7 @@ import { Item } from "./Item";
 import { Vantage } from "./Vantage";
 import { CeilingFeature } from "./CeilingFeature";
 import { Level } from "./Level";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 
 interface SquareWithFeaturesData {
@@ -65,12 +66,14 @@ class SquareWithFeatures extends Vantage {
         return allFeatures
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         this.floorFeatures.forEach(feature => {
-            feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount)
+            feature.drawInSight(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount)
         })
         this.ceilingFeatures.forEach(feature => {
-            feature.drawInSight(ctx, convertFunction, renderInstruction, tickCount)
+            feature.drawInSight(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount)
         })
     }
 

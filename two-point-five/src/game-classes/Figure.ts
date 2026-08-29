@@ -7,6 +7,7 @@ import { Wall } from "./Wall";
 import { RelativeDirection } from "./RelativeDirection";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Color } from "@/canvas/Color";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 interface FigureConfig {
     x: number
@@ -58,7 +59,9 @@ class Figure extends Vantage {
         }
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convert: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convert: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { place } = renderInstruction
         const { sprite, altitude = 0 } = this.data
 
@@ -88,18 +91,18 @@ class Figure extends Vantage {
         }
 
         ctx.drawImage(
-            this.getSpriteImage(renderInstruction, tickCount),
+            this.getSpriteImage(spriteSheetMap, renderInstruction, tickCount),
             ...convert(topLeftAtAltitude),
             ...convert(relativeDimensions)
         );
 
     }
 
-    getSpriteImage(renderInstruction: RenderInstruction, tickCount: number): CanvasImageSource {
+    private getSpriteImage(spriteSheetMap: Map<string, SpriteSheet>, renderInstruction: RenderInstruction, tickCount: number): CanvasImageSource {
         const { sprite } = this.data
 
         try {
-            return sprite.provideImage(this.actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount, this.data.transitionPhase)
+            return sprite.provideImage(spriteSheetMap, this.actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount, this.data.transitionPhase)
         } catch (error) {
             console.warn(error.message)
         }

@@ -5,6 +5,7 @@ import { RelativeDirection } from './RelativeDirection'
 import { ConvertFunction, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility'
 import { RenderInstruction } from '@/canvas/RenderInstruction'
 import { Blockage } from './Level'
+import { SpriteSheet } from '@/canvas/SpriteSheet'
 
 interface VantageConfig {
     x: number
@@ -63,7 +64,9 @@ class Vantage extends Position {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { place, viewedFrom } = renderInstruction
         const relativeDirection = renderInstruction.relativeDirection as RelativeDirection;
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);

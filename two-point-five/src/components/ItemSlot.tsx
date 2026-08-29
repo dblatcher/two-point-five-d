@@ -1,5 +1,6 @@
 import { Item, ItemConfig } from "@/game-classes/Item";
 import { CSSProperties, useEffect, useState } from "react";
+import { useGame } from "./GameContext";
 
 
 interface Props {
@@ -16,6 +17,7 @@ const styles = {
 } satisfies Record<string, CSSProperties>
 
 export const ItemSlot = ({ itemData, getItem, size = 50, style }: Props) => {
+    const { game } = useGame()
     const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
     useEffect(() => {
         if (!canvas) {
@@ -23,7 +25,7 @@ export const ItemSlot = ({ itemData, getItem, size = 50, style }: Props) => {
         }
         const item = getItem()
         if (item) {
-            item.drawAsIcon(canvas)
+            item.drawAsIcon(game().spriteSheetMap, canvas)
         } else {
             Item.clearIcon(canvas)
         }

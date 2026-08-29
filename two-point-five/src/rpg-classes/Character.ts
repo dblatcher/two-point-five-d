@@ -9,6 +9,7 @@ import { AttackOption } from "./AttackOption";
 
 import { CharacterStats } from "./CharacterStats"
 import { Monster } from "./Monster";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 interface CharacterConfig {
     name?: string
@@ -38,13 +39,13 @@ class Character {
     }
 
 
-    get portraitSrc(): string | null {
-        return this.data.portrait.provideSrc(Sprite.defaultPortraitAnimation)
+    getPortraitSrc(spriteSheetMap: Map<string, SpriteSheet>): string | null {
+        return this.data.portrait.provideSrc(spriteSheetMap, Sprite.defaultPortraitAnimation)
     }
 
-    get icon(): CanvasImageSource {
+    getIcon(spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
         try {
-            return this.data.portrait.provideImage(Sprite.defaultPortraitAnimation, RelativeDirection.BACK, 0)
+            return this.data.portrait.provideImage(spriteSheetMap, Sprite.defaultPortraitAnimation, RelativeDirection.BACK, 0)
         } catch (error) {
             console.warn(error.message)
         }
@@ -150,12 +151,13 @@ class Character {
         })
     }
 
-    drawAsIcon(canvas: HTMLCanvasElement): void {
+    drawAsIcon(spriteSheetMap: Map<string, SpriteSheet>, canvas: HTMLCanvasElement): void {
         const ctx = canvas.getContext("2d");
         if (!ctx) { return }
         const height = Number(canvas.getAttribute('height') || "100");
         const width = Number(canvas.getAttribute('width') || "100");
-        const { icon } = this
+        const icon = this.getIcon(spriteSheetMap)
+
         ctx.clearRect(0, 0, width, height)
         ctx.drawImage(icon, 0, 0, width, height)
     }

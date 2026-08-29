@@ -9,6 +9,7 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
     index: number;
     setCharacterScreenOpen: { (characterIndex?: number): void }
 }) => {
+    const { game } = useGame()
     const [data, ref] = useCharacter(index)
     if (!data) {
         return <div></div>
@@ -40,7 +41,7 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
         </div>
 
         <div style={{ gridArea: 'c', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <img style={{ height: "100%" }} src={ref.current?.portraitSrc ?? undefined} />
+            <img style={{ height: "100%" }} src={ref.current?.getPortraitSrc(game().spriteSheetMap) ?? undefined} />
         </div>
 
         <div style={{ gridArea: 'd', }}>

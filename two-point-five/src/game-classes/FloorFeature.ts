@@ -12,6 +12,7 @@ import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
 import { Sprite } from "@/canvas/Sprite";
 import { Direction } from "./Direction";
 import { Color } from "@/canvas/Color";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 interface FloorFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
@@ -67,7 +68,9 @@ class FloorFeature extends AbstractFeature {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
         const { shape = Vantage.defaultMarkerShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data
         const { place, viewedFrom, relativeDirection = RelativeDirection.FORWARD } = renderInstruction
 
@@ -144,7 +147,9 @@ class Pit extends FloorFeature {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
 
         const { place, viewedFrom, level } = renderInstruction
         const relativeDirection = RelativeDirection.FORWARD

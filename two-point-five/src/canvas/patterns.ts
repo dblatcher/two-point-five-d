@@ -5,21 +5,23 @@ import { ConvertFunction, Point } from "./canvas-utility";
 import { flipImage, flipImageVertically, perspectiveSkew, resizeFrame, scaleTo } from "./manipulations";
 import { RenderInstruction } from "./RenderInstruction";
 import { TextBoard } from "./TextBoard";
+import { SpriteSheet } from "./SpriteSheet";
 
 
 function getPatternFill(
+    spriteSheetMap: Map<string, SpriteSheet>,
     ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction,
     tickCount: number,
     sprite: Sprite, animationName: string, fullWallPoints: Point[],
-    transitionPhase?:number,
-    repeat?:string
+    transitionPhase?: number,
+    repeat?: string
 ): CanvasPattern | null {
 
     const { topLeft, convertedWallDimensions } = getMeasurements(fullWallPoints, convertFunction);
 
     let image: CanvasImageSource;
     try {
-        image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
+        image = sprite.provideImage(spriteSheetMap, animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
     } catch (error) {
         console.warn(error)
         return null
@@ -29,19 +31,20 @@ function getPatternFill(
 }
 
 function getUpperLevelPatternFill(
+    spriteSheetMap: Map<string, SpriteSheet>,
     ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction,
     tickCount: number,
     sprite: Sprite, animationName: string, fullWallPoints: Point[],
-    transitionPhase?:number,
-    repeat?:string
+    transitionPhase?: number,
+    repeat?: string
 ): CanvasPattern | null {
 
     const { topLeft, convertedWallDimensions } = getMeasurements(fullWallPoints, convertFunction);
 
     let image: CanvasImageSource;
     try {
-        image = sprite.provideImage(animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
-        image = flipImage (flipImageVertically(image))
+        image = sprite.provideImage(spriteSheetMap, animationName, renderInstruction.wallFacingDirection, tickCount, transitionPhase)
+        image = flipImage(flipImageVertically(image))
     } catch (error) {
         console.warn(error)
         return null
@@ -89,8 +92,8 @@ function getMeasurements(fullWallPoints: Point[], convertFunction: ConvertFuncti
     // stretch the pattern by 1 pixel in all directions to avoid a gap where the stroke line would be.
     topLeft[0]--
     topLeft[1]--
-    convertedWallDimensions[0]+=2
-    convertedWallDimensions[1]+=2
+    convertedWallDimensions[0] += 2
+    convertedWallDimensions[1] += 2
 
     return { topLeft, convertedWallDimensions }
 }
@@ -150,4 +153,4 @@ function drawTextImage(ctx: CanvasRenderingContext2D, convertFunction: ConvertFu
 }
 
 
-export { getPatternFill, drawTextImage, getTextPatternFill,getUpperLevelPatternFill }
+export { getPatternFill, drawTextImage, getTextPatternFill, getUpperLevelPatternFill }

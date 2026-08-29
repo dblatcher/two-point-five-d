@@ -9,6 +9,7 @@ import { Vantage } from "./Vantage"
 import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
 import { AnimationTransition } from "./AnimationTransition"
 import { Actor } from "@/game-classes/Actor"
+import { SpriteSheet } from "@/canvas/SpriteSheet"
 
 interface WallFeatureData extends AbstractFeatureData {
     textBoard?: TextBoard
@@ -50,11 +51,13 @@ class WallFeature extends AbstractFeature {
         ]
     }
 
-    drawInSight(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints: Point[], wallShapePoints: Point[]): void {
+    drawInSight(
+        spriteSheetMap: Map<string, SpriteSheet>,
+        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints: Point[], wallShapePoints: Point[]): void {
 
         let featureImage: CanvasPattern | null = null;
         if (this.data.sprite) {
-            featureImage = getPatternFill(ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.animation, fullWallPoints, this.transitionPhase);
+            featureImage = getPatternFill(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.animation, fullWallPoints, this.transitionPhase);
         }
         if (this.data.textBoard) {
             featureImage = getTextPatternFill(ctx, convertFunction, renderInstruction, this.data.textBoard)

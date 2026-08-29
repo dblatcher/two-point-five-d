@@ -9,6 +9,7 @@ import { ItemType } from "./ItemType";
 import { Point } from "@/canvas/canvas-utility";
 import { Actor } from "@/game-classes/Actor";
 import { Blockage } from "./Level";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 
 interface ItemConfig {
@@ -44,21 +45,21 @@ class Item {
         return null
     }
 
-    get icon(): CanvasImageSource {
+    getIcon(spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
         try {
-            return this.data.type.icon.provideImage(Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
+            return this.data.type.icon.provideImage(spriteSheetMap, Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
         } catch (error) {
             console.warn(error.message)
         }
         return document.createElement('img');
     }
 
-    drawAsIcon(canvas: HTMLCanvasElement): void {
+    drawAsIcon(spriteSheetMap: Map<string, SpriteSheet>, canvas: HTMLCanvasElement): void {
         const ctx = canvas.getContext("2d");
         if (!ctx) { return }
         const height = Number(canvas.getAttribute('height') || "100");
         const width = Number(canvas.getAttribute('width') || "100");
-        const { icon } = this
+        const icon = this.getIcon(spriteSheetMap)
         ctx.clearRect(0, 0, width, height)
         ctx.fillStyle = this.data.type.backgroundColor.css;
         ctx.fillRect(0, 0, width, height)
@@ -153,12 +154,12 @@ class Item {
         }
     }
 
-    handleImpactWith(blockage: Blockage, game:Game): void {
+    handleImpactWith(blockage: Blockage, game: Game): void {
         console.log(blockage)
 
         switch (blockage.blockageClass) {
-            case Actor: 
-                blockage.actor?.handleBeingHitByFlyingItem(this,game);
+            case Actor:
+                blockage.actor?.handleBeingHitByFlyingItem(this, game);
                 break;
         }
 
