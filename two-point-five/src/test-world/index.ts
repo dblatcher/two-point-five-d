@@ -71,6 +71,7 @@ const game = new Game(
         characters: [],
         activeCharacterIndex: undefined,
         spriteSheets,
+        narrativeMessages: [],
     },
     { noCharacters: true }
 )

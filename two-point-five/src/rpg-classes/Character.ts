@@ -186,12 +186,11 @@ class Character {
     }
 
     say(message: string, game: Game): void {
-        game.narrativeMessages.push(new NarrativeMessage({
+        game.addMessage({
             content: `${this.data.name || "NAMELESS_CHARACTER"}: "${message}"`,
             color: this.getMyColor(game),
-            character: this,
-        }))
-
+            character: this
+        })
     }
 
     consume(item: Item, game: Game): FeedbackToUI {

@@ -9,6 +9,7 @@ import { DirectionName } from "@/types"
 import { CharacterScreen } from "./CharacterScreen"
 import { AttackButtons } from "./AttackButtons"
 import { QuestScreen } from "./QuestScreen"
+import { MessageBox } from "./MessageBox"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -65,6 +66,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
 
             </div>
         </section>
+        <MessageBox />
 
         {gameData.intersitial && (
             <Intersitial

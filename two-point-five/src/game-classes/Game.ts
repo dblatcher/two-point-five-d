@@ -12,7 +12,7 @@ import { Controller } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
 import { Intersitial } from './Intersitial'
-import { NarrativeMessage } from './NarrativeMessage'
+import { NarrativeMessage, NarrativeMessageData } from './NarrativeMessage'
 import { Actor } from '@/game-classes/Actor'
 import { Monster } from '@/rpg-classes/Monster'
 import { AttackOption } from '@/rpg-classes/AttackOption'
@@ -37,6 +37,7 @@ interface GameConfig {
     intersitial?: Intersitial
     gameCompleteMessage?: string
     spriteSheets: SpriteSheet[]
+    narrativeMessages: NarrativeMessage[]
 }
 
 interface GameRules {
@@ -80,7 +81,7 @@ class Game {
     data: GameConfig
     rules: GameRules
     queuedPlayerActions: Action[]
-    narrativeMessages: NarrativeMessage[]
+    
     tickCount: number
     pointerLocator: PointerLocator
     debugElement?: HTMLElement
@@ -225,6 +226,11 @@ class Game {
                 controller.reactToTriggers(this.featuresTriggeredThisTick)
             })
         }
+
+        this.data.narrativeMessages.forEach(message=> {
+            message.ticksLeft--
+        })
+        this.data.narrativeMessages= this.data.narrativeMessages.filter(message => message.ticksLeft>0)
 
         // TO DO - game over when all characters are dead
         this.data.characters.forEach(character => character.tick(this))
@@ -493,10 +499,11 @@ class Game {
                 targetMonster = monsters[0]
             }
         }
-
-
-
         return character.attack(targetMonster, option, this);
+    }
+
+    addMessage(message: NarrativeMessageData) {
+        this.data.narrativeMessages.push(new NarrativeMessage(message))
     }
 }
 

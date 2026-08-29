@@ -52,6 +52,7 @@ const game = new Game({
     ],
     characters: [characters.sally, characters.boblin, characters.drake, characters.gwim],
     spriteSheets,
+    narrativeMessages: [],
 }, {
     needCharacterToPickUpItems: true,
     playerBlocksPassage: true,

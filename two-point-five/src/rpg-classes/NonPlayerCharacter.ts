@@ -33,10 +33,10 @@ class NonPlayerCharacter extends Actor {
     }
 
     say(content: string, game: Game): void {
-        game.narrativeMessages.push(new NarrativeMessage({
+        game.addMessage({
             content: `${this.data.name || "NAMELESS_CHARACTER"}: "${content}"`,
             color: Color.GRAY
-        }))
+        });
     }
 
     doAnimation(animationName: string, time: number): void {

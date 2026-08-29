@@ -3,7 +3,7 @@ import { Game } from "@/game-classes/Game";
 import { Direction } from "@/game-classes/Direction";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
-import {duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3} from "./levels"
+import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels"
 import { spriteSheets as sharedSheets } from "@/instances/sprites";
 import { spriteSheets as localSheets } from "./sprites";
 
@@ -22,10 +22,11 @@ const game = new Game({
     level: levels[0],
     levels: levels,
     playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 0, y: 0, direction: Direction.south }),
-    controllers:[],
+    controllers: [],
     activeCharacterIndex: 0,
     characters: [],
     spriteSheets,
+    narrativeMessages: [],
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,

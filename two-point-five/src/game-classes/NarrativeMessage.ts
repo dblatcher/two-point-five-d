@@ -14,7 +14,7 @@ class NarrativeMessage {
 
     constructor(config: NarrativeMessageData) {
         this.data = config
-        this.ticksLeft = 10
+        this.ticksLeft = 20
     }
 }
 
