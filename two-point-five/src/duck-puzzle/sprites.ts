@@ -59,66 +59,66 @@ const duckSprite = new Sprite("DUCK", {
     shadow: { x: 1 / 4, y: 1 / 12 },
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
-            { sheet: sheets.duck_back },
+            { sheet: sheets.duck_back.id },
         ])
         .set("STAND_BACK", [
-            { sheet: sheets.duck_front },
+            { sheet: sheets.duck_front.id },
         ])
         .set("STAND_LEFT", [
-            { sheet: sheets.duck_side },
+            { sheet: sheets.duck_side.id },
         ])
         .set("STAND_RIGHT", [
-            { sheet: sheets.duck_side, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_side.id, transforms: ["FLIP_H"] },
         ])
         .set("WALK_FORWARD", [
-            { sheet: sheets.duck_walk_back_1 },
-            { sheet: sheets.duck_walk_back_2 },
-            { sheet: sheets.duck_walk_back_3 },
-            { sheet: sheets.duck_walk_back_4 },
+            { sheet: sheets.duck_walk_back_1.id },
+            { sheet: sheets.duck_walk_back_2.id },
+            { sheet: sheets.duck_walk_back_3.id },
+            { sheet: sheets.duck_walk_back_4.id },
         ])
         .set("WALK_BACK", [
-            { sheet: sheets.duck_walk_front_1 },
-            { sheet: sheets.duck_walk_front_2 },
-            { sheet: sheets.duck_walk_front_3 },
-            { sheet: sheets.duck_walk_front_4 },
+            { sheet: sheets.duck_walk_front_1.id },
+            { sheet: sheets.duck_walk_front_2.id },
+            { sheet: sheets.duck_walk_front_3.id },
+            { sheet: sheets.duck_walk_front_4.id },
         ])
         .set("WALK_LEFT", [
-            { sheet: sheets.duck_walk_side_1 },
-            { sheet: sheets.duck_walk_side_2 },
-            { sheet: sheets.duck_walk_side_3 },
-            { sheet: sheets.duck_walk_side_4 },
-            { sheet: sheets.duck_walk_side_5 },
-            { sheet: sheets.duck_walk_side_6 },
-            { sheet: sheets.duck_walk_side_7 },
+            { sheet: sheets.duck_walk_side_1.id },
+            { sheet: sheets.duck_walk_side_2.id },
+            { sheet: sheets.duck_walk_side_3.id },
+            { sheet: sheets.duck_walk_side_4.id },
+            { sheet: sheets.duck_walk_side_5.id },
+            { sheet: sheets.duck_walk_side_6.id },
+            { sheet: sheets.duck_walk_side_7.id },
         ])
         .set("WALK_RIGHT", [
-            { sheet: sheets.duck_walk_side_1, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_2, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_3, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_4, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_5, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_6, transforms: ["FLIP_H"] },
-            { sheet: sheets.duck_walk_side_7, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_walk_side_1.id, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_walk_side_2.id, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_walk_side_3.id, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_walk_side_4.id, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_walk_side_5.id, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_walk_side_6.id, transforms: ["FLIP_H"] },
+            { sheet: sheets.duck_walk_side_7.id, transforms: ["FLIP_H"] },
         ])
 })
 
 
 const weight = Sprite.itemSpriteDirectional("WEIGHT", {
-    back: [{ sheet: sheets.weight, row: 0, col: 1, }],
-    left: [{ sheet: sheets.weight, row: 1, col: 1, }],
-    forward: [{ sheet: sheets.weight, row: 0, col: 0, }],
-    right: [{ sheet: sheets.weight, row: 1, col: 0, }],
+    back: [{ sheet: sheets.weight.id, row: 0, col: 1, }],
+    left: [{ sheet: sheets.weight.id, row: 1, col: 1, }],
+    forward: [{ sheet: sheets.weight.id, row: 0, col: 0, }],
+    right: [{ sheet: sheets.weight.id, row: 1, col: 0, }],
 }, {
     baseline: .08,
     transforms: ["CROP_BASE",],
 })
 
-const weightIcon = Sprite.itemSpriteOneFrame("WEIGHT_ICON", { sheet: sheets.weight, row: 0, col: 0, })
+const weightIcon = Sprite.itemSpriteOneFrame("WEIGHT_ICON", { sheet: sheets.weight.id, row: 0, col: 0, })
 
 const sprites = {
-    brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks),
-    duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side),
-    windowWall: Sprite.patternSprite("WINDOW", sheets.window),
+    brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks.id),
+    duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side.id),
+    windowWall: Sprite.patternSprite("WINDOW", sheets.window.id),
     weight, weightIcon,
     duckSprite,
 }

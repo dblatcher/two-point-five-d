@@ -54,40 +54,40 @@ const dinoSprite = new Sprite("DINOSAUR", {
     transforms: ["CROP_BASE"],
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
-            { sheet: sheets.dinosaur, col: 2, row: 0 },
+            { sheet: sheets.dinosaur.id, col: 2, row: 0 },
         ])
         .set("STAND_BACK", [
-            { sheet: sheets.dinosaur, col: 0, row: 0 },
+            { sheet: sheets.dinosaur.id, col: 0, row: 0 },
         ])
         .set("STAND_LEFT", [
-            { sheet: sheets.dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
+            { sheet: sheets.dinosaur.id, col: 1, row: 0, transforms: ["FLIP_H"] },
         ])
         .set("STAND_RIGHT", [
-            { sheet: sheets.dinosaur, col: 1, row: 0 },
+            { sheet: sheets.dinosaur.id, col: 1, row: 0 },
         ])
         .set("WALK_FORWARD", [
-            { sheet: sheets.dinosaur, col: 2, row: 0 },
-            { sheet: sheets.dinosaur, col: 2, row: 1 },
-            { sheet: sheets.dinosaur, col: 2, row: 2 },
-            { sheet: sheets.dinosaur, col: 2, row: 3 },
+            { sheet: sheets.dinosaur.id, col: 2, row: 0 },
+            { sheet: sheets.dinosaur.id, col: 2, row: 1 },
+            { sheet: sheets.dinosaur.id, col: 2, row: 2 },
+            { sheet: sheets.dinosaur.id, col: 2, row: 3 },
         ])
         .set("WALK_BACK", [
-            { sheet: sheets.dinosaur, col: 0, row: 0 },
-            { sheet: sheets.dinosaur, col: 0, row: 1 },
-            { sheet: sheets.dinosaur, col: 0, row: 2 },
-            { sheet: sheets.dinosaur, col: 0, row: 3 },
+            { sheet: sheets.dinosaur.id, col: 0, row: 0 },
+            { sheet: sheets.dinosaur.id, col: 0, row: 1 },
+            { sheet: sheets.dinosaur.id, col: 0, row: 2 },
+            { sheet: sheets.dinosaur.id, col: 0, row: 3 },
         ])
         .set("WALK_LEFT", [
-            { sheet: sheets.dinosaur, col: 1, row: 0, transforms: ["FLIP_H"] },
-            { sheet: sheets.dinosaur, col: 1, row: 1, transforms: ["FLIP_H"] },
-            { sheet: sheets.dinosaur, col: 1, row: 2, transforms: ["FLIP_H"] },
-            { sheet: sheets.dinosaur, col: 1, row: 3, transforms: ["FLIP_H"] },
+            { sheet: sheets.dinosaur.id, col: 1, row: 0, transforms: ["FLIP_H"] },
+            { sheet: sheets.dinosaur.id, col: 1, row: 1, transforms: ["FLIP_H"] },
+            { sheet: sheets.dinosaur.id, col: 1, row: 2, transforms: ["FLIP_H"] },
+            { sheet: sheets.dinosaur.id, col: 1, row: 3, transforms: ["FLIP_H"] },
         ])
         .set("WALK_RIGHT", [
-            { sheet: sheets.dinosaur, col: 1, row: 0 },
-            { sheet: sheets.dinosaur, col: 1, row: 1 },
-            { sheet: sheets.dinosaur, col: 1, row: 2 },
-            { sheet: sheets.dinosaur, col: 1, row: 3 },
+            { sheet: sheets.dinosaur.id, col: 1, row: 0 },
+            { sheet: sheets.dinosaur.id, col: 1, row: 1 },
+            { sheet: sheets.dinosaur.id, col: 1, row: 2 },
+            { sheet: sheets.dinosaur.id, col: 1, row: 3 },
         ])
 })
 
@@ -97,16 +97,16 @@ const testSprite = new Sprite("TEST_CARD", {
     shadow: { x: 1 / 3, y: 1 / 12 },
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
-            { sheet: sheets.testCard },
+            { sheet: sheets.testCard.id },
         ])
         .set("STAND_BACK", [
-            { sheet: sheets.testCard },
+            { sheet: sheets.testCard.id },
         ])
         .set("STAND_LEFT", [
-            { sheet: sheets.testCard },
+            { sheet: sheets.testCard.id },
         ])
         .set("STAND_RIGHT", [
-            { sheet: sheets.testCard },
+            { sheet: sheets.testCard.id },
         ]),
 })
 
@@ -114,22 +114,22 @@ const leverSprite = new Sprite("LEVER", {
     size: { x: .5, y: .3 },
     animations: new Map<string, Frame[]>()
         .set("OFF", [
-            { sheet: sheets.leverAndButton, col: 0, row: 1, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton.id, col: 0, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
         .set("OFF_LEFT", [
-            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton.id, col: 0, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
         .set("OFF_RIGHT", [
-            { sheet: sheets.leverAndButton, col: 0, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
+            { sheet: sheets.leverAndButton.id, col: 0, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
         ])
         .set("ON", [
-            { sheet: sheets.leverAndButton, col: 2, row: 1, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton.id, col: 2, row: 1, transforms: ["RESIZE_CENTER"] },
         ])
         .set("ON_LEFT", [
-            { sheet: sheets.leverAndButton, col: 2, row: 0, transforms: ["RESIZE_CENTER"] },
+            { sheet: sheets.leverAndButton.id, col: 2, row: 0, transforms: ["RESIZE_CENTER"] },
         ])
         .set("ON_RIGHT", [
-            { sheet: sheets.leverAndButton, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
+            { sheet: sheets.leverAndButton.id, col: 2, row: 0, transforms: ["RESIZE_CENTER", "FLIP_H"] },
         ])
 })
 
@@ -138,7 +138,7 @@ const buttonSprite = new Sprite("BUTTON", {
     offset: { x: .3, y: .4 },
     animations: new Map<string, Frame[]>()
         .set(Sprite.defaultWallAnimation, [
-            { sheet: sheets.leverAndButton, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.leverAndButton.id, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
         ])
 })
 
@@ -147,7 +147,7 @@ const smallButtonSprite = new Sprite("BUTTON", {
     offset: { x: .03, y: .4 },
     animations: new Map<string, Frame[]>()
         .set(Sprite.defaultWallAnimation, [
-            { sheet: sheets.leverAndButton, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.leverAndButton.id, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
         ])
 })
 
@@ -156,46 +156,46 @@ const doorSprite = new Sprite("DOOR", {
     offset: { x: .5, y: .55 },
     animations: new Map<string, Frame[]>()
         .set("CLOSED", [
-            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 0, transforms: ["RESIZE_OFFSET"] },
         ])
         .set("CLOSED^OPEN", [
-            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 0, transforms: ["RESIZE_OFFSET"] },
-            { sheet: sheets.woodenDoor, col: 0, row: 1, transforms: ["RESIZE_OFFSET"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 1, transforms: ["RESIZE_OFFSET"] },
-            { sheet: sheets.woodenDoor, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 0, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 0, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 1, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 1, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 2, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 2, transforms: ["RESIZE_OFFSET"] },
         ])
         .set("CLOSED_LEFT", [
-            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
         ])
         .set("CLOSED^OPEN_LEFT", [
-            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
-            { sheet: sheets.woodenDoor, col: 0, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
-            { sheet: sheets.woodenDoor, col: 0, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
         ])
         .set("CLOSED_RIGHT", [
-            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
         ])
         .set("CLOSED^OPEN_RIGHT", [
-            { sheet: sheets.woodenDoor, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
-            { sheet: sheets.woodenDoor, col: 0, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
-            { sheet: sheets.woodenDoor, col: 0, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
-            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 0, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 1, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 0, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
         ])
         .set("OPEN", [
-            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 2, transforms: ["RESIZE_OFFSET"] },
         ])
         .set("OPEN_LEFT", [
-            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"] },
         ])
         .set("OPEN_RIGHT", [
-            { sheet: sheets.woodenDoor, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
+            { sheet: sheets.woodenDoor.id, col: 1, row: 2, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"] },
         ])
 })
 
@@ -204,12 +204,12 @@ const doorSprite = new Sprite("DOOR", {
 
 
 const sprites = {
-    brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks),
-    brickWall2: Sprite.patternSprite("BRICK_WALL", sheets.brickWall2),
-    windowWall: Sprite.patternSprite("WINDOW", sheets.window),
-    testPattern: Sprite.patternSprite("TEST", sheets.testCard),
-    paintingWall: Sprite.patternSprite("painting", sheets.painting, { size: { x: .5, y: .35 } }),
-    stairs: Sprite.patternSprite("stairs", sheets.stairs, { size: { x: .75, y: 1 } }, { col: 0, row: 0 }),
+    brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks.id),
+    brickWall2: Sprite.patternSprite("BRICK_WALL", sheets.brickWall2.id),
+    windowWall: Sprite.patternSprite("WINDOW", sheets.window.id),
+    testPattern: Sprite.patternSprite("TEST", sheets.testCard.id),
+    paintingWall: Sprite.patternSprite("painting", sheets.painting.id, { size: { x: .5, y: .35 } }),
+    stairs: Sprite.patternSprite("stairs", sheets.stairs.id, { size: { x: .75, y: 1 } }, { col: 0, row: 0 }),
 
     dinoSprite,
     testSprite,
@@ -221,14 +221,14 @@ const sprites = {
         size: { x: .25, y: .25 }, offset: { x: .05, y: .4 },
         animations: new Map<string, Frame[]>()
             .set(Sprite.defaultWallAnimation, [
-                { sheet: sheets.leverAndButton, col: 0, row: 3, transforms: ["RESIZE_OFFSET"] },
+                { sheet: sheets.leverAndButton.id, col: 0, row: 3, transforms: ["RESIZE_OFFSET"] },
             ])
     }),
-    apple: Sprite.itemSpriteOneFrame("apple", { sheet: sheets.fruits, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
-    bean: Sprite.itemSpriteOneFrame("bean", { sheet: sheets.fruits, col: 1, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
-    key: Sprite.itemSpriteOneFrame("key", { sheet: sheets.fruits, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),
-    bardHat: Sprite.itemSpriteOneFrame("bardHat", { sheet: sheets.bardHat }, { baseline: .25, transforms: ["CROP_BASE",], }),
-    helmet: Sprite.itemSpriteOneFrame("helmet", { sheet: sheets.helmet }, { baseline: .05, transforms: ["CROP_BASE",], }),
+    apple: Sprite.itemSpriteOneFrame("apple", { sheet: sheets.fruits.id, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
+    bean: Sprite.itemSpriteOneFrame("bean", { sheet: sheets.fruits.id, col: 1, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
+    key: Sprite.itemSpriteOneFrame("key", { sheet: sheets.fruits.id, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),
+    bardHat: Sprite.itemSpriteOneFrame("bardHat", { sheet: sheets.bardHat.id }, { baseline: .25, transforms: ["CROP_BASE",], }),
+    helmet: Sprite.itemSpriteOneFrame("helmet", { sheet: sheets.helmet.id }, { baseline: .05, transforms: ["CROP_BASE",], }),
 }
 
 const textBoards = {

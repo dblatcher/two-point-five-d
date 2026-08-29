@@ -6,7 +6,7 @@ import { SpriteSheet } from "./SpriteSheet"
 
 
 interface Frame {
-    sheet: SpriteSheet
+    sheet: string
     row?: number
     col?: number
     transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
@@ -61,19 +61,19 @@ class Sprite {
      * @returns the CanvasImageSource of the sprite frame
      */
     private loadImage(frame: Frame, animationFrameKey: string, spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
-        const sheet = spriteSheetMap.get(frame.sheet.id);
+        const sheet = spriteSheetMap.get(frame.sheet);
         if (!sheet) {
-            throw new Error(`No spriteSheet ${frame.sheet.id} `)
+            throw new Error(`No spriteSheet ${frame.sheet} `)
         }
         const { bitmap } = sheet;
         if (!bitmap) {
-            throw new Error(`SpriteSheet ${frame.sheet.id} has no bitmap`)
+            throw new Error(`SpriteSheet ${frame.sheet} has no bitmap`)
         }
 
         let image: CanvasImageSource = bitmap;
 
-        if (frame.sheet.config.pattern === 'GRID') {
-            image = frame.sheet.provideFrame(frame.col, frame.row)
+        if (sheet.config.pattern === 'GRID') {
+            image = sheet.provideFrame(frame.col, frame.row)
         }
 
         if (frame.transforms || this.transforms) {
@@ -108,8 +108,7 @@ class Sprite {
             return null
         }
 
-        const spritesheetId = animation[0].sheet.id
-        const sheet = spriteSheetMap.get(spritesheetId)
+        const sheet = spriteSheetMap.get(animation[0].sheet)
         return sheet?.src ?? null;
     }
 
@@ -192,7 +191,7 @@ class Sprite {
         this.loadedFrames.clear()
     }
 
-    static patternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}, gridCell: { row?: number, col?: number } = {}): Sprite {
+    static patternSprite(name: string, sheet: string, config: SpriteConfig = {}, gridCell: { row?: number, col?: number } = {}): Sprite {
 
         config.animations = new Map<string, Frame[]>()
             .set(`${Sprite.defaultWallAnimation}`, [
@@ -208,12 +207,12 @@ class Sprite {
         return new Sprite(name, config)
     }
 
-    static animatedPatternSprite(name: string, sheet: SpriteSheet, config: SpriteConfig = {}, gridCells?: { row?: number, col?: number }[]): Sprite {
+    static animatedPatternSprite(name: string, spriteSheet: SpriteSheet, config: SpriteConfig = {}, gridCells?: { row?: number, col?: number }[]): Sprite {
 
         if (!gridCells) {
             gridCells = []
-            for (let i = 0; i < (sheet.config.cols || 1); i++) {
-                for (let j = 0; j < (sheet.config.rows || 1); j++) {
+            for (let i = 0; i < (spriteSheet.config.cols || 1); i++) {
+                for (let j = 0; j < (spriteSheet.config.rows || 1); j++) {
                     gridCells.push({ row: j, col: i })
                 }
             }
@@ -221,13 +220,13 @@ class Sprite {
 
         config.animations = new Map<string, Frame[]>()
             .set(`${Sprite.defaultWallAnimation}`,
-                gridCells.map(gridCell => { return { sheet, transforms: ["RESIZE_CENTER"], row: gridCell.row, col: gridCell.col } })
+                gridCells.map(gridCell => { return { sheet: spriteSheet.id, transforms: ["RESIZE_CENTER"], row: gridCell.row, col: gridCell.col } })
             )
             .set(`${Sprite.defaultWallAnimation}_LEFT`,
-                gridCells.map(gridCell => { return { sheet, transforms: ["RESIZE_CENTER", "SKEW_LEFT"], row: gridCell.row, col: gridCell.col } })
+                gridCells.map(gridCell => { return { sheet: spriteSheet.id, transforms: ["RESIZE_CENTER", "SKEW_LEFT"], row: gridCell.row, col: gridCell.col } })
             )
             .set(`${Sprite.defaultWallAnimation}_RIGHT`,
-                gridCells.map(gridCell => { return { sheet, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], row: gridCell.row, col: gridCell.col } })
+                gridCells.map(gridCell => { return { sheet: spriteSheet.id, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], row: gridCell.row, col: gridCell.col } })
             );
 
         return new Sprite(name, config)
@@ -260,7 +259,7 @@ class Sprite {
         return new Sprite(name, config)
     }
 
-    static portraitSprite(name: string, sheet: SpriteSheet): Sprite {
+    static portraitSprite(name: string, sheet: string): Sprite {
         return new Sprite(name, {
             animations: new Map<string, Frame[]>()
                 .set(Sprite.defaultPortraitAnimation, [{ sheet }])
