@@ -99,7 +99,7 @@ class Actor {
     }
 
     handleBeingHitByFlyingItem(item:Item, game:Game):void {
-        console.log(`${this.data.sprite.name} was hit by a ${item.data.type.name} going ${item.data.vantage?.data.direction.name}.`)
+        console.log(`${this.data.sprite.id} was hit by a ${item.data.type.name} going ${item.data.vantage?.data.direction.name}.`)
     }
 
     move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined {

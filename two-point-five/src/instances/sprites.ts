@@ -34,11 +34,11 @@ const sheets: { [index: string]: SpriteSheet } = {
     stairs: new SpriteSheet("stairs", stairs, { pattern: "GRID", cols: 1, rows: 5 }),
 
     //https://opengameart.org/content/brick-wall-0
-    brickWall2: new SpriteSheet("brickWall",brickWall),
+    brickWall2: new SpriteSheet("brickWall", brickWall),
 
     //https://opengameart.org/content/helmets-64x64
-    bardHat: new SpriteSheet("bardHat",bardHat),
-    helmet: new SpriteSheet("helmet",helmet),
+    bardHat: new SpriteSheet("bardHat", bardHat),
+    helmet: new SpriteSheet("helmet", helmet),
 
     testCard: new SpriteSheet("testCard", testCard),
     painting: new SpriteSheet("painting", painting),
@@ -48,7 +48,8 @@ const sheets: { [index: string]: SpriteSheet } = {
 
 const spriteSheets = Object.keys(sheets).map(key => sheets[key])
 
-const dinoSprite = new Sprite("DINOSAUR", {
+const dinoSprite = new Sprite({
+    id: "DINOSAUR",
     baseline: .25,
     shadow: { x: 1 / 6, y: 1 / 24 },
     transforms: ["CROP_BASE"],
@@ -92,7 +93,8 @@ const dinoSprite = new Sprite("DINOSAUR", {
 })
 
 
-const testSprite = new Sprite("TEST_CARD", {
+const testSprite = new Sprite({
+    id: "TEST_CARD",
     baseline: 0,
     shadow: { x: 1 / 3, y: 1 / 12 },
     animations: new Map<string, Frame[]>()
@@ -110,7 +112,8 @@ const testSprite = new Sprite("TEST_CARD", {
         ]),
 })
 
-const leverSprite = new Sprite("LEVER", {
+const leverSprite = new Sprite({
+    id: "LEVER",
     size: { x: .5, y: .3 },
     animations: new Map<string, Frame[]>()
         .set("OFF", [
@@ -133,7 +136,8 @@ const leverSprite = new Sprite("LEVER", {
         ])
 })
 
-const buttonSprite = new Sprite("BUTTON", {
+const buttonSprite = new Sprite({
+    id: "BUTTON",
     size: { x: .4, y: .4 },
     offset: { x: .3, y: .4 },
     animations: new Map<string, Frame[]>()
@@ -142,7 +146,8 @@ const buttonSprite = new Sprite("BUTTON", {
         ])
 })
 
-const smallButtonSprite = new Sprite("BUTTON", {
+const smallButtonSprite = new Sprite({
+    id: "SMALL_BUTTON",
     size: { x: .25, y: .25 },
     offset: { x: .03, y: .4 },
     animations: new Map<string, Frame[]>()
@@ -151,7 +156,8 @@ const smallButtonSprite = new Sprite("BUTTON", {
         ])
 })
 
-const doorSprite = new Sprite("DOOR", {
+const doorSprite = new Sprite({
+    id: "DOOR",
     size: { x: .8, y: .9 },
     offset: { x: .5, y: .55 },
     animations: new Map<string, Frame[]>()
@@ -204,12 +210,12 @@ const doorSprite = new Sprite("DOOR", {
 
 
 const sprites = {
-    brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks.id),
-    brickWall2: Sprite.patternSprite("BRICK_WALL", sheets.brickWall2.id),
-    windowWall: Sprite.patternSprite("WINDOW", sheets.window.id),
-    testPattern: Sprite.patternSprite("TEST", sheets.testCard.id),
-    paintingWall: Sprite.patternSprite("painting", sheets.painting.id, { size: { x: .5, y: .35 } }),
-    stairs: Sprite.patternSprite("stairs", sheets.stairs.id, { size: { x: .75, y: 1 } }, { col: 0, row: 0 }),
+    brickWall: Sprite.patternSprite(sheets.bricks.id, { id: "BRICK_WALL" }),
+    brickWall2: Sprite.patternSprite(sheets.brickWall2.id, { id: "BRICK_WALL2" }),
+    windowWall: Sprite.patternSprite(sheets.window.id, { id: "WINDOW" }),
+    testPattern: Sprite.patternSprite(sheets.testCard.id, { id: "TEST" }),
+    paintingWall: Sprite.patternSprite(sheets.painting.id, { id: "painting", size: { x: .5, y: .35 } }),
+    stairs: Sprite.patternSprite(sheets.stairs.id, { id: "stairs", size: { x: .75, y: 1 } }, { col: 0, row: 0 }),
 
     dinoSprite,
     testSprite,
@@ -217,18 +223,19 @@ const sprites = {
     doorSprite,
     buttonSprite,
     smallButtonSprite,
-    keyHole: new Sprite("KEYHOLE", {
+    keyHole: new Sprite({
+        id: "KEYHOLE",
         size: { x: .25, y: .25 }, offset: { x: .05, y: .4 },
         animations: new Map<string, Frame[]>()
             .set(Sprite.defaultWallAnimation, [
                 { sheet: sheets.leverAndButton.id, col: 0, row: 3, transforms: ["RESIZE_OFFSET"] },
             ])
     }),
-    apple: Sprite.itemSpriteOneFrame("apple", { sheet: sheets.fruits.id, col: 0, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
-    bean: Sprite.itemSpriteOneFrame("bean", { sheet: sheets.fruits.id, col: 1, row: 0 }, { baseline: .1, transforms: ["CROP_BASE",], }),
-    key: Sprite.itemSpriteOneFrame("key", { sheet: sheets.fruits.id, col: 1, row: 2 }, { baseline: .1, transforms: ["CROP_BASE",], }),
-    bardHat: Sprite.itemSpriteOneFrame("bardHat", { sheet: sheets.bardHat.id }, { baseline: .25, transforms: ["CROP_BASE",], }),
-    helmet: Sprite.itemSpriteOneFrame("helmet", { sheet: sheets.helmet.id }, { baseline: .05, transforms: ["CROP_BASE",], }),
+    apple: Sprite.itemSpriteOneFrame({ sheet: sheets.fruits.id, col: 0, row: 0 }, { id: "apple", baseline: .1, transforms: ["CROP_BASE",], }),
+    bean: Sprite.itemSpriteOneFrame({ sheet: sheets.fruits.id, col: 1, row: 0 }, { id: "bean", baseline: .1, transforms: ["CROP_BASE",], }),
+    key: Sprite.itemSpriteOneFrame({ sheet: sheets.fruits.id, col: 1, row: 2 }, { id: "key", baseline: .1, transforms: ["CROP_BASE",], }),
+    bardHat: Sprite.itemSpriteOneFrame({ sheet: sheets.bardHat.id }, { id: 'bardHat', baseline: .25, transforms: ["CROP_BASE",], }),
+    helmet: Sprite.itemSpriteOneFrame({ sheet: sheets.helmet.id }, { id: 'helmet', baseline: .05, transforms: ["CROP_BASE",], }),
 }
 
 const textBoards = {

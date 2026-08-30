@@ -51,7 +51,7 @@ class Monster extends Actor {
 
         if (!hit) {
             game.addMessage({
-                content: `The ${this.data.sprite.name} missed ${attackedCharacter.data.name}`,
+                content: `The ${this.data.sprite.id} missed ${attackedCharacter.data.name}`,
                 color: Color.TRANSPARENT
             })
             return

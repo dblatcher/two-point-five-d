@@ -98,7 +98,6 @@ class Game {
         this.data = config;
         this.rules = rules;
         this.queuedPlayerActions = []
-        this.narrativeMessages = []
         this.tickCount = 0
         this.pointerLocator = new PointerLocator;
         this.tick = this.tick.bind(this)

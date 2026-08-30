@@ -13,6 +13,7 @@ interface Frame {
 }
 
 interface SpriteConfig {
+    id: string,
     baseline?: number
     shadow?: Dimensions
     size?: Dimensions
@@ -23,7 +24,7 @@ interface SpriteConfig {
 }
 
 class Sprite {
-    name: string
+    id: string
     animations: Map<string, Frame[]>
     baseline: number
     shadow?: Dimensions
@@ -37,8 +38,8 @@ class Sprite {
     static get defaultFigureAnimation(): "STAND" { return "STAND" }
     static get defaultPortraitAnimation(): "NEUTRAL" { return "NEUTRAL" }
 
-    constructor(name: string, config: SpriteConfig = {}) {
-        this.name = name
+    constructor(config: SpriteConfig) {
+        this.id = config.id;
         this.animations = config.animations || new Map<string, Frame[]>();
         this.baseline = config.baseline || 0
         this.shadow = config.shadow
@@ -99,12 +100,12 @@ class Sprite {
         const animation = this.getFrameList(actionName, direction);
 
         if (animation == null) {
-            console.warn(`Invalid animation key on ${this.name}: ${actionName} (${direction.name})`);
+            console.warn(`Invalid animation key on ${this.id}: ${actionName} (${direction.name})`);
             return null
         }
 
         if (animation.length == 0) {
-            console.warn(`No frames in animation ${actionName} (${direction.name}) of ${this.name}`);
+            console.warn(`No frames in animation ${actionName} (${direction.name}) of ${this.id}`);
             return null
         }
 
@@ -159,11 +160,11 @@ class Sprite {
         const animation = this.getFrameList(actionName, direction);
 
         if (animation === null) {
-            throw new Error(`Invalid animation key on ${this.name}: ${actionName} (${direction.name})`);
+            throw new Error(`Invalid animation key on ${this.id}: ${actionName} (${direction.name})`);
         }
 
         if (animation.length == 0) {
-            throw new Error(`No frames in animation ${actionName} (${direction.name}) of ${this.name}`);
+            throw new Error(`No frames in animation ${actionName} (${direction.name}) of ${this.id}`);
         }
 
         const frameIndex = this.getFrameIndex(animation, tickCount, transitionPhase);
@@ -191,7 +192,7 @@ class Sprite {
         this.loadedFrames.clear()
     }
 
-    static patternSprite(name: string, sheet: string, config: SpriteConfig = {}, gridCell: { row?: number, col?: number } = {}): Sprite {
+    static patternSprite(sheet: string, config: SpriteConfig, gridCell: { row?: number, col?: number } = {}): Sprite {
 
         config.animations = new Map<string, Frame[]>()
             .set(`${Sprite.defaultWallAnimation}`, [
@@ -204,10 +205,10 @@ class Sprite {
                 { sheet, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"], ...gridCell },
             ]);
 
-        return new Sprite(name, config)
+        return new Sprite(config)
     }
 
-    static animatedPatternSprite(name: string, spriteSheet: SpriteSheet, config: SpriteConfig = {}, gridCells?: { row?: number, col?: number }[]): Sprite {
+    static animatedPatternSprite(spriteSheet: SpriteSheet, config: SpriteConfig, gridCells?: { row?: number, col?: number }[]): Sprite {
 
         if (!gridCells) {
             gridCells = []
@@ -229,10 +230,10 @@ class Sprite {
                 gridCells.map(gridCell => { return { sheet: spriteSheet.id, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], row: gridCell.row, col: gridCell.col } })
             );
 
-        return new Sprite(name, config)
+        return new Sprite(config)
     }
 
-    static itemSpriteOneFrame(name: string, frames: Frame[] | Frame, config: SpriteConfig = {}): Sprite {
+    static itemSpriteOneFrame(frames: Frame[] | Frame, config: SpriteConfig): Sprite {
 
         const framesInArray = Array.isArray(frames) ? frames : [frames];
 
@@ -242,10 +243,10 @@ class Sprite {
         config.size = config.size || Sprite.DEFAULT_SIZE
         config.shadow = config.shadow || { x: config.size.x * (3 / 5), y: .1 }
 
-        return new Sprite(name, config)
+        return new Sprite(config)
     }
 
-    static itemSpriteDirectional(name: string, frames: { back: Frame[], left: Frame[], right: Frame[], forward: Frame[] }, config: SpriteConfig = {}): Sprite {
+    static itemSpriteDirectional(frames: { back: Frame[], left: Frame[], right: Frame[], forward: Frame[] }, config: SpriteConfig): Sprite {
 
         config.animations = new Map<string, Frame[]>()
             .set(Sprite.defaultFigureAnimation + "_BACK", frames.back)
@@ -256,11 +257,12 @@ class Sprite {
         config.size = config.size || Sprite.DEFAULT_SIZE
         config.shadow = config.shadow || { x: config.size.x * (3 / 5), y: .1 }
 
-        return new Sprite(name, config)
+        return new Sprite(config)
     }
 
     static portraitSprite(name: string, sheet: string): Sprite {
-        return new Sprite(name, {
+        return new Sprite({
+            id: name,
             animations: new Map<string, Frame[]>()
                 .set(Sprite.defaultPortraitAnimation, [{ sheet }])
         })

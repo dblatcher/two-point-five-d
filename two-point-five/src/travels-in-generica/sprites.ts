@@ -90,7 +90,8 @@ function makeULpcSprite(name: string, spriteSheet: SpriteSheet): Sprite {
         return output
     }
 
-    return new Sprite(name, {
+    return new Sprite({
+        id: name,
         baseline: .26,
         shadow: { x: 1 / 10, y: 1 / 26 },
         size: { x: .5, y: .5 },
@@ -152,20 +153,21 @@ const sprites = {
     boblin_portrait: Sprite.portraitSprite("boblin", sheets.portrait3.id),
     gwim_portrait: Sprite.portraitSprite("gwim", sheets.portrait13.id),
 
-    silverSword: Sprite.itemSpriteOneFrame("silverSword", { sheet: sheets.weapons.id, col: 1, row: 0 }),
-    hammer: Sprite.itemSpriteOneFrame("hammer", { sheet: sheets.weapons.id, col: 14, row: 0 }),
-    stick: Sprite.itemSpriteOneFrame("stick", { sheet: sheets.weapons.id, col: 3, row: 1 }),
-    mailShirt: Sprite.itemSpriteOneFrame("mailShirt", { sheet: sheets.armour.id, col: 7, row: 0 }),
-    plateArmour: Sprite.itemSpriteOneFrame("plateArmour", { sheet: sheets.armour.id, col: 8, row: 0 }),
-    rubyKey: Sprite.itemSpriteOneFrame("rubyKey", { sheet: sheets.rubyKey.id }),
+    silverSword: Sprite.itemSpriteOneFrame({ sheet: sheets.weapons.id, col: 1, row: 0 }, { id: "silverSword" }),
+    hammer: Sprite.itemSpriteOneFrame({ sheet: sheets.weapons.id, col: 14, row: 0 }, { id: "hammer" }),
+    stick: Sprite.itemSpriteOneFrame({ sheet: sheets.weapons.id, col: 3, row: 1 }, { id: "stick" }),
+    mailShirt: Sprite.itemSpriteOneFrame({ sheet: sheets.armour.id, col: 7, row: 0 }, { id: "mailShirt" }),
+    plateArmour: Sprite.itemSpriteOneFrame({ sheet: sheets.armour.id, col: 8, row: 0 }, { id: "plateArmour" }),
+    rubyKey: Sprite.itemSpriteOneFrame({ sheet: sheets.rubyKey.id }, { id: "rubyKey" }),
 
-    torch: Sprite.animatedPatternSprite('torch', sheets.torch, { size: { x: .25, y: .5 } }),
+    torch: Sprite.animatedPatternSprite(sheets.torch, { id: 'torch', size: { x: .25, y: .5 } }),
 
-    brownWoodWallOne: Sprite.patternSprite('brownWoodWallOne', sheets.woodenWalls.id, {}, { row: 2, col: 0 }),
-    yellowWoodWallOne: Sprite.patternSprite('yellowWoodWallOne', sheets.woodenWalls.id, {}, { row: 2, col: 1 }),
-    grayWoodWallOne: Sprite.patternSprite('grayWoodWallOne', sheets.woodenWalls.id, {}, { row: 2, col: 2 }),
-    fence: Sprite.patternSprite('fence', sheets.fence.id, { size: { x: 1, y: .5 }, offset: { x: 0.5, y: 0.75 } },),
-    treeOne: new Sprite('treeOne', {
+    brownWoodWallOne: Sprite.patternSprite(sheets.woodenWalls.id, { id: 'brownWoodWallOne' }, { row: 2, col: 0 }),
+    yellowWoodWallOne: Sprite.patternSprite(sheets.woodenWalls.id, { id: 'yellowWoodWallOne' }, { row: 2, col: 1 }),
+    grayWoodWallOne: Sprite.patternSprite(sheets.woodenWalls.id, { id: 'grayWoodWallOne' }, { row: 2, col: 2 }),
+    fence: Sprite.patternSprite(sheets.fence.id, { id: 'fence', size: { x: 1, y: .5 }, offset: { x: 0.5, y: 0.75 } },),
+    treeOne: new Sprite({
+        id: 'treeOne',
         plotShift: { x: -0.1, y: 0.175 },
         size: { x: 1, y: 1 },
         animations: new Map<string, Frame[]>()
@@ -174,7 +176,8 @@ const sprites = {
             .set("STAND_LEFT", [{ sheet: sheets.trees.id, col: 0 }])
             .set("STAND_RIGHT", [{ sheet: sheets.trees.id, col: 0, transforms: ["FLIP_H"] }])
     }),
-    treeTwo: new Sprite('treeTwo', {
+    treeTwo: new Sprite({
+        id: 'treeTwo',
         plotShift: { x: -0.025, y: 0.175 },
         size: { x: .7, y: .7 },
         animations: new Map<string, Frame[]>()

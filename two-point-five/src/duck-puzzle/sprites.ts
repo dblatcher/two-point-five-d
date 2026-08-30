@@ -55,7 +55,8 @@ const sheets: { [index: string]: SpriteSheet } = {
 
 const spriteSheets = Object.keys(sheets).map(key => sheets[key])
 
-const duckSprite = new Sprite("DUCK", {
+const duckSprite = new Sprite({
+    id: "DUCK",
     shadow: { x: 1 / 4, y: 1 / 12 },
     animations: new Map<string, Frame[]>()
         .set("STAND_FORWARD", [
@@ -103,22 +104,23 @@ const duckSprite = new Sprite("DUCK", {
 })
 
 
-const weight = Sprite.itemSpriteDirectional("WEIGHT", {
+const weight = Sprite.itemSpriteDirectional({
     back: [{ sheet: sheets.weight.id, row: 0, col: 1, }],
     left: [{ sheet: sheets.weight.id, row: 1, col: 1, }],
     forward: [{ sheet: sheets.weight.id, row: 0, col: 0, }],
     right: [{ sheet: sheets.weight.id, row: 1, col: 0, }],
 }, {
+    id: "WEIGHT",
     baseline: .08,
     transforms: ["CROP_BASE",],
 })
 
-const weightIcon = Sprite.itemSpriteOneFrame("WEIGHT_ICON", { sheet: sheets.weight.id, row: 0, col: 0, })
+const weightIcon = Sprite.itemSpriteOneFrame({ sheet: sheets.weight.id, row: 0, col: 0, }, { id: "WEIGHT_ICON", })
 
 const sprites = {
-    brickWall: Sprite.patternSprite("BRICK_WALL", sheets.bricks.id),
-    duckPattern: Sprite.patternSprite("DUCK_PATTERN", sheets.duck_side.id),
-    windowWall: Sprite.patternSprite("WINDOW", sheets.window.id),
+    brickWall: Sprite.patternSprite(sheets.bricks.id, { id: "BRICK_WALL" }),
+    duckPattern: Sprite.patternSprite(sheets.duck_side.id, { id: "DUCK_PATTERN" }),
+    windowWall: Sprite.patternSprite(sheets.window.id, { id: "WINDOW" }),
     weight, weightIcon,
     duckSprite,
 }
