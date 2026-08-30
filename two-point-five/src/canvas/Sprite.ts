@@ -3,13 +3,13 @@ import { Dimensions, Point } from "./canvas-utility"
 import { RelativeDirection } from "../game-classes/RelativeDirection"
 import { SpriteSheet } from "./SpriteSheet"
 
-
+type TransformName = "FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE"
 
 interface Frame {
     sheet: string
     row?: number
     col?: number
-    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
+    transforms?: Array<TransformName>
 }
 
 interface SpriteConfig {
@@ -20,18 +20,11 @@ interface SpriteConfig {
     offset?: Point
     plotShift?: Point
     animations?: Map<string, Frame[]>
-    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
+    transforms?: Array<TransformName>
 }
 
 class Sprite {
-    id: string
-    animations: Map<string, Frame[]>
-    baseline: number
-    shadow?: Dimensions
-    size?: Dimensions
-    offset?: Point
-    plotShift?: Point
-    transforms?: Array<"FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE">
+    data: SpriteConfig
     loadedFrames: Map<string, CanvasImageSource>
 
     static get defaultWallAnimation(): "NEUTRAL" { return "NEUTRAL" }
@@ -39,15 +32,12 @@ class Sprite {
     static get defaultPortraitAnimation(): "NEUTRAL" { return "NEUTRAL" }
 
     constructor(config: SpriteConfig) {
-        this.id = config.id;
-        this.animations = config.animations || new Map<string, Frame[]>();
-        this.baseline = config.baseline || 0
-        this.shadow = config.shadow
-        this.size = config.size
-        this.offset = config.offset
-        this.plotShift = config.plotShift
-        this.transforms = config.transforms
+        this.data = config
         this.loadedFrames = new Map<string, CanvasImageSource>();
+    }
+
+    get id() {
+        return this.data.id
     }
 
     /**
@@ -77,9 +67,9 @@ class Sprite {
             image = sheet.provideFrame(frame.col, frame.row)
         }
 
-        if (frame.transforms || this.transforms) {
+        if (frame.transforms || this.data.transforms) {
             const transforms = [
-                ...(this.transforms || []),
+                ...(this.data.transforms || []),
                 ...(frame.transforms || []),
             ]
             image = transformSpriteImage(image, transforms, this);
@@ -121,9 +111,13 @@ class Sprite {
      * @return the list of frames for the animation, or null
      */
     getFrameList(actionName: string, direction: RelativeDirection): Frame[] | null {
+        const { animations } = this.data
+        if (!animations) {
+            return null
+        }
         const animationWithDirection = `${actionName}_${direction.name}`
         const animationWithoutDirection = `${actionName}`
-        return this.animations.get(animationWithDirection) || this.animations.get(animationWithoutDirection) || null
+        return animations.get(animationWithDirection) || animations.get(animationWithoutDirection) || null
     }
 
     /**
@@ -179,8 +173,12 @@ class Sprite {
     }
 
     get keyArray(): string[] {
+        const { animations } = this.data
+        if (!animations) {
+            return []
+        }
         const list: string[] = []
-        this.animations.forEach((value: Frame[], key: string) => { list.push(key) })
+        animations.forEach((value: Frame[], key: string) => { list.push(key) })
         return list
     }
 

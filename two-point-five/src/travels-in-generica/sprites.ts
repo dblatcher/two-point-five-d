@@ -44,7 +44,7 @@ const sheets: { [index: string]: SpriteSheet } = {
     portrait1: new SpriteSheet("portrait1", portrait1),
     portrait2: new SpriteSheet("portrait2", portrait2),
     portrait3: new SpriteSheet("portrait3", portrait3),
-    portrait13: new SpriteSheet("portrait15", portrait13),
+    portrait13: new SpriteSheet("portrait13", portrait13),
     portrait15: new SpriteSheet("portrait15", portrait15),
 
     //https://opengameart.org/content/32-weapon-icons

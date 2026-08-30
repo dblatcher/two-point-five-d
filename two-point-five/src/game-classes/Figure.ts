@@ -67,10 +67,10 @@ class Figure extends Vantage {
 
         const { centerOnFloor, topLeft, topRight, widthAtDistance, heightAtDistance } = this.getRenderParams(renderInstruction.viewedFrom, place.forward, place.right);
 
-
-        if (sprite.shadow) {
+        const { shadow } = sprite.data
+        if (shadow) {
             const shadowSize: Dimensions = {
-                x: widthAtDistance * sprite.shadow.x, y: heightAtDistance * sprite.shadow.y
+                x: widthAtDistance * shadow.x, y: heightAtDistance * shadow.y
             }
             ctx.beginPath()
             ctx.fillStyle = Color.BLACK.opacityAt(.5).css
@@ -78,7 +78,7 @@ class Figure extends Vantage {
             ctx.fill()
         }
 
-        const bottomPastBaseline = sprite.plotShift?.y || 0
+        const bottomPastBaseline = sprite.data.plotShift?.y || 0
 
         const relativeDimensions: Dimensions = {
             x: topRight.x - topLeft.x,

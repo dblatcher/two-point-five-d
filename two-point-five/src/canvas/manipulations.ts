@@ -147,31 +147,31 @@ function cropBase(source: CanvasImageSource, baseline: number): CanvasImageSourc
     return board;
 }
 
-function transformSpriteImage(image: CanvasImageSource, transforms: string[], sprite: Sprite):  CanvasImageSource {
-
+function transformSpriteImage(image: CanvasImageSource, transforms: string[], sprite: Sprite): CanvasImageSource {
+    const { size, offset, baseline = 0 } = sprite.data
     transforms.forEach(transform => {
         switch (transform) {
             case "RESIZE_CENTER":
-                if (sprite.size) {
-                    image = resizeFrame(image, sprite.size)
+                if (size) {
+                    image = resizeFrame(image, size)
                 }
                 break
             case "RESIZE_OFFSET":
-                if (sprite.size) {
-                    image = resizeFrame(image, sprite.size, sprite.offset)
+                if (size) {
+                    image = resizeFrame(image, size, offset)
                 }
                 break
             case "FLIP_H":
                 image = flipImage(image)
                 break;
             case "SKEW_LEFT":
-                image = perspectiveSkew(image, sprite.size || Sprite.DEFAULT_SIZE, false)
+                image = perspectiveSkew(image, size || Sprite.DEFAULT_SIZE, false)
                 break;
             case "SKEW_RIGHT":
-                image = perspectiveSkew(image, sprite.size || Sprite.DEFAULT_SIZE, true)
+                image = perspectiveSkew(image, size || Sprite.DEFAULT_SIZE, true)
                 break;
             case "CROP_BASE":
-                image = cropBase(image, sprite.baseline)
+                image = cropBase(image, baseline)
                 break;
         }
     })

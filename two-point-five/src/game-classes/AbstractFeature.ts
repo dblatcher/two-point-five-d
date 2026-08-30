@@ -15,7 +15,7 @@ import { Vantage } from "./Vantage"
 
 
 interface AbstractFeatureData {
-    id?:string
+    id?: string
     status?: string
     reactions?: Reaction[]
     blocksByDefault?: boolean
@@ -75,16 +75,17 @@ class AbstractFeature {
 
 
     get missingAnimations(): string[] {
-        if (!this.data.sprite) { return [] }
-
-        const sprite = this.data.sprite as Sprite;
+        const sprite = this.data.sprite;
+        if (!sprite) { return [] }
+        const { animations } = sprite.data
         const missing: string[] = [];
 
         this.requiredAnimations.forEach(animationName => {
             RelativeDirection.names.forEach(relativeDirection => {
                 if (
-                    !sprite.animations.has(`${animationName}_${relativeDirection}`) &&
-                    !sprite.animations.has(`${animationName}`)
+                    !animations || (
+                        !animations.has(`${animationName}_${relativeDirection}`) &&
+                        !animations.has(`${animationName}`))
                 ) {
                     missing.push(`${animationName}_${relativeDirection}`)
                 }
@@ -96,14 +97,14 @@ class AbstractFeature {
 
     get size(): Dimensions {
         if (this.data.sprite) {
-            return this.data.sprite.size || { x: 1, y: 1 }
+            return this.data.sprite.data.size || { x: 1, y: 1 }
         }
         return { x: 1, y: 1 }
     }
 
     get offset(): Dimensions {
         if (this.data.sprite) {
-            return this.data.sprite.offset || { x: .5, y: .5 }
+            return this.data.sprite.data.offset || { x: .5, y: .5 }
         }
         return { x: .5, y: .5 }
     }
@@ -142,7 +143,7 @@ class AbstractFeature {
         this.data.status = newStatus
     }
 
-    advanceTransition():void {
+    advanceTransition(): void {
         if (this.transition) {
             if (typeof this.transitionTickCount == 'undefined') { this.transitionTickCount = -1 }
             this.transitionTickCount++;
@@ -154,7 +155,7 @@ class AbstractFeature {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    tick(game:Game):void {
+    tick(game: Game): void {
         this.advanceTransition()
     }
 
@@ -195,7 +196,7 @@ class AbstractFeature {
         game.featuresTriggeredThisTick.push(this)
     }
 
-    fireReactions(actor: Vantage|Actor, game: Game): void {
+    fireReactions(actor: Vantage | Actor, game: Game): void {
         const { reactions = [] } = this.data
         reactions.forEach(reaction => {
             reaction.fire(actor, game)
@@ -203,11 +204,11 @@ class AbstractFeature {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static isSubClassOf(feature: AbstractFeature):boolean {
+    static isSubClassOf(feature: AbstractFeature): boolean {
         return true
     }
 
-    static getFeatureFromKey(featureId:string, subClass: typeof AbstractFeature, level:Level):AbstractFeature|undefined {
+    static getFeatureFromKey(featureId: string, subClass: typeof AbstractFeature, level: Level): AbstractFeature | undefined {
         const levelFeatures = level.data.features || {};
         const match = levelFeatures[featureId];
         if (match && subClass.isSubClassOf(match)) {
@@ -216,7 +217,7 @@ class AbstractFeature {
         return undefined
     }
 
-    static getFeaturesFromKeyArray(featureIds:string[], subClass: typeof AbstractFeature, level:Level):AbstractFeature[] {
+    static getFeaturesFromKeyArray(featureIds: string[], subClass: typeof AbstractFeature, level: Level): AbstractFeature[] {
 
         const features: AbstractFeature[] = []
         const levelFeatures = level.data.features || {};
