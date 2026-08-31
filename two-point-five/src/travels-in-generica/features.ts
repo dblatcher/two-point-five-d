@@ -6,8 +6,8 @@ import { Color } from "@/canvas/Color";
 import { CeilingFeature } from "@/game-classes/CeilingFeature";
 
 
-const painting1 = new WallFeature({ sprite: sprites.paintingWall, })
-const paintingClipped = new WallFeature({ sprite: sprites.paintingWall, clipToWall: true })
+const painting1 = new WallFeature({ spriteId: sprites.paintingWall.id, })
+const paintingClipped = new WallFeature({ spriteId: sprites.paintingWall.id, clipToWall: true })
 
 const poemBoard = new WallFeature({
     clipToWall: true,
@@ -21,9 +21,9 @@ const advertBoard = new WallFeature({
 
 const tunnel = makeTunnel();
 
-const staircaseAUp = new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[0]] })
+const staircaseAUp = new InteractableWallFeature({ spriteId: sprites.stairs.id, reactions: [tunnel[0]] })
 
-const staircaseAdown =  new InteractableWallFeature({ sprite: sprites.stairs, reactions: [tunnel[1]] })
+const staircaseAdown = new InteractableWallFeature({ spriteId: sprites.stairs.id, reactions: [tunnel[1]] })
 
 
 const brownCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'saddlebrown', strokeStyle: 'sandybrown' } });
@@ -31,9 +31,9 @@ const grayCeiling = new CeilingFeature({ plotConfig: { fillStyle: 'gray', stroke
 const redCeiling = new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } });
 
 const torch = new WallFeature({
-    sprite: mySprites.torch,
+    spriteId: mySprites.torch.id,
 })
 
 export {
-    painting1, staircaseAUp, staircaseAdown, paintingClipped, poemBoard, advertBoard, brownCeiling, grayCeiling, redCeiling,torch
+    painting1, staircaseAUp, staircaseAdown, paintingClipped, poemBoard, advertBoard, brownCeiling, grayCeiling, redCeiling, torch
 }

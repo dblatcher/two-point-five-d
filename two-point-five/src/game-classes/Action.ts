@@ -2,7 +2,6 @@ import { Point } from "@/canvas/canvas-utility";
 import { Actor } from "@/game-classes/Actor";
 import { Game } from "./Game";
 import { Item } from "./Item";
-import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { WallFeature } from "./WallFeature";
@@ -218,4 +217,4 @@ class WalkForward extends Action {
 }
 
 
-export { Action, MovementAction, InterAction, ShiftAction, MovementByAction, NpcInterAction, DoAction, WalkForward }
+export { Action, DoAction, InterAction, MovementAction, MovementByAction, NpcInterAction, ShiftAction, WalkForward };

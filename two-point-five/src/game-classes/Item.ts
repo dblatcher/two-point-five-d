@@ -49,7 +49,7 @@ class Item {
         try {
             return this.data.type.icon.provideImage(spriteSheetMap, Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
         } catch (error) {
-            console.warn(error.message)
+            console.warn(error instanceof Error ? error.message : error)
         }
         return document.createElement('img');
     }

@@ -11,7 +11,7 @@ import { Blockage } from "./Level"
 
 interface ActorData {
     vantage?: Vantage
-    sprite: Sprite
+    spriteId: string
     behaviour?: Behaviour
     height?: number
     width?: number
@@ -23,6 +23,7 @@ class Actor {
     data: ActorData
     actionQueue: Action[]
     currentAction: Action | undefined
+    sprite?: Sprite
     get isMonster(): boolean { return false }
 
     static MAX_QUEUE_LENGTH = 10
@@ -34,8 +35,9 @@ class Actor {
     }
 
     get figure(): Figure | null {
-        const { vantage, sprite, height = 1, width = 1 } = this.data
-        if (vantage) {
+        const { vantage, height = 1, width = 1 } = this.data
+        const sprite = this.sprite;
+        if (vantage && sprite) {
             return new Figure({
                 sprite, ...vantage.data,
                 initialAnimation: this.animation,
@@ -50,7 +52,7 @@ class Actor {
         if (this.currentAction.action == "MOVEBY" || this.currentAction.action == "WALK_FORWARD") { return 'WALK' }
         if (this.currentAction.action == "DO") {
             const doAction = (this.currentAction as DoAction);
-            if (this.data.sprite.keyArray.some(animationKey => animationKey.indexOf(doAction.animation) != -1)) {
+            if (this.sprite?.keyArray.some(animationKey => animationKey.indexOf(doAction.animation) != -1)) {
                 return (this.currentAction as DoAction).animation
             }
 
@@ -98,8 +100,8 @@ class Actor {
         console.log('handleInteraction', game.tickCount)
     }
 
-    handleBeingHitByFlyingItem(item:Item, game:Game):void {
-        console.log(`${this.data.sprite.id} was hit by a ${item.data.type.name} going ${item.data.vantage?.data.direction.name}.`)
+    handleBeingHitByFlyingItem(item: Item, game: Game): void {
+        console.log(`${this.data.spriteId} was hit by a ${item.data.type.name} going ${item.data.vantage?.data.direction.name}.`)
     }
 
     move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined {

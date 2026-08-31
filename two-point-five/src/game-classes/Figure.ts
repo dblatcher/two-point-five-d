@@ -1,13 +1,13 @@
-import { ConvertFunction, Dimensions, mapPointInSight, Point, VANISH_RATE, RelativePoint } from "@/canvas/canvas-utility";
+import { Dimensions, DrawingContext, mapPointInSight, Point, RelativePoint, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Vantage } from "./Vantage";
 
-import { Sprite } from '../canvas/Sprite'
-import { Direction } from "./Direction";
-import { Wall } from "./Wall";
-import { RelativeDirection } from "./RelativeDirection";
-import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Color } from "@/canvas/Color";
+import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { SpriteSheet } from "@/canvas/SpriteSheet";
+import { Sprite } from '../canvas/Sprite';
+import { Direction } from "./Direction";
+import { RelativeDirection } from "./RelativeDirection";
+import { Wall } from "./Wall";
 
 interface FigureConfig {
     x: number
@@ -60,9 +60,12 @@ class Figure extends Vantage {
     }
 
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convert: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction,
+        tickCount: number
+    ): void {
         const { place } = renderInstruction
+        const { ctx, spriteSheetMap, convertFunction } = drawingContext
         const { sprite, altitude = 0 } = this.data
 
         const { centerOnFloor, topLeft, topRight, widthAtDistance, heightAtDistance } = this.getRenderParams(renderInstruction.viewedFrom, place.forward, place.right);
@@ -74,7 +77,7 @@ class Figure extends Vantage {
             }
             ctx.beginPath()
             ctx.fillStyle = Color.BLACK.opacityAt(.5).css
-            ctx.ellipse(...convert(centerOnFloor), ...convert(shadowSize), 0, 0, Math.PI * 2)
+            ctx.ellipse(...convertFunction(centerOnFloor), ...convertFunction(shadowSize), 0, 0, Math.PI * 2)
             ctx.fill()
         }
 
@@ -92,8 +95,8 @@ class Figure extends Vantage {
 
         ctx.drawImage(
             this.getSpriteImage(spriteSheetMap, renderInstruction, tickCount),
-            ...convert(topLeftAtAltitude),
-            ...convert(relativeDimensions)
+            ...convertFunction(topLeftAtAltitude),
+            ...convertFunction(relativeDimensions)
         );
 
     }
@@ -110,4 +113,4 @@ class Figure extends Vantage {
     }
 }
 
-export { Figure, FigureConfig }
+export { Figure, FigureConfig };

@@ -1,17 +1,15 @@
 import { Color } from "@/canvas/Color"
-import { Sprite } from "@/canvas/Sprite"
 import { DoAction } from "@/game-classes/Action"
 import { Actor } from "@/game-classes/Actor"
 import { Behaviour } from "@/game-classes/Behaviour"
 import { Game } from "@/game-classes/Game"
-import { NarrativeMessage } from "@/game-classes/NarrativeMessage"
 import { Vantage } from "@/game-classes/Vantage"
 import { Quest, QuestHook } from "./Quest"
 
 
 interface NonPlayerCharacterData {
     vantage?: Vantage
-    sprite: Sprite
+    spriteId: string;
     behaviour?: Behaviour
     height?: number
     width?: number
@@ -58,15 +56,15 @@ class NonPlayerCharacter extends Actor {
         return myQuests.filter(quest => quest.data.state === questState)
     }
 
-    getQuestsAndHooksWhichICan(hookAction: string, questState: string, game: Game): {quest:Quest, questHook:QuestHook}[] {
+    getQuestsAndHooksWhichICan(hookAction: string, questState: string, game: Game): { quest: Quest, questHook: QuestHook }[] {
         const { questHooks = [] } = this.data
         const { quests = [] } = game.data;
-        const questsAndHooks: {quest:Quest, questHook:QuestHook}[] = [];
+        const questsAndHooks: { quest: Quest, questHook: QuestHook }[] = [];
 
         questHooks.filter(questHook => questHook.data.action == hookAction).forEach(questHook => {
             const matchingQuest = quests.find(quest => quest.data.id === questHook.data.questId)
             if (matchingQuest) {
-                questsAndHooks.push({quest:matchingQuest, questHook})
+                questsAndHooks.push({ quest: matchingQuest, questHook })
             }
         })
 
@@ -103,3 +101,4 @@ class NonPlayerCharacter extends Actor {
 export {
     NonPlayerCharacter
 }
+

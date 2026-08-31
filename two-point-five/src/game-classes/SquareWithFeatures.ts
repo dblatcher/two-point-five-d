@@ -1,15 +1,14 @@
 
-import { ConvertFunction } from "@/canvas/canvas-utility";
+import { DrawingContext } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
-import { PlayerVantage } from "./PlayerVantage";
+import { CeilingFeature } from "./CeilingFeature";
 import { Direction } from "./Direction";
 import { Figure } from "./Figure";
 import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
-import { Vantage } from "./Vantage";
-import { CeilingFeature } from "./CeilingFeature";
 import { Level } from "./Level";
-import { SpriteSheet } from "@/canvas/SpriteSheet";
+import { PlayerVantage } from "./PlayerVantage";
+import { Vantage } from "./Vantage";
 
 
 interface SquareWithFeaturesData {
@@ -44,11 +43,11 @@ class SquareWithFeatures extends Vantage {
 
     getFloorFeatures(): FloorFeature[] {
 
-        const {  floorFeatureIds = [] } = this.data
+        const { floorFeatureIds = [] } = this.data
         const allFeatures = []
 
         if (this.level) {
-            const featuresFromKeys = FloorFeature.getFeaturesFromKeyArray(floorFeatureIds,FloorFeature, this.level) as FloorFeature[];
+            const featuresFromKeys = FloorFeature.getFeaturesFromKeyArray(floorFeatureIds, FloorFeature, this.level) as FloorFeature[];
             allFeatures.push(...featuresFromKeys)
         }
         return allFeatures
@@ -60,20 +59,22 @@ class SquareWithFeatures extends Vantage {
         const allFeatures = []
 
         if (this.level) {
-            const featuresFromKeys = CeilingFeature.getFeaturesFromKeyArray(ceilingFeatureIds,CeilingFeature, this.level) as CeilingFeature[];
+            const featuresFromKeys = CeilingFeature.getFeaturesFromKeyArray(ceilingFeatureIds, CeilingFeature, this.level) as CeilingFeature[];
             allFeatures.push(...featuresFromKeys)
         }
         return allFeatures
     }
 
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction,
+        tickCount: number
+    ): void {
         this.floorFeatures.forEach(feature => {
-            feature.drawInSight(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount)
+            feature.drawInSight(drawingContext, renderInstruction, tickCount)
         })
         this.ceilingFeatures.forEach(feature => {
-            feature.drawInSight(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount)
+            feature.drawInSight(drawingContext, renderInstruction, tickCount)
         })
     }
 
@@ -108,4 +109,4 @@ class SquareWithFeatures extends Vantage {
     }
 }
 
-export { SquareWithFeatures, SquareWithFeaturesData }
+export { SquareWithFeatures, SquareWithFeaturesData };

@@ -5,7 +5,7 @@ import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
 import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels"
 import { spriteSheets as sharedSheets } from "@/instances/sprites";
-import { spriteSheets as localSheets } from "./sprites";
+import { spriteSheets as localSheets, sprites } from "./sprites";
 
 const spriteSheets = [
     ...sharedSheets,
@@ -27,6 +27,7 @@ const game = new Game({
     characters: [],
     spriteSheets,
     narrativeMessages: [],
+    sprites: Object.values(sprites).map(sprite => sprite.data),
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,

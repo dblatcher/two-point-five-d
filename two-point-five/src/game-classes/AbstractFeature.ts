@@ -21,7 +21,7 @@ interface AbstractFeatureData {
     blocksByDefault?: boolean
     requiresItem?: ItemType
     consumesItem?: boolean
-    sprite?: Sprite
+    spriteId?: string
     transitions?: AnimationTransition[]
 }
 
@@ -48,11 +48,13 @@ class AbstractFeature {
 
     get requiredAnimations(): string[] { return [] }
 
-    get animation(): string {
+    protected getAnimation(spriteRecord: Record<string, Sprite>): string {
+        const { spriteId } = this.data
+        const sprite = spriteId && spriteRecord[spriteId];
+        if (!sprite) { return "" }
         const { status } = this.data
-        if (!this.data.sprite) { return "" }
 
-        const { keyArray } = this.data.sprite;
+        const { keyArray } = sprite;
 
         if (this.transition) {
             const { animationKey } = this.transition
@@ -73,9 +75,10 @@ class AbstractFeature {
         return this.transition.getTransitionPhase(this.transitionTickCount || 0, this.transitionReversed)
     }
 
-
-    get missingAnimations(): string[] {
-        const sprite = this.data.sprite;
+    // TO DO - call at some point - not using
+    getMissingAnimations(spriteRecord: Record<string, Sprite>): string[] {
+        const { spriteId } = this.data
+        const sprite = spriteId && spriteRecord[spriteId];
         if (!sprite) { return [] }
         const { animations } = sprite.data
         const missing: string[] = [];
@@ -95,16 +98,20 @@ class AbstractFeature {
         return missing
     }
 
-    get size(): Dimensions {
-        if (this.data.sprite) {
-            return this.data.sprite.data.size || { x: 1, y: 1 }
+    size(spriteRecord: Record<string, Sprite>): Dimensions {
+        const { spriteId } = this.data
+        const sprite = spriteId && spriteRecord[spriteId];
+        if (sprite) {
+            return sprite.data.size || { x: 1, y: 1 }
         }
         return { x: 1, y: 1 }
     }
 
-    get offset(): Dimensions {
-        if (this.data.sprite) {
-            return this.data.sprite.data.offset || { x: .5, y: .5 }
+    offset(spriteRecord: Record<string, Sprite>): Dimensions {
+        const { spriteId } = this.data
+        const sprite = spriteId && spriteRecord[spriteId];
+        if (sprite) {
+            return sprite.data.offset || { x: .5, y: .5 }
         }
         return { x: .5, y: .5 }
     }

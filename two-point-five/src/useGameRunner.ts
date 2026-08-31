@@ -10,11 +10,9 @@ export const useGameRunner = (game: Game) => {
 
     const renderSight = useCallback(() => {
         if (canvas) {
-            const { playerVantage, level } = gameRef.current.data;
-            level.drawAsSight(gameRef.current.spriteSheetMap, canvas, playerVantage)
+            gameRef.current.renderSight(canvas)
         }
     }, [canvas])
-
 
     useEffect(() => {
         if (ready) {

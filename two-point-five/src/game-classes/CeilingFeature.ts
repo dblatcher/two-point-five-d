@@ -1,11 +1,8 @@
-import { ConvertFunction, plotPolygon, RelativePoint, PlotConfig, mapPointOnCeiling } from "@/canvas/canvas-utility";
+import { DrawingContext, mapPointOnCeiling, PlotConfig, plotPolygon, RelativePoint } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
-
-
-import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
-import { SpriteSheet } from "@/canvas/SpriteSheet";
+import { AbstractFeature, AbstractFeatureData } from './AbstractFeature';
 
 interface CeilingFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
@@ -29,8 +26,11 @@ class CeilingFeature extends AbstractFeature {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction,
+        tickCount: number
+    ): void {
+        const { ctx, convertFunction } = drawingContext
         const { shape = this.defaultShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data
         const { place, viewedFrom, relativeDirection = RelativeDirection.FORWARD } = renderInstruction
 
@@ -57,4 +57,4 @@ class CeilingFeature extends AbstractFeature {
 
 
 
-export { CeilingFeature, CeilingFeatureData }
+export { CeilingFeature, CeilingFeatureData };

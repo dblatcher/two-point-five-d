@@ -1,4 +1,4 @@
-import { ConvertFunction, mapPointOnFloor, plotPolygon, RelativePoint, PlotConfig, Point } from "@/canvas/canvas-utility";
+import { ConvertFunction, mapPointOnFloor, plotPolygon, RelativePoint, PlotConfig, Point, DrawingContext } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Item } from "./Item";
 import { Level } from "./Level";
@@ -69,8 +69,11 @@ class FloorFeature extends AbstractFeature {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction,
+        tickCount: number
+    ): void {
+        const { ctx, convertFunction } = drawingContext
         const { shape = Vantage.defaultMarkerShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data
         const { place, viewedFrom, relativeDirection = RelativeDirection.FORWARD } = renderInstruction
 
@@ -99,7 +102,7 @@ class FloorFeature extends AbstractFeature {
         [0, -.25], [.25, 0], [0, .25], [-.25, 0]
     ]
 
-    static isSubClassOf(feature: AbstractFeature):boolean {
+    static isSubClassOf(feature: AbstractFeature): boolean {
         return feature.isFloorFeature
     }
 }
@@ -137,7 +140,7 @@ class Pit extends FloorFeature {
         const bottomleft = direction.leftOf.translatePoint(direction.behind.translatePoint(squareCenter, size), size);
 
         return [
-            [topleft, topMiddle,bottomMiddle,topMiddle, topRight, bottomRight, bottomleft, topleft]
+            [topleft, topMiddle, bottomMiddle, topMiddle, topRight, bottomRight, bottomleft, topleft]
         ]
     }
 
@@ -148,9 +151,11 @@ class Pit extends FloorFeature {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
-
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction, 
+        tickCount: number
+    ): void {
+        const { ctx, convertFunction } = drawingContext
         const { place, viewedFrom, level } = renderInstruction
         const relativeDirection = RelativeDirection.FORWARD
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(renderInstruction.thing as Vantage);

@@ -1,28 +1,24 @@
 import { Color } from "@/canvas/Color";
 import { Direction } from "@/game-classes/Direction";
+import { Item } from "@/game-classes/Item";
 import { Level } from "@/game-classes/Level";
+import { TeleportReaction } from "@/game-classes/Reaction";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { Item } from "@/game-classes/Item";
-import { TeleportReaction } from "@/game-classes/Reaction";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
-
 import { sprites as sharedSprites } from "@/instances/sprites";
-
-import { lowWall, doorway } from "@/instances/wallShapes"
-import * as globalFeatures from "@/travels-in-generica/features"
-import { Actor } from "@/game-classes/Actor";
-
-import { itemTypes } from "./itemTypes"
-import { Controller } from "@/game-classes/Controller";
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
-import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { Monster } from "@/rpg-classes/Monster";
-import { sprites } from "./sprites";
-import { CharacterStats } from "@/rpg-classes/CharacterStats";
+import { doorway } from "@/instances/wallShapes";
+import * as globalFeatures from "@/travels-in-generica/features";
 import { Behaviour } from "@/game-classes/Behaviour";
-import * as monsterDecisionFunctions from "./monsterBehaviour";
+import { Controller } from "@/game-classes/Controller";
+import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { Sky } from "@/game-classes/Sky";
+import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
+import { CharacterStats } from "@/rpg-classes/CharacterStats";
+import { Monster } from "@/rpg-classes/Monster";
+import { itemTypes } from "./itemTypes";
+import * as monsterDecisionFunctions from "./monsterBehaviour";
+import { sprites } from "./sprites";
 
 const bigSquareOnFloor: [number, number][] = [
     [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
@@ -38,14 +34,14 @@ const redSquare = new FloorFeature({
     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
 })
 
-const lever1 = new WallSwitch({ sprite: sharedSprites.leverSprite, })
-const door1 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const doorOpenable1 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: true })
-const doorOpenable2 = new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: true })
+const lever1 = new WallSwitch({ spriteId: sharedSprites.leverSprite.id, })
+const door1 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const door2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const doorOpenable1 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
+const doorOpenable2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 
 const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
-const button1 = new InteractableWallFeature({ sprite: sharedSprites.buttonSprite, reactions: [teleportToCorner] })
+const button1 = new InteractableWallFeature({ spriteId: sharedSprites.buttonSprite.id, reactions: [teleportToCorner] })
 
 const pit1 = new Pit({});
 
@@ -155,15 +151,9 @@ const level2: Level = new Level({
 
     ],
     actors: [
-        // new Actor({
-        //     vantage: new Vantage({ x: 5.5, y: 3.5, direction: Direction.west }),
-        //     sprite: sharedSprites.dinoSprite,
-        //     height: .5, width: .5,
-        // }),
-
         new Monster({
             vantage: new Vantage({ x: 5.5, y: 6.5, direction: Direction.west }),
-            sprite: sprites.skeletonArcher,
+            spriteId: sprites.skeletonArcher.data.id,
             defaultAttackAnimation: "ATTACK_SWING",
             stats: new CharacterStats([1, 10], [10, 10]),
             behaviour: new Behaviour(monsterDecisionFunctions.standAndFight),
@@ -171,14 +161,14 @@ const level2: Level = new Level({
 
         new Monster({
             vantage: new Vantage({ x: 4.5, y: 8.5, direction: Direction.south }),
-            sprite: sprites.skeletonSpearman,
+            spriteId: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats([10, 10], [10, 10]),
             behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveClockwise),
         }),
 
         new Monster({
             vantage: new Vantage({ x: 6.5, y: 9.5, direction: Direction.north }),
-            sprite: sprites.skeletonSpearman,
+            spriteId: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats([10, 10], [10, 10]),
             behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
         }),
@@ -203,4 +193,4 @@ const level2: Level = new Level({
 
 
 
-export { level2 }
+export { level2 };

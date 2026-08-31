@@ -1,8 +1,7 @@
 import { mapPointInSight, mapPointOnCeiling, mapPointOnFloor, Point } from "@/canvas/canvas-utility";
+import { Sprite } from "@/canvas/Sprite";
 import { Direction } from "./Direction";
 import { FigureMap } from "./Game";
-import { Item } from "./Item";
-import { Level } from "./Level";
 import { PlayerVantage } from "./PlayerVantage";
 import { Position } from "./Position";
 import { Vantage } from "./Vantage";
@@ -226,13 +225,12 @@ class PointerLocator {
         return wallClicked;
     }
 
-    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall: boolean, level: Level): WallFeature | null {
+    identifyClickedFeature(zonePoint: ZonePoint, wall: Wall, isReverseOfWall: boolean, spriteRecord:Record<string, Sprite>): WallFeature | null {
         const { features } = wall;
         return features.find(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return false }
-
-            const { offset, size } = feature;
-
+            const offset = feature.offset(spriteRecord)
+            const size = feature.size(spriteRecord)
             const clickIsWithinBounds = Math.abs((zonePoint.x - offset.x) / (size.x / 2)) <= 1 &&
                 Math.abs((zonePoint.y - offset.y) / (size.y / 2)) <= 1
             return clickIsWithinBounds;
@@ -290,4 +288,4 @@ class PointerLocator {
 
 }
 
-export { PointerLocator }
+export { PointerLocator };

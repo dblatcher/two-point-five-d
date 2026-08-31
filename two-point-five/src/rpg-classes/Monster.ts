@@ -1,5 +1,4 @@
 import { Color } from "@/canvas/Color"
-import { Sprite } from "@/canvas/Sprite"
 import { DoAction } from "@/game-classes/Action"
 import { Actor } from "@/game-classes/Actor"
 import { Behaviour } from "@/game-classes/Behaviour"
@@ -10,7 +9,7 @@ import { CharacterStats } from "./CharacterStats"
 
 interface MonsterData {
     vantage?: Vantage
-    sprite: Sprite
+    spriteId: string
     behaviour?: Behaviour
     height?: number
     width?: number
@@ -51,7 +50,7 @@ class Monster extends Actor {
 
         if (!hit) {
             game.addMessage({
-                content: `The ${this.data.sprite.id} missed ${attackedCharacter.data.name}`,
+                content: `The ${this.data.spriteId} missed ${attackedCharacter.data.name}`,
                 color: Color.TRANSPARENT
             })
             return

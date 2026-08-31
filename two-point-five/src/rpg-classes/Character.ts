@@ -2,7 +2,6 @@ import { Color } from "@/canvas/Color";
 import { Sprite } from "@/canvas/Sprite";
 import { FeedbackToUI, Game } from "../game-classes/Game";
 import { Item } from "../game-classes/Item";
-import { NarrativeMessage } from "../game-classes/NarrativeMessage";
 import { PlayerVantage } from "../game-classes/PlayerVantage";
 import { RelativeDirection } from "../game-classes/RelativeDirection";
 import { AttackOption } from "./AttackOption";
@@ -136,7 +135,7 @@ class Character {
         if (!hit) {
             return new FeedbackToUI({
                 success: false,
-                message: `${this.data.name} failed to hit ${monster.data.sprite.id} with a ${attackName}!`
+                message: `${this.data.name} failed to hit ${monster.data.spriteId} with a ${attackName}!`
             })
         }
 
@@ -144,7 +143,7 @@ class Character {
 
         return new FeedbackToUI({
             success: false,
-            message: `${this.data.name} hit ${monster.data.sprite.id} with a ${attackName}, doing ${damage} damage!`,
+            message: `${this.data.name} hit ${monster.data.spriteId} with a ${attackName}, doing ${damage} damage!`,
             propertyList: [
                 ['damage', damage]
             ]

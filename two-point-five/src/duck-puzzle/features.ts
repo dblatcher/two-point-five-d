@@ -18,9 +18,9 @@ function makeSign(text: string[]): WallFeature {
     })
 }
 
-const lever1 = new WallSwitch({ sprite: sprites.leverSprite, })
-const door1 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({ sprite: sprites.doorSprite, status: 'CLOSED', canOpenDirectly: false })
+const lever1 = new WallSwitch({ spriteId: sprites.leverSprite.id, })
+const door1 = new Door({ spriteId: sprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const door2 = new Door({ spriteId: sprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -41,4 +41,4 @@ const floorSwitch2 = new FloorFeature({
 const pit1 = new Pit({ status: "OPEN" })
 const pitClosed = new Pit({ status: "CLOSED" })
 
-export {makeSign, lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed}
+export { makeSign, lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed }

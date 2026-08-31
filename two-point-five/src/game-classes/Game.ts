@@ -19,6 +19,7 @@ import { AttackOption } from '@/rpg-classes/AttackOption'
 import { Quest } from '@/rpg-classes/Quest'
 import { ItemType } from './ItemType'
 import { SpriteSheet } from '@/canvas/SpriteSheet'
+import { Sprite, SpriteConfig } from '@/canvas/Sprite'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -37,6 +38,7 @@ interface GameConfig {
     intersitial?: Intersitial
     gameCompleteMessage?: string
     spriteSheets: SpriteSheet[]
+    sprites: SpriteConfig[]
     narrativeMessages: NarrativeMessage[]
 }
 
@@ -81,18 +83,13 @@ class Game {
     data: GameConfig
     rules: GameRules
     queuedPlayerActions: Action[]
-    
+
     tickCount: number
     pointerLocator: PointerLocator
     debugElement?: HTMLElement
     featuresTriggeredThisTick: AbstractFeature[]
     spriteSheetMap: Map<string, SpriteSheet>
-
-    static MAX_QUEUE_LENGTH: 10
-
-    static CHARACTER_COLORS = [
-        Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW
-    ]
+    spriteRecord: Record<string, Sprite>
 
     constructor(config: GameConfig, rules: GameRules = {}) {
         this.data = config;
@@ -109,11 +106,21 @@ class Game {
         this.spriteSheetMap = new Map<string, SpriteSheet>()
         config.spriteSheets.forEach(sheet => this.spriteSheetMap.set(sheet.id, sheet))
 
-        // this.debugElement = document.createElement("div");
-        // document.body.appendChild(this.debugElement)
-        // this.debugElement.innerText += "first line \n";
-        // this.debugElement.innerText += "Second line \n";
+        this.spriteRecord = config.sprites.reduce((record, nextSpriteConfig) => {
+            return {
+                ...record,
+                [nextSpriteConfig.id]: new Sprite(nextSpriteConfig)
+            }
+        }, {})
+
+        this.data.level.provideSprites(this.spriteRecord)
     }
+
+    static MAX_QUEUE_LENGTH: 10
+
+    static CHARACTER_COLORS = [
+        Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW
+    ]
 
     async loadImages() {
         return SpriteSheet.loadAll(this.data.spriteSheets)
@@ -154,11 +161,28 @@ class Game {
             }
         })
         actors.forEach(actor => {
-            if (actor.figure) {
-                output.push({ figure: actor.figure, subject: actor, subjectClass: Actor, canInteractWith: !!actor.data.canInteractWith })
+            const figure = actor.figure
+            if (figure) {
+                output.push({ figure, subject: actor, subjectClass: Actor, canInteractWith: !!actor.data.canInteractWith })
             }
         })
         return output
+    }
+
+    renderSight(
+        canvas: HTMLCanvasElement,
+        viewWidth?: number,
+        viewHeight?: number
+    ): void {
+        const { playerVantage, level } = this.data;
+        level.drawAsSight(
+            this.spriteRecord,
+            this.spriteSheetMap,
+            canvas,
+            playerVantage,
+            viewWidth,
+            viewHeight
+        )
     }
 
     tick(): void {
@@ -194,7 +218,7 @@ class Game {
 
 
         //TO DO - use FigureMap
-        const npcFigures = actors.filter(npc => npc.figure).map(npc => npc.figure) as Figure[];
+        const npcFigures = actors.flatMap(npc => npc.figure ?? []);
 
         // TODO: make copy of items and figures array that the method can splice from
         // So square don't have to check if things already assigned are on them too
@@ -226,10 +250,10 @@ class Game {
             })
         }
 
-        this.data.narrativeMessages.forEach(message=> {
+        this.data.narrativeMessages.forEach(message => {
             message.ticksLeft--
         })
-        this.data.narrativeMessages= this.data.narrativeMessages.filter(message => message.ticksLeft>0)
+        this.data.narrativeMessages = this.data.narrativeMessages.filter(message => message.ticksLeft > 0)
 
         // TO DO - game over when all characters are dead
         this.data.characters.forEach(character => character.tick(this))
@@ -291,6 +315,7 @@ class Game {
             console.warn(`There is no level ${levelIndex}!`)
             return
         }
+        newLevel.provideSprites(this.spriteRecord)
         this.data.level = newLevel;
         playerVantage.data.direction = vantage.data.direction
         playerVantage.data.x = vantage.data.x
@@ -378,7 +403,7 @@ class Game {
                 const wallClicked = pointerLocator.identifyClickedWall(location, walls, playerVantage);
                 if (!wallClicked) { continue }
                 const isReverseOfWall = wallClicked.reverseSideShowingfrom(this.data.playerVantage)
-                const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall, this.data.level);
+                const featureClicked = this.pointerLocator.identifyClickedFeature(location, wallClicked, isReverseOfWall, this.spriteRecord);
 
                 if (!featureClicked) {
                     if (wallClicked.isBlocking) { break }

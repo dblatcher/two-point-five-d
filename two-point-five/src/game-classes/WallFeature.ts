@@ -1,15 +1,14 @@
-import { ConvertFunction, plotPolygon, Point } from "@/canvas/canvas-utility"
+import { DrawingContext, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { getPatternFill, getTextPatternFill } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
-import { TextBoard } from "@/canvas/TextBoard"
 import { Sprite } from "@/canvas/Sprite"
+import { TextBoard } from "@/canvas/TextBoard"
+import { Actor } from "@/game-classes/Actor"
+import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
+import { AnimationTransition } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Vantage } from "./Vantage"
-import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
-import { AnimationTransition } from "./AnimationTransition"
-import { Actor } from "@/game-classes/Actor"
-import { SpriteSheet } from "@/canvas/SpriteSheet"
 
 interface WallFeatureData extends AbstractFeatureData {
     textBoard?: TextBoard
@@ -25,12 +24,9 @@ class WallFeature extends AbstractFeature {
         this.data = config
         this.data.status = config.status || this.defaultStatus
         this.data.onBothSides == !!config.onBothSides
-
-        const { missingAnimations } = this
-        if (missingAnimations.length > 0) { console.warn('Missing animations on WallFeature', this, missingAnimations) }
     }
 
-    get requiredAnimations(): string[] { return this.data.sprite ? [Sprite.defaultWallAnimation] : [] }
+    get requiredAnimations(): string[] { return this.data.spriteId ? [Sprite.defaultWallAnimation] : [] }
     get isWallFeature(): boolean { return true }
     get canInteract(): boolean { return false }
 
@@ -52,12 +48,17 @@ class WallFeature extends AbstractFeature {
     }
 
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, fullWallPoints: Point[], wallShapePoints: Point[]): void {
-
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction,
+        tickCount: number,
+        fullWallPoints: Point[],
+        wallShapePoints: Point[]
+    ): void {
+        const { spriteRecord, spriteSheetMap, convertFunction, ctx } = drawingContext
+        const sprite = this.data.spriteId && spriteRecord[this.data.spriteId]
         let featureImage: CanvasPattern | null = null;
-        if (this.data.sprite) {
-            featureImage = getPatternFill(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, this.data.sprite, this.animation, fullWallPoints, this.transitionPhase);
+        if (sprite) {
+            featureImage = getPatternFill(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, sprite, this.getAnimation(spriteRecord), fullWallPoints, this.transitionPhase);
         }
         if (this.data.textBoard) {
             featureImage = getTextPatternFill(ctx, convertFunction, renderInstruction, this.data.textBoard)
@@ -96,7 +97,7 @@ class WallSwitch extends InteractableWallFeature {
 
 
 interface DoorConfig {
-    sprite: Sprite
+    spriteId: string
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
     onBothSides?: boolean
@@ -155,5 +156,5 @@ class Door extends InteractableWallFeature {
 
 }
 
-export { WallFeature, InteractableWallFeature, WallSwitch, Door }
+export { Door, InteractableWallFeature, WallFeature, WallSwitch }
 

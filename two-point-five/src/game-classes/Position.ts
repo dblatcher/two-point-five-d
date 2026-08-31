@@ -1,9 +1,8 @@
-import { Direction } from './Direction'
-import { ConvertFunction, mapPointOnFloor, PlotConfig, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility';
-import { Game } from './Game';
+import { DrawingContext, mapPointOnFloor, PlotConfig, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility';
 import { RenderInstruction } from '@/canvas/RenderInstruction';
+import { Direction } from './Direction';
+import { Game } from './Game';
 import { Blockage } from './Level';
-import { SpriteSheet } from '@/canvas/SpriteSheet';
 
 
 interface PositionConfig {
@@ -127,8 +126,11 @@ class Position {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction, 
+        tickCount: number
+    ): void {
+        const { ctx, convertFunction } = drawingContext
         const { place, viewedFrom } = renderInstruction
 
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
@@ -178,4 +180,4 @@ class Position {
 }
 
 
-export { Position, PositionConfig }
+export { Position, PositionConfig };

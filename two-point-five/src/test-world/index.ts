@@ -21,13 +21,12 @@ const spriteSheets = [
 ]
 
 const features = {
-    painting: new WallFeature({ sprite: sprites.paintingWall }),
-    switch: new WallSwitch({ sprite: sprites.leverSprite }),
-    door: new Door({ sprite: sprites.doorSprite, status: "CLOSED" }),
+    painting: new WallFeature({ spriteId: sprites.paintingWall.id }),
+    switch: new WallSwitch({ spriteId: sprites.leverSprite.id }),
+    door: new Door({ spriteId: sprites.doorSprite.id, status: "CLOSED" }),
     pitOne: new Pit({ status: "OPEN" }),
     grayCeiling: new CeilingFeature({ plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } }),
     redCeiling: new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } }),
-
 }
 
 const levels = [
@@ -72,6 +71,7 @@ const game = new Game(
         activeCharacterIndex: undefined,
         spriteSheets,
         narrativeMessages: [],
+        sprites: Object.values(sprites).map(sprite => sprite.data),
     },
     { noCharacters: true }
 )

@@ -1,4 +1,4 @@
-import { ConvertFunction, plotPolygon, Point, mapPointInSight } from "@/canvas/canvas-utility";
+import { ConvertFunction, DrawingContext, mapPointInSight, plotPolygon, Point } from "@/canvas/canvas-utility";
 import { getPatternFill, getUpperLevelPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
@@ -9,7 +9,6 @@ import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
 import { WallFeature } from "./WallFeature";
-import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 
 
@@ -90,10 +89,13 @@ class Wall extends Position {
     }
 
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number, defaultSprite?: Sprite): void {
-
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction,
+        tickCount: number,
+        defaultSprite?: Sprite
+    ): void {
         const { place, relativeDirection = RelativeDirection.BACK, isReverseOfWall } = renderInstruction
+        const { ctx, convertFunction, spriteSheetMap } = drawingContext;
         const { patternSprite = defaultSprite, shape = Wall.defaultShape } = this.data
         const wallShapePoints = getMappedPoints(relativeDirection, shape, place);
         const fullWallPoints = getMappedPoints(relativeDirection, Wall.defaultShape, place);
@@ -124,7 +126,7 @@ class Wall extends Position {
 
         features.forEach(feature => {
             if (isReverseOfWall && !feature.data.onBothSides) { return }
-            feature.drawInSight(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, fullWallPoints, wallShapePoints)
+            feature.drawInSight(drawingContext, renderInstruction, tickCount, fullWallPoints, wallShapePoints)
         })
 
 
@@ -224,4 +226,4 @@ class Wall extends Position {
 }
 
 
-export { Wall, WallConfig }
+export { Wall, WallConfig };

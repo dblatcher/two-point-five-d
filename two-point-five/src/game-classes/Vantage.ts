@@ -1,11 +1,10 @@
-import { Direction } from './Direction'
-import { Position, PositionConfig } from './Position'
-import { Game } from './Game'
-import { RelativeDirection } from './RelativeDirection'
-import { ConvertFunction, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility'
+import { DrawingContext, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility'
 import { RenderInstruction } from '@/canvas/RenderInstruction'
+import { Direction } from './Direction'
+import { Game } from './Game'
 import { Blockage } from './Level'
-import { SpriteSheet } from '@/canvas/SpriteSheet'
+import { Position, PositionConfig } from './Position'
+import { RelativeDirection } from './RelativeDirection'
 
 interface VantageConfig {
     x: number
@@ -23,11 +22,11 @@ class Vantage extends Position {
 
     get isVantage(): boolean { return true }
 
-    move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined  {
+    move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined {
         return this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
-    moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): Blockage | undefined  {
+    moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): Blockage | undefined {
         return this.moveAbsoluteBy(distance, relativeDirection.getAbsoluteDirection(this.data.direction), game)
     }
 
@@ -36,7 +35,7 @@ class Vantage extends Position {
     }
 
     translateToVantage(vector: PositionConfig): Vantage {
-        return new Vantage({ x: this.data.x + vector.x, y: this.data.y + vector.y, direction:this.data.direction });
+        return new Vantage({ x: this.data.x + vector.x, y: this.data.y + vector.y, direction: this.data.direction });
     }
 
 
@@ -65,9 +64,12 @@ class Vantage extends Position {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(
-        spriteSheetMap: Map<string, SpriteSheet>,
-        ctx: CanvasRenderingContext2D, convertFunction: ConvertFunction, renderInstruction: RenderInstruction, tickCount: number): void {
+        drawingContext: DrawingContext,
+        renderInstruction: RenderInstruction,
+        tickCount: number
+    ): void {
         const { place, viewedFrom } = renderInstruction
+        const { ctx, convertFunction } = drawingContext
         const relativeDirection = renderInstruction.relativeDirection as RelativeDirection;
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(this);
         const exactPlace: RelativePoint = {

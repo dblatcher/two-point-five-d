@@ -1,18 +1,15 @@
-import { Frame, Sprite } from "@/canvas/Sprite"
-import { SpriteSheet } from "@/canvas/SpriteSheet"
+import { Sprite } from "@/canvas/Sprite";
+import { SpriteSheet } from "@/canvas/SpriteSheet";
 //https://opengameart.org/content/cute-duck-animated-set
-import duck_front from "./assets/duck/walk/front/1.png";
-import duck_side from "./assets/duck/walk/side/1.png";
-import duck_back from "./assets/duck/walk/back/1.png";
-import duck_front_walk_1 from "./assets/duck/walk/front/1.png";
-import duck_front_walk_2 from "./assets/duck/walk/front/2.png";
-import duck_front_walk_3 from "./assets/duck/walk/front/3.png";
-import duck_front_walk_4 from "./assets/duck/walk/front/4.png";
-import duck_back_walk_1 from "./assets/duck/walk/back/1.png";
+import { default as duck_back, default as duck_back_walk_1 } from "./assets/duck/walk/back/1.png";
 import duck_back_walk_2 from "./assets/duck/walk/back/2.png";
 import duck_back_walk_3 from "./assets/duck/walk/back/3.png";
 import duck_back_walk_4 from "./assets/duck/walk/back/4.png";
-import duck_side_walk_1 from "./assets/duck/walk/side/1.png";
+import { default as duck_front, default as duck_front_walk_1 } from "./assets/duck/walk/front/1.png";
+import duck_front_walk_2 from "./assets/duck/walk/front/2.png";
+import duck_front_walk_3 from "./assets/duck/walk/front/3.png";
+import duck_front_walk_4 from "./assets/duck/walk/front/4.png";
+import { default as duck_side, default as duck_side_walk_1 } from "./assets/duck/walk/side/1.png";
 import duck_side_walk_2 from "./assets/duck/walk/side/2.png";
 import duck_side_walk_3 from "./assets/duck/walk/side/3.png";
 import duck_side_walk_4 from "./assets/duck/walk/side/4.png";
@@ -128,6 +125,5 @@ const sprites = {
 
 
 export {
-    spriteSheets,
-    sprites,
-}
+    sprites, spriteSheets
+};

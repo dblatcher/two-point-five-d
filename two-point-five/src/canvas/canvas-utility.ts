@@ -2,6 +2,8 @@ import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
 import { Wall } from "../game-classes/Wall";
+import { Sprite } from "./Sprite";
+import { SpriteSheet } from "./SpriteSheet";
 
 interface Point { x: number, y: number }
 interface RelativePoint { f: number, r: number }
@@ -15,6 +17,12 @@ interface PlotConfig {
     strokeStyle?: string | CanvasPattern | CanvasGradient
 }
 
+interface DrawingContext {
+    spriteRecord: Record<string, Sprite>
+    spriteSheetMap: Map<string, SpriteSheet>,
+    ctx: CanvasRenderingContext2D,
+    convertFunction: ConvertFunction
+}
 
 const MAX_VIEW_DISTANCE = 12;
 const VANISH_RATE = Math.SQRT2;
@@ -44,14 +52,13 @@ function plotPolygon(ctx: CanvasRenderingContext2D, convertFunction: ConvertFunc
     }
     if (!config.noClose) { ctx.closePath() }
 
-
-    if (!config.noStroke) { 
+    if (!config.noStroke) {
         ctx.strokeStyle = config.strokeStyle || 'black'
-        ctx.stroke() 
+        ctx.stroke()
     }
-    if (!config.noFill) { 
+    if (!config.noFill) {
         ctx.fillStyle = config.fillStyle || 'transparent'
-        ctx.fill() 
+        ctx.fill()
     }
 }
 
@@ -86,7 +93,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
 
         const newRow = matrix[matrix.length - 1]
 
-        if (index%3 != 0) {
+        if (index % 3 != 0) {
             const leftItem = newRow[0]
             newRow.unshift({
                 forward: leftItem.forward,
@@ -109,7 +116,7 @@ function getPlacesInSight(vantage: Vantage): { position: Position, forward: numb
 
 
 export {
-    ConvertFunction, Point, Dimensions, RelativePoint, PlotConfig,
+    ConvertFunction, Point, Dimensions, RelativePoint, PlotConfig, DrawingContext,
     mapPointOnFloor, getViewportMapFunction, mapPointOnCeiling, plotPolygon, getPlacesInSight, mapPointInSight,
     MAX_VIEW_DISTANCE, VANISH_RATE
 }

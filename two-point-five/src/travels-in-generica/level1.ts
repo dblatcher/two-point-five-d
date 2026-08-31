@@ -25,10 +25,10 @@ import { AbstractFeature } from "@/game-classes/AbstractFeature";
 
 
 
-const features:{[index:string]:AbstractFeature} = {
+const features: { [index: string]: AbstractFeature } = {
     ...globalFeatures,
-    door3: new Door({ sprite: sharedSprites.doorSprite, status: 'CLOSED', canOpenDirectly: false }),
-    keyhole: new InteractableWallFeature({ sprite: sharedSprites.keyHole, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true }),
+    door3: new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
+    keyhole: new InteractableWallFeature({ spriteId: sharedSprites.keyHole.id, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true }),
 }
 
 const church = makeChurch(0, 0)
@@ -63,18 +63,18 @@ const level1: Level = new Level({
         ...hut5.walls,
         ...hut6.walls,
 
-        new Wall({x:3, y:15, place:Direction.south, shape:spikey,color:Color.GREEN}),
-        new Wall({x:4, y:15, place:Direction.south, shape:spikey,color:Color.GREEN}),
-        new Wall({x:5, y:15, place:Direction.south, shape:spikey,color:Color.GREEN}),
+        new Wall({ x: 3, y: 15, place: Direction.south, shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 4, y: 15, place: Direction.south, shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 5, y: 15, place: Direction.south, shape: spikey, color: Color.GREEN }),
 
-        new Wall({x:5, y:12, place:Direction.south, shape:spikey,color:Color.GREEN}),
-        new Wall({x:6, y:12, place:Direction.south, shape:spikey,color:Color.GREEN}),
-        new Wall({x:7, y:12, place:Direction.south, shape:spikey,color:Color.GREEN}),
+        new Wall({ x: 5, y: 12, place: Direction.south, shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 6, y: 12, place: Direction.south, shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 7, y: 12, place: Direction.south, shape: spikey, color: Color.GREEN }),
 
     ],
 
-    staticFigures:[
-        new Figure({x:4, y:7, direction:Direction.south, sprite:sprites.treeOne}),
+    staticFigures: [
+        new Figure({ x: 4, y: 7, direction: Direction.south, sprite: sprites.treeOne }),
     ],
 
     squaresWithFeatures: [
@@ -98,20 +98,20 @@ const level1: Level = new Level({
 
     actors: [
         new NonPlayerCharacter({
-            sprite: sprites.smith,
+            spriteId: sprites.smith.data.id,
             vantage: new Vantage({ x: 1.5, y: 7.5, direction: Direction.east }),
             talkMessage: "Wanna buy a hammer?",
             name: "George the blacksmith",
         }),
         new NonPlayerCharacter({
-            sprite: sprites.farmer2,
+            spriteId: sprites.farmer2.data.id,
             behaviour: new Behaviour(decisionFunctions.wanderAround),
             vantage: new Vantage({ x: 8.25, y: 4.25, direction: Direction.north }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",
         }),
         new NonPlayerCharacter({
-            sprite: sprites.farmer,
+            spriteId: sprites.farmer.data.id,
             behaviour: new Behaviour(decisionFunctions.walkInCircle),
             vantage: new Vantage({ x: 6.25, y: 6.25, direction: Direction.west }),
             talkMessage: "I should get back to the cows.",
@@ -119,14 +119,14 @@ const level1: Level = new Level({
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.armedMan,
+            spriteId: sprites.armedMan.data.id,
             vantage: new Vantage({ x: 10.75, y: 5.75, direction: Direction.north }),
             talkMessage: "They aren't offering enough money for me to fight any monsters.",
             name: "Harry Longblade",
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.guard2,
+            spriteId: sprites.guard2.data.id,
             vantage: new Vantage({ x: 5.25, y: 7.25, direction: Direction.north }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
@@ -134,7 +134,7 @@ const level1: Level = new Level({
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.guard3,
+            spriteId: sprites.guard3.data.id,
             vantage: new Vantage({ x: 4.5, y: 3.5, direction: Direction.south }),
             talkMessage: "I'm just a guard.",
             name: "Corporal Colin",
@@ -150,7 +150,7 @@ const level1: Level = new Level({
         }),
 
         new NonPlayerCharacter({
-            sprite: sprites.redMonk,
+            spriteId: sprites.redMonk.data.id,
             vantage: new Vantage({ x: 3.5, y: 0.5, direction: Direction.south }),
             name: "Father Dunlaw",
             talkMessage: "Welcome to Saint Bernard's Chapel.",
@@ -175,7 +175,7 @@ const level1: Level = new Level({
             ]
         }),
         new NonPlayerCharacter({
-            sprite: sprites.innKeeper,
+            spriteId: sprites.innKeeper.data.id,
             vantage: new Vantage({ x: 6.5, y: 2.25, direction: Direction.south }),
             name: "Widow Elsa",
             talkMessage: "No rooms for the likes of you!",
@@ -187,7 +187,7 @@ const level1: Level = new Level({
 
         new Controller({ inputIds: ["keyhole"], subjectId: "door3", statusChangeOnInputTrigger: "OPEN" }),
     ]
-}).withWallsAround({ patternSprite:sprites.fence,  })
+}).withWallsAround({ patternSprite: sprites.fence, })
 
 
 

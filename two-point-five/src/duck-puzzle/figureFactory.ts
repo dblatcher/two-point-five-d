@@ -18,7 +18,7 @@ function duck(config: DuckConfig): Actor {
 
     return new Actor({
         vantage: new Vantage({ x, y, direction }),
-        sprite: sprites.duckSprite,
+        spriteId: sprites.duckSprite.data.id,
         behaviour,
         height:.5, width:.5
     })

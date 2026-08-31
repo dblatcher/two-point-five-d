@@ -1,4 +1,4 @@
-import { ConvertFunction, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, Point, VANISH_RATE } from "@/canvas/canvas-utility";
+import { ConvertFunction, DrawingContext, getPlacesInSight, getViewportMapFunction, mapPointOnFloor, MAX_VIEW_DISTANCE, plotPolygon, Point, VANISH_RATE } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Actor } from "@/game-classes/Actor";
@@ -79,6 +79,10 @@ class Level {
     }
 
     static defaultFloorColor = new Color(80, 80, 80);
+
+    provideSprites(spriteRecord: Record<string, Sprite>) {
+        this.data.actors?.forEach(actor => actor.sprite = spriteRecord[actor.data.spriteId])
+    }
 
     get timeOfDay(): [number, number] {
         const hour = Math.floor((this.tickCount % (24 * ticksPerMinute)) / ticksPerMinute)
@@ -269,7 +273,16 @@ class Level {
         walls.forEach(wall => { wall.drawInMap(ctx, gridSize) });
         squaresWithFeatures.forEach(thing => { thing.drawInMap(ctx, gridSize) })
 
-        actors.filter(npc => npc.figure).forEach(npc => npc.figure?.drawInMap(ctx, gridSize))
+        actors.forEach(actor => {
+            // TO DO - need the sprites to get figure, but not drawn on map anyway yet
+            const figureOrNull = actor.figure
+            if (figureOrNull) {
+                figureOrNull.drawInMap(ctx, gridSize)
+            } else {
+                actor.data.vantage?.drawInMap(ctx, gridSize);
+            }
+        }
+        )
 
         if (vantage) {
             vantage.drawInMap(ctx, gridSize);
@@ -319,8 +332,13 @@ class Level {
     }
 
     drawAsSight(
+        spriteRecord: Record<string, Sprite>,
         spriteSheetMap: Map<string, SpriteSheet>,
-        canvas: HTMLCanvasElement, vantage: Vantage, viewWidth = 600, viewHeight = viewWidth * (2 / 3)): void {
+        canvas: HTMLCanvasElement,
+        vantage: Vantage,
+        viewWidth = 600,
+        viewHeight = viewWidth * (2 / 3)
+    ): void {
         const startTime = Date.now()
         const { items = [], squaresWithFeatures = [], actors = [], walls = [], staticFigures = [] } = this.data
 
@@ -328,6 +346,13 @@ class Level {
         canvas.setAttribute('height', viewHeight.toString());
         const toCanvasCoords = getViewportMapFunction(viewWidth, viewHeight);
         const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+        const drawingContext: DrawingContext = {
+            spriteRecord,
+            spriteSheetMap,
+            ctx,
+            convertFunction: getViewportMapFunction(viewWidth, viewHeight)
+        }
 
         this.drawSightBackground(ctx, toCanvasCoords, vantage, viewWidth / viewHeight);
 
@@ -379,7 +404,7 @@ class Level {
         })
 
         actors.forEach(npc => {
-            const { figure } = npc
+            const figure = npc.figure
             if (figure) {
                 const place = placesInSight.find(place => place.position.isInSameSquareAs(figure))
                 if (!place) { return }
@@ -395,10 +420,10 @@ class Level {
 
         renderInstructions.forEach(renderInstruction => {
             if (renderInstruction.wall) {
-                renderInstruction.wall.drawInSight(spriteSheetMap, ctx, toCanvasCoords, renderInstruction, this.tickCount, this.data.defaultWallPattern)
+                renderInstruction.wall.drawInSight(drawingContext, renderInstruction, this.tickCount, this.data.defaultWallPattern)
             }
             if (renderInstruction.thing) {
-                renderInstruction.thing.drawInSight(spriteSheetMap, ctx, toCanvasCoords, renderInstruction, this.tickCount)
+                renderInstruction.thing.drawInSight(drawingContext, renderInstruction, this.tickCount)
             }
         })
 

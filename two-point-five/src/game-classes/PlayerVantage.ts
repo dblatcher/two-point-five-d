@@ -1,4 +1,4 @@
-import { PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility";
+import { PlotConfig, Point } from "@/canvas/canvas-utility";
 import { Color } from "@/canvas/Color";
 import { Direction } from "./Direction";
 import { Vantage } from "./Vantage";
@@ -32,4 +32,4 @@ class PlayerVantage extends Vantage {
 
 }
 
-export { PlayerVantage, PlayerVantageConfig }
+export { PlayerVantage, PlayerVantageConfig };
