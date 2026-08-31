@@ -96,41 +96,42 @@ function makeULpcSprite(name: string, spriteSheet: SpriteSheet): Sprite {
         shadow: { x: 1 / 10, y: 1 / 26 },
         size: { x: .5, y: .5 },
         transforms: ["RESIZE_CENTER", "CROP_BASE"],
-        animations: new Map<string, Frame[]>()
-            .set("STAND_FORWARD", [
+        animations: {
+            ["STAND_FORWARD"]: [
                 { sheet: spriteSheet.id, col: 0, row: 8 },
-            ])
-            .set("STAND_LEFT", [
+            ],
+            ["STAND_LEFT"]: [
                 { sheet: spriteSheet.id, col: 0, row: 9 },
-            ])
-            .set("STAND_BACK", [
+            ],
+            ["STAND_BACK"]: [
                 { sheet: spriteSheet.id, col: 0, row: 10 },
-            ])
-            .set("STAND_RIGHT", [
+            ],
+            ["STAND_RIGHT"]: [
                 { sheet: spriteSheet.id, col: 0, row: 11 },
-            ])
-            .set("WALK_FORWARD", makeRow(8, 8, 1))
-            .set("WALK_LEFT", makeRow(9, 8, 1))
-            .set("WALK_BACK", makeRow(10, 8, 1))
-            .set("WALK_RIGHT", makeRow(11, 8, 1))
-            .set("ATTACK_FORWARD", makeRow(4, 7))
-            .set("ATTACK_LEFT", makeRow(5, 7))
-            .set("ATTACK_BACK", makeRow(6, 7))
-            .set("ATTACK_RIGHT", makeRow(7, 7))
-            .set("ATTACK_SWING_FORWARD", makeRow(12, 5))
-            .set("ATTACK_SWING_LEFT", makeRow(13, 5))
-            .set("ATTACK_SWING_BACK", makeRow(14, 5))
-            .set("ATTACK_SWING_RIGHT", makeRow(15, 5))
-            .set("DIE", [...makeRow(20, 4),
-            { sheet: spriteSheet.id, col: 4, row: 20 },
-            { sheet: spriteSheet.id, col: 4, row: 20 },
-            ])
-            .set("hurt", [...makeRow(20, 3)])
-            .set("TALK_FORWARD", makeMixedRow(0, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet))
-            .set("TALK_LEFT", makeMixedRow(1, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet))
-            .set("TALK_BACK", makeMixedRow(2, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet))
-            .set("TALK_RIGHT", makeMixedRow(3, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet))
-
+            ],
+            ["WALK_FORWARD"]: makeRow(8, 8, 1),
+            ["WALK_LEFT"]: makeRow(9, 8, 1),
+            ["WALK_BACK"]: makeRow(10, 8, 1),
+            ["WALK_RIGHT"]: makeRow(11, 8, 1),
+            ["ATTACK_FORWARD"]: makeRow(4, 7),
+            ["ATTACK_LEFT"]: makeRow(5, 7),
+            ["ATTACK_BACK"]: makeRow(6, 7),
+            ["ATTACK_RIGHT"]: makeRow(7, 7),
+            ["ATTACK_SWING_FORWARD"]: makeRow(12, 5),
+            ["ATTACK_SWING_LEFT"]: makeRow(13, 5),
+            ["ATTACK_SWING_BACK"]: makeRow(14, 5),
+            ["ATTACK_SWING_RIGHT"]: makeRow(15, 5),
+            ["DIE"]: [
+                ...makeRow(20, 4),
+                { sheet: spriteSheet.id, col: 4, row: 20 },
+                { sheet: spriteSheet.id, col: 4, row: 20 },
+            ],
+            ["hurt"]: [...makeRow(20, 3)],
+            ["TALK_FORWARD"]: makeMixedRow(0, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet),
+            ["TALK_LEFT"]: makeMixedRow(1, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet),
+            ["TALK_BACK"]: makeMixedRow(2, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet),
+            ["TALK_RIGHT"]: makeMixedRow(3, [0, 1, 6, 3, 6, 1, 0, 1, 6, 3, 6, 1], spriteSheet),
+        }
     })
 }
 
@@ -170,20 +171,22 @@ const sprites = {
         id: 'treeOne',
         plotShift: { x: -0.1, y: 0.175 },
         size: { x: 1, y: 1 },
-        animations: new Map<string, Frame[]>()
-            .set("STAND_FORWARD", [{ sheet: sheets.trees.id, col: 1 }])
-            .set("STAND_BACK", [{ sheet: sheets.trees.id, col: 1, transforms: ["FLIP_H"] }])
-            .set("STAND_LEFT", [{ sheet: sheets.trees.id, col: 0 }])
-            .set("STAND_RIGHT", [{ sheet: sheets.trees.id, col: 0, transforms: ["FLIP_H"] }])
+        animations: {
+            ["STAND_FORWARD"]: [{ sheet: sheets.trees.id, col: 1 }],
+            ["STAND_BACK"]: [{ sheet: sheets.trees.id, col: 1, transforms: ["FLIP_H"] }],
+            ["STAND_LEFT"]: [{ sheet: sheets.trees.id, col: 0 }],
+            ["STAND_RIGHT"]: [{ sheet: sheets.trees.id, col: 0, transforms: ["FLIP_H"] }],
+        },
     }),
     treeTwo: new Sprite({
         id: 'treeTwo',
         plotShift: { x: -0.025, y: 0.175 },
         size: { x: .7, y: .7 },
-        animations: new Map<string, Frame[]>()
-            .set("STAND", [{ sheet: sheets.trees.id, col: 1 }])
-            .set("STAND_BACK", [{ sheet: sheets.trees.id, col: 1, transforms: ["FLIP_H"] }])
-            .set("STAND_LEFT", [{ sheet: sheets.trees.id, col: 1, transforms: ["FLIP_H"] }])
+        animations: {
+            ["STAND"]: [{ sheet: sheets.trees.id, col: 1 }],
+            ["STAND_BACK"]: [{ sheet: sheets.trees.id, col: 1, transforms: ["FLIP_H"] }],
+            ["STAND_LEFT"]: [{ sheet: sheets.trees.id, col: 1, transforms: ["FLIP_H"] }],
+        }
     })
 }
 

@@ -19,7 +19,7 @@ interface SpriteConfig {
     size?: Dimensions
     offset?: Point
     plotShift?: Point
-    animations?: Map<string, Frame[]>
+    animations?: Record<string, Frame[]>
     transforms?: Array<TransformName>
 }
 
@@ -117,7 +117,7 @@ class Sprite {
         }
         const animationWithDirection = `${actionName}_${direction.name}`
         const animationWithoutDirection = `${actionName}`
-        return animations.get(animationWithDirection) || animations.get(animationWithoutDirection) || null
+        return animations[animationWithDirection] || animations[animationWithoutDirection] || null
     }
 
     /**
@@ -174,12 +174,7 @@ class Sprite {
 
     get keyArray(): string[] {
         const { animations } = this.data
-        if (!animations) {
-            return []
-        }
-        const list: string[] = []
-        animations.forEach((value: Frame[], key: string) => { list.push(key) })
-        return list
+        return animations ? Object.keys(animations) : []
     }
 
     /**
@@ -191,18 +186,17 @@ class Sprite {
     }
 
     static patternSprite(sheet: string, config: SpriteConfig, gridCell: { row?: number, col?: number } = {}): Sprite {
-
-        config.animations = new Map<string, Frame[]>()
-            .set(`${Sprite.defaultWallAnimation}`, [
+        config.animations = {
+            [`${Sprite.defaultWallAnimation}`]: [
                 { sheet, transforms: ["RESIZE_OFFSET"], ...gridCell },
-            ])
-            .set(`${Sprite.defaultWallAnimation}_LEFT`, [
+            ],
+            [`${Sprite.defaultWallAnimation}_LEFT`]: [
                 { sheet, transforms: ["RESIZE_OFFSET", "SKEW_LEFT"], ...gridCell },
-            ])
-            .set(`${Sprite.defaultWallAnimation}_RIGHT`, [
+            ],
+            [`${Sprite.defaultWallAnimation}_RIGHT`]: [
                 { sheet, transforms: ["RESIZE_OFFSET", "SKEW_RIGHT"], ...gridCell },
-            ]);
-
+            ],
+        }
         return new Sprite(config)
     }
 
@@ -217,40 +211,51 @@ class Sprite {
             }
         }
 
-        config.animations = new Map<string, Frame[]>()
-            .set(`${Sprite.defaultWallAnimation}`,
-                gridCells.map(gridCell => { return { sheet: spriteSheet.id, transforms: ["RESIZE_CENTER"], row: gridCell.row, col: gridCell.col } })
-            )
-            .set(`${Sprite.defaultWallAnimation}_LEFT`,
-                gridCells.map(gridCell => { return { sheet: spriteSheet.id, transforms: ["RESIZE_CENTER", "SKEW_LEFT"], row: gridCell.row, col: gridCell.col } })
-            )
-            .set(`${Sprite.defaultWallAnimation}_RIGHT`,
-                gridCells.map(gridCell => { return { sheet: spriteSheet.id, transforms: ["RESIZE_CENTER", "SKEW_RIGHT"], row: gridCell.row, col: gridCell.col } })
-            );
+        config.animations = {
+            [`${Sprite.defaultWallAnimation}`]: gridCells.map(gridCell =>
+            ({
+                sheet: spriteSheet.id,
+                transforms: ["RESIZE_CENTER"],
+                row: gridCell.row,
+                col: gridCell.col
+            })),
+            [`${Sprite.defaultWallAnimation}_LEFT`]: gridCells.map(gridCell =>
+            ({
+                sheet: spriteSheet.id,
+                transforms: ["RESIZE_CENTER", "SKEW_LEFT"],
+                row: gridCell.row,
+                col: gridCell.col
+
+            })),
+            [`${Sprite.defaultWallAnimation}_RIGHT`]: gridCells.map(gridCell =>
+            ({
+                sheet: spriteSheet.id,
+                transforms: ["RESIZE_CENTER", "SKEW_RIGHT"],
+                row: gridCell.row,
+                col: gridCell.col
+            })),
+        }
 
         return new Sprite(config)
     }
 
     static itemSpriteOneFrame(frames: Frame[] | Frame, config: SpriteConfig): Sprite {
-
         const framesInArray = Array.isArray(frames) ? frames : [frames];
-
-        config.animations = new Map<string, Frame[]>()
-            .set(Sprite.defaultFigureAnimation, framesInArray)
-
+        config.animations = {
+            [Sprite.defaultFigureAnimation]: framesInArray
+        }
         config.size = config.size || Sprite.DEFAULT_SIZE
         config.shadow = config.shadow || { x: config.size.x * (3 / 5), y: .1 }
-
         return new Sprite(config)
     }
 
     static itemSpriteDirectional(frames: { back: Frame[], left: Frame[], right: Frame[], forward: Frame[] }, config: SpriteConfig): Sprite {
-
-        config.animations = new Map<string, Frame[]>()
-            .set(Sprite.defaultFigureAnimation + "_BACK", frames.back)
-            .set(Sprite.defaultFigureAnimation + "_LEFT", frames.left)
-            .set(Sprite.defaultFigureAnimation + "_FORWARD", frames.forward)
-            .set(Sprite.defaultFigureAnimation + "_RIGHT", frames.right)
+        config.animations = {
+            [Sprite.defaultFigureAnimation + "_BACK"]: frames.back,
+            [Sprite.defaultFigureAnimation + "_LEFT"]: frames.left,
+            [Sprite.defaultFigureAnimation + "_FORWARD"]: frames.forward,
+            [Sprite.defaultFigureAnimation + "_RIGHT"]: frames.right,
+        }
 
         config.size = config.size || Sprite.DEFAULT_SIZE
         config.shadow = config.shadow || { x: config.size.x * (3 / 5), y: .1 }
@@ -261,8 +266,9 @@ class Sprite {
     static portraitSprite(name: string, sheet: string): Sprite {
         return new Sprite({
             id: name,
-            animations: new Map<string, Frame[]>()
-                .set(Sprite.defaultPortraitAnimation, [{ sheet }])
+            animations: {
+                [Sprite.defaultPortraitAnimation]: [{ sheet }]
+            }
         })
     }
 

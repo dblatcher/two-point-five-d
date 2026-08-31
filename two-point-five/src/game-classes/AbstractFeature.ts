@@ -84,8 +84,8 @@ class AbstractFeature {
             RelativeDirection.names.forEach(relativeDirection => {
                 if (
                     !animations || (
-                        !animations.has(`${animationName}_${relativeDirection}`) &&
-                        !animations.has(`${animationName}`))
+                        !animations[`${animationName}_${relativeDirection}`] &&
+                        !animations[`${animationName}`])
                 ) {
                     missing.push(`${animationName}_${relativeDirection}`)
                 }

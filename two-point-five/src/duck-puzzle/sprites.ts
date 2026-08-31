@@ -58,32 +58,32 @@ const spriteSheets = Object.keys(sheets).map(key => sheets[key])
 const duckSprite = new Sprite({
     id: "DUCK",
     shadow: { x: 1 / 4, y: 1 / 12 },
-    animations: new Map<string, Frame[]>()
-        .set("STAND_FORWARD", [
+    animations: {
+        ["STAND_FORWARD"]: [
             { sheet: sheets.duck_back.id },
-        ])
-        .set("STAND_BACK", [
+        ],
+        ["STAND_BACK"]: [
             { sheet: sheets.duck_front.id },
-        ])
-        .set("STAND_LEFT", [
+        ],
+        ["STAND_LEFT"]: [
             { sheet: sheets.duck_side.id },
-        ])
-        .set("STAND_RIGHT", [
+        ],
+        ["STAND_RIGHT"]: [
             { sheet: sheets.duck_side.id, transforms: ["FLIP_H"] },
-        ])
-        .set("WALK_FORWARD", [
+        ],
+        ["WALK_FORWARD"]: [
             { sheet: sheets.duck_walk_back_1.id },
             { sheet: sheets.duck_walk_back_2.id },
             { sheet: sheets.duck_walk_back_3.id },
             { sheet: sheets.duck_walk_back_4.id },
-        ])
-        .set("WALK_BACK", [
+        ],
+        ["WALK_BACK"]: [
             { sheet: sheets.duck_walk_front_1.id },
             { sheet: sheets.duck_walk_front_2.id },
             { sheet: sheets.duck_walk_front_3.id },
             { sheet: sheets.duck_walk_front_4.id },
-        ])
-        .set("WALK_LEFT", [
+        ],
+        ["WALK_LEFT"]: [
             { sheet: sheets.duck_walk_side_1.id },
             { sheet: sheets.duck_walk_side_2.id },
             { sheet: sheets.duck_walk_side_3.id },
@@ -91,8 +91,8 @@ const duckSprite = new Sprite({
             { sheet: sheets.duck_walk_side_5.id },
             { sheet: sheets.duck_walk_side_6.id },
             { sheet: sheets.duck_walk_side_7.id },
-        ])
-        .set("WALK_RIGHT", [
+        ],
+        ["WALK_RIGHT"]: [
             { sheet: sheets.duck_walk_side_1.id, transforms: ["FLIP_H"] },
             { sheet: sheets.duck_walk_side_2.id, transforms: ["FLIP_H"] },
             { sheet: sheets.duck_walk_side_3.id, transforms: ["FLIP_H"] },
@@ -100,7 +100,8 @@ const duckSprite = new Sprite({
             { sheet: sheets.duck_walk_side_5.id, transforms: ["FLIP_H"] },
             { sheet: sheets.duck_walk_side_6.id, transforms: ["FLIP_H"] },
             { sheet: sheets.duck_walk_side_7.id, transforms: ["FLIP_H"] },
-        ])
+        ],
+    }
 })
 
 
