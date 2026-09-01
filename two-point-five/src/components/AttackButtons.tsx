@@ -5,7 +5,6 @@ import { ItemSlot } from "./ItemSlot"
 import { AttackOption } from "@/rpg-classes/AttackOption"
 
 
-
 const CharacterAttackButtons = ({ charcterIndex }: { charcterIndex: number }) => {
     const { gameData, game } = useGame()
     const [feedback, setFeedback] = useState<FeedbackToUI>()
@@ -22,6 +21,7 @@ const CharacterAttackButtons = ({ charcterIndex }: { charcterIndex: number }) =>
         return <div></div>
     }
 
+    const item = character.data.equipmentSlots?.get('RIGHT_HAND')
     const doAttack = (option: AttackOption) => {
         const result = game().handleAttackButton({
             character,
@@ -29,7 +29,6 @@ const CharacterAttackButtons = ({ charcterIndex }: { charcterIndex: number }) =>
         })
         flashFeedBack(result)
     }
-
     const damageDone = feedback?.propertyList?.find(item => item[0] === 'damage')?.[1];
 
     return <div style={{
@@ -40,19 +39,17 @@ const CharacterAttackButtons = ({ charcterIndex }: { charcterIndex: number }) =>
             position: 'relative'
         }}>
             <ItemSlot
-                getItem={() => {
-                    const item = character.data.equipmentSlots?.get('RIGHT_HAND');
-                    return item && item.data.type.isWieldable ? item : undefined
-                }}
+                itemData={item?.data.type.isWieldable ? item.data : undefined}
                 style={{
-                    filter: "brightness(0)"
+                    filter: "brightness(0)",
+                    padding: 5,
                 }}
             />
             {feedback && (
                 <span style={{
-                    position:'absolute',
-                    left:'50%',
-                    top:'50%',
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
                     transform: 'translateX(-50%) translateY(-50%)',
                     background: 'white',
                     color: 'black'

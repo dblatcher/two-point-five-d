@@ -1,15 +1,15 @@
+import { DirectionName } from "@/types"
 import { Dispatch, SetStateAction, useCallback, useState } from "react"
 import { Arrows } from "./Arrows"
+import { AttackButtons } from "./AttackButtons"
 import { CharacterBar } from "./CharacterBar"
+import { CharacterScreen } from "./CharacterScreen"
 import { useGame } from "./GameContext"
 import { Intersitial } from "./Intersitial"
 import { ItemSlot } from "./ItemSlot"
-import { SightCanvas } from "./SightCanvas"
-import { DirectionName } from "@/types"
-import { CharacterScreen } from "./CharacterScreen"
-import { AttackButtons } from "./AttackButtons"
-import { QuestScreen } from "./QuestScreen"
 import { MessageBox } from "./MessageBox"
+import { QuestScreen } from "./QuestScreen"
+import { SightCanvas } from "./SightCanvas"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -30,7 +30,6 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
         game().queuePlayerMovementAction({ action: 'TURN', direction })
     }, [])
 
-    const getItemInHand = useCallback(() => game().data.itemInHand, [])
 
     return <main>
 
@@ -55,7 +54,6 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                 }}>
                     <ItemSlot
                         itemData={gameData.itemInHand?.data}
-                        getItem={getItemInHand}
                     />
                     <button onClick={() => setQuestScreenOpen(true)}>quests</button>
                 </div>
@@ -84,5 +82,4 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
             <QuestScreen close={() => setQuestScreenOpen(false)} />
         )}
     </main>
-
 }

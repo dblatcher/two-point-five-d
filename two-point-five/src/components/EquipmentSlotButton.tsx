@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { useCharacter, useGame } from "./GameContext";
 import { ItemSlot } from "./ItemSlot";
 
@@ -13,10 +12,6 @@ export const EquipmentSlotButton = ({ characterIndex, equipmentSlot, gridArea }:
     const { game } = useGame()
     const [data, ref] = useCharacter(characterIndex)
 
-    const getItem = useCallback(() => {
-        return ref.current?.data.equipmentSlots?.get(equipmentSlot) ?? undefined
-    }, [equipmentSlot])
-
     return <button
         style={{
             padding: 0,
@@ -30,7 +25,7 @@ export const EquipmentSlotButton = ({ characterIndex, equipmentSlot, gridArea }:
         }}>
         <ItemSlot size={30}
             itemData={data?.equipmentSlots?.get(equipmentSlot)?.data ?? undefined}
-            getItem={getItem} />
+        />
     </button>
 
 }

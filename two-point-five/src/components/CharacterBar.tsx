@@ -2,6 +2,8 @@ import { Game } from "@/game-classes/Game";
 import { EquipmentSlotButton } from "./EquipmentSlotButton";
 import { useCharacter, useGame } from "./GameContext";
 import { StatBars } from "./StatBars";
+import { SpriteIcon } from "./SpriteIcon";
+import { Sprite } from "@/canvas/Sprite";
 
 
 
@@ -9,9 +11,8 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
     index: number;
     setCharacterScreenOpen: { (characterIndex?: number): void }
 }) => {
-    const { game } = useGame()
-    const [data, ref] = useCharacter(index)
-    if (!data) {
+    const [characterData] = useCharacter(index)
+    if (!characterData) {
         return <div></div>
     }
 
@@ -24,8 +25,8 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
             "a d d c"
         `,
     }}>
-        <div style={{ gridArea: 'a' }}>
-            <StatBars stats={data.stats} />
+        <div style={{ gridArea: 'c' }}>
+            <StatBars stats={characterData.stats} />
         </div>
         <div style={{
             gridArea: 'b',
@@ -36,12 +37,25 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
             lineHeight: 1,
         }}>
             <button onClick={() => setCharacterScreenOpen(index)}>
-                <b>{data.name}</b>
+                <b>{characterData.name}</b>
             </button>
         </div>
 
-        <div style={{ gridArea: 'c', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-            <img style={{ height: "100%" }} src={ref.current?.getPortraitSrc(game().spriteSheetMap) ?? undefined} />
+        <div style={{
+            gridArea: 'a',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+            <SpriteIcon
+                spriteId={characterData.portrait.id}
+                actionName={Sprite.defaultPortraitAnimation}
+                style={{
+                    width: "100%",
+                    aspectRatio: 1
+                }}
+            />
         </div>
 
         <div style={{ gridArea: 'd', }}>
