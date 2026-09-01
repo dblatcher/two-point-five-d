@@ -7,7 +7,7 @@ import { CharacterStats } from '@/rpg-classes/CharacterStats';
 const boblin = new Character({
     name: "Boblin",
     stats: new CharacterStats([10,12],[2,20],[5,5]),
-    portrait: sprites.boblin_portrait,
+    portraitSpriteId: sprites.boblin_portrait.id,
     inventory: [
         null, null,
         new Item({ type: itemTypes.apple, }), null,
@@ -24,7 +24,7 @@ const boblin = new Character({
 const drake = new Character({
     name: "Drake",
     stats: new CharacterStats([12,15],[15,15],[0,0]),
-    portrait: sprites.drake_portrait,
+    portraitSpriteId: sprites.drake_portrait.id,
     inventory: [
         null, null,
         null, new Item({type:itemTypes.plateArmour}),
@@ -40,7 +40,7 @@ const drake = new Character({
 
 const sally = new Character({
     name: "Sally",
-    portrait: sprites.sally_portrait,
+    portraitSpriteId: sprites.sally_portrait.id,
     stats: new CharacterStats([10,18],[20,20],[0,0]),
     inventory: [
         null, null,
@@ -55,7 +55,7 @@ const sally = new Character({
 
 const gwim = new Character({
     name: "Gwimin",
-    portrait: sprites.gwim_portrait,
+    portraitSpriteId: sprites.gwim_portrait.id,
     stats: new CharacterStats([10,10],[10,10],[10,20]),
     inventory: [
         null, null,

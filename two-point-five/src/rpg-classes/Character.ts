@@ -1,5 +1,4 @@
 import { Color } from "@/canvas/Color";
-import { Sprite } from "@/canvas/Sprite";
 import { FeedbackToUI, Game } from "../game-classes/Game";
 import { Item } from "../game-classes/Item";
 import { PlayerVantage } from "../game-classes/PlayerVantage";
@@ -11,7 +10,7 @@ interface CharacterConfig {
     name?: string
     inventory: Array<Item | null>
     equipmentSlots?: Map<string, Item | null>
-    portrait: Sprite
+    portraitSpriteId: string
     stats: CharacterStats
 }
 

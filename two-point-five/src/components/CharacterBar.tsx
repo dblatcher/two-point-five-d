@@ -49,7 +49,7 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
             justifyContent: 'center',
         }}>
             <SpriteIcon
-                spriteId={characterData.portrait.id}
+                spriteId={characterData.portraitSpriteId}
                 actionName={Sprite.defaultPortraitAnimation}
                 style={{
                     width: "100%",

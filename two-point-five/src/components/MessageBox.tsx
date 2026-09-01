@@ -19,7 +19,7 @@ export const MessageBox = () => {
         {gameData.narrativeMessages.map((message, index) => (
             <div key={index} style={styles.entry}>
                 {message.data.character && (
-                    <SpriteIcon spriteId={message.data.character.data.portrait.id} actionName={Sprite.defaultPortraitAnimation} />
+                    <SpriteIcon spriteId={message.data.character.data.portraitSpriteId} actionName={Sprite.defaultPortraitAnimation} />
                 )}
 
                 <p style={{ color: message.data.color.css }}>
