@@ -33,7 +33,7 @@ const duckPuzzleLevel1 = new Level({
     startingVantage: {
         x: 1, y: 4, direction: Direction.north,
     },
-    defaultWallPattern: sprites.brickWall,
+    defaultWallPattern: sprites.brickWall.id,
     floorColor: new Color(100, 40, 40),
     features,
     walls: [
@@ -92,7 +92,6 @@ const duckPuzzleLevel2 = new Level({
     startingVantage: {
         x: 1, y: 2, direction: Direction.east,
     },
-    // defaultWallPattern: sprites.brickWall,
     floorColor: new Color(30, 120, 90),
     walls: [
         new Wall({ x: 5, y: 2, place: Direction.north, shape: lowWall, }),

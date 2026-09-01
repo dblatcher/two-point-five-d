@@ -63,7 +63,7 @@ const level2: Level = new Level({
     height: 10, width: 12,
     features,
     sky: new Sky({ indoors: true, skyBaseColor: new Color(60, 60, 25) }),
-    defaultWallPattern: sharedSprites.brickWall,
+    defaultWallPattern: sharedSprites.brickWall.id,
     floorColor: new Color(70, 70, 30),
     startingVantage: { x: 0, y: 5, direction: Direction.west },
     walls: [

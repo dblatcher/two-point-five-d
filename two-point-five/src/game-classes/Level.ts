@@ -37,7 +37,7 @@ interface Blockage {
 interface LevelConfig {
     width: number
     height: number
-    defaultWallPattern?: Sprite
+    defaultWallPattern?: string
     floorColor?: Color
     sky?: Sky
 
@@ -418,9 +418,11 @@ class Level {
 
         const gatherTime = Date.now();
 
+        const defaultWallSprite = this.data.defaultWallPattern ? drawingContext.spriteRecord[this.data.defaultWallPattern] : undefined
+
         renderInstructions.forEach(renderInstruction => {
             if (renderInstruction.wall) {
-                renderInstruction.wall.drawInSight(drawingContext, renderInstruction, this.tickCount, this.data.defaultWallPattern)
+                renderInstruction.wall.drawInSight(drawingContext, renderInstruction, this.tickCount, defaultWallSprite)
             }
             if (renderInstruction.thing) {
                 renderInstruction.thing.drawInSight(drawingContext, renderInstruction, this.tickCount)
