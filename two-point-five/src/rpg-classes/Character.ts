@@ -37,11 +37,6 @@ class Character {
             .set("LEFT_HAND", null)
     }
 
-
-    getPortraitSrc(spriteSheetMap: Map<string, SpriteSheet>): string | null {
-        return this.data.portrait.provideSrc(spriteSheetMap, Sprite.defaultPortraitAnimation)
-    }
-
     getIcon(spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
         try {
             return this.data.portrait.provideImage(spriteSheetMap, Sprite.defaultPortraitAnimation, RelativeDirection.BACK, 0)

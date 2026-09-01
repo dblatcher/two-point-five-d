@@ -81,36 +81,12 @@ class Sprite {
 
 
     /**
-     * Get the src for the spritesheet used by the first frame of an animation
-     * @param actionName 
-     * @param direction 
-     * @returns the src path for the first frame of the animation, or null if there is none
-     */
-    provideSrc(spriteSheetMap: Map<string, SpriteSheet>, actionName: string, direction: RelativeDirection = RelativeDirection.BACK): string | null {
-        const animation = this.getFrameList(actionName, direction);
-
-        if (animation == null) {
-            console.warn(`Invalid animation key on ${this.id}: ${actionName} (${direction.name})`);
-            return null
-        }
-
-        if (animation.length == 0) {
-            console.warn(`No frames in animation ${actionName} (${direction.name}) of ${this.id}`);
-            return null
-        }
-
-        const sheet = spriteSheetMap.get(animation[0].sheet)
-        return sheet?.src ?? null;
-    }
-
-
-    /**
      * get the list of frames for an action and direction, or null if there is non
      * @param actionName 
      * @param direction 
      * @return the list of frames for the animation, or null
      */
-    getFrameList(actionName: string, direction: RelativeDirection): Frame[] | null {
+    private getFrameList(actionName: string, direction: RelativeDirection): Frame[] | null {
         const { animations } = this.data
         if (!animations) {
             return null
@@ -127,7 +103,7 @@ class Sprite {
      * @param transitionPhase
      * @returns the index of the frame
      */
-    getFrameIndex(animation: Frame[], tickCount: number, transitionPhase?: number): number {
+    private getFrameIndex(animation: Frame[], tickCount: number, transitionPhase?: number): number {
         if (typeof transitionPhase == 'number') {
             return (Math.floor(transitionPhase * (animation.length - 1)))
         }
