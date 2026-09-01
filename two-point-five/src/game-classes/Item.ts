@@ -1,15 +1,12 @@
+import { Point } from "@/canvas/canvas-utility";
+import { Actor } from "@/game-classes/Actor";
 import { Direction } from "./Direction";
 import { Figure } from "./Figure";
 import { Game } from "./Game";
-import { Position } from "./Position";
-import { RelativeDirection } from "./RelativeDirection";
-import { Sprite } from "../canvas/Sprite";
-import { Vantage } from "./Vantage";
 import { ItemType } from "./ItemType";
-import { Point } from "@/canvas/canvas-utility";
-import { Actor } from "@/game-classes/Actor";
 import { Blockage } from "./Level";
-import { SpriteSheet } from "@/canvas/SpriteSheet";
+import { Position } from "./Position";
+import { Vantage } from "./Vantage";
 
 
 interface ItemConfig {
@@ -43,35 +40,6 @@ class Item {
         }
 
         return null
-    }
-
-    getIcon(spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
-        try {
-            return this.data.type.icon.provideImage(spriteSheetMap, Sprite.defaultFigureAnimation, RelativeDirection.BACK, 0)
-        } catch (error) {
-            console.warn(error instanceof Error ? error.message : error)
-        }
-        return document.createElement('img');
-    }
-
-    drawAsIcon(spriteSheetMap: Map<string, SpriteSheet>, canvas: HTMLCanvasElement): void {
-        const ctx = canvas.getContext("2d");
-        if (!ctx) { return }
-        const height = Number(canvas.getAttribute('height') || "100");
-        const width = Number(canvas.getAttribute('width') || "100");
-        const icon = this.getIcon(spriteSheetMap)
-        ctx.clearRect(0, 0, width, height)
-        ctx.fillStyle = this.data.type.backgroundColor.css;
-        ctx.fillRect(0, 0, width, height)
-        ctx.drawImage(icon, 0, 0, width, height)
-    }
-
-    static clearIcon(canvas: HTMLCanvasElement): void {
-        const ctx = canvas.getContext("2d");
-        if (!ctx) { return }
-        const height = Number(canvas.getAttribute('height') || "100");
-        const width = Number(canvas.getAttribute('width') || "100");
-        ctx.clearRect(0, 0, width, height)
     }
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {
@@ -168,4 +136,4 @@ class Item {
 }
 
 
-export { Item, ItemConfig }
+export { Item, ItemConfig };

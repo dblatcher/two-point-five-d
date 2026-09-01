@@ -3,12 +3,9 @@ import { Sprite } from "@/canvas/Sprite";
 import { FeedbackToUI, Game } from "../game-classes/Game";
 import { Item } from "../game-classes/Item";
 import { PlayerVantage } from "../game-classes/PlayerVantage";
-import { RelativeDirection } from "../game-classes/RelativeDirection";
 import { AttackOption } from "./AttackOption";
-
-import { CharacterStats } from "./CharacterStats"
+import { CharacterStats } from "./CharacterStats";
 import { Monster } from "./Monster";
-import { SpriteSheet } from "@/canvas/SpriteSheet";
 
 interface CharacterConfig {
     name?: string
@@ -19,7 +16,6 @@ interface CharacterConfig {
 }
 
 class Character {
-
     data: CharacterConfig
     attackCooldown: number
     constructor(config: CharacterConfig) {
@@ -35,15 +31,6 @@ class Character {
             .set("FEET", null)
             .set("RIGHT_HAND", null)
             .set("LEFT_HAND", null)
-    }
-
-    getIcon(spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
-        try {
-            return this.data.portrait.provideImage(spriteSheetMap, Sprite.defaultPortraitAnimation, RelativeDirection.BACK, 0)
-        } catch (error) {
-            console.warn(error.message)
-        }
-        return document.createElement('img');
     }
 
     get attackOptions(): AttackOption[] {
@@ -145,26 +132,6 @@ class Character {
         })
     }
 
-    drawAsIcon(spriteSheetMap: Map<string, SpriteSheet>, canvas: HTMLCanvasElement): void {
-        const ctx = canvas.getContext("2d");
-        if (!ctx) { return }
-        const height = Number(canvas.getAttribute('height') || "100");
-        const width = Number(canvas.getAttribute('width') || "100");
-        const icon = this.getIcon(spriteSheetMap)
-
-        ctx.clearRect(0, 0, width, height)
-        ctx.drawImage(icon, 0, 0, width, height)
-    }
-
-    static clearIcon(canvas: HTMLCanvasElement): void {
-        const ctx = canvas.getContext("2d");
-        if (!ctx) { return }
-        const height = Number(canvas.getAttribute('height') || "100");
-        const width = Number(canvas.getAttribute('width') || "100");
-        ctx.clearRect(0, 0, width, height)
-    }
-
-
     getMyColor(game: Game): Color {
         if (game.data.characters.indexOf(this) == -1) { return Color.TRANSPARENT }
         return Game.CHARACTER_COLORS[game.data.characters.indexOf(this)]
@@ -243,4 +210,4 @@ class Character {
 
 }
 
-export { Character, CharacterConfig }
+export { Character, CharacterConfig };
