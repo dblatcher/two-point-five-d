@@ -24,6 +24,7 @@ import weapons from "@/travels-in-generica/assets/new-weapons.png";
 import armour from "@/travels-in-generica/assets/gear_armor.png";
 import torch from "@/travels-in-generica/assets/animated_torch.png";
 import rubyKey from "@/travels-in-generica/assets/ruby_key.png";
+import { PortraitSprite } from "@/rpg-classes/PortraitSprite"
 
 
 const sheets: { [index: string]: SpriteSheet } = {
@@ -149,10 +150,10 @@ const sprites = {
     skeletonArcher: makeULpcSprite("skeletonArcher", sheets.skeletonArcher),
     skeletonSpearman: makeULpcSprite("skeletonSpearman", sheets.skeletonSpearman),
 
-    drake_portrait: Sprite.portraitSprite("drake", sheets.portrait1.id),
-    sally_portrait: Sprite.portraitSprite("sally", sheets.portrait2.id),
-    boblin_portrait: Sprite.portraitSprite("boblin", sheets.portrait3.id),
-    gwim_portrait: Sprite.portraitSprite("gwim", sheets.portrait13.id),
+    drake_portrait: new PortraitSprite("drake", sheets.portrait1.id),
+    sally_portrait: new PortraitSprite("sally", sheets.portrait2.id),
+    boblin_portrait: new PortraitSprite("boblin", sheets.portrait3.id),
+    gwim_portrait: new PortraitSprite("gwim", sheets.portrait13.id),
 
     silverSword: Sprite.itemSpriteOneFrame({ sheet: sheets.weapons.id, col: 1, row: 0 }, { id: "silverSword" }),
     hammer: Sprite.itemSpriteOneFrame({ sheet: sheets.weapons.id, col: 14, row: 0 }, { id: "hammer" }),

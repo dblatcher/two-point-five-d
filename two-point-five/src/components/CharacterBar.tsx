@@ -1,9 +1,9 @@
 import { Game } from "@/game-classes/Game";
+import { PortraitSprite } from "@/rpg-classes/PortraitSprite";
 import { EquipmentSlotButton } from "./EquipmentSlotButton";
 import { useCharacter, useGame } from "./GameContext";
-import { StatBars } from "./StatBars";
 import { SpriteIcon } from "./SpriteIcon";
-import { Sprite } from "@/canvas/Sprite";
+import { StatBars } from "./StatBars";
 
 
 
@@ -50,7 +50,7 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
         }}>
             <SpriteIcon
                 spriteId={characterData.portraitSpriteId}
-                actionName={Sprite.defaultPortraitAnimation}
+                actionName={PortraitSprite.defaultPortraitAnimation}
                 style={{
                     width: "100%",
                     aspectRatio: 1

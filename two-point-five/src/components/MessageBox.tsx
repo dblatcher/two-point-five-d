@@ -1,7 +1,7 @@
+import { PortraitSprite } from "@/rpg-classes/PortraitSprite"
 import { CSSProperties } from "react"
 import { useGame } from "./GameContext"
 import { SpriteIcon } from "./SpriteIcon"
-import { Sprite } from "@/canvas/Sprite"
 
 const styles = {
     entry: {
@@ -19,7 +19,9 @@ export const MessageBox = () => {
         {gameData.narrativeMessages.map((message, index) => (
             <div key={index} style={styles.entry}>
                 {message.data.character && (
-                    <SpriteIcon spriteId={message.data.character.data.portraitSpriteId} actionName={Sprite.defaultPortraitAnimation} />
+                    <SpriteIcon
+                        spriteId={message.data.character.data.portraitSpriteId}
+                        actionName={PortraitSprite.defaultPortraitAnimation} />
                 )}
 
                 <p style={{ color: message.data.color.css }}>

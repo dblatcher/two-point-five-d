@@ -29,7 +29,6 @@ class Sprite {
 
     static get defaultWallAnimation(): "NEUTRAL" { return "NEUTRAL" }
     static get defaultFigureAnimation(): "STAND" { return "STAND" }
-    static get defaultPortraitAnimation(): "NEUTRAL" { return "NEUTRAL" }
 
     constructor(config: SpriteConfig) {
         this.data = config
@@ -237,15 +236,6 @@ class Sprite {
         config.shadow = config.shadow || { x: config.size.x * (3 / 5), y: .1 }
 
         return new Sprite(config)
-    }
-
-    static portraitSprite(name: string, sheet: string): Sprite {
-        return new Sprite({
-            id: name,
-            animations: {
-                [Sprite.defaultPortraitAnimation]: [{ sheet }]
-            }
-        })
     }
 
     static DEFAULT_SIZE: Dimensions = { x: .5, y: .5 }
