@@ -10,6 +10,7 @@ import { ItemSlot } from "./ItemSlot"
 import { MessageBox } from "./MessageBox"
 import { QuestScreen } from "./QuestScreen"
 import { SightCanvas } from "./SightCanvas"
+import { MapScreen } from "./MapScreen"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -21,6 +22,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
     const { gameData, game } = useGame()
     const [characterScreenOpen, setCharacterScreenOpen] = useState<number>()
     const [questScreenOpen, setQuestScreenOpen] = useState(false)
+    const [mapScreenOpen, setMapScreenOpen] = useState(false)
 
     const move = useCallback((direction: DirectionName) => {
         game().queuePlayerMovementAction({ action: 'MOVE', direction })
@@ -56,6 +58,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                         itemData={gameData.itemInHand?.data}
                     />
                     <button onClick={() => setQuestScreenOpen(true)}>quests</button>
+                    <button onClick={() => setMapScreenOpen(true)}>map</button>
                 </div>
                 <AttackButtons />
                 <div style={{ marginTop: 'auto' }}>
@@ -80,6 +83,9 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
 
         {questScreenOpen && (
             <QuestScreen close={() => setQuestScreenOpen(false)} />
+        )}
+        {mapScreenOpen && (
+            <MapScreen close={() => setMapScreenOpen(false)} />
         )}
     </main>
 }
