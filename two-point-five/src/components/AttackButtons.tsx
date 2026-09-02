@@ -36,13 +36,18 @@ const CharacterAttackButtons = ({ charcterIndex }: { charcterIndex: number }) =>
         flex: 1
     }}>
         <div style={{
-            position: 'relative'
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
         }}>
             <ItemSlot
                 itemData={item?.data.type.isWieldable ? item.data : undefined}
                 style={{
                     filter: "brightness(0)",
                     padding: 5,
+                    maxHeight: 120,
+                    display: 'inline-flex',
+                    justifyContent: 'center',
                 }}
             />
             {feedback && (
