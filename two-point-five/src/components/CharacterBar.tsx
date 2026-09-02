@@ -11,7 +11,8 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
     index: number;
     setCharacterScreenOpen: { (characterIndex?: number): void }
 }) => {
-    const [characterData] = useCharacter(index)
+    const { game } = useGame()
+    const [characterData, _, isActive] = useCharacter(index)
     if (!characterData) {
         return <div></div>
     }
@@ -33,21 +34,36 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
             color: 'black',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'stretch',
             lineHeight: 1,
         }}>
-            <button onClick={() => setCharacterScreenOpen(index)}>
-                <b>{characterData.name}</b>
+            <button
+                style={{ flex: 1 }}
+                onClick={() => {
+                    game().setActiveCharacter(index)
+                }}
+            >
+
+                {isActive ? (
+                    <span title="active" style={{
+                        color: Game.CHARACTER_COLORS[index].darker(.2).css
+                    }}><b>{characterData.name}</b></span>
+                ) : (
+                    <span>{characterData.name}</span>
+                )}
             </button>
         </div>
 
-        <div style={{
-            gridArea: 'a',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
+        <button
+            onClick={() => setCharacterScreenOpen(index)}
+            style={{
+                gridArea: 'a',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 0,
+            }}>
             <SpriteIcon
                 spriteId={characterData.portraitSpriteId}
                 actionName={PortraitSprite.defaultPortraitAnimation}
@@ -56,7 +72,7 @@ const CharacterBlock = ({ index, setCharacterScreenOpen }: {
                     aspectRatio: 1
                 }}
             />
-        </div>
+        </button>
 
         <div style={{ gridArea: 'd', }}>
             <EquipmentSlotButton characterIndex={index} equipmentSlot="LEFT_HAND" />

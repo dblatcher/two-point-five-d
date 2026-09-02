@@ -13,12 +13,13 @@ export const GameContext = createContext<{
 
 export const useGame = () => useContext(GameContext)
 
-export const useCharacter = (index: number): [CharacterConfig | undefined, RefObject<Character | undefined>] => {
+export const useCharacter = (index: number): [CharacterConfig | undefined, RefObject<Character | undefined>, boolean] => {
     const { gameData, game } = useGame()
     const characterData = gameData.characters.at(index)?.data;
+    const isActive = index === gameData.activeCharacterIndex;
     const characterRef = useRef<Character>(undefined)
     useEffect(() => {
         characterRef.current = game().data.characters.at(index)
     }, [index])
-    return [characterData, characterRef]
+    return [characterData, characterRef, isActive]
 }
