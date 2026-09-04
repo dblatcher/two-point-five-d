@@ -1,10 +1,9 @@
 
 import { Game } from "@/game-classes/Game";
-import { Direction } from "@/game-classes/Direction";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
-import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels"
 import { spriteSheets as sharedSheets } from "@/instances/sprites";
+import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels";
 import { spriteSheets as localSheets, sprites } from "./sprites";
 
 const spriteSheets = [
@@ -25,12 +24,14 @@ const game = new Game({
     controllers: [],
     activeCharacterIndex: 0,
     characters: [],
-    spriteSheets,
     narrativeMessages: [],
+}, {
+    spriteSheets,
     sprites: Object.values(sprites).map(sprite => sprite.data),
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,
 })
 
-export { game, spriteSheets }
+export { game, spriteSheets };
+

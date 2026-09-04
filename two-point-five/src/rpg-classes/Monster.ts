@@ -65,7 +65,7 @@ class Monster extends Actor {
         if (!vantage) { return false }
         const { playerVantage, level } = game.data
         const squareAheadIsBlocked = level.hasSquareAheadBlockedByWall(vantage)
-        const squareAhead = vantage.translate(vantage.data.direction)
+        const squareAhead = vantage.translate(vantage.direction)
 
         return !squareAheadIsBlocked && squareAhead.isInSameSquareAs(playerVantage)
     }

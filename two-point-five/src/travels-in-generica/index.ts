@@ -50,8 +50,9 @@ const game = new Game({
         questOne
     ],
     characters: [characters.sally, characters.boblin, characters.drake, characters.gwim],
-    spriteSheets,
     narrativeMessages: [],
+}, {
+    spriteSheets,
     sprites: [
         ...Object.values(sharedSprites).map(sprite => sprite.data),
         ...Object.values(sprites).map(sprite => sprite.data)

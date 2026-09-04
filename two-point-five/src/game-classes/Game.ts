@@ -38,9 +38,12 @@ interface GameConfig {
     activeCharacterIndex: number | undefined
     intersitial?: Intersitial
     gameCompleteMessage?: string
+    narrativeMessages: NarrativeMessage[]
+}
+
+interface GameImmutables {
     spriteSheets: SpriteSheet[]
     sprites: SpriteConfig[]
-    narrativeMessages: NarrativeMessage[]
 }
 
 interface GameRules {
@@ -58,6 +61,7 @@ interface FigureMap {
 
 class Game {
     data: GameConfig
+    immutables: GameImmutables
     rules: GameRules
     queuedPlayerActions: Action[]
 
@@ -68,8 +72,13 @@ class Game {
     spriteSheetMap: Map<string, SpriteSheet>
     spriteRecord: Record<string, Sprite>
 
-    constructor(config: GameConfig, rules: GameRules = {}) {
+    constructor(
+        config: GameConfig,
+        immutables: GameImmutables,
+        rules: GameRules = {}
+    ) {
         this.data = config;
+        this.immutables = immutables
         this.rules = rules;
         this.queuedPlayerActions = []
         this.tickCount = 0
@@ -81,9 +90,9 @@ class Game {
         this.setActiveCharacter(config.activeCharacterIndex);
 
         this.spriteSheetMap = new Map<string, SpriteSheet>()
-        config.spriteSheets.forEach(sheet => this.spriteSheetMap.set(sheet.id, sheet))
+        immutables.spriteSheets.forEach(sheet => this.spriteSheetMap.set(sheet.id, sheet))
 
-        this.spriteRecord = config.sprites.reduce((record, nextSpriteConfig) => {
+        this.spriteRecord = immutables.sprites.reduce((record, nextSpriteConfig) => {
             return {
                 ...record,
                 [nextSpriteConfig.id]: new Sprite(nextSpriteConfig)
@@ -100,7 +109,7 @@ class Game {
     ]
 
     async loadImages() {
-        return SpriteSheet.loadAll(this.data.spriteSheets)
+        return SpriteSheet.loadAll(this.immutables.spriteSheets)
     }
 
     get activeCharacter(): Character | null {

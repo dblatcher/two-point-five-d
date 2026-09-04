@@ -17,10 +17,10 @@ function duck(config: DuckConfig): Actor {
     const { x, y, direction, behaviour } = config
 
     return new Actor({
-        vantage: new Vantage({ x, y, direction }),
+        vantage: new Vantage({ x, y, direction: direction.name }),
         spriteId: sprites.duckSprite.data.id,
         behaviour,
-        height:.5, width:.5
+        height: .5, width: .5
     })
 }
 

@@ -178,7 +178,7 @@ const duckPuzzleLevel3 = new Level({
     ],
     actors: [
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
-        duck({ x: 0.5, y: 3.5, direction: 'NORTH', behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
+        duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
 

@@ -69,9 +69,12 @@ const game = new Game(
         controllers: [],
         characters: [],
         activeCharacterIndex: undefined,
-        spriteSheets,
         narrativeMessages: [],
+    },
+    {
+        spriteSheets,
         sprites: Object.values(sprites).map(sprite => sprite.data),
+
     },
     { noCharacters: true }
 )
