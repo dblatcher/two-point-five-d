@@ -1,15 +1,13 @@
 import { Game } from "@/game-classes/Game";
-import { Direction } from "@/game-classes/Direction";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
-import { level1 } from "./level1"
-import { level2 } from "./level2"
-import { characters } from "./characters";
-import { spriteSheets as sharedSheets } from "@/instances/sprites";
-import { spriteSheets as localSheets, sprites } from "./sprites";
-import { sprites as sharedSprites } from "@/instances/sprites";
+import { spriteSheets as sharedSheets, sprites as sharedSprites } from "@/instances/sprites";
 import { Quest, QuestGoal } from "@/rpg-classes/Quest";
+import { characters } from "./characters";
 import { itemTypes } from "./itemTypes";
+import { level1 } from "./level1";
+import { level2 } from "./level2";
+import { spriteSheets as localSheets, sprites } from "./sprites";
 
 const spriteSheets = [
     ...sharedSheets,
@@ -45,7 +43,7 @@ const questOne = new Quest({
 const game = new Game({
     level: levels[0],
     levels: levels,
-    playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 0, y: 0, direction: Direction.south }),
+    playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 0, y: 0, direction: 'SOUTH' }),
     controllers: [],
     activeCharacterIndex: 0,
     quests: [
@@ -63,4 +61,5 @@ const game = new Game({
     playerBlocksPassage: true,
 })
 
-export { game, spriteSheets }
+export { game, spriteSheets };
+

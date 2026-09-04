@@ -78,7 +78,7 @@ class SquareWithFeatures extends Vantage {
         const featureToDraw = this.floorFeatures.find(feature => feature.isDrawnInMap);
 
         if (featureToDraw) {
-            featureToDraw.drawInMap(ctx, gridSize, this, this.data.direction)
+            featureToDraw.drawInMap(ctx, gridSize, this, this.direction)
         }
     }
 

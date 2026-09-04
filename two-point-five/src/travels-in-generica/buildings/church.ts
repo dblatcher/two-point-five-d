@@ -29,16 +29,16 @@ function makeChurch(x: number, y: number): { walls: Wall[], ceilings: SquareWith
             new Wall({ x: x + 4, y: y + 1, place: Direction.east, patternSprite: sharedSprites.windowWall, }),
         ],
         ceilings: [
-            new SquareWithFeatures({ x: x + 2, y: y + 0, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 3, y: y + 0, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 4, y: y + 0, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 2, y: y + 1, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 3, y: y + 1, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 4, y: y + 1, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 2, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 3, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 4, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 2, y: y + 1, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 3, y: y + 1, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 4, y: y + 1, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
 
-            new SquareWithFeatures({ x: x + 2, y: y + 2, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 3, y: y + 2, direction: Direction.north,  ceilingFeatureIds: ["grayCeiling"] }),
-            new SquareWithFeatures({ x: x + 4, y: y + 2, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 2, y: y + 2, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 3, y: y + 2, direction: 'NORTH',  ceilingFeatureIds: ["grayCeiling"] }),
+            new SquareWithFeatures({ x: x + 4, y: y + 2, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
         ]
     }
 

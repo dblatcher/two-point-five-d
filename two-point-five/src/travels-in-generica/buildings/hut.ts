@@ -19,10 +19,10 @@ function makeHut(x: number, y: number, doorPlacement: Direction = Direction.sout
             new Wall({ x: x + 1, y: y + 1, place: Direction.east, patternSprite }),
         ],
         ceilings: [
-            new SquareWithFeatures({ x: x + 0, y: y + 0, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 1, y: y + 0, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 0, y: y + 1, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 1, y: y + 1, direction: Direction.north,  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 0, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 1, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 0, y: y + 1, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            new SquareWithFeatures({ x: x + 1, y: y + 1, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
         ]
     }
 

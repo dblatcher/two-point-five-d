@@ -121,4 +121,4 @@ const SOUTH = new Direction('SOUTH', 0, 1);
 const EAST = new Direction('EAST', 1, 0);
 const WEST = new Direction('WEST', -1, 0)
 
-export { Direction }
+export { Direction, CardinalDirectionName }

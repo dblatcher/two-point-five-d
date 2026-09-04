@@ -40,7 +40,7 @@ const door2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED'
 const doorOpenable1 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 const doorOpenable2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 
-const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: Direction.south })
+const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: 'SOUTH' })
 const button1 = new InteractableWallFeature({ spriteId: sharedSprites.buttonSprite.id, reactions: [teleportToCorner] })
 
 const pit1 = new Pit({});
@@ -65,7 +65,7 @@ const level2: Level = new Level({
     sky: new Sky({ indoors: true, skyBaseColor: new Color(60, 60, 25) }),
     defaultWallPattern: sharedSprites.brickWall.id,
     floorColor: new Color(70, 70, 30),
-    startingVantage: { x: 0, y: 5, direction: Direction.west },
+    startingVantage: { x: 0, y: 5, direction: 'WEST' },
     walls: [
         new Wall({ x: 0, y: 5, place: Direction.west, featureIds: ["staircaseAUp"] }),
         new Wall({ x: 0, y: 5, place: Direction.north }),
@@ -144,15 +144,15 @@ const level2: Level = new Level({
     ],
     squaresWithFeatures: [
 
-        new SquareWithFeatures({ x: 4, y: 3, direction: Direction.north, floorFeatureIds: ["blueSquare"], }),
-        new SquareWithFeatures({ x: 6, y: 3, direction: Direction.north, floorFeatureIds: ["redSquare"], }),
-        new SquareWithFeatures({ x: 5, y: 2, direction: Direction.north, floorFeatureIds: ["pit1"] }),
+        new SquareWithFeatures({ x: 4, y: 3, direction: 'NORTH', floorFeatureIds: ["blueSquare"], }),
+        new SquareWithFeatures({ x: 6, y: 3, direction: 'NORTH', floorFeatureIds: ["redSquare"], }),
+        new SquareWithFeatures({ x: 5, y: 2, direction: 'NORTH', floorFeatureIds: ["pit1"] }),
 
 
     ],
     actors: [
         new Monster({
-            vantage: new Vantage({ x: 5.5, y: 6.5, direction: Direction.west }),
+            vantage: new Vantage({ x: 5.5, y: 6.5, direction: 'WEST' }),
             spriteId: sprites.skeletonArcher.data.id,
             defaultAttackAnimation: "ATTACK_SWING",
             stats: new CharacterStats([1, 10], [10, 10]),
@@ -160,14 +160,14 @@ const level2: Level = new Level({
         }),
 
         new Monster({
-            vantage: new Vantage({ x: 4.5, y: 8.5, direction: Direction.south }),
+            vantage: new Vantage({ x: 4.5, y: 8.5, direction: 'SOUTH' }),
             spriteId: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats([10, 10], [10, 10]),
             behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveClockwise),
         }),
 
         new Monster({
-            vantage: new Vantage({ x: 6.5, y: 9.5, direction: Direction.north }),
+            vantage: new Vantage({ x: 6.5, y: 9.5, direction: 'NORTH' }),
             spriteId: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats([10, 10], [10, 10]),
             behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
@@ -175,7 +175,7 @@ const level2: Level = new Level({
 
     ],
     items: [
-        Item.ofType(itemTypes.apple, { vantage: new Vantage({ x: 4.85, y: 4.4, direction: Direction.north }) }),
+        Item.ofType(itemTypes.apple, { vantage: new Vantage({ x: 4.85, y: 4.4, direction: 'NORTH' }) }),
     ],
     controllers: [
         new Controller({

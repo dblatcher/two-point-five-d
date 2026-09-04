@@ -46,7 +46,7 @@ hut3.walls[0].data.featureIds = ["torch"]
 
 const level1: Level = new Level({
     height: 10, width: 15,
-    startingVantage: { x: 3, y: 7, direction: Direction.north },
+    startingVantage: { x: 3, y: 7, direction: 'NORTH' },
 
     sky: new Sky({
         skyBaseColor: new Color(140, 150, 250),
@@ -74,7 +74,7 @@ const level1: Level = new Level({
     ],
 
     staticFigures: [
-        new Figure({ x: 4, y: 7, direction: Direction.south, sprite: sprites.treeOne }),
+        new Figure({ x: 4, y: 7, direction: 'SOUTH', sprite: sprites.treeOne }),
     ],
 
     squaresWithFeatures: [
@@ -89,45 +89,45 @@ const level1: Level = new Level({
 
     items: [
         Item.ofType(itemTypes.bardHat, {
-            vantage: new Vantage({ x: 8.2, y: 6.2, direction: Direction.north })
+            vantage: new Vantage({ x: 8.2, y: 6.2, direction: 'NORTH' })
         }),
         Item.ofType(itemTypes.helmet, {
-            vantage: new Vantage({ x: 5.5, y: 4.5, direction: Direction.north })
+            vantage: new Vantage({ x: 5.5, y: 4.5, direction: 'NORTH' })
         }),
     ],
 
     actors: [
         new NonPlayerCharacter({
             spriteId: sprites.smith.data.id,
-            vantage: new Vantage({ x: 1.5, y: 7.5, direction: Direction.east }),
+            vantage: new Vantage({ x: 1.5, y: 7.5, direction: 'EAST' }),
             talkMessage: "Wanna buy a hammer?",
             name: "George the blacksmith",
         }),
         new NonPlayerCharacter({
             spriteId: sprites.farmer2.data.id,
             behaviour: new Behaviour(decisionFunctions.wanderAround),
-            vantage: new Vantage({ x: 8.25, y: 4.25, direction: Direction.north }),
+            vantage: new Vantage({ x: 8.25, y: 4.25, direction: 'NORTH' }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",
         }),
         new NonPlayerCharacter({
             spriteId: sprites.farmer.data.id,
             behaviour: new Behaviour(decisionFunctions.walkInCircle),
-            vantage: new Vantage({ x: 6.25, y: 6.25, direction: Direction.west }),
+            vantage: new Vantage({ x: 6.25, y: 6.25, direction: 'WEST' }),
             talkMessage: "I should get back to the cows.",
             name: "Roger the herdsman",
         }),
 
         new NonPlayerCharacter({
             spriteId: sprites.armedMan.data.id,
-            vantage: new Vantage({ x: 10.75, y: 5.75, direction: Direction.north }),
+            vantage: new Vantage({ x: 10.75, y: 5.75, direction: 'NORTH' }),
             talkMessage: "They aren't offering enough money for me to fight any monsters.",
             name: "Harry Longblade",
         }),
 
         new NonPlayerCharacter({
             spriteId: sprites.guard2.data.id,
-            vantage: new Vantage({ x: 5.25, y: 7.25, direction: Direction.north }),
+            vantage: new Vantage({ x: 5.25, y: 7.25, direction: 'NORTH' }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
             behaviour: new Behaviour(decisionFunctions.moveBackAndForward),
@@ -135,7 +135,7 @@ const level1: Level = new Level({
 
         new NonPlayerCharacter({
             spriteId: sprites.guard3.data.id,
-            vantage: new Vantage({ x: 4.5, y: 3.5, direction: Direction.south }),
+            vantage: new Vantage({ x: 4.5, y: 3.5, direction: 'SOUTH' }),
             talkMessage: "I'm just a guard.",
             name: "Corporal Colin",
             questHooks: [
@@ -151,7 +151,7 @@ const level1: Level = new Level({
 
         new NonPlayerCharacter({
             spriteId: sprites.redMonk.data.id,
-            vantage: new Vantage({ x: 3.5, y: 0.5, direction: Direction.south }),
+            vantage: new Vantage({ x: 3.5, y: 0.5, direction: 'SOUTH' }),
             name: "Father Dunlaw",
             talkMessage: "Welcome to Saint Bernard's Chapel.",
             questHooks: [
@@ -176,7 +176,7 @@ const level1: Level = new Level({
         }),
         new NonPlayerCharacter({
             spriteId: sprites.innKeeper.data.id,
-            vantage: new Vantage({ x: 6.5, y: 2.25, direction: Direction.south }),
+            vantage: new Vantage({ x: 6.5, y: 2.25, direction: 'SOUTH' }),
             name: "Widow Elsa",
             talkMessage: "No rooms for the likes of you!",
         }),

@@ -320,7 +320,7 @@ class Game {
 
     createItemInfrontOfPlayer(itemType: ItemType, distanceRightOfCenter = 0, dropHeight = 0): void {
         const { playerVantage } = this.data
-        const { direction, x, y } = playerVantage.data
+        const { direction, data: { x, y } } = playerVantage
         const inFrontOfPlayer = {
             x: x + .5 + (.5 * direction.x),
             y: y + .5 + (.5 * direction.y)
@@ -332,7 +332,7 @@ class Game {
         this.data.level.data.items.push(
             Item.ofType(
                 itemType,
-                { vantage: new Vantage({ ...inFrontOfPlayer, direction }), altitude: dropHeight }
+                { vantage: new Vantage({ ...inFrontOfPlayer, direction: direction.name }), altitude: dropHeight }
             )
         )
     }
@@ -401,16 +401,16 @@ class Game {
 
             if (location.type === 'FLOOR') {
                 if (location.zone == "FLOOR") {
-                    const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerVantage.data.direction);
+                    const rotatedLocation = this.pointerLocator.identifyPointOnFloorSquare(location, playerVantage.direction);
                     const withinSquareAhead = rotatedLocation.x <= 1 && rotatedLocation.y < 1 && rotatedLocation.x >= 0 && rotatedLocation.y >= 0
 
                     const positionClicked = new Position({
                         x: playerVantage.data.x + rotatedLocation.x,
                         y: playerVantage.data.y + rotatedLocation.y
-                    }).translate(playerVantage.data.direction)
+                    }).translate(playerVantage.direction)
 
                     if (itemInHand && withinSquareAhead) {
-                        itemInHand.placeAt(positionClicked, this.data.playerVantage.data.direction, this);
+                        itemInHand.placeAt(positionClicked, this.data.playerVantage.direction, this);
                         this.data.itemInHand = undefined;
                     }
 
@@ -491,7 +491,7 @@ class Game {
 
         if (!squareAheadIsBlocked) {
             //to do - attacking walls
-            const squareAhead = playerVantage.translate(playerVantage.data.direction)
+            const squareAhead = playerVantage.translate(playerVantage.direction)
             const actorsInTargetSquare = actors.filter(actor => actor.data.vantage?.isInSameSquareAs(squareAhead))
             const monsters = actorsInTargetSquare.filter(actor => {
                 return Object.getPrototypeOf(actor).constructor === Monster

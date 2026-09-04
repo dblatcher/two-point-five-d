@@ -58,17 +58,17 @@ class Wall extends Position {
 
     reverseSideShowingfrom(vantage: Vantage): boolean {
 
-        const relativeDirection = this.data.place.relativeDirection(vantage.data.direction)
+        const relativeDirection = this.data.place.relativeDirection(vantage.direction)
         // wall relative direction is which edge of the square it makes up, not the direction it faces
 
-        const rightOfVantage = vantage.data.direction.rightOf;
+        const rightOfVantage = vantage.direction.rightOf;
 
         const stepsRight = rightOfVantage.y
             ? (this.gridY - vantage.gridY) * rightOfVantage.y
             : (this.gridX - vantage.gridX) * rightOfVantage.x
 
         if (relativeDirection.r == 0) {
-            return this.data.place.name != vantage.data.direction.name
+            return this.data.place.name != vantage.direction.name
         } else {
             if (relativeDirection.r == 1 && stepsRight >= 0) { return false }
             else if (relativeDirection.r == -1 && stepsRight <= 0) { return false }

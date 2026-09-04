@@ -72,7 +72,7 @@ function getViewportMapFunction(viewWidth: number, viewHeight: number): ConvertF
 
 function getPlacesInSight(vantage: Vantage): { position: Position, forward: number, right: number }[] {
     const zeroZero = new Position(vantage.data)
-    const facing = vantage.data.direction;
+    const facing = vantage.direction;
 
     const matrix = [
         [

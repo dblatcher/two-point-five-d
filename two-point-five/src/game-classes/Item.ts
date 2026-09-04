@@ -75,13 +75,13 @@ class Item {
 
     placeAt(position: Position, direction: Direction, game: Game): void {
         this.data.vantage = new Vantage({
-            ...position.data, direction
+            ...position.data, direction:direction.name
         })
         game.data.level.data.items.push(this)
     }
 
     launch(pointInBackOfScreen: Point, vantage: Vantage, game: Game): void {
-        const { direction } = vantage.data;
+        const { direction } = vantage;
 
         const howFarRight = pointInBackOfScreen.x
 
@@ -109,7 +109,7 @@ class Item {
 
         this.data.vantage = new Vantage({
             ...squareAhead.data,
-            direction
+            direction:direction.name,
         })
         this.data.altitude = .5
         this.data.momentum = 10
@@ -125,7 +125,7 @@ class Item {
         }
         if (this.data.momentum && this.data.momentum > 0) {
             this.data.momentum = Math.max(0, this.data.momentum - 1)
-            const blockage = this.data.vantage?.moveAbsoluteBy(.15, this.data.vantage.data.direction, game)
+            const blockage = this.data.vantage?.moveAbsoluteBy(.15, this.data.vantage.direction, game)
 
             if (blockage) { this.handleImpactWith(blockage, game) }
         }

@@ -1,6 +1,6 @@
 import { DrawingContext, mapPointOnFloor, plotPolygon, Point, RelativePoint } from '@/canvas/canvas-utility'
 import { RenderInstruction } from '@/canvas/RenderInstruction'
-import { Direction } from './Direction'
+import { CardinalDirectionName, Direction } from './Direction'
 import { Game } from './Game'
 import { Blockage } from './Level'
 import { Position, PositionConfig } from './Position'
@@ -9,7 +9,7 @@ import { RelativeDirection } from './RelativeDirection'
 interface VantageConfig {
     x: number
     y: number
-    direction: Direction
+    direction: CardinalDirectionName
 }
 
 class Vantage extends Position {
@@ -21,17 +21,20 @@ class Vantage extends Position {
     }
 
     get isVantage(): boolean { return true }
+    get direction() {
+        return Direction.of(this.data.direction)
+    }
 
     move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined {
-        return this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.data.direction), game)
+        return this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.direction), game)
     }
 
     moveBy(distance: number, relativeDirection: RelativeDirection, game: Game): Blockage | undefined {
-        return this.moveAbsoluteBy(distance, relativeDirection.getAbsoluteDirection(this.data.direction), game)
+        return this.moveAbsoluteBy(distance, relativeDirection.getAbsoluteDirection(this.direction), game)
     }
 
     turn(direction: RelativeDirection): void {
-        this.data.direction = direction.getAbsoluteDirection(this.data.direction);
+        this.data.direction = direction.getAbsoluteDirection(this.direction).name;
     }
 
     translateToVantage(vector: PositionConfig): Vantage {
@@ -40,8 +43,7 @@ class Vantage extends Position {
 
 
     get drawInMapPoints(): Point[][] {
-        const { direction: d } = this.data;
-
+        const d = this.direction;
         const arrowCenter = { x: 0, y: 0 }
 
         const arrowEnd = {

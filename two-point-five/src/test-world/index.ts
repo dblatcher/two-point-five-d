@@ -43,11 +43,11 @@ const levels = [
 
         ],
         squaresWithFeatures: [
-            new SquareWithFeatures({ x: 7, y: 4, direction: Direction.north, floorFeatureIds: ["pitOne"] }),
-            new SquareWithFeatures({ x: 8, y: 5, direction: Direction.north, ceilingFeatureIds: ["redCeiling"] }),
+            new SquareWithFeatures({ x: 7, y: 4, direction: 'NORTH', floorFeatureIds: ["pitOne"] }),
+            new SquareWithFeatures({ x: 8, y: 5, direction: 'NORTH', ceilingFeatureIds: ["redCeiling"] }),
         ],
         staticFigures: [
-            new Figure({ x: 9.5, y: 2.5, direction: Direction.south, sprite: gSprites.treeOne }),
+            new Figure({ x: 9.5, y: 2.5, direction: 'SOUTH', sprite: gSprites.treeOne }),
         ],
         features,
         controllers: [
@@ -65,7 +65,7 @@ const game = new Game(
     {
         level: levels[0],
         levels: levels,
-        playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 7, y: 0, direction: Direction.south }),
+        playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 7, y: 0, direction: 'SOUTH' }),
         controllers: [],
         characters: [],
         activeCharacterIndex: undefined,

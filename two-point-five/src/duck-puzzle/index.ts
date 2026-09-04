@@ -21,7 +21,7 @@ const levels = [
 const game = new Game({
     level: levels[0],
     levels: levels,
-    playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 0, y: 0, direction: Direction.south }),
+    playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 0, y: 0, direction: 'SOUTH' }),
     controllers: [],
     activeCharacterIndex: 0,
     characters: [],

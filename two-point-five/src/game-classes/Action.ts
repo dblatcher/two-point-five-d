@@ -173,8 +173,8 @@ class WalkForward extends Action {
             this.shouldCancel = true
         } else {
             this.destination = vantage.translateToVantage({
-                x: vantage.data.direction.x * this.distance,
-                y: vantage.data.direction.y * this.distance,
+                x: vantage.direction.x * this.distance,
+                y: vantage.direction.y * this.distance,
             })
             this.location = vantage
         }
@@ -191,7 +191,7 @@ class WalkForward extends Action {
                     return
                 }
             } else { //will cancel if blocked by other anything, including other actors
-                const blockage = game.data.level.findBlockage(...location.coords, ...location.translate(location.data.direction).coords, actor, game)
+                const blockage = game.data.level.findBlockage(...location.coords, ...location.translate(location.direction).coords, actor, game)
                 if (blockage) {
                     this.shouldCancel = true
                     return

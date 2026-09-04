@@ -104,7 +104,7 @@ class Figure extends Vantage {
         try {
             return sprite.provideImage(spriteSheetMap, this.actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount, this.data.transitionPhase)
         } catch (error) {
-            console.warn(error.message)
+            console.warn(error instanceof Error ? error.message : error)
         }
         return document.createElement('img');
     }

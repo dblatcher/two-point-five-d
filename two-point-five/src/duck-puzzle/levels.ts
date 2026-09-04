@@ -31,7 +31,7 @@ const duckPuzzleLevel1 = new Level({
     height: 6,
     width: 8,
     startingVantage: {
-        x: 1, y: 4, direction: Direction.north,
+        x: 1, y: 4, direction: 'NORTH',
     },
     defaultWallPattern: sprites.brickWall.id,
     floorColor: new Color(100, 40, 40),
@@ -52,15 +52,15 @@ const duckPuzzleLevel1 = new Level({
     ],
     squaresWithFeatures: [
         new SquareWithFeatures({
-            x: 7, y: 5, direction: Direction.north, floorFeatureIds: ["blueStar"]
+            x: 7, y: 5, direction: 'NORTH', floorFeatureIds: ["blueStar"]
         }),
 
         new SquareWithFeatures({
-            x: 7, y: 2, direction: Direction.north, floorFeatureIds: ["pit1"]
+            x: 7, y: 2, direction: 'NORTH', floorFeatureIds: ["pit1"]
         }),
 
         new SquareWithFeatures({
-            x: 5, y: 2, direction: Direction.north, floorFeatureIds: ["floorSwitch"]
+            x: 5, y: 2, direction: 'NORTH', floorFeatureIds: ["floorSwitch"]
         }),
 
     ],
@@ -90,7 +90,7 @@ const duckPuzzleLevel2 = new Level({
     width: 6,
     features,
     startingVantage: {
-        x: 1, y: 2, direction: Direction.east,
+        x: 1, y: 2, direction: 'EAST',
     },
     floorColor: new Color(30, 120, 90),
     walls: [
@@ -103,15 +103,15 @@ const duckPuzzleLevel2 = new Level({
     ],
     squaresWithFeatures: [
         new SquareWithFeatures({
-            x: 1, y: 2, direction: Direction.north, floorFeatureIds: ["blueStar"]
+            x: 1, y: 2, direction: 'NORTH', floorFeatureIds: ["blueStar"]
         }),
 
         new SquareWithFeatures({
-            x: 3, y: 1, direction: Direction.north, floorFeatureIds: ["floorSwitch2"]
+            x: 3, y: 1, direction: 'NORTH', floorFeatureIds: ["floorSwitch2"]
         }),
 
         new SquareWithFeatures({
-            x: 3, y: 3, direction: Direction.north, floorFeatureIds: ["floorSwitch"]
+            x: 3, y: 3, direction: 'NORTH', floorFeatureIds: ["floorSwitch"]
         }),
 
     ],
@@ -122,7 +122,7 @@ const duckPuzzleLevel2 = new Level({
         Item.ofType(
             itemTypes.weight,
             {
-                vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
+                vantage: new Vantage({ x: 4.5, y: 3.75, direction: 'NORTH' })
             }),
     ],
     controllers: [
@@ -140,7 +140,7 @@ const duckPuzzleLevel3 = new Level({
     width: 7,
     features,
     startingVantage: {
-        x: 0, y: 0, direction: Direction.east,
+        x: 0, y: 0, direction: 'EAST',
     },
     floorColor: new Color(120, 90, 30),
     walls: [
@@ -165,15 +165,15 @@ const duckPuzzleLevel3 = new Level({
     ],
     squaresWithFeatures: [
         new SquareWithFeatures({
-            x: 3, y: 3, direction: Direction.north, floorFeatureIds: ["blueStar"]
+            x: 3, y: 3, direction: 'NORTH', floorFeatureIds: ["blueStar"]
         }),
 
         new SquareWithFeatures({
-            x: 4, y: 0, direction: Direction.north, floorFeatureIds: ["pitClosed"]
+            x: 4, y: 0, direction: 'NORTH', floorFeatureIds: ["pitClosed"]
         }),
 
         new SquareWithFeatures({
-            x: 3, y: 0, direction: Direction.north, floorFeatureIds: ["floorSwitch"]
+            x: 3, y: 0, direction: 'NORTH', floorFeatureIds: ["floorSwitch"]
         }),
     ],
     actors: [

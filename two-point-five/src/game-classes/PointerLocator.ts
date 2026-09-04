@@ -206,20 +206,20 @@ class PointerLocator {
         let wallClicked: Wall | undefined = undefined;
         if (zonePoint.zone == "FRONT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.data.direction)) ||
-                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.data.direction)) && wall.isFacing(observer.data.direction.behind));
+                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.direction)) ||
+                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.direction)) && wall.isFacing(observer.direction.behind));
         }
 
         if (zonePoint.zone == "RIGHT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.data.direction.rightOf)) ||
-                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.data.direction.rightOf)) && wall.isFacing(observer.data.direction.leftOf));
+                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.direction.rightOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.direction.rightOf)) && wall.isFacing(observer.direction.leftOf));
         }
 
         if (zonePoint.zone == "LEFT_WALL") {
             wallClicked =
-                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.data.direction.leftOf)) ||
-                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.data.direction.leftOf)) && wall.isFacing(observer.data.direction.rightOf));
+                walls.find(wall => wall.isInSameSquareAs(observer) && wall.isFacing(observer.direction.leftOf)) ||
+                walls.find(wall => wall.isInSameSquareAs(observer.translate(observer.direction.leftOf)) && wall.isFacing(observer.direction.rightOf));
         }
 
         return wallClicked;
@@ -260,17 +260,17 @@ class PointerLocator {
     identifyClickedFigure(playerVantage: PlayerVantage, figureMaps: FigureMap[], clickInfo: { x: number; y: number; }, canReachSquareAhead = false): FigureMap | null {
 
         const squareIn = new Position(playerVantage.data);
-        const squareAhead = squareIn.translate(playerVantage.data.direction)
+        const squareAhead = squareIn.translate(playerVantage.direction)
 
         const figureInSquareIn = figureMaps.filter(figureMap => figureMap.figure.isInSameSquareAs(squareIn))
         const figuresSquareAhead = figureMaps.filter(figureMap => figureMap.figure.isInSameSquareAs(squareAhead))
 
         if (!canReachSquareAhead) {
-            return identifyClickedFigureInSquare(playerVantage.data.direction, figureInSquareIn, clickInfo, 0)
+            return identifyClickedFigureInSquare(playerVantage.direction, figureInSquareIn, clickInfo, 0)
         }
 
-        return identifyClickedFigureInSquare(playerVantage.data.direction, figureInSquareIn, clickInfo, 0) ||
-            identifyClickedFigureInSquare(playerVantage.data.direction, figuresSquareAhead, clickInfo, 1)
+        return identifyClickedFigureInSquare(playerVantage.direction, figureInSquareIn, clickInfo, 0) ||
+            identifyClickedFigureInSquare(playerVantage.direction, figuresSquareAhead, clickInfo, 1)
 
         function identifyClickedFigureInSquare(viewedFrom: Direction, figureMaps: FigureMap[], clickInfo: Point, forward = 0): FigureMap | null {
             return figureMaps.find(figureMap => {

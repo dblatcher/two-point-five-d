@@ -51,7 +51,7 @@ class RenderInstruction {
             this.wall = subject as Wall;
 
             // to do - use Wall method
-            this.relativeDirection = this.wall.data.place.relativeDirection(observer.data.direction)
+            this.relativeDirection = this.wall.data.place.relativeDirection(observer.direction)
             // wall relative direction is which edge of the square it makes up, not the direction it faces
 
             this.isReverseOfWall = this.wall.reverseSideShowingfrom(observer);
@@ -74,14 +74,14 @@ class RenderInstruction {
         } else if (this.subjectClass === Vantage || this.subjectClass === SquareWithFeatures) {
             this.thing = subject;
             this.isReverseOfWall = false
-            this.relativePositionInSquare = observer.data.direction.getRelativeSquarePosition(this.thing);
+            this.relativePositionInSquare = observer.direction.getRelativeSquarePosition(this.thing);
             this.relativePositionInSquare.forward -= .5;
             this.relativePositionInSquare.right -= .5;
-            this.relativeDirection = (this.thing as Vantage).data.direction.relativeDirection(this.observer.data.direction);
+            this.relativeDirection = (this.thing as Vantage).direction.relativeDirection(this.observer.direction);
         } else {
             this.thing = subject;
             this.isReverseOfWall = false
-            this.relativePositionInSquare = observer.data.direction.getRelativeSquarePosition(this.thing);
+            this.relativePositionInSquare = observer.direction.getRelativeSquarePosition(this.thing);
             this.relativePositionInSquare.forward -= .5;
             this.relativePositionInSquare.right -= .5;
         }
@@ -93,7 +93,7 @@ class RenderInstruction {
     }
 
     get viewedFrom(): Direction {
-        return this.observer.data.direction
+        return this.observer.direction
     }
 
     get exactPlace(): RelativePoint {

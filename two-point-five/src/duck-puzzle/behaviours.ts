@@ -42,8 +42,8 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Beha
 
     const howCloseToGet = .5
     const whereToLookForBlockage = vantage.translate({
-        x: vantage.data.direction.x * howCloseToGet,
-        y: vantage.data.direction.y * howCloseToGet,
+        x: vantage.direction.x * howCloseToGet,
+        y: vantage.direction.y * howCloseToGet,
     })
 
     if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
@@ -56,7 +56,7 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Beha
 const areAllDucksOnTheStar = (level: Level, game: Game):boolean => {
 
     const ducks: Actor[] = (level.data.actors || [])
-        .filter(npc => npc.data.sprite === mySprites.duckSprite)
+        .filter(npc => npc.sprite === mySprites.duckSprite)
         .filter(npc => npc.data.vantage)
 
     const squareWithStar = (game.data.level.data.squaresWithFeatures || [])

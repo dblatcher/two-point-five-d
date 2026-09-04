@@ -15,7 +15,7 @@ function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action |
     if (!vantage) { return null }
 
     const whereToLookForBlockage = vantage.translate({
-        ...vantage.data.direction
+        ...vantage.direction
     })
 
     if (actor.currentAction) { return null }
@@ -32,7 +32,7 @@ function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Acti
     if (!vantage) { return null }
 
     const whereToLookForBlockage = vantage.translate({
-        ...vantage.data.direction
+        ...vantage.direction
     })
 
     if (actor.currentAction) { return null }
@@ -49,7 +49,7 @@ function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Act
     if (!vantage) { return null }
 
     const whereToLookForBlockage = vantage.translate({
-        ...vantage.data.direction
+        ...vantage.direction
     })
 
     if (actor.currentAction) { return null }
@@ -87,7 +87,7 @@ function walkInCircle(actor: Actor, game: Game, behaviour: Behaviour): Action | 
     if (behaviour.history[0]?.action === "WALK_FORWARD") {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
-        if (game.data.level.isBlocked(...vantage.coords, ...vantage.translate(vantage.data.direction).coords, actor, game)) {
+        if (game.data.level.isBlocked(...vantage.coords, ...vantage.translate(vantage.direction).coords, actor, game)) {
             return new DoAction('STAND', 8);
         } else {
             return new WalkForward(1.5, .06);
