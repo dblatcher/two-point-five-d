@@ -20,6 +20,7 @@ import { Quest } from '@/rpg-classes/Quest'
 import { ItemType } from './ItemType'
 import { SpriteSheet } from '@/canvas/SpriteSheet'
 import { Sprite, SpriteConfig } from '@/canvas/Sprite'
+import { FeedbackToUI } from './FeebackToUi'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -46,30 +47,6 @@ interface GameRules {
     needCharacterToPickUpItems?: boolean
     noCharacters?: boolean
     playerBlocksPassage?: boolean
-}
-
-class FeedbackToUI {
-    message?: string
-    propertyList?: [string, string | number][]
-    success?: boolean
-
-    constructor(input: {
-        message?: string
-        propertyList?: [string, string | number][]
-        success?: boolean
-    }) {
-        this.message = input.message
-        this.propertyList = input.propertyList
-        this.success = input.success
-    }
-
-    get isEmpty(): boolean {
-        return !this.message && !this.propertyList
-    }
-
-    static get empty(): FeedbackToUI { return new FeedbackToUI({}) }
-    static get yes(): FeedbackToUI { return new FeedbackToUI({ success: true }) }
-    static get no(): FeedbackToUI { return new FeedbackToUI({ success: false }) }
 }
 
 interface FigureMap {
