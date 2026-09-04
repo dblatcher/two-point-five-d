@@ -2,46 +2,38 @@ import { Point } from '../canvas/canvas-utility'
 import { Position } from './Position'
 import { RelativeDirection } from './RelativeDirection'
 
+type CardinalDirectionName = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST'
+
 class Direction {
-    name: string
+    name: CardinalDirectionName
     x: 1 | 0 | -1
     y: 1 | 0 | -1
 
 
-    constructor(name: string, x: 1 | 0 | -1, y: 1 | 0 | -1) {
+    constructor(name: CardinalDirectionName, x: 1 | 0 | -1, y: 1 | 0 | -1) {
         this.name = name
         this.x = x
         this.y = y
     }
 
-    get rightOf(): Direction {
-        let answer = nowhere;
-        Direction.cardinal.forEach(direction => {
-            if (direction.x == -this.y && direction.y == this.x) {
-                answer = direction
+    private findDirection(comparisonFunction: { (direction: Direction): boolean }) {
+        return [NORTH, EAST, SOUTH, WEST].find(direction => {
+            if (comparisonFunction(direction)) {
+                return direction
             }
-        })
-        return answer;
+        }) ?? this;
+    }
+
+    get rightOf(): Direction {
+        return this.findDirection(direction => direction.x == -this.y && direction.y == this.x )
     }
 
     get leftOf(): Direction {
-        let answer = nowhere;
-        Direction.cardinal.forEach(direction => {
-            if (direction.x == this.y && direction.y == -this.x) {
-                answer = direction
-            }
-        })
-        return answer || null;
+        return this.findDirection(direction => direction.x == this.y && direction.y == -this.x )
     }
-
+    
     get behind(): Direction {
-        let answer = nowhere;
-        Direction.cardinal.forEach(direction => {
-            if (direction.x == -this.x && direction.y == -this.y) {
-                answer = direction
-            }
-        })
-        return answer || null;
+        return this.findDirection(direction => direction.x == -this.x && direction.y == -this.y)
     }
 
     relativeDirection(relativeToDirection: Direction): RelativeDirection {
@@ -69,8 +61,6 @@ class Direction {
                 return { x: y, y: 1 - x, }
             case "WEST":
                 return { x: 1 - x, y: 1 - y, }
-            default:
-                return { x: 0.5, y: 0.5 }
         }
     }
 
@@ -85,12 +75,10 @@ class Direction {
                 return { x: squareY, y: 1 - squareX, }
             case "WEST":
                 return { x: 1 - squareX, y: 1 - squareY, }
-            default:
-                return { x: 0.5, y: 0.5 }
         }
     }
 
-    getRelativeSquarePosition(position: Position): {forward:number,right:number} {
+    getRelativeSquarePosition(position: Position): { forward: number, right: number } {
         const { squareX, squareY } = position;
         switch (this.name) {
             case "NORTH":
@@ -101,12 +89,10 @@ class Direction {
                 return { forward: squareY, right: 1 - squareX, }
             case "WEST":
                 return { forward: 1 - squareX, right: 1 - squareY, }
-            default:
-                return { forward: 0.5, right: 0.5 }
         }
     }
 
-    static combine(directions: Direction[]):Point {
+    static combine(directions: Direction[]): Point {
         let x = 0, y = 0;
         directions.forEach(direction => {
             x += direction.x;
@@ -115,23 +101,12 @@ class Direction {
         return { x, y }
     }
 
-    static get cardinal(): Map<string, Direction> {
-        const map = new Map();
-        map.set("NORTH", NORTH)
-        map.set("EAST", EAST)
-        map.set("SOUTH", SOUTH)
-        map.set("WEST", WEST)
-        return map
-    }
-
     static get north() { return NORTH }
     static get south() { return SOUTH }
     static get east() { return EAST }
     static get west() { return WEST }
-    static get nowhere() { return nowhere }
 }
 
-const nowhere = new Direction("?", 0, 0);
 const NORTH = new Direction('NORTH', 0, -1);
 const SOUTH = new Direction('SOUTH', 0, 1);
 const EAST = new Direction('EAST', 1, 0);
