@@ -2,19 +2,15 @@
 import { DrawingContext } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { CeilingFeature } from "./CeilingFeature";
-import { Direction } from "./Direction";
 import { Figure } from "./Figure";
 import { FloorFeature } from "./FloorFeature";
 import { Item } from "./Item";
 import { Level } from "./Level";
 import { PlayerVantage } from "./PlayerVantage";
-import { Vantage } from "./Vantage";
+import { Vantage, VantageConfig } from "./Vantage";
 
 
-interface SquareWithFeaturesData {
-    x: number
-    y: number
-    direction: Direction
+type SquareWithFeaturesData = VantageConfig & {
     floorFeatureIds?: string[]
     ceilingFeatureIds?: string[]
 }
@@ -110,3 +106,4 @@ class SquareWithFeatures extends Vantage {
 }
 
 export { SquareWithFeatures, SquareWithFeaturesData };
+

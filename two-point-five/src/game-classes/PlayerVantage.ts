@@ -1,18 +1,12 @@
 import { PlotConfig, Point } from "@/canvas/canvas-utility";
 import { Color } from "@/canvas/Color";
-import { Direction } from "./Direction";
-import { Vantage } from "./Vantage";
+import { Vantage, VantageConfig } from "./Vantage";
 
-interface PlayerVantageConfig {
-    x: number
-    y: number
-    direction: Direction
-}
 
 class PlayerVantage extends Vantage {
 
-    data: PlayerVantageConfig
-    constructor(config: PlayerVantageConfig) {
+    data: VantageConfig
+    constructor(config: VantageConfig) {
         super(config)
         this.data = config
     }
@@ -32,4 +26,5 @@ class PlayerVantage extends Vantage {
 
 }
 
-export { PlayerVantage, PlayerVantageConfig };
+export { PlayerVantage };
+
