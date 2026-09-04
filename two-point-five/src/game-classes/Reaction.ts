@@ -107,7 +107,7 @@ class TunnelReaction extends Reaction {
         }
 
         const wall = game.data.levels[levelIndex].data.walls[wallIndex];
-        game.changeLevel(levelIndex, new Vantage({ x: wall.gridX, y: wall.gridY, direction: wall.data.place }));
+        game.changeLevel(levelIndex, new Vantage({ x: wall.gridX, y: wall.gridY, direction: wall.place.name }));
     }
 }
 

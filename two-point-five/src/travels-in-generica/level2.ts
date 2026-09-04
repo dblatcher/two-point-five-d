@@ -1,21 +1,20 @@
 import { Color } from "@/canvas/Color";
-import { Direction } from "@/game-classes/Direction";
+import { Behaviour } from "@/game-classes/Behaviour";
+import { Controller } from "@/game-classes/Controller";
+import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { Item } from "@/game-classes/Item";
 import { Level } from "@/game-classes/Level";
 import { TeleportReaction } from "@/game-classes/Reaction";
+import { Sky } from "@/game-classes/Sky";
+import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";
-import * as globalFeatures from "@/travels-in-generica/features";
-import { Behaviour } from "@/game-classes/Behaviour";
-import { Controller } from "@/game-classes/Controller";
-import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { Sky } from "@/game-classes/Sky";
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { CharacterStats } from "@/rpg-classes/CharacterStats";
 import { Monster } from "@/rpg-classes/Monster";
+import * as globalFeatures from "@/travels-in-generica/features";
 import { itemTypes } from "./itemTypes";
 import * as monsterDecisionFunctions from "./monsterBehaviour";
 import { sprites } from "./sprites";
@@ -67,78 +66,78 @@ const level2: Level = new Level({
     floorColor: new Color(70, 70, 30),
     startingVantage: { x: 0, y: 5, direction: 'WEST' },
     walls: [
-        new Wall({ x: 0, y: 5, place: Direction.west, featureIds: ["staircaseAUp"] }),
-        new Wall({ x: 0, y: 5, place: Direction.north }),
-        new Wall({ x: 1, y: 5, place: Direction.north }),
-        new Wall({ x: 2, y: 5, place: Direction.north }),
-        new Wall({ x: 2, y: 5, place: Direction.east, featureIds: ["lever1"] }),
-        new Wall({ x: 2, y: 6, place: Direction.east, shape: doorway, open: true, featureIds: ["door1"] }),
-        new Wall({ x: 2, y: 7, place: Direction.east }),
-        new Wall({ x: 2, y: 7, place: Direction.south }),
-        new Wall({ x: 1, y: 7, place: Direction.south }),
-        new Wall({ x: 0, y: 7, place: Direction.south }),
+        new Wall({ x: 0, y: 5, placeName: 'WEST', featureIds: ["staircaseAUp"] }),
+        new Wall({ x: 0, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 1, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 2, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 2, y: 5, placeName: 'EAST', featureIds: ["lever1"] }),
+        new Wall({ x: 2, y: 6, placeName: 'EAST', shape: doorway, open: true, featureIds: ["door1"] }),
+        new Wall({ x: 2, y: 7, placeName: 'EAST' }),
+        new Wall({ x: 2, y: 7, placeName: 'SOUTH' }),
+        new Wall({ x: 1, y: 7, placeName: 'SOUTH' }),
+        new Wall({ x: 0, y: 7, placeName: 'SOUTH' }),
 
-        new Wall({ x: 3, y: 6, place: Direction.south }),
-        new Wall({ x: 3, y: 6, place: Direction.north }),
-        new Wall({ x: 3, y: 6, place: Direction.east, shape: doorway, open: true }),
-        new Wall({ x: 3, y: 5, place: Direction.east }),
-        new Wall({ x: 3, y: 7, place: Direction.east }),
-        new Wall({ x: 4, y: 5, place: Direction.north }),
-        new Wall({ x: 5, y: 5, place: Direction.north, shape: doorway, open: true, featureIds: ["doorOpenable1"] }),
-        new Wall({ x: 6, y: 5, place: Direction.north }),
-        new Wall({ x: 6, y: 5, place: Direction.east }),
-        new Wall({ x: 7, y: 6, place: Direction.north }),
-        new Wall({ x: 7, y: 6, place: Direction.east, shape: doorway, open: true }),
-        new Wall({ x: 7, y: 7, place: Direction.east, }),
-        new Wall({ x: 7, y: 7, place: Direction.south, }),
-        new Wall({ x: 6, y: 7, place: Direction.south, }),
-        new Wall({ x: 5, y: 7, place: Direction.south, shape: doorway, open: true, featureIds: ["doorOpenable2"] }),
-        new Wall({ x: 4, y: 7, place: Direction.south, }),
+        new Wall({ x: 3, y: 6, placeName: 'SOUTH' }),
+        new Wall({ x: 3, y: 6, placeName: 'NORTH' }),
+        new Wall({ x: 3, y: 6, placeName: 'EAST', shape: doorway, open: true }),
+        new Wall({ x: 3, y: 5, placeName: 'EAST' }),
+        new Wall({ x: 3, y: 7, placeName: 'EAST' }),
+        new Wall({ x: 4, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 5, y: 5, placeName: 'NORTH', shape: doorway, open: true, featureIds: ["doorOpenable1"] }),
+        new Wall({ x: 6, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 6, y: 5, placeName: 'EAST' }),
+        new Wall({ x: 7, y: 6, placeName: 'NORTH' }),
+        new Wall({ x: 7, y: 6, placeName: 'EAST', shape: doorway, open: true }),
+        new Wall({ x: 7, y: 7, placeName: 'EAST', }),
+        new Wall({ x: 7, y: 7, placeName: 'SOUTH', }),
+        new Wall({ x: 6, y: 7, placeName: 'SOUTH', }),
+        new Wall({ x: 5, y: 7, placeName: 'SOUTH', shape: doorway, open: true, featureIds: ["doorOpenable2"] }),
+        new Wall({ x: 4, y: 7, placeName: 'SOUTH', }),
 
-        new Wall({ x: 4, y: 4, place: Direction.west }),
-        new Wall({ x: 4, y: 3, place: Direction.west }),
-        new Wall({ x: 4, y: 3, place: Direction.north }),
-        new Wall({ x: 5, y: 2, place: Direction.west }),
-        new Wall({ x: 5, y: 2, place: Direction.east }),
-        new Wall({ x: 5, y: 1, place: Direction.west }),
-        new Wall({ x: 5, y: 1, place: Direction.north }),
-        new Wall({ x: 5, y: 1, place: Direction.east }),
-        new Wall({ x: 6, y: 3, place: Direction.north }),
-        new Wall({ x: 6, y: 3, place: Direction.east }),
-        new Wall({ x: 6, y: 4, place: Direction.east }),
-        new Wall({ x: 7, y: 6, place: Direction.west, shape: doorway, open: true }),
-        new Wall({ x: 7, y: 6, place: Direction.north }),
-        new Wall({ x: 7, y: 6, place: Direction.south }),
+        new Wall({ x: 4, y: 4, placeName: 'WEST' }),
+        new Wall({ x: 4, y: 3, placeName: 'WEST' }),
+        new Wall({ x: 4, y: 3, placeName: 'NORTH' }),
+        new Wall({ x: 5, y: 2, placeName: 'WEST' }),
+        new Wall({ x: 5, y: 2, placeName: 'EAST' }),
+        new Wall({ x: 5, y: 1, placeName: 'WEST' }),
+        new Wall({ x: 5, y: 1, placeName: 'NORTH' }),
+        new Wall({ x: 5, y: 1, placeName: 'EAST' }),
+        new Wall({ x: 6, y: 3, placeName: 'NORTH' }),
+        new Wall({ x: 6, y: 3, placeName: 'EAST' }),
+        new Wall({ x: 6, y: 4, placeName: 'EAST' }),
+        new Wall({ x: 7, y: 6, placeName: 'WEST', shape: doorway, open: true }),
+        new Wall({ x: 7, y: 6, placeName: 'NORTH' }),
+        new Wall({ x: 7, y: 6, placeName: 'SOUTH' }),
 
-        new Wall({ x: 3, y: 8, place: Direction.east }),
-        new Wall({ x: 3, y: 9, place: Direction.east }),
-        new Wall({ x: 6, y: 8, place: Direction.east }),
-        new Wall({ x: 6, y: 9, place: Direction.east }),
+        new Wall({ x: 3, y: 8, placeName: 'EAST' }),
+        new Wall({ x: 3, y: 9, placeName: 'EAST' }),
+        new Wall({ x: 6, y: 8, placeName: 'EAST' }),
+        new Wall({ x: 6, y: 9, placeName: 'EAST' }),
 
-        new Wall({ x: 8, y: 6, place: Direction.north, shape: doorway, open: true }),
-        new Wall({ x: 8, y: 6, place: Direction.south, shape: doorway, open: true }),
-        new Wall({ x: 9, y: 6, place: Direction.east, shape: doorway, open: true }),
-        new Wall({ x: 9, y: 6, place: Direction.north, shape: doorway, open: true }),
-        new Wall({ x: 9, y: 6, place: Direction.south, shape: doorway, open: true }),
-        new Wall({ x: 10, y: 6, place: Direction.east, shape: doorway, open: true }),
-        new Wall({ x: 10, y: 6, place: Direction.north, shape: doorway, open: true }),
-        new Wall({ x: 10, y: 6, place: Direction.south, shape: doorway, open: true }),
-        new Wall({ x: 11, y: 6, place: Direction.north, shape: doorway, open: true }),
-        new Wall({ x: 11, y: 6, place: Direction.south, shape: doorway, open: true }),
+        new Wall({ x: 8, y: 6, placeName: 'NORTH', shape: doorway, open: true }),
+        new Wall({ x: 8, y: 6, placeName: 'SOUTH', shape: doorway, open: true }),
+        new Wall({ x: 9, y: 6, placeName: 'EAST', shape: doorway, open: true }),
+        new Wall({ x: 9, y: 6, placeName: 'NORTH', shape: doorway, open: true }),
+        new Wall({ x: 9, y: 6, placeName: 'SOUTH', shape: doorway, open: true }),
+        new Wall({ x: 10, y: 6, placeName: 'EAST', shape: doorway, open: true }),
+        new Wall({ x: 10, y: 6, placeName: 'NORTH', shape: doorway, open: true }),
+        new Wall({ x: 10, y: 6, placeName: 'SOUTH', shape: doorway, open: true }),
+        new Wall({ x: 11, y: 6, placeName: 'NORTH', shape: doorway, open: true }),
+        new Wall({ x: 11, y: 6, placeName: 'SOUTH', shape: doorway, open: true }),
 
-        new Wall({ x: 7, y: 5, place: Direction.north }),
-        new Wall({ x: 8, y: 5, place: Direction.north }),
-        new Wall({ x: 9, y: 5, place: Direction.north }),
-        new Wall({ x: 9, y: 2, place: Direction.east, featureIds: ["painting1"] }),
-        new Wall({ x: 9, y: 3, place: Direction.east, shape: doorway, open: true, featureIds: ["door2"] }),
-        new Wall({ x: 9, y: 4, place: Direction.east }),
-        new Wall({ x: 10, y: 2, place: Direction.north }),
-        new Wall({ x: 11, y: 2, place: Direction.north }),
+        new Wall({ x: 7, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 8, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 9, y: 5, placeName: 'NORTH' }),
+        new Wall({ x: 9, y: 2, placeName: 'EAST', featureIds: ["painting1"] }),
+        new Wall({ x: 9, y: 3, placeName: 'EAST', shape: doorway, open: true, featureIds: ["door2"] }),
+        new Wall({ x: 9, y: 4, placeName: 'EAST' }),
+        new Wall({ x: 10, y: 2, placeName: 'NORTH' }),
+        new Wall({ x: 11, y: 2, placeName: 'NORTH' }),
 
-        new Wall({ x: 9, y: 2, place: Direction.north }),
-        new Wall({ x: 8, y: 2, place: Direction.north }),
-        new Wall({ x: 7, y: 2, place: Direction.north }),
-        new Wall({ x: 6, y: 2, place: Direction.north }),
+        new Wall({ x: 9, y: 2, placeName: 'NORTH' }),
+        new Wall({ x: 8, y: 2, placeName: 'NORTH' }),
+        new Wall({ x: 7, y: 2, placeName: 'NORTH' }),
+        new Wall({ x: 6, y: 2, placeName: 'NORTH' }),
 
 
     ],
@@ -194,3 +193,4 @@ const level2: Level = new Level({
 
 
 export { level2 };
+

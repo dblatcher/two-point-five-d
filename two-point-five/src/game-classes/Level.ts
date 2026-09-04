@@ -131,11 +131,11 @@ class Level {
         const dY = targetY - startY
 
         if (walls.find(
-            wall => wall.gridX == startX && wall.gridY == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
+            wall => wall.gridX == startX && wall.gridY == startY && wall.place.x == dX && wall.place.y == dY && wall.isBlocking
         )) { return true }
 
         if (walls.find(
-            wall => wall.gridX == targetX && wall.gridY == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY && wall.isBlocking
+            wall => wall.gridX == targetX && wall.gridY == targetY && wall.place.x == -dX && wall.place.y == -dY && wall.isBlocking
         )) { return true }
 
         return false
@@ -197,7 +197,7 @@ class Level {
         const dY = targetY - startY
 
         const blockingWall1 = walls.find(
-            wall => wall.gridX == startX && wall.gridY == startY && wall.data.place.x == dX && wall.data.place.y == dY && wall.isBlocking
+            wall => wall.gridX == startX && wall.gridY == startY && wall.place.x == dX && wall.place.y == dY && wall.isBlocking
         );
         if (blockingWall1) {
             return {
@@ -207,7 +207,7 @@ class Level {
         }
 
         const blockingWall2 = walls.find(
-            wall => wall.gridX == targetX && wall.gridY == targetY && wall.data.place.x == -dX && wall.data.place.y == -dY && wall.isBlocking
+            wall => wall.gridX == targetX && wall.gridY == targetY && wall.place.x == -dX && wall.place.y == -dY && wall.isBlocking
         )
         if (blockingWall2) {
             return {
@@ -367,7 +367,7 @@ class Level {
         walls.forEach(wall => {
             const place = placesInSight.find(place => place.position.isInSameSquareAs(wall))
             if (!place) { return }
-            const relativeDirection = wall.data.place.relativeDirection(vantage.direction);
+            const relativeDirection = wall.place.relativeDirection(vantage.direction);
             if (relativeDirection == RelativeDirection.BACK && place.forward == 0) { return } // the back wall of row 0 is 'behind the camera'
 
             renderInstructions.push(new RenderInstruction({
@@ -493,26 +493,26 @@ class Level {
 
         let x = 0, y = 0;
         for (x = 0; x < width; x++) {
-            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.north)) {
-                walls.push(new Wall({ x, y, place: Direction.north, color, patternSprite, shape }))
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.place == Direction.north)) {
+                walls.push(new Wall({ x, y, placeName: 'NORTH', color, patternSprite, shape }))
             }
         }
         x = 0;
         for (y = 0; y < height; y++) {
-            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.west)) {
-                walls.push(new Wall({ x, y, place: Direction.west, color, patternSprite, shape }))
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.place == Direction.west)) {
+                walls.push(new Wall({ x, y, placeName: 'WEST', color, patternSprite, shape }))
             }
         }
         y = height - 1;
         for (x = 0; x < width; x++) {
-            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.south)) {
-                walls.push(new Wall({ x, y, place: Direction.south, color, patternSprite, shape }))
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.place == Direction.south)) {
+                walls.push(new Wall({ x, y, placeName: 'SOUTH', color, patternSprite, shape }))
             }
         }
         x = width - 1;
         for (y = 0; y < height; y++) {
-            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.data.place == Direction.east)) {
-                walls.push(new Wall({ x, y, place: Direction.east, color, patternSprite, shape }))
+            if (!walls.find(wall => wall.gridX == x && wall.gridY == y && wall.place == Direction.east)) {
+                walls.push(new Wall({ x, y, placeName: 'EAST', color, patternSprite, shape }))
             }
         }
         return this

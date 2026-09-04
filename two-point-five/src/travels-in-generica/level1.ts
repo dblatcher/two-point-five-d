@@ -55,7 +55,7 @@ const level1: Level = new Level({
     features,
     walls: [
         ...church.walls,
-        new Wall({ x: 2, y: 2, place: Direction.north, patternSprite: sharedSprites.brickWall, shape: doorway, featureIds: ["door3", "keyhole"], open: true }),
+        new Wall({ x: 2, y: 2, placeName: 'NORTH', patternSprite: sharedSprites.brickWall, shape: doorway, featureIds: ["door3", "keyhole"], open: true }),
         ...hut1.walls,
         ...hut2.walls,
         ...hut3.walls,
@@ -63,13 +63,13 @@ const level1: Level = new Level({
         ...hut5.walls,
         ...hut6.walls,
 
-        new Wall({ x: 3, y: 15, place: Direction.south, shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 4, y: 15, place: Direction.south, shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 5, y: 15, place: Direction.south, shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 3, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 4, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 5, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
 
-        new Wall({ x: 5, y: 12, place: Direction.south, shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 6, y: 12, place: Direction.south, shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 7, y: 12, place: Direction.south, shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 5, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 6, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
+        new Wall({ x: 7, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
 
     ],
 

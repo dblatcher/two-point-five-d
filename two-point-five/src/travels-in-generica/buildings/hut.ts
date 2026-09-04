@@ -9,14 +9,14 @@ function makeHut(x: number, y: number, doorPlacement: Direction = Direction.sout
 
     const base = {
         walls: [
-            new Wall({ x: x + 0, y: y + 0, place: Direction.north, patternSprite }),
-            new Wall({ x: x + 0, y: y + 0, place: Direction.west, patternSprite }),
-            new Wall({ x: x + 1, y: y + 0, place: Direction.north, patternSprite }),
-            new Wall({ x: x + 1, y: y + 0, place: Direction.east, patternSprite }),
-            new Wall({ x: x + 0, y: y + 1, place: Direction.south, patternSprite }),
-            new Wall({ x: x + 0, y: y + 1, place: Direction.west, patternSprite }),
-            new Wall({ x: x + 1, y: y + 1, place: Direction.south, patternSprite }),
-            new Wall({ x: x + 1, y: y + 1, place: Direction.east, patternSprite }),
+            new Wall({ x: x + 0, y: y + 0, placeName: 'NORTH', patternSprite }),
+            new Wall({ x: x + 0, y: y + 0, placeName: 'WEST', patternSprite }),
+            new Wall({ x: x + 1, y: y + 0, placeName: 'NORTH', patternSprite }),
+            new Wall({ x: x + 1, y: y + 0, placeName: 'EAST', patternSprite }),
+            new Wall({ x: x + 0, y: y + 1, placeName: 'SOUTH', patternSprite }),
+            new Wall({ x: x + 0, y: y + 1, placeName: 'WEST', patternSprite }),
+            new Wall({ x: x + 1, y: y + 1, placeName: 'SOUTH', patternSprite }),
+            new Wall({ x: x + 1, y: y + 1, placeName: 'EAST', patternSprite }),
         ],
         ceilings: [
             new SquareWithFeatures({ x: x + 0, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),

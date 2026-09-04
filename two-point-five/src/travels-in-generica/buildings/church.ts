@@ -9,24 +9,24 @@ function makeChurch(x: number, y: number): { walls: Wall[], ceilings: SquareWith
 
     return {
         walls: [
-            new Wall({ x: x + 2, y: y + 2, place: Direction.south,shape: tower, patternSprite: sharedSprites.brickWall, }),
-            new Wall({ x: x + 2, y: y + 2, place: Direction.west, shape: tower, patternSprite: sharedSprites.brickWall, }),
-            new Wall({ x: x + 2, y: y + 2, place: Direction.east, shape: tower, patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 2, y: y + 2, placeName: 'SOUTH',shape: tower, patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 2, y: y + 2, placeName: 'WEST', shape: tower, patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 2, y: y + 2, placeName: 'EAST', shape: tower, patternSprite: sharedSprites.brickWall, }),
 
-            new Wall({ x: x + 3, y: y + 2, place: Direction.north,shape: doorway, open: true, patternSprite: sharedSprites.brickWall, }),
-            new Wall({ x: x + 3, y: y + 3, place: Direction.north,shape: vaultDoorway, open: true, patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 3, y: y + 2, placeName: 'NORTH',shape: doorway, open: true, patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 3, y: y + 3, placeName: 'NORTH',shape: vaultDoorway, open: true, patternSprite: sharedSprites.brickWall, }),
 
-            new Wall({ x: x + 4, y: y + 3, place: Direction.north, shape: tower, featureIds:["poemBoard"], patternSprite: sharedSprites.brickWall, }),
-            new Wall({ x: x + 4, y: y + 2, place: Direction.west, shape: tower, patternSprite: sharedSprites.brickWall, }),
-            new Wall({ x: x + 4, y: y + 2, place: Direction.east, shape: tower, patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 4, y: y + 3, placeName: 'NORTH', shape: tower, featureIds:["poemBoard"], patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 4, y: y + 2, placeName: 'WEST', shape: tower, patternSprite: sharedSprites.brickWall, }),
+            new Wall({ x: x + 4, y: y + 2, placeName: 'EAST', shape: tower, patternSprite: sharedSprites.brickWall, }),
 
-            new Wall({ x: x + 2, y: y + 1, place: Direction.west, patternSprite: sharedSprites.windowWall, }),
-            new Wall({ x: x + 2, y: y + 0, place: Direction.west, patternSprite: sharedSprites.windowWall, }),
-            new Wall({ x: x + 2, y: y + 0, place: Direction.north, patternSprite: sharedSprites.brickWall, featureIds: ["painting1"] }),
-            new Wall({ x: x + 3, y: y + 0, place: Direction.north, patternSprite: sharedSprites.windowWall,  }),
-            new Wall({ x: x + 4, y: y + 0, place: Direction.north, patternSprite: sharedSprites.brickWall, featureIds: ["painting1"]}),
-            new Wall({ x: x + 4, y: y + 0, place: Direction.east, patternSprite: sharedSprites.windowWall, }),
-            new Wall({ x: x + 4, y: y + 1, place: Direction.east, patternSprite: sharedSprites.windowWall, }),
+            new Wall({ x: x + 2, y: y + 1, placeName: 'WEST', patternSprite: sharedSprites.windowWall, }),
+            new Wall({ x: x + 2, y: y + 0, placeName: 'WEST', patternSprite: sharedSprites.windowWall, }),
+            new Wall({ x: x + 2, y: y + 0, placeName: 'NORTH', patternSprite: sharedSprites.brickWall, featureIds: ["painting1"] }),
+            new Wall({ x: x + 3, y: y + 0, placeName: 'NORTH', patternSprite: sharedSprites.windowWall,  }),
+            new Wall({ x: x + 4, y: y + 0, placeName: 'NORTH', patternSprite: sharedSprites.brickWall, featureIds: ["painting1"]}),
+            new Wall({ x: x + 4, y: y + 0, placeName: 'EAST', patternSprite: sharedSprites.windowWall, }),
+            new Wall({ x: x + 4, y: y + 1, placeName: 'EAST', patternSprite: sharedSprites.windowWall, }),
         ],
         ceilings: [
             new SquareWithFeatures({ x: x + 2, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),

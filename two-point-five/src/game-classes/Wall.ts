@@ -3,7 +3,7 @@ import { getPatternFill, getUpperLevelPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { Color } from "../canvas/Color";
-import { Direction } from "./Direction";
+import { CardinalDirectionName, Direction } from "./Direction";
 import { Level } from "./Level";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
@@ -15,7 +15,7 @@ import { WallFeature } from "./WallFeature";
 interface WallConfig {
     x: number
     y: number
-    place: Direction
+    placeName: CardinalDirectionName
     color?: Color
     patternSprite?: Sprite
     shape?: Point[]
@@ -25,12 +25,14 @@ interface WallConfig {
 
 class Wall extends Position {
     data: WallConfig
+    place: Direction
     level?: Level
     features: WallFeature[]
 
     constructor(config: WallConfig) {
         super(config)
         this.data = config
+        this.place = Direction.of(config.placeName)
         this.data.open = !!this.data.open
         this.features = []
     }
@@ -53,12 +55,12 @@ class Wall extends Position {
     }
 
     isFacing(direction: Direction): boolean {
-        return this.data.place.x === direction.x && this.data.place.y === direction.y
+        return this.place.x === direction.x && this.place.y === direction.y
     }
 
     reverseSideShowingfrom(vantage: Vantage): boolean {
 
-        const relativeDirection = this.data.place.relativeDirection(vantage.direction)
+        const relativeDirection = this.place.relativeDirection(vantage.direction)
         // wall relative direction is which edge of the square it makes up, not the direction it faces
 
         const rightOfVantage = vantage.direction.rightOf;
@@ -68,7 +70,7 @@ class Wall extends Position {
             : (this.gridX - vantage.gridX) * rightOfVantage.x
 
         if (relativeDirection.r == 0) {
-            return this.data.place.name != vantage.direction.name
+            return this.place.name != vantage.direction.name
         } else {
             if (relativeDirection.r == 1 && stepsRight >= 0) { return false }
             else if (relativeDirection.r == -1 && stepsRight <= 0) { return false }
@@ -169,12 +171,12 @@ class Wall extends Position {
 
     drawInMap(ctx: CanvasRenderingContext2D, gridSize: number): void {
 
-        const { place } = this.data;
+        const { place } = this;
         const { features } = this;
         const featureToDraw = features.find(feature => feature.isDrawnInMap);
 
         if (featureToDraw) {
-            featureToDraw.drawInMap(ctx, gridSize, this, this.data.place)
+            featureToDraw.drawInMap(ctx, gridSize, this, this.place)
         } else {
 
             const convert: ConvertFunction = (point: Point): [number, number] => [point.x * gridSize, point.y * gridSize];

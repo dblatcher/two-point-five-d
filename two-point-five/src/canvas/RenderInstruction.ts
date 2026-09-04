@@ -51,7 +51,7 @@ class RenderInstruction {
             this.wall = subject as Wall;
 
             // to do - use Wall method
-            this.relativeDirection = this.wall.data.place.relativeDirection(observer.direction)
+            this.relativeDirection = this.wall.place.relativeDirection(observer.direction)
             // wall relative direction is which edge of the square it makes up, not the direction it faces
 
             this.isReverseOfWall = this.wall.reverseSideShowingfrom(observer);

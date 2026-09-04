@@ -35,9 +35,9 @@ const levels = [
         width: 10,
         walls: [
             // new Wall({ x: 6, y: 4, place: Direction.west, shape: vaultDoorway, patternSprite: sprites.brickWall, }),
-            new Wall({ x: 6, y: 3, place: Direction.west, patternSprite: sprites.brickWall2, featureIds: ["switch"] }),
-            new Wall({ x: 6, y: 5, place: Direction.north, shape: vaultDoorway, featureIds: ["door"], open: true }),
-            // new Wall({ x: 5, y: 7, place: Direction.north, shape: tower, patternSprite: sprites.testPattern, }),
+            new Wall({ x: 6, y: 3, placeName: 'WEST', patternSprite: sprites.brickWall2, featureIds: ["switch"] }),
+            new Wall({ x: 6, y: 5, placeName: 'NORTH', shape: vaultDoorway, featureIds: ["door"], open: true }),
+            // new Wall({ x: 5, y: 7, place: 'NORTH', shape: tower, patternSprite: sprites.testPattern, }),
         ],
         items: [
 
