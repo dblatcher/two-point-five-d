@@ -1,5 +1,5 @@
 import { Dimensions, DrawingContext, mapPointInSight, Point, RelativePoint, VANISH_RATE } from "@/canvas/canvas-utility";
-import { Vantage } from "./Vantage";
+import { Vantage, VantageConfig } from "./Vantage";
 
 import { Color } from "@/canvas/Color";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
@@ -9,10 +9,7 @@ import { Direction } from "./Direction";
 import { RelativeDirection } from "./RelativeDirection";
 import { Wall } from "./Wall";
 
-interface FigureConfig {
-    x: number
-    y: number
-    direction: Direction
+type FigureConfig = VantageConfig &  {
     sprite: Sprite
     height?: number
     width?: number
