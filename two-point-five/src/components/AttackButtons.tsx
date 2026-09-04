@@ -41,7 +41,7 @@ const CharacterAttackButtons = ({ charcterIndex }: { charcterIndex: number }) =>
             justifyContent: 'center',
         }}>
             <ItemSlot
-                itemData={item?.data.type.isWieldable ? item.data : undefined}
+                item={item?.itemType.isWieldable ? item : undefined}
                 style={{
                     filter: "brightness(0)",
                     padding: 5,

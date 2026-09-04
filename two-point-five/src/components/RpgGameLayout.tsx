@@ -55,7 +55,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                     borderStyle: 'dashed',
                 }}>
                     <ItemSlot
-                        itemData={gameData.itemInHand?.data}
+                        item={gameData.itemInHand}
                     />
                     <button onClick={() => setQuestScreenOpen(true)}>quests</button>
                     <button onClick={() => setMapScreenOpen(true)}>map</button>

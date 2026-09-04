@@ -6,45 +6,49 @@ import { sprites } from "./sprites";
 
 
 const apple = new ItemType({
-    name: "apple", sprite: commonSprites.apple, figureDimensions: { height: .2, width: .2 },
+    id: "apple", sprite: commonSprites.apple, figureDimensions: { height: .2, width: .2 },
     consumable: { nutrition: 5, }
 })
 
 const key = new ItemType({
-    name: "key", sprite: sprites.rubyKey, figureDimensions: { height: .2, width: .2 },
+    id: "key", sprite: sprites.rubyKey, figureDimensions: { height: .2, width: .2 },
 })
 
 const bean = new ItemType({
-    name: "bean", sprite: commonSprites.bean, figureDimensions: { height: .2, width: .2 },
+    id: "bean", sprite: commonSprites.bean, figureDimensions: { height: .2, width: .2 },
     backgroundColor: new Color(40, 50, 120),
     consumable: { nutrition: 5, remains: key }
 })
 
 const helmet = new ItemType({
-    name: "helmet", sprite: commonSprites.helmet, figureDimensions: { height: .225, width: .18 },
+    id: "helmet", sprite: commonSprites.helmet, figureDimensions: { height: .225, width: .18 },
     equipable: { slotName: 'HEAD' },
     weight: 3,
 })
 
 const bardHat = new ItemType({
+    id: 'bardHat',
     name: "bard's hat", sprite: commonSprites.bardHat, figureDimensions: { height: .2, width: .25 },
     equipable: { slotName: 'HEAD' },
     weight: 1,
 })
 
 const mailShirt = new ItemType({
+    id: 'mailShirt',
     name: "mail shirt", sprite: sprites.mailShirt,
     weight: 8,
     equipable: { slotName: 'TORSO', defenseBonus: 4, encumberance: 2 },
 })
 
 const plateArmour = new ItemType({
+    id: 'plateArmour',
     name: "plate armour", sprite: sprites.plateArmour,
     weight: 14,
     equipable: { slotName: 'TORSO', defenseBonus: 6, encumberance: 3 },
 })
 
 const silverSword = new ItemType({
+    id: 'silverSword',
     name: "silver sword", sprite: sprites.silverSword, figureDimensions: { height: .2, width: .25 },
     weight: 3,
     wieldable: {
@@ -60,7 +64,7 @@ const silverSword = new ItemType({
 })
 
 const hammer = new ItemType({
-    name: "hammer", sprite: sprites.hammer, figureDimensions: { height: .2, width: .25 },
+    id: "hammer", sprite: sprites.hammer, figureDimensions: { height: .2, width: .25 },
     weight: 4,
     wieldable: {
         attackOptions: [
@@ -72,7 +76,7 @@ const hammer = new ItemType({
 })
 
 const stick = new ItemType({
-    name: "stick", sprite: sprites.stick, figureDimensions: { height: .2, width: .25 },
+    id: "stick", sprite: sprites.stick, figureDimensions: { height: .2, width: .25 },
     weight: 2,
     wieldable: {
         attackOptions: [

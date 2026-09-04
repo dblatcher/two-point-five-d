@@ -36,8 +36,8 @@ class Character {
 
         const item = this.data.equipmentSlots?.get("RIGHT_HAND");
 
-        if (item && item.data.type.isWieldable) {
-            return item.data.type.data.wieldable?.attackOptions || []
+        if (item && item.itemType.isWieldable) {
+            return item.itemType.data.wieldable?.attackOptions || []
         }
 
         return AttackOption.unarmedAttacks
@@ -53,7 +53,7 @@ class Character {
         let amount = 0
         this.data.equipmentSlots?.forEach(item => {
             if (!item) { return }
-            amount += item.data.type.data.equipable?.encumberance || 0
+            amount += item.itemType.data.equipable?.encumberance || 0
         })
         return amount;
     }
@@ -157,18 +157,18 @@ class Character {
         if (!this.canAct) {
             return new FeedbackToUI({ message: `${this.data.name} cannot eat!` })
         }
-        if (!item.data.type.data.consumable) {
-            this.say(`I want to eat this ${item.data.type.name}, but I cannot!`, game);
-            return new FeedbackToUI({ message: `${item.data.type.name} is not consumable!` })
+        if (!item.itemType.data.consumable) {
+            this.say(`I want to eat this ${item.itemType.name}, but I cannot!`, game);
+            return new FeedbackToUI({ message: `${item.itemType.name} is not consumable!` })
         }
-        if (item.data.type.data.consumable.remains) {
+        if (item.itemType.data.consumable.remains) {
             this.say(`*eats*`, game);
-            game.data.itemInHand = new Item({ type: item.data.type.data.consumable.remains })
+            game.data.itemInHand = Item.ofType(item.itemType.data.consumable.remains)
         } else {
             game.data.itemInHand = undefined
         }
 
-        return new FeedbackToUI({ message: `nutrition was ${item.data.type.data.consumable.nutrition}!` })
+        return new FeedbackToUI({ message: `nutrition was ${item.itemType.data.consumable.nutrition}!` })
     }
 
     equip(slotName: string, itemInHand: Item | undefined, game: Game): FeedbackToUI {
@@ -183,7 +183,7 @@ class Character {
 
         if (itemInHand) {
             const isHandSlot = slotName.indexOf('HAND') != -1;
-            const canEquipInSlot = isHandSlot || itemInHand.data.type.data.equipable?.slotName === slotName;
+            const canEquipInSlot = isHandSlot || itemInHand.itemType.data.equipable?.slotName === slotName;
             if (canEquipInSlot) {
                 game.data.itemInHand = currentEquipment || undefined
                 this.data.equipmentSlots?.set(slotName, itemInHand)
@@ -204,7 +204,7 @@ class Character {
     throw(item: Item, clickPoint: { x: number; y: number; }, playerVantage: PlayerVantage, game: Game): void {
         if (!this.canAct) { return }
         item.launch(clickPoint, playerVantage, game);
-        this.say(`I threw the ${item.data.type.name}`, game)
+        this.say(`I threw the ${item.itemType.name}`, game)
     }
 
 }

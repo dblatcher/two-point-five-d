@@ -22,7 +22,7 @@ class QuestGoal {
 
         const { haveItem, allMonstersKilled } = this.data
 
-        if (haveItem && game.data.itemInHand?.data.type !== haveItem) {
+        if (haveItem && game.data.itemInHand?.itemType !== haveItem) {
             return false
         }
 

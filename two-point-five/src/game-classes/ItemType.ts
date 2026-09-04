@@ -3,7 +3,8 @@ import { Sprite } from "@/canvas/Sprite";
 import { AttackOption } from "@/rpg-classes/AttackOption";
 
 interface ItemTypeConfig {
-    name: string
+    id: string
+    name?: string
     figureDimensions?: { width: number, height: number }
     sprite: Sprite
     iconSprite?: Sprite
@@ -38,18 +39,18 @@ class ItemType {
         this.data = config
     }
 
-    get name(): string { return this.data.name }
+    get name(): string { return this.data.name ?? this.data.id }
     get backgroundColor(): Color { return this.data.backgroundColor || Color.TRANSPARENT }
     get isConsumable(): boolean { return !!this.data.consumable }
     get isEquipable(): boolean { return !!this.data.equipable }
-    get isWieldable(): boolean {return !!this.data.wieldable}
+    get isWieldable(): boolean { return !!this.data.wieldable }
 
-    get icon(): Sprite { return this.data.iconSprite || this.data.sprite}
+    get icon(): Sprite { return this.data.iconSprite || this.data.sprite }
 
     get propertyList(): [string, string | number][] {
         const list: [string, string | number][] = [];
 
-        list.push(['name', this.data.name]);
+        list.push(['name', this.data.id]);
         list.push(['weight', this.data.weight || 0]);
 
         if (this.data.consumable) {
@@ -60,7 +61,7 @@ class ItemType {
         }
         if (this.data.wieldable) {
             this.data.wieldable.attackOptions.forEach(option => {
-                const {name, staminaCost, damage, cooldown} = option.data
+                const { name, staminaCost, damage, cooldown } = option.data
                 list.push([name, `St${staminaCost}, Dam${damage}, Cd${cooldown}`])
             })
         }

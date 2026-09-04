@@ -88,11 +88,11 @@ const level1: Level = new Level({
     ],
 
     items: [
-        new Item({
-            type: itemTypes.bardHat, vantage: new Vantage({ x: 8.2, y: 6.2, direction: Direction.north })
+        Item.ofType(itemTypes.bardHat, {
+            vantage: new Vantage({ x: 8.2, y: 6.2, direction: Direction.north })
         }),
-        new Item({
-            type: itemTypes.helmet, vantage: new Vantage({ x: 5.5, y: 4.5, direction: Direction.north })
+        Item.ofType(itemTypes.helmet, {
+            vantage: new Vantage({ x: 5.5, y: 4.5, direction: Direction.north })
         }),
     ],
 

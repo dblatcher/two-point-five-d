@@ -191,7 +191,7 @@ class AbstractFeature {
         const { requiresItem, consumesItem } = this.data
         const { itemInHand } = game.data;
         if (requiresItem) {
-            if (requiresItem !== itemInHand?.data.type) {
+            if (requiresItem !== itemInHand?.itemType) {
                 console.log(`Do not have ${requiresItem.name}.`)
                 return
             }

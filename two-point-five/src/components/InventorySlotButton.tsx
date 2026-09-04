@@ -28,7 +28,7 @@ export const InventorySlotButton = ({ characterIndex, inventoryIndex }: Props) =
             })
         }}>
         <ItemSlot size={30}
-            itemData={data?.inventory?.at(inventoryIndex)?.data ?? undefined}
-            getItem={getItem} />
+            item={data?.inventory?.at(inventoryIndex) ?? undefined}
+        />
     </button>
 }

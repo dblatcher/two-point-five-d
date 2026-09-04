@@ -24,7 +24,7 @@ export const EquipmentSlotButton = ({ characterIndex, equipmentSlot, gridArea }:
             })
         }}>
         <ItemSlot size={30}
-            itemData={data?.equipmentSlots?.get(equipmentSlot)?.data ?? undefined}
+            item={data?.equipmentSlots?.get(equipmentSlot) ?? undefined}
         />
     </button>
 

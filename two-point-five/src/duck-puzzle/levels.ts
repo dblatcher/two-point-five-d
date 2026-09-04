@@ -119,9 +119,11 @@ const duckPuzzleLevel2 = new Level({
         duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
-        new Item({
-            type: itemTypes.weight, vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
-        }),
+        Item.ofType(
+            itemTypes.weight,
+            {
+                vantage: new Vantage({ x: 4.5, y: 3.75, direction: Direction.north })
+            }),
     ],
     controllers: [
         new Controller({

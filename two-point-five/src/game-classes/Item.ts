@@ -11,7 +11,7 @@ import { Vantage } from "./Vantage";
 
 interface ItemConfig {
     vantage?: Vantage
-    type: ItemType
+    type: string
     altitude?: number
     momentum?: number
 }
@@ -19,17 +19,26 @@ interface ItemConfig {
 class Item {
 
     data: ItemConfig
-    constructor(config: ItemConfig) {
+    itemType: ItemType
+    constructor(config: ItemConfig, itemType: ItemType) {
         this.data = config
+        this.itemType = itemType
+    }
+
+    static ofType(itemType: ItemType, config: Omit<ItemConfig, 'type'> = {}) {
+        return new Item({
+            ...config,
+            type: itemType.data.id,
+        }, itemType)
     }
 
     get propertyList(): [string, string | number][] {
-        return this.data.type.propertyList
+        return this.itemType.propertyList
     }
 
     get figure(): Figure | null {
         const { vantage, altitude = 0 } = this.data
-        const { figureDimensions = { width: .2, height: .2 }, sprite } = this.data.type.data
+        const { figureDimensions = { width: .2, height: .2 }, sprite } = this.itemType.data
         if (vantage) {
             return new Figure({
                 sprite,

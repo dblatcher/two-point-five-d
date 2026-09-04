@@ -330,7 +330,10 @@ class Game {
         inFrontOfPlayer.y += (distanceRightOfCenter * direction.rightOf.y)
 
         this.data.level.data.items.push(
-            new Item({ type: itemType, vantage: new Vantage({ ...inFrontOfPlayer, direction }), altitude: dropHeight })
+            Item.ofType(
+                itemType,
+                { vantage: new Vantage({ ...inFrontOfPlayer, direction }), altitude: dropHeight }
+            )
         )
     }
 
