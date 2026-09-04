@@ -1,12 +1,11 @@
+import { Item } from '@/game-classes/Item';
 import { Character } from '@/rpg-classes/Character';
 import { itemTypes } from './itemTypes';
-import { Item } from '@/game-classes/Item';
 import { sprites } from './sprites';
-import { CharacterStats } from '@/rpg-classes/CharacterStats';
 
 const boblin = new Character({
     name: "Boblin",
-    stats: new CharacterStats([10, 12], [2, 20], [5, 5]),
+    stats: { health: [10, 12], stamina: [2, 20], mana: [5, 5] },
     portraitSpriteId: sprites.boblin_portrait.id,
     inventory: [
         null, null,
@@ -15,15 +14,16 @@ const boblin = new Character({
         null, null,
         null, null,
     ],
-    equipmentSlots: Character.emptyEquipmentSlots()
-        .set("HEAD", Item.ofType(itemTypes.bardHat))
-        .set("RIGHT_HAND", Item.ofType(itemTypes.stick)),
+    equipmentSlots: {
+        "HEAD": Item.ofType(itemTypes.bardHat),
+        "RIGHT_HAND": Item.ofType(itemTypes.stick)
+    }
 
 });
 
 const drake = new Character({
     name: "Drake",
-    stats: new CharacterStats([12, 15], [15, 15], [0, 0]),
+    stats: { health: [12, 15], stamina: [15, 15], mana: [0, 0] },
     portraitSpriteId: sprites.drake_portrait.id,
     inventory: [
         null, null,
@@ -32,16 +32,16 @@ const drake = new Character({
         null, null,
         null, null,
     ],
-    equipmentSlots: Character.emptyEquipmentSlots()
-        .set("RIGHT_HAND", Item.ofType(itemTypes.hammer))
-        .set("TORSO", Item.ofType(itemTypes.mailShirt))
-    ,
+    equipmentSlots: {
+        "RIGHT_HAND": Item.ofType(itemTypes.hammer),
+        "TORSO": Item.ofType(itemTypes.mailShirt)
+    }
 });
 
 const sally = new Character({
     name: "Sally",
     portraitSpriteId: sprites.sally_portrait.id,
-    stats: new CharacterStats([10, 18], [20, 20], [0, 0]),
+    stats: { health: [10, 18], stamina: [20, 20], mana: [0, 0] },
     inventory: [
         null, null,
         null, null,
@@ -49,14 +49,16 @@ const sally = new Character({
         null, null,
         null, null,
     ],
-    equipmentSlots: Character.emptyEquipmentSlots()
-        .set("HEAD", Item.ofType(itemTypes.helmet))
+    equipmentSlots: {
+        "HEAD": Item.ofType(itemTypes.helmet),
+        "RIGHT_HAND": Item.ofType(itemTypes.stick)
+    }
 });
 
 const gwim = new Character({
     name: "Gwimin",
     portraitSpriteId: sprites.gwim_portrait.id,
-    stats: new CharacterStats([10, 10], [10, 10], [10, 20]),
+    stats: { health: [10, 10], stamina: [10, 10], mana: [10, 20] },
     inventory: [
         null, null,
         null, null,
@@ -64,12 +66,13 @@ const gwim = new Character({
         null, null,
         null, null,
     ],
-    equipmentSlots: Character.emptyEquipmentSlots()
-        .set("HEAD", Item.ofType(itemTypes.helmet))
+   equipmentSlots: {
+        "HEAD": Item.ofType(itemTypes.bardHat),
+    }
 });
 
 const characters = {
     boblin, drake, sally, gwim
 }
 
-export { characters }
+export { characters };

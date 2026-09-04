@@ -1,4 +1,10 @@
 
+export type CharacterStatsInput = {
+    health: [number, number],
+    stamina: [number, number],
+    mana: [number, number],
+}
+
 class PointBar {
     current: number
     max: number
@@ -26,10 +32,18 @@ class CharacterStats {
     stamina: PointBar
     mana: PointBar
 
-    constructor(health: [number, number], stamina: [number, number], mana: [number, number] = [0,0]) {
+    constructor(input: CharacterStatsInput) {
+        const { health, stamina, mana } = input
         this.health = new PointBar(health[0], health[1])
         this.stamina = new PointBar(stamina[0], stamina[1])
         this.mana = new PointBar(mana[0], mana[1])
+    }
+    serialise(): CharacterStatsInput {
+        return {
+            health: [this.health.current, this.health.max],
+            stamina: [this.stamina.current, this.stamina.max],
+            mana: [this.mana.current, this.mana.max],
+        }
     }
 
     get isDead(): boolean {

@@ -3,10 +3,13 @@ import { FeedbackToUI, Game } from "../game-classes/Game";
 import { Item } from "../game-classes/Item";
 import { PlayerVantage } from "../game-classes/PlayerVantage";
 import { AttackOption } from "./AttackOption";
-import { CharacterStats } from "./CharacterStats";
+import { CharacterStats, CharacterStatsInput } from "./CharacterStats";
 import { Monster } from "./Monster";
 
-interface CharacterConfig {
+
+type EquipmentSlot = "HEAD" | "TORSO" | "LEGS" | "FEET" | "RIGHT_HAND" | "LEFT_HAND"
+
+interface CharacterData {
     name?: string
     inventory: Array<Item | null>
     equipmentSlots?: Map<string, Item | null>
@@ -14,12 +17,42 @@ interface CharacterConfig {
     stats: CharacterStats
 }
 
+interface CharacterInput {
+    name?: string
+    inventory: Array<Item | null>
+    equipmentSlots?: Partial<Record<EquipmentSlot, Item>>
+    portraitSpriteId: string
+    stats: CharacterStatsInput
+}
+
 class Character {
-    data: CharacterConfig
+    data: CharacterData
     attackCooldown: number
-    constructor(config: CharacterConfig) {
-        this.data = config
+    constructor(input: CharacterInput) {
+        const equipmentSlots = Character.emptyEquipmentSlots();
+        Object.entries(input.equipmentSlots ?? {}).forEach(([key, value]) => {
+            equipmentSlots.set(key, value)
+        })
+
+        this.data = {
+            ...input,
+            equipmentSlots,
+            stats: new CharacterStats(input.stats)
+        }
         this.attackCooldown = 0
+    }
+
+    serialise(): CharacterInput {
+        const equipmentSlots: CharacterInput['equipmentSlots'] = {}
+        this.data.equipmentSlots?.forEach((value, key) => {
+            equipmentSlots[key as EquipmentSlot] = value ?? undefined
+        })
+
+        return {
+            ...this.data,
+            equipmentSlots,
+            stats: this.data.stats.serialise(),
+        }
     }
 
     static emptyEquipmentSlots(): Map<string, Item | null> {
@@ -209,4 +242,4 @@ class Character {
 
 }
 
-export { Character, CharacterConfig };
+export { Character, CharacterData };
