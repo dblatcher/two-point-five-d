@@ -8,7 +8,6 @@ import { ItemType } from "./ItemType"
 import { Level } from "./Level"
 import { Position } from "./Position"
 import { Reaction } from "./Reaction"
-import { RelativeDirection } from "./RelativeDirection"
 import { Vantage } from "./Vantage"
 
 
@@ -73,29 +72,6 @@ class AbstractFeature {
     get transitionPhase(): number | undefined {
         if (!this.transition) { return undefined }
         return this.transition.getTransitionPhase(this.transitionTickCount || 0, this.transitionReversed)
-    }
-
-    // TO DO - call at some point - not using
-    getMissingAnimations(spriteRecord: Record<string, Sprite>): string[] {
-        const { spriteId } = this.data
-        const sprite = spriteId && spriteRecord[spriteId];
-        if (!sprite) { return [] }
-        const { animations } = sprite.data
-        const missing: string[] = [];
-
-        this.requiredAnimations.forEach(animationName => {
-            RelativeDirection.names.forEach(relativeDirection => {
-                if (
-                    !animations || (
-                        !animations[`${animationName}_${relativeDirection}`] &&
-                        !animations[`${animationName}`])
-                ) {
-                    missing.push(`${animationName}_${relativeDirection}`)
-                }
-
-            })
-        })
-        return missing
     }
 
     size(spriteRecord: Record<string, Sprite>): Dimensions {

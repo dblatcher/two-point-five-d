@@ -1,12 +1,14 @@
 import { Direction } from "./Direction"
 import { RelativePoint } from "../canvas/canvas-utility"
+import { DirectionName } from "@/types"
+
 
 class RelativeDirection {
-    name: "LEFT" | "RIGHT" | "FORWARD" | "BACK"
+    name: DirectionName
     f: 1 | 0 | -1
     r: 1 | 0 | -1
 
-    constructor(name: "LEFT" | "RIGHT" | "FORWARD" | "BACK", f: 1 | 0 | -1, r: 1 | 0 | -1) {
+    constructor(name: DirectionName, f: 1 | 0 | -1, r: 1 | 0 | -1) {
         this.name = name
         this.f = f
         this.r = r
@@ -48,7 +50,6 @@ class RelativeDirection {
         return points
     }
 
-    static names = ["FORWARD", "BACK", "LEFT", "RIGHT"]
     static get FORWARD(): RelativeDirection { return FORWARD }
     static get BACK(): RelativeDirection { return BACK }
     static get LEFT(): RelativeDirection { return LEFT }

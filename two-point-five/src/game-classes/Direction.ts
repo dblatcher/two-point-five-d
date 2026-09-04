@@ -25,13 +25,13 @@ class Direction {
     }
 
     get rightOf(): Direction {
-        return this.findDirection(direction => direction.x == -this.y && direction.y == this.x )
+        return this.findDirection(direction => direction.x == -this.y && direction.y == this.x)
     }
 
     get leftOf(): Direction {
-        return this.findDirection(direction => direction.x == this.y && direction.y == -this.x )
+        return this.findDirection(direction => direction.x == this.y && direction.y == -this.x)
     }
-    
+
     get behind(): Direction {
         return this.findDirection(direction => direction.x == -this.x && direction.y == -this.y)
     }
@@ -105,6 +105,15 @@ class Direction {
     static get south() { return SOUTH }
     static get east() { return EAST }
     static get west() { return WEST }
+
+    static of(name: CardinalDirectionName): Direction {
+        switch (name) {
+            case 'NORTH': return NORTH
+            case 'SOUTH': return SOUTH
+            case 'EAST': return EAST
+            case 'WEST': return WEST
+        }
+    }
 }
 
 const NORTH = new Direction('NORTH', 0, -1);
