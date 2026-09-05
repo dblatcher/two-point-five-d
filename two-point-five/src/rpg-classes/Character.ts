@@ -5,6 +5,7 @@ import { PlayerVantage } from "../game-classes/PlayerVantage";
 import { AttackOption } from "./AttackOption";
 import { CharacterStats, CharacterStatsInput } from "./CharacterStats";
 import { Monster } from "./Monster";
+import { ItemType } from "@/game-classes/ItemType";
 
 
 type EquipmentSlot = "HEAD" | "TORSO" | "LEGS" | "FEET" | "RIGHT_HAND" | "LEFT_HAND"
@@ -19,8 +20,8 @@ interface CharacterData {
 
 interface CharacterInput {
     name?: string
-    inventory: Array<Item | null>
-    equipmentSlots?: Partial<Record<EquipmentSlot, Item>>
+    inventory: Array<string | null>
+    equipmentSlots?: Partial<Record<EquipmentSlot, string>>
     portraitSpriteId: string
     stats: CharacterStatsInput
 }
@@ -28,14 +29,23 @@ interface CharacterInput {
 class Character {
     data: CharacterData
     attackCooldown: number
-    constructor(input: CharacterInput) {
+    constructor(input: CharacterInput, itemTypeRecord: Record<string, ItemType>) {
         const equipmentSlots = Character.emptyEquipmentSlots();
-        Object.entries(input.equipmentSlots ?? {}).forEach(([key, value]) => {
-            equipmentSlots.set(key, value)
+
+        const makeItem = (itemTypeId: string | null) => {
+            const itemType = itemTypeId && itemTypeRecord[itemTypeId];
+            return itemType ? Item.ofType(itemType) : null
+        }
+
+        Object.entries(input.equipmentSlots ?? {}).forEach(([key, itemTypeId]) => {
+            equipmentSlots.set(key, makeItem(itemTypeId))
         })
+
+        const inventory: Array<Item | null> = input.inventory.map(makeItem)
 
         this.data = {
             ...input,
+            inventory,
             equipmentSlots,
             stats: new CharacterStats(input.stats)
         }
@@ -44,13 +54,15 @@ class Character {
 
     serialise(): CharacterInput {
         const equipmentSlots: CharacterInput['equipmentSlots'] = {}
-        this.data.equipmentSlots?.forEach((value, key) => {
-            equipmentSlots[key as EquipmentSlot] = value ?? undefined
+        this.data.equipmentSlots?.forEach((itemOrNull, key) => {
+            equipmentSlots[key as EquipmentSlot] = itemOrNull?.itemType.id ?? undefined
         })
+        const inventory = this.data.inventory.map((itemOrNull) => itemOrNull?.itemType.id ?? null)
 
         return {
             ...this.data,
             equipmentSlots,
+            inventory,
             stats: this.data.stats.serialise(),
         }
     }
@@ -242,4 +254,4 @@ class Character {
 
 }
 
-export { Character, CharacterData };
+export { Character, CharacterData, CharacterInput };

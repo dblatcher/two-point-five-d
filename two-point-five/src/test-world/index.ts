@@ -1,7 +1,5 @@
-import { Direction } from "@/game-classes/Direction";
 import { Game } from "@/game-classes/Game";
 import { Level } from "@/game-classes/Level";
-import { PlayerVantage } from "@/game-classes/PlayerVantage";
 import { Wall } from "@/game-classes/Wall";
 
 import { Color } from "@/canvas/Color";
@@ -11,10 +9,10 @@ import { Figure } from "@/game-classes/Figure";
 import { Pit } from "@/game-classes/FloorFeature";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { itemTypes } from "@/instances/itemTypes";
 import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
 import { vaultDoorway } from "@/instances/wallShapes";
 import { spriteSheets as gSpriteSheets, sprites as gSprites } from "@/travels-in-generica/sprites";
-import { itemTypes } from "@/instances/itemTypes";
 
 const spriteSheets = [
     ...sharedSpriteSheets,
@@ -32,7 +30,7 @@ const features = {
 
 const levels = [
     new Level({
-        id:'test-level',
+        id: 'test-level',
         height: 10,
         width: 10,
         walls: [
@@ -67,7 +65,7 @@ const game = new Game(
     {
         level: levels[0],
         levels: levels,
-        playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 7, y: 0, direction: 'SOUTH' }),
+        playerVantage: levels[0].data.startingVantage || { x: 7, y: 0, direction: 'SOUTH' },
         controllers: [],
         characters: [],
         activeCharacterIndex: undefined,
@@ -82,3 +80,4 @@ const game = new Game(
 )
 
 export { game, spriteSheets };
+

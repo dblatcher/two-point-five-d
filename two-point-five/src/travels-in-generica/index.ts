@@ -1,8 +1,6 @@
 import { Game } from "@/game-classes/Game";
-import { PlayerVantage } from "@/game-classes/PlayerVantage";
-
 import { spriteSheets as sharedSheets, sprites as sharedSprites } from "@/instances/sprites";
-import { Quest } from "@/rpg-classes/Quest";
+import { QuestData } from "@/rpg-classes/Quest";
 import { characters } from "./characters";
 import { itemTypes } from "./itemTypes";
 import { level1 } from "./level1";
@@ -20,7 +18,7 @@ const levels = [
 ]
 
 
-const questOne = new Quest({
+const questOne: QuestData = {
     id: 'questOne',
     state: 'NOT_TAKEN',
     title: "Purge the crypt",
@@ -38,18 +36,23 @@ const questOne = new Quest({
             allMonstersKilled: level2.id
         },
     ]
-})
+}
 
 const game = new Game({
     level: levels[0],
     levels: levels,
-    playerVantage: new PlayerVantage(levels[0].data.startingVantage || { x: 0, y: 0, direction: 'SOUTH' }),
+    playerVantage: levels[0].data.startingVantage || { x: 0, y: 0, direction: 'SOUTH' },
     controllers: [],
     activeCharacterIndex: 0,
     quests: [
         questOne
     ],
-    characters: [characters.sally, characters.boblin, characters.drake, characters.gwim],
+    characters: [
+        characters.sally,
+        characters.boblin,
+        characters.drake,
+        characters.gwim,
+    ],
     narrativeMessages: [],
 }, {
     spriteSheets,

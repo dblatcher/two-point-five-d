@@ -25,7 +25,7 @@ class Item {
         this.itemType = itemType
     }
 
-    static ofType(itemType: ItemType, config: Omit<ItemConfig, 'type'> = {}) {
+    static ofType(itemType: ItemType, config: Omit<ItemConfig, 'type'> & { type?: string } = {}) {
         return new Item({
             ...config,
             type: itemType.data.id,
@@ -75,7 +75,7 @@ class Item {
 
     placeAt(position: Position, direction: Direction, game: Game): void {
         this.data.vantage = new Vantage({
-            ...position.data, direction:direction.name
+            ...position.data, direction: direction.name
         })
         game.data.level.data.items.push(this)
     }
@@ -109,7 +109,7 @@ class Item {
 
         this.data.vantage = new Vantage({
             ...squareAhead.data,
-            direction:direction.name,
+            direction: direction.name,
         })
         this.data.altitude = .5
         this.data.momentum = 10

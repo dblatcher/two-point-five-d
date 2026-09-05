@@ -6,9 +6,9 @@ import { Position } from './Position'
 import { RelativeDirection } from './RelativeDirection'
 import { Item } from './Item'
 import { PlayerVantage } from './PlayerVantage'
-import { Character } from '../rpg-classes/Character'
-import { Vantage } from './Vantage'
-import { Controller } from './Controller'
+import { Character, CharacterInput } from '../rpg-classes/Character'
+import { Vantage, VantageConfig } from './Vantage'
+import { Controller, ControllerData } from './Controller'
 import { AbstractFeature } from './AbstractFeature'
 import { Color } from '@/canvas/Color'
 import { Intersitial } from './Intersitial'
@@ -16,7 +16,7 @@ import { NarrativeMessage, NarrativeMessageData } from './NarrativeMessage'
 import { Actor } from '@/game-classes/Actor'
 import { Monster } from '@/rpg-classes/Monster'
 import { AttackOption } from '@/rpg-classes/AttackOption'
-import { Quest } from '@/rpg-classes/Quest'
+import { Quest, QuestData } from '@/rpg-classes/Quest'
 import { ItemType } from './ItemType'
 import { SpriteSheet } from '@/canvas/SpriteSheet'
 import { Sprite, SpriteConfig } from '@/canvas/Sprite'
@@ -38,6 +38,21 @@ interface GameConfig {
     activeCharacterIndex: number | undefined
     intersitial?: Intersitial
     gameCompleteMessage?: string
+    narrativeMessages: NarrativeMessage[]
+}
+
+interface GameInputs {
+    itemInHand?: string
+    characters: CharacterInput[]
+    activeCharacterIndex: number | undefined
+    quests?: QuestData[]
+    gameCompleteMessage?: string // move to immutables?
+    playerVantage: VantageConfig,
+    controllers: ControllerData[]
+    intersitial?: undefined
+
+    level: Level
+    levels: Level[]
     narrativeMessages: NarrativeMessage[]
 }
 
@@ -74,11 +89,11 @@ class Game {
     spriteRecord: Record<string, Sprite>
 
     constructor(
-        config: GameConfig,
+        config: GameInputs,
         immutables: GameImmutables,
         rules: GameRules = {}
     ) {
-        this.data = config;
+
         this.immutables = immutables
         this.rules = rules;
         this.queuedPlayerActions = []
@@ -87,9 +102,6 @@ class Game {
         this.tick = this.tick.bind(this)
 
         this.featuresTriggeredThisTick = []
-
-        this.setActiveCharacter(config.activeCharacterIndex);
-
         this.spriteSheetMap = new Map<string, SpriteSheet>()
         immutables.spriteSheets.forEach(sheet => this.spriteSheetMap.set(sheet.id, sheet))
 
@@ -100,7 +112,32 @@ class Game {
             }
         }, {})
 
+        const itemInHand = config.itemInHand && immutables.itemTypeRecord[config.itemInHand] ? Item.ofType(immutables.itemTypeRecord[config.itemInHand]) : undefined
+
+        this.data = {
+            ...config,
+            playerVantage: new PlayerVantage(config.playerVantage),
+            itemInHand,
+            characters: config.characters.map(input => new Character(input, immutables.itemTypeRecord)),
+            quests: config.quests?.map(data => new Quest(data)),
+            controllers: config.controllers.map(data => new Controller(data))
+        };
+
         this.data.level.provideSprites(this.spriteRecord)
+
+        this.setActiveCharacter(config.activeCharacterIndex);
+    }
+
+    serialiseData(): GameInputs {
+        return {
+            ...this.data,
+            intersitial: undefined,
+            playerVantage: this.data.playerVantage.data,
+            itemInHand: this.data.itemInHand?.itemType.id,
+            characters: this.data.characters.map(character => character.serialise()),
+            quests: this.data.quests?.map(quest => quest.serialise()),
+            controllers: this.data.controllers.map(controller => controller.data),
+        }
     }
 
     static MAX_QUEUE_LENGTH: 10
