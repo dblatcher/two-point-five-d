@@ -35,6 +35,7 @@ interface Blockage {
 }
 
 interface LevelConfig {
+    id: string,
     width: number
     height: number
     defaultWallPattern?: string
@@ -76,6 +77,10 @@ class Level {
             squaresWithFeature.floorFeatures = squaresWithFeature.getFloorFeatures()
         })
         this.data.controllers?.forEach(controller => controller.level = this)
+    }
+
+    get id() {
+        return this.data.id
     }
 
     static defaultFloorColor = new Color(80, 80, 80);

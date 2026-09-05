@@ -1,6 +1,6 @@
+import { Quest } from "@/rpg-classes/Quest"
 import { CSSProperties } from "react"
 import { useGame } from "./GameContext"
-import { QuestData } from "@/rpg-classes/Quest"
 
 interface Props {
     close: { (): void }
@@ -24,24 +24,24 @@ const styles = {
     },
 } satisfies Record<string, CSSProperties>
 
-const QuestDisplay = ({ questData }: { questData: QuestData }) => {
+const QuestDisplay = ({ quest }: { quest: Quest }) => {
     const { game } = useGame()
-
+    const { title, description, goals } = quest.data
 
     return (
         <div>
-            <p><b>{questData.title}</b></p>
-            <p>{questData.description}</p>
-            <ul>{questData.goals.map((goal, index) => (
+            <p><b>{title}</b></p>
+            <p>{description}</p>
+            <ul>{goals.map((goal, index) => (
                 <li key={index} >
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: 5,
                     }}>
-                        <span>{goal.data.narrative}</span>
+                        <span>{goal.narrative}</span>
                         <b>
-                            {goal.testComplete(game()) ? '☑' : '☐'}
+                            {Quest.testGoalComplete(goal, game()) ? '☑' : '☐'}
                         </b>
                     </div>
                 </li>
@@ -62,7 +62,7 @@ export const QuestScreen = ({ close }: Props) => {
         </header>
         <section style={{ gridArea: 'b' }}>
             {takenQuests?.map((quest, index) => (
-                <QuestDisplay key={index} questData={quest.data} />
+                <QuestDisplay key={index} quest={quest} />
             ))}
         </section>
     </article>

@@ -1,45 +1,8 @@
 import { Game } from "@/game-classes/Game"
 import { Intersitial } from "@/game-classes/Intersitial"
-import { ItemType } from "@/game-classes/ItemType"
-import { Level } from "@/game-classes/Level"
 import { Monster } from "./Monster"
 import { NonPlayerCharacter } from "./NonPlayerCharacter"
 
-
-interface QuestGoalData {
-    narrative: string
-    haveItem?: ItemType
-    allMonstersKilled?: Level
-}
-
-class QuestGoal {
-    data: QuestGoalData
-    constructor(data: QuestGoalData) {
-        this.data = data
-    }
-
-    testComplete(game: Game): boolean {
-
-        const { haveItem, allMonstersKilled } = this.data
-
-        if (haveItem && game.data.itemInHand?.itemType !== haveItem) {
-            return false
-        }
-
-        if (allMonstersKilled && game.data.levels.includes(allMonstersKilled)) {
-            const { actors = [] } = allMonstersKilled.data
-            const areLiveMonsters = actors
-                .filter(actor => actor.isMonster)
-                .find(monster => !(monster as Monster).data.stats.isDead)
-
-            if (areLiveMonsters) {
-                return false
-            }
-        }
-
-        return true
-    }
-}
 
 interface QuestData {
     state: "NOT_TAKEN" | "TAKEN" | "SUCCESS" | "FAIL"
@@ -47,10 +10,18 @@ interface QuestData {
     description: string
     id: string
 
-    itemsGivenOnAccept?: ItemType[]
-    itemsGivenOnComplete?: ItemType[]
+    itemsGivenOnAccept?: string[]
+    itemsGivenOnComplete?: string[]
     goals: QuestGoal[]
 }
+
+
+interface QuestGoal {
+    narrative: string
+    haveItem?: string
+    allMonstersKilled?: string
+}
+
 
 class Quest {
     data: QuestData
@@ -59,8 +30,12 @@ class Quest {
         this.data = data
     }
 
+    serialise() {
+        return this.data
+    }
+
     checkIfFinished(game: Game): boolean {
-        return !this.data.goals.find(goal => !goal.testComplete(game))
+        return this.data.goals.every(goal => Quest.testGoalComplete(goal, game))
     }
 
     markComplete(): Quest {
@@ -127,6 +102,29 @@ class Quest {
             pausesTime: true
         })
     }
+
+    static testGoalComplete(goal: QuestGoal, game: Game) {
+        const { haveItem, allMonstersKilled } = goal
+        if (haveItem && game.data.itemInHand?.itemType.id !== haveItem) {
+            return false
+        }
+        if (allMonstersKilled) {
+            const level = game.data.levels.find(level => level.id === allMonstersKilled)
+            if (!level) {
+                console.error('no such level', allMonstersKilled, game.data.levels.map(l => l.id))
+            } else {
+                const { actors = [] } = level.data
+                const areLiveMonsters = actors
+                    .filter(actor => actor.isMonster)
+                    .find(monster => !(monster as Monster).data.stats.isDead)
+
+                if (areLiveMonsters) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
 }
 
 interface QuestHookData {
@@ -146,4 +144,5 @@ class QuestHook {
 }
 
 
-export { Quest, QuestData, QuestHook, QuestHookData, QuestGoalData, QuestGoal }
+export { Quest, QuestData, QuestHook, QuestHookData }
+

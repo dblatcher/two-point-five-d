@@ -44,6 +44,7 @@ interface GameConfig {
 interface GameImmutables {
     spriteSheets: SpriteSheet[]
     sprites: SpriteConfig[]
+    itemTypeRecord: Record<string, ItemType>
 }
 
 interface GameRules {
@@ -63,8 +64,8 @@ class Game {
     data: GameConfig
     immutables: GameImmutables
     rules: GameRules
-    queuedPlayerActions: Action[]
 
+    queuedPlayerActions: Action[]
     tickCount: number
     pointerLocator: PointerLocator
     debugElement?: HTMLElement
@@ -327,7 +328,12 @@ class Game {
         }
     }
 
-    createItemInfrontOfPlayer(itemType: ItemType, distanceRightOfCenter = 0, dropHeight = 0): void {
+    createItemInfrontOfPlayer(itemTypeId: string, distanceRightOfCenter = 0, dropHeight = 0): void {
+        const itemType = this.immutables.itemTypeRecord[itemTypeId]
+        if (!itemType) {
+            console.error('no such item', itemTypeId, Object.keys(this.immutables.itemTypeRecord))
+            return
+        }
         const { playerVantage } = this.data
         const { direction, data: { x, y } } = playerVantage
         const inFrontOfPlayer = {
@@ -341,7 +347,10 @@ class Game {
         this.data.level.data.items.push(
             Item.ofType(
                 itemType,
-                { vantage: new Vantage({ ...inFrontOfPlayer, direction: direction.name }), altitude: dropHeight }
+                {
+                    vantage: new Vantage({ ...inFrontOfPlayer, direction: direction.name }),
+                    altitude: dropHeight
+                }
             )
         )
     }

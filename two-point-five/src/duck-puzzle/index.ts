@@ -1,10 +1,10 @@
 
 import { Game } from "@/game-classes/Game";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
-
 import { spriteSheets as sharedSheets } from "@/instances/sprites";
 import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels";
 import { spriteSheets as localSheets, sprites } from "./sprites";
+import { itemTypes } from "./itemTypes";
 
 const spriteSheets = [
     ...sharedSheets,
@@ -28,6 +28,7 @@ const game = new Game({
 }, {
     spriteSheets,
     sprites: Object.values(sprites).map(sprite => sprite.data),
+    itemTypeRecord: itemTypes,
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,

@@ -39,6 +39,7 @@ class ItemType {
         this.data = config
     }
 
+    get id(): string { return this.data.id }
     get name(): string { return this.data.name ?? this.data.id }
     get backgroundColor(): Color { return this.data.backgroundColor || Color.TRANSPARENT }
     get isConsumable(): boolean { return !!this.data.consumable }

@@ -14,6 +14,7 @@ import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
 import { vaultDoorway } from "@/instances/wallShapes";
 import { spriteSheets as gSpriteSheets, sprites as gSprites } from "@/travels-in-generica/sprites";
+import { itemTypes } from "@/instances/itemTypes";
 
 const spriteSheets = [
     ...sharedSpriteSheets,
@@ -31,6 +32,7 @@ const features = {
 
 const levels = [
     new Level({
+        id:'test-level',
         height: 10,
         width: 10,
         walls: [
@@ -74,7 +76,7 @@ const game = new Game(
     {
         spriteSheets,
         sprites: Object.values(sprites).map(sprite => sprite.data),
-
+        itemTypeRecord: itemTypes,
     },
     { noCharacters: true }
 )

@@ -2,7 +2,7 @@ import { Game } from "@/game-classes/Game";
 import { PlayerVantage } from "@/game-classes/PlayerVantage";
 
 import { spriteSheets as sharedSheets, sprites as sharedSprites } from "@/instances/sprites";
-import { Quest, QuestGoal } from "@/rpg-classes/Quest";
+import { Quest } from "@/rpg-classes/Quest";
 import { characters } from "./characters";
 import { itemTypes } from "./itemTypes";
 import { level1 } from "./level1";
@@ -26,17 +26,17 @@ const questOne = new Quest({
     title: "Purge the crypt",
     description: "clear the crypt of Saint Bernard's chapel of undead and report back to Father Dunlaw.",
     itemsGivenOnAccept: [
-        itemTypes.key,
-        itemTypes.apple,
+        itemTypes.key.id,
+        itemTypes.apple.id,
     ],
     itemsGivenOnComplete: [
-        itemTypes.silverSword
+        itemTypes.silverSword.id
     ],
     goals: [
-        new QuestGoal({
+        {
             narrative: "destroy skeletons",
-            allMonstersKilled: level2
-        }),
+            allMonstersKilled: level2.id
+        },
     ]
 })
 
@@ -57,6 +57,7 @@ const game = new Game({
         ...Object.values(sharedSprites).map(sprite => sprite.data),
         ...Object.values(sprites).map(sprite => sprite.data)
     ],
+    itemTypeRecord: itemTypes,
 }, {
     needCharacterToPickUpItems: true,
     playerBlocksPassage: true,

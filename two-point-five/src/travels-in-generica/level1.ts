@@ -45,6 +45,7 @@ hut3.walls[0].data.featureIds = ["torch"]
 
 
 const level1: Level = new Level({
+    id:'level1',
     height: 10, width: 15,
     startingVantage: { x: 3, y: 7, direction: 'NORTH' },
 

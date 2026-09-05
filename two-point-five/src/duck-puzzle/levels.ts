@@ -15,7 +15,7 @@ import { Item } from "@/game-classes/Item";
 import { duck } from "@/duck-puzzle/figureFactory";
 import { sprites } from "@/instances/sprites";
 
-import * as itemTypes from "./itemTypes";
+import { itemTypes } from "./itemTypes";
 import { areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
 import { makeSign, lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed } from "./features";
 
@@ -28,6 +28,7 @@ const features = {
 }
 
 const duckPuzzleLevel1 = new Level({
+    id: "duckPuzzleLevel1",
     height: 6,
     width: 8,
     startingVantage: {
@@ -86,6 +87,7 @@ const duckPuzzleLevel1 = new Level({
 }).withWallsAround()
 
 const duckPuzzleLevel2 = new Level({
+    id: 'duckPuzzleLevel2',
     height: 6,
     width: 6,
     features,
@@ -136,6 +138,7 @@ const duckPuzzleLevel2 = new Level({
 }).withWallsAround()
 
 const duckPuzzleLevel3 = new Level({
+    id: 'duckPuzzleLevel3',
     height: 7,
     width: 7,
     features,

@@ -59,6 +59,7 @@ const features = {
 }
 
 const level2: Level = new Level({
+    id: 'level2',
     height: 10, width: 12,
     features,
     sky: new Sky({ indoors: true, skyBaseColor: new Color(60, 60, 25) }),
