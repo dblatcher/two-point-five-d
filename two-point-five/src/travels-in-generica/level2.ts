@@ -175,7 +175,7 @@ const level2: Level = new Level({
 
     ],
     items: [
-        Item.ofType(itemTypes.apple, { vantage: new Vantage({ x: 4.85, y: 4.4, direction: 'NORTH' }) }),
+        Item.ofType(itemTypes.apple, { vantage: { x: 4.85, y: 4.4, direction: 'NORTH' } }),
     ],
     controllers: [
         new Controller({

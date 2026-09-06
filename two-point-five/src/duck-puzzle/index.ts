@@ -1,17 +1,17 @@
 
 import { Game } from "@/game-classes/Game";
-import { PlayerVantage } from "@/game-classes/PlayerVantage";
+import { Level } from "@/game-classes/Level";
 import { spriteSheets as sharedSheets } from "@/instances/sprites";
+import { itemTypes } from "./itemTypes";
 import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels";
 import { spriteSheets as localSheets, sprites } from "./sprites";
-import { itemTypes } from "./itemTypes";
 
 const spriteSheets = [
     ...sharedSheets,
     ...localSheets,
 ];
 
-const levels = [
+const levels:[Level, ...Level[]] = [
     duckPuzzleLevel3,
     duckPuzzleLevel1,
     duckPuzzleLevel2,

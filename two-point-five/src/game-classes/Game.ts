@@ -31,7 +31,7 @@ interface GameConfig {
     playerVantage: PlayerVantage,
     itemInHand?: Item
     level: Level
-    levels: Level[]
+    levels: [Level, ...Level[]]
     controllers: Controller[]
     characters: Character[]
     quests?: Quest[]
@@ -52,7 +52,7 @@ interface GameInputs {
     intersitial?: undefined
 
     level: Level
-    levels: Level[]
+    levels: [Level, ...Level[]]
     narrativeMessages: NarrativeMessage[]
 }
 
@@ -385,7 +385,7 @@ class Game {
             Item.ofType(
                 itemType,
                 {
-                    vantage: new Vantage({ ...inFrontOfPlayer, direction: direction.name }),
+                    vantage: { ...inFrontOfPlayer, direction: direction.name },
                     altitude: dropHeight
                 }
             )

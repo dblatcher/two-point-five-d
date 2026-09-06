@@ -6,13 +6,14 @@ import { itemTypes } from "./itemTypes";
 import { level1 } from "./level1";
 import { level2 } from "./level2";
 import { spriteSheets as localSheets, sprites } from "./sprites";
+import { Level } from "@/game-classes/Level";
 
 const spriteSheets = [
     ...sharedSheets,
     ...localSheets,
 ]
 
-const levels = [
+const levels:[Level, ...Level[]] = [
     level1,
     level2,
 ]

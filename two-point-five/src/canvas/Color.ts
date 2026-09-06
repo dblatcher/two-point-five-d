@@ -1,3 +1,6 @@
+
+export type ColorParams = [number, number, number] | [number, number, number, number]
+
 class Color {
     r: number
     g: number
@@ -10,8 +13,13 @@ class Color {
         this.b = b
         this.a = typeof a === 'number' ? a : 1
     }
+    serialise(): ColorParams {
+        return [
+            this.r, this.g, this.b, this.a
+        ]
+    }
 
-    get css():string {
+    get css(): string {
         const { r, g, b, a } = this
         return `rgba(${r},${g},${b},${a})`
     }
@@ -26,7 +34,7 @@ class Color {
         return new Color(r + amount, g + amount, b + amount, a).normalise()
     }
 
-    opacityAt(amount:number): Color {
+    opacityAt(amount: number): Color {
         const { r, g, b } = this
         return new Color(r, g, b, amount).normalise()
     }
@@ -46,13 +54,13 @@ class Color {
         return this
     }
 
-    static BLACK = new Color(0,0,0);
-    static TRANSPARENT = new Color(0,0,0,0);
-    static RED = new Color(200,40,40);
-    static GREEN = new Color(40,200,40);
-    static BLUE = new Color(40,40,200);
-    static YELLOW = new Color(150,150,40);
-    static GRAY = new Color(100,100,100);
+    static BLACK = new Color(0, 0, 0);
+    static TRANSPARENT = new Color(0, 0, 0, 0);
+    static RED = new Color(200, 40, 40);
+    static GREEN = new Color(40, 200, 40);
+    static BLUE = new Color(40, 40, 200);
+    static YELLOW = new Color(150, 150, 40);
+    static GRAY = new Color(100, 100, 100);
 }
 
 

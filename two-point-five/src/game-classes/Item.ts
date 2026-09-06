@@ -6,7 +6,7 @@ import { Game } from "./Game";
 import { ItemType } from "./ItemType";
 import { Blockage } from "./Level";
 import { Position } from "./Position";
-import { Vantage } from "./Vantage";
+import { Vantage, VantageConfig } from "./Vantage";
 
 
 interface ItemConfig {
@@ -16,16 +16,33 @@ interface ItemConfig {
     momentum?: number
 }
 
+interface ItemInput {
+    vantage?: VantageConfig
+    type: string
+    altitude?: number
+    momentum?: number
+}
+
 class Item {
 
     data: ItemConfig
     itemType: ItemType
-    constructor(config: ItemConfig, itemType: ItemType) {
-        this.data = config
+    constructor(config: ItemInput, itemType: ItemType) {
+        this.data = {
+            ...config,
+            vantage: config.vantage && new Vantage(config.vantage),
+        }
         this.itemType = itemType
     }
 
-    static ofType(itemType: ItemType, config: Omit<ItemConfig, 'type'> & { type?: string } = {}) {
+    serialise(): ItemInput {
+        return {
+            ...this.data,
+            vantage: this.data.vantage?.data
+        }
+    }
+
+    static ofType(itemType: ItemType, config: Omit<ItemInput, 'type'> & { type?: string } = {}) {
         return new Item({
             ...config,
             type: itemType.data.id,

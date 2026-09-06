@@ -45,7 +45,7 @@ hut3.walls[0].data.featureIds = ["torch"]
 
 
 const level1: Level = new Level({
-    id:'level1',
+    id: 'level1',
     height: 10, width: 15,
     startingVantage: { x: 3, y: 7, direction: 'NORTH' },
 
@@ -90,10 +90,10 @@ const level1: Level = new Level({
 
     items: [
         Item.ofType(itemTypes.bardHat, {
-            vantage: new Vantage({ x: 8.2, y: 6.2, direction: 'NORTH' })
+            vantage: { x: 8.2, y: 6.2, direction: 'NORTH' }
         }),
         Item.ofType(itemTypes.helmet, {
-            vantage: new Vantage({ x: 5.5, y: 4.5, direction: 'NORTH' })
+            vantage: { x: 5.5, y: 4.5, direction: 'NORTH' }
         }),
     ],
 

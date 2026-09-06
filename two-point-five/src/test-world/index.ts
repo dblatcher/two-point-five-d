@@ -28,7 +28,7 @@ const features = {
     redCeiling: new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } }),
 }
 
-const levels = [
+const levels:[Level, ...Level[]] = [
     new Level({
         id: 'test-level',
         height: 10,

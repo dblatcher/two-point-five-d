@@ -39,9 +39,13 @@ interface LevelConfig {
     width: number
     height: number
     defaultWallPattern?: string
+    victoryMessage?: string
+    
     floorColor?: Color
+    startingVantage?: VantageConfig
     sky?: Sky
-
+    controllers?: Controller[]
+    
     walls: Wall[]
     squaresWithFeatures?: SquareWithFeatures[]
     items: Item[]
@@ -49,10 +53,7 @@ interface LevelConfig {
     staticFigures?: Figure[]
     features?: { [index: string]: AbstractFeature }
 
-    controllers?: Controller[]
     victoryCondition?: VictoryTest
-    victoryMessage?: string
-    startingVantage?: VantageConfig
 }
 
 
