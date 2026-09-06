@@ -25,7 +25,7 @@ class Intersitial {
     }
 
     static goToNextLevel(game: Game): void {
-        const levelIndex = game.data.levels.indexOf(game.data.level);
+        const levelIndex = game.data.levels.indexOf(game.currentLevel);
         const nextLevel = game.data.levels[levelIndex + 1]
         game.changeLevel(levelIndex + 1, new PlayerVantage(nextLevel.data.startingVantage || { x: 0, y: 0, direction: 'SOUTH' }))
     }

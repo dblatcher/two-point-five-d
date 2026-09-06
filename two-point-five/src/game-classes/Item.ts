@@ -69,7 +69,7 @@ class Item {
     }
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {
-        const { items } = game.data.level.data;
+        const { items } = game.currentLevel.data;
         if (!game.data.itemInHand) {
             this.takeIntoHand(items, game)
         }
@@ -94,7 +94,7 @@ class Item {
         this.data.vantage = new Vantage({
             ...position.data, direction: direction.name
         })
-        game.data.level.data.items.push(this)
+        game.currentLevel.data.items.push(this)
     }
 
     launch(pointInBackOfScreen: Point, vantage: Vantage, game: Game): void {
@@ -130,7 +130,7 @@ class Item {
         })
         this.data.altitude = .5
         this.data.momentum = 10
-        game.data.level.data.items.push(this)
+        game.currentLevel.data.items.push(this)
     }
 
     flyThroughAir(game: Game): void {

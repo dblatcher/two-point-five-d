@@ -49,7 +49,7 @@ const sheets: { [index: string]: SpriteSheet } = {
 const spriteSheets = Object.keys(sheets).map(key => sheets[key])
 
 const dinoSprite = new Sprite({
-    id: "DINOSAUR",
+    id: "dinoSprite",
     baseline: .25,
     shadow: { x: 1 / 6, y: 1 / 24 },
     transforms: ["CROP_BASE"],
@@ -95,7 +95,7 @@ const dinoSprite = new Sprite({
 
 
 const testSprite = new Sprite({
-    id: "TEST_CARD",
+    id: "testSprite",
     baseline: 0,
     shadow: { x: 1 / 3, y: 1 / 12 },
     animations: {
@@ -115,7 +115,7 @@ const testSprite = new Sprite({
 })
 
 const leverSprite = new Sprite({
-    id: "LEVER",
+    id: "leverSprite",
     size: { x: .5, y: .3 },
     animations: {
         ["OFF"]: [
@@ -140,7 +140,7 @@ const leverSprite = new Sprite({
 })
 
 const buttonSprite = new Sprite({
-    id: "BUTTON",
+    id: "buttonSprite",
     size: { x: .4, y: .4 },
     offset: { x: .3, y: .4 },
     animations: {
@@ -151,7 +151,7 @@ const buttonSprite = new Sprite({
 })
 
 const smallButtonSprite = new Sprite({
-    id: "SMALL_BUTTON",
+    id: "smallButtonSprite",
     size: { x: .25, y: .25 },
     offset: { x: .03, y: .4 },
     animations: {
@@ -162,7 +162,7 @@ const smallButtonSprite = new Sprite({
 })
 
 const doorSprite = new Sprite({
-    id: "DOOR",
+    id: "doorSprite",
     size: { x: .8, y: .9 },
     offset: { x: .5, y: .55 },
     animations:

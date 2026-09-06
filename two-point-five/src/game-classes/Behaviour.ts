@@ -19,7 +19,7 @@ function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action |
     })
 
     if (actor.currentAction) { return null }
-    else if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
+    else if (game.currentLevel.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
         return new WalkForward();
@@ -36,7 +36,7 @@ function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Acti
     })
 
     if (actor.currentAction) { return null }
-    else if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
+    else if (game.currentLevel.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
         return new WalkForward();
@@ -53,7 +53,7 @@ function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Act
     })
 
     if (actor.currentAction) { return null }
-    else if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
+    else if (game.currentLevel.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.BACK)
     } else {
         return new WalkForward(1,.05,false);
@@ -87,7 +87,7 @@ function walkInCircle(actor: Actor, game: Game, behaviour: Behaviour): Action | 
     if (behaviour.history[0]?.action === "WALK_FORWARD") {
         return new MovementAction("TURN", RelativeDirection.RIGHT)
     } else {
-        if (game.data.level.isBlocked(...vantage.coords, ...vantage.translate(vantage.direction).coords, actor, game)) {
+        if (game.currentLevel.isBlocked(...vantage.coords, ...vantage.translate(vantage.direction).coords, actor, game)) {
             return new DoAction('STAND', 8);
         } else {
             return new WalkForward(1.5, .06);

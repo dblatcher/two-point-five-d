@@ -1,20 +1,25 @@
 
 import { Game } from "@/game-classes/Game";
 import { Level } from "@/game-classes/Level";
-import { spriteSheets as sharedSheets } from "@/instances/sprites";
+import { spriteSheets as sharedSheets, sprites as sharedSprites } from "@/instances/sprites";
 import { itemTypes } from "./itemTypes";
 import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels";
-import { spriteSheets as localSheets, sprites } from "./sprites";
+import { spriteSheets as duckPuzzleSheets, duckPuzzleSprites } from "./sprites";
 
-const spriteSheets = [
+const allSpriteSheets = [
     ...sharedSheets,
-    ...localSheets,
+    ...duckPuzzleSheets,
 ];
 
+const allSprites = {
+    ...sharedSprites,
+    ...duckPuzzleSprites,
+}
+
 const levels:[Level, ...Level[]] = [
-    duckPuzzleLevel3,
     duckPuzzleLevel1,
     duckPuzzleLevel2,
+    duckPuzzleLevel3,
 ]
 
 const game = new Game({
@@ -26,13 +31,13 @@ const game = new Game({
     characters: [],
     narrativeMessages: [],
 }, {
-    spriteSheets,
-    sprites: Object.values(sprites).map(sprite => sprite.data),
+    spriteSheets: allSpriteSheets,
+    sprites: Object.values(allSprites).map(sprite => sprite.data),
     itemTypeRecord: itemTypes,
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,
 })
 
-export { game, spriteSheets };
+export { game, allSpriteSheets as spriteSheets };
 

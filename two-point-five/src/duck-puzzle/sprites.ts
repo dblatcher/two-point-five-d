@@ -115,7 +115,7 @@ const weight = Sprite.itemSpriteDirectional({
 
 const weightIcon = Sprite.itemSpriteOneFrame({ sheet: sheets.weight.id, row: 0, col: 0, }, { id: "WEIGHT_ICON", })
 
-const sprites = {
+const duckPuzzleSprites = {
     brickWall: Sprite.patternSprite(sheets.bricks.id, { id: "BRICK_WALL" }),
     duckPattern: Sprite.patternSprite(sheets.duck_side.id, { id: "DUCK_PATTERN" }),
     windowWall: Sprite.patternSprite(sheets.window.id, { id: "WINDOW" }),
@@ -125,5 +125,5 @@ const sprites = {
 
 
 export {
-    sprites, spriteSheets
+    duckPuzzleSprites, spriteSheets
 };

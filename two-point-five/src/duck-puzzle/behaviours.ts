@@ -5,7 +5,7 @@ import { FloorFeature } from "@/game-classes/FloorFeature";
 import { Game } from "@/game-classes/Game";
 import { Level } from "@/game-classes/Level";
 import { RelativeDirection } from "@/game-classes/RelativeDirection";
-import { sprites as mySprites } from "./sprites";
+import { duckPuzzleSprites as mySprites } from "./sprites";
 
 const starOnFloor: [number, number][] = [
     [0, 0.5],
@@ -29,7 +29,7 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Beha
     const { vantage } = actor.data;
     if (!vantage) return null
 
-    const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
+    const squareWithStar = (game.currentLevel.data.squaresWithFeatures || [])
         .find(square => {
             return square.floorFeatures.includes(blueStar)
         })
@@ -46,7 +46,7 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Beha
         y: vantage.direction.y * howCloseToGet,
     })
 
-    if (game.data.level.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
+    if (game.currentLevel.isBlocked(...vantage.coords, ...whereToLookForBlockage.coords, actor, game)) {
         return new MovementAction("TURN", RelativeDirection.LEFT)
     } else {
         return new MovementByAction(distanceToMove, RelativeDirection.FORWARD)
@@ -56,10 +56,10 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Beha
 const areAllDucksOnTheStar = (level: Level, game: Game):boolean => {
 
     const ducks: Actor[] = (level.data.actors || [])
-        .filter(npc => npc.sprite === mySprites.duckSprite)
+        .filter(npc => npc.sprite?.id === mySprites.duckSprite.id)
         .filter(npc => npc.data.vantage)
 
-    const squareWithStar = (game.data.level.data.squaresWithFeatures || [])
+    const squareWithStar = (game.currentLevel.data.squaresWithFeatures || [])
         .find(square => {
             return square.floorFeatures.includes(blueStar)
         })

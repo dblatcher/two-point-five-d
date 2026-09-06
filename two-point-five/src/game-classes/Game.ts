@@ -124,8 +124,7 @@ class Game {
             narrativeMessages: config.narrativeMessages.map(data => new NarrativeMessage(data))
         };
 
-        this.data.level.provideSprites(this.spriteRecord)
-
+        this.currentLevel.provideSprites(this.spriteRecord)
         this.setActiveCharacter(config.activeCharacterIndex);
     }
 
@@ -150,6 +149,10 @@ class Game {
 
     async loadImages() {
         return SpriteSheet.loadAll(this.immutables.spriteSheets)
+    }
+
+    get currentLevel(): Level {
+        return this.data.level
     }
 
     get activeCharacter(): Character | null {
@@ -218,14 +221,14 @@ class Game {
         const startTime = Date.now();
 
         this.tickCount++;
-        this.data.level.tickCount = this.tickCount
+        this.currentLevel.tickCount = this.tickCount
         this.featuresTriggeredThisTick = []
 
         const {
             walls = [], items = [], squaresWithFeatures = [], actors = [],
             victoryCondition,
             controllers: levelControllers = []
-        } = this.data.level.data;
+        } = this.currentLevel.data;
 
         const allControllers = [...this.data.controllers, ...levelControllers];
 
@@ -288,8 +291,8 @@ class Game {
             controller.reactToInputStatus()
         })
 
-        if (victoryCondition && victoryCondition(this.data.level, this)) {
-            this.handleVictory(this.data.level)
+        if (victoryCondition && victoryCondition(this.currentLevel, this)) {
+            this.handleVictory(this.currentLevel)
         }
 
         const endTime = Date.now()
@@ -383,7 +386,7 @@ class Game {
         inFrontOfPlayer.x += (distanceRightOfCenter * direction.rightOf.x)
         inFrontOfPlayer.y += (distanceRightOfCenter * direction.rightOf.y)
 
-        this.data.level.data.items.push(
+        this.currentLevel.data.items.push(
             Item.ofType(
                 itemType,
                 {

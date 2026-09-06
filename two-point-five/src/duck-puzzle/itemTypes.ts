@@ -1,8 +1,8 @@
 
 import { ItemType } from '@/game-classes/ItemType'
-import { sprites } from './sprites'
+import { duckPuzzleSprites } from './sprites'
 
-const weight = new ItemType({ id: "weight", sprite: sprites.weight, iconSprite: sprites.weightIcon })
+const weight = new ItemType({ id: "weight", sprite: duckPuzzleSprites.weight, iconSprite: duckPuzzleSprites.weightIcon })
 
 export const itemTypes = {
     weight

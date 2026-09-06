@@ -45,7 +45,7 @@ export const MapScreen = ({ close }: Props) => {
             return
         }
         const gameInstance = game();
-        gameInstance.data.level.drawAsMap(mapCanvas, gameData.playerVantage, 25)
+        gameInstance.currentLevel.drawAsMap(mapCanvas, gameData.playerVantage, 25)
     }, [mapCanvas, gameData])
 
     return <article style={styles.frame}>

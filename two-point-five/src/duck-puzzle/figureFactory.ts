@@ -1,4 +1,4 @@
-import { sprites } from './sprites'
+import { duckPuzzleSprites } from './sprites'
 import { Behaviour } from '../game-classes/Behaviour';
 import { Direction } from "../game-classes/Direction";
 import { Actor } from '@/game-classes/Actor';
@@ -18,7 +18,7 @@ function duck(config: DuckConfig): Actor {
 
     return new Actor({
         vantage: new Vantage({ x, y, direction: direction.name }),
-        spriteId: sprites.duckSprite.data.id,
+        spriteId: duckPuzzleSprites.duckSprite.data.id,
         behaviour,
         height: .5, width: .5
     })

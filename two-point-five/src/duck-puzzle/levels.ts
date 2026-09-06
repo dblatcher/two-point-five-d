@@ -1,23 +1,22 @@
 import { Color } from "@/canvas/Color";
 
-import { FloorFeature } from "@/game-classes/FloorFeature";
 import { Behaviour } from "@/game-classes/Behaviour";
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
+import { Controller } from "@/game-classes/Controller";
 import { Direction } from "@/game-classes/Direction";
+import { FloorFeature } from "@/game-classes/FloorFeature";
+import { Item } from "@/game-classes/Item";
 import { Level } from "@/game-classes/Level";
-import { Vantage } from "@/game-classes/Vantage";
+import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Wall } from "@/game-classes/Wall";
 import { doorway, lowWall } from "../instances/wallShapes";
-import { Controller } from "@/game-classes/Controller";
-import { Item } from "@/game-classes/Item";
 
 
 import { duck } from "@/duck-puzzle/figureFactory";
 import { sprites } from "@/instances/sprites";
 
-import { itemTypes } from "./itemTypes";
 import { areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
-import { makeSign, lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed } from "./features";
+import { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed } from "./features";
+import { itemTypes } from "./itemTypes";
 
 
 const hintForLevel1 = makeSign(["Help the duck", "reach the", "blue star!",])
@@ -124,7 +123,7 @@ const duckPuzzleLevel2 = new Level({
         Item.ofType(
             itemTypes.weight,
             {
-                vantage: new Vantage({ x: 4.5, y: 3.75, direction: 'NORTH' })
+                vantage: { x: 4.5, y: 3.75, direction: 'NORTH' }
             }),
     ],
     controllers: [
@@ -204,4 +203,4 @@ const duckPuzzleLevel3 = new Level({
     victoryMessage: "Something something ducks!"
 }).withWallsAround()
 
-export { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 }
+export { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 };

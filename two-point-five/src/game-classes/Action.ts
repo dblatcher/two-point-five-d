@@ -186,12 +186,12 @@ class WalkForward extends Action {
 
 
             if (stubborn) { // will only cancel if blocked by wall
-                if (game.data.level.hasSquareAheadBlockedByWall(location)) {
+                if (game.currentLevel.hasSquareAheadBlockedByWall(location)) {
                     this.shouldCancel = true
                     return
                 }
             } else { //will cancel if blocked by other anything, including other actors
-                const blockage = game.data.level.findBlockage(...location.coords, ...location.translate(location.direction).coords, actor, game)
+                const blockage = game.currentLevel.findBlockage(...location.coords, ...location.translate(location.direction).coords, actor, game)
                 if (blockage) {
                     this.shouldCancel = true
                     return

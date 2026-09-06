@@ -65,7 +65,7 @@ class Position {
         const targetY = this.gridY + (direction.y);
 
         if (!ignoreWalls) {
-            const blockage = game.data.level.findBlockage(this.gridX, this.gridY, targetX, targetY, this, game);
+            const blockage = game.currentLevel.findBlockage(this.gridX, this.gridY, targetX, targetY, this, game);
             if (blockage) { return blockage }
         }
 
@@ -95,7 +95,7 @@ class Position {
             let i = 0;
             let blockage;
             for (i = 0; i < squaresCovered.length - 1; i++) {
-                blockage = (game.data.level.findBlockage(
+                blockage = (game.currentLevel.findBlockage(
                     squaresCovered[i].gridX, squaresCovered[i].gridY,
                     squaresCovered[i + 1].gridX, squaresCovered[i + 1].gridY,
                     this, game
