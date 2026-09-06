@@ -1,5 +1,6 @@
 // import './App.css'
-import { game } from '@/duck-puzzle'
+// import { game } from '@/duck-puzzle'
+import { game } from '@/travels-in-generica'
 import { GameContext } from './components/GameContext'
 import { RpgGameLayout } from './components/RpgGameLayout'
 import { useGameRunner } from './useGameRunner'

@@ -36,8 +36,8 @@ interface GameConfig {
     activeCharacterIndex: number | undefined
     intersitial?: Intersitial
     narrativeMessages: NarrativeMessage[]
+    levelIndex: number
 
-    level: Level
     levels: [Level, ...Level[]]
 }
 
@@ -50,8 +50,8 @@ interface GameInputs {
     controllers: ControllerData[]
     intersitial?: undefined
     narrativeMessages: NarrativeMessageData[]
+    levelIndex?: number
 
-    level: Level
     levels: [Level, ...Level[]]
 }
 
@@ -118,6 +118,7 @@ class Game {
             ...config,
             playerVantage: new PlayerVantage(config.playerVantage),
             itemInHand,
+            levelIndex: config.levelIndex ?? 0,
             characters: config.characters.map(input => new Character(input, immutables.itemTypeRecord)),
             quests: config.quests?.map(data => new Quest(data)),
             controllers: config.controllers.map(data => new Controller(data)),
@@ -152,7 +153,8 @@ class Game {
     }
 
     get currentLevel(): Level {
-        return this.data.level
+        const {levels, levelIndex} = this.data
+        return levels[levelIndex] ?? levels[0]
     }
 
     get activeCharacter(): Character | null {
@@ -182,7 +184,7 @@ class Game {
     }
 
     get figureMaps(): FigureMap[] {
-        const { items = [], actors = [] } = this.data.level.data
+        const { items = [], actors = [] } = this.currentLevel.data
         const output: FigureMap[] = [];
         items.forEach(item => {
             if (item.figure) {
@@ -203,8 +205,8 @@ class Game {
         viewWidth?: number,
         viewHeight?: number
     ): void {
-        const { playerVantage, level } = this.data;
-        level.drawAsSight(
+        const { playerVantage } = this.data;
+        this.currentLevel.drawAsSight(
             this.spriteRecord,
             this.spriteSheetMap,
             canvas,
@@ -345,7 +347,7 @@ class Game {
             return
         }
         newLevel.provideSprites(this.spriteRecord)
-        this.data.level = newLevel;
+        this.data.levelIndex = levelIndex
         playerVantage.data.direction = vantage.data.direction
         playerVantage.data.x = vantage.data.x
         playerVantage.data.y = vantage.data.y
@@ -398,7 +400,8 @@ class Game {
     }
 
     handleSightClick(clickInfo: { x: number, y: number }): void {
-        const { level, playerVantage, itemInHand } = this.data
+        const { playerVantage, itemInHand } = this.data
+        const level = this.currentLevel
         const { needCharacterToPickUpItems = false } = this.rules
         const { pointerLocator, activeCharacter } = this
         const { walls } = level.data
@@ -543,7 +546,8 @@ class Game {
 
     handleAttackButton(clickInfo: { character: Character, option: AttackOption }): FeedbackToUI {
         const { character, option } = clickInfo
-        const { playerVantage, level } = this.data
+        const { playerVantage } = this.data
+        const level = this.currentLevel
         const squareAheadIsBlocked = level.hasSquareAheadBlockedByWall(playerVantage)
         const { actors = [] } = level.data
 
