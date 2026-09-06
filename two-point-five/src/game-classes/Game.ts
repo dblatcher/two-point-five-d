@@ -30,15 +30,15 @@ const ticksPerMinute = 60
 interface GameConfig {
     playerVantage: PlayerVantage,
     itemInHand?: Item
-    level: Level
-    levels: [Level, ...Level[]]
     controllers: Controller[]
     characters: Character[]
     quests?: Quest[]
     activeCharacterIndex: number | undefined
     intersitial?: Intersitial
-    gameCompleteMessage?: string
     narrativeMessages: NarrativeMessage[]
+
+    level: Level
+    levels: [Level, ...Level[]]
 }
 
 interface GameInputs {
@@ -46,20 +46,20 @@ interface GameInputs {
     characters: CharacterInput[]
     activeCharacterIndex: number | undefined
     quests?: QuestData[]
-    gameCompleteMessage?: string // move to immutables?
     playerVantage: VantageConfig,
     controllers: ControllerData[]
     intersitial?: undefined
+    narrativeMessages: NarrativeMessageData[]
 
     level: Level
     levels: [Level, ...Level[]]
-    narrativeMessages: NarrativeMessage[]
 }
 
 interface GameImmutables {
     spriteSheets: SpriteSheet[]
     sprites: SpriteConfig[]
     itemTypeRecord: Record<string, ItemType>
+    gameCompleteMessage?: string
 }
 
 interface GameRules {
@@ -120,7 +120,8 @@ class Game {
             itemInHand,
             characters: config.characters.map(input => new Character(input, immutables.itemTypeRecord)),
             quests: config.quests?.map(data => new Quest(data)),
-            controllers: config.controllers.map(data => new Controller(data))
+            controllers: config.controllers.map(data => new Controller(data)),
+            narrativeMessages: config.narrativeMessages.map(data => new NarrativeMessage(data))
         };
 
         this.data.level.provideSprites(this.spriteRecord)
@@ -137,6 +138,7 @@ class Game {
             characters: this.data.characters.map(character => character.serialise()),
             quests: this.data.quests?.map(quest => quest.serialise()),
             controllers: this.data.controllers.map(controller => controller.data),
+            narrativeMessages: this.data.narrativeMessages.map(message => message.data)
         }
     }
 
@@ -313,7 +315,7 @@ class Game {
         } else {
             this.data.intersitial = new Intersitial({
                 role: 'END_OF_GAME',
-                content: this.data.gameCompleteMessage || 'Game complete.',
+                content: this.immutables.gameCompleteMessage || 'Game complete.',
                 options: [
                 ]
             })
