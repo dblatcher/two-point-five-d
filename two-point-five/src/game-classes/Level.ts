@@ -56,6 +56,8 @@ interface LevelConfig {
     victoryCondition?: VictoryTest
 }
 
+export type LevelInput = LevelConfig
+
 
 class Level {
 

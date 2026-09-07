@@ -1,5 +1,5 @@
 import { Game } from "@/game-classes/Game";
-import { Level } from "@/game-classes/Level";
+import { Level, LevelInput } from "@/game-classes/Level";
 import { Wall } from "@/game-classes/Wall";
 
 import { Color } from "@/canvas/Color";
@@ -13,6 +13,7 @@ import { itemTypes } from "@/instances/itemTypes";
 import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
 import { vaultDoorway } from "@/instances/wallShapes";
 import { spriteSheets as gSpriteSheets, sprites as gSprites } from "@/travels-in-generica/sprites";
+import { NonEmptyArray } from "@/types";
 
 const spriteSheets = [
     ...sharedSpriteSheets,
@@ -28,8 +29,8 @@ const features = {
     redCeiling: new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } }),
 }
 
-const levels: [Level, ...Level[]] = [
-    new Level({
+const levels: NonEmptyArray<LevelInput> = [
+    {
         id: 'test-level',
         height: 10,
         width: 10,
@@ -58,13 +59,13 @@ const levels: [Level, ...Level[]] = [
                 ]
             })
         ]
-    })
+    }
 ]
 
 const game = new Game(
     {
         levels: levels,
-        playerVantage: levels[0].data.startingVantage || { x: 7, y: 0, direction: 'SOUTH' },
+        playerVantage: levels[0].startingVantage || { x: 7, y: 0, direction: 'SOUTH' },
         controllers: [],
         characters: [],
         activeCharacterIndex: undefined,

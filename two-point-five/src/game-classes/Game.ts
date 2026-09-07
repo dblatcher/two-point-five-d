@@ -1,4 +1,4 @@
-import { Level } from './Level'
+import { Level, LevelInput } from './Level'
 import { Action, InterAction, MovementAction, NpcInterAction } from './Action'
 import { Figure } from './Figure'
 import { PointerLocator } from './PointerLocator'
@@ -21,6 +21,7 @@ import { ItemType } from './ItemType'
 import { SpriteSheet } from '@/canvas/SpriteSheet'
 import { Sprite, SpriteConfig } from '@/canvas/Sprite'
 import { FeedbackToUI } from './FeebackToUi'
+import { NonEmptyArray } from '@/types'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -38,7 +39,7 @@ interface GameConfig {
     narrativeMessages: NarrativeMessage[]
     levelIndex: number
 
-    levels: [Level, ...Level[]]
+    levels: NonEmptyArray<Level>
 }
 
 interface GameInputs {
@@ -52,7 +53,7 @@ interface GameInputs {
     narrativeMessages: NarrativeMessageData[]
     levelIndex?: number
 
-    levels: [Level, ...Level[]]
+    levels: NonEmptyArray<LevelInput>
 }
 
 interface GameImmutables {
@@ -122,7 +123,8 @@ class Game {
             characters: config.characters.map(input => new Character(input, immutables.itemTypeRecord)),
             quests: config.quests?.map(data => new Quest(data)),
             controllers: config.controllers.map(data => new Controller(data)),
-            narrativeMessages: config.narrativeMessages.map(data => new NarrativeMessage(data))
+            narrativeMessages: config.narrativeMessages.map(data => new NarrativeMessage(data)),
+            levels: config.levels.map(data => new Level(data)) as NonEmptyArray<Level>
         };
 
         this.currentLevel.provideSprites(this.spriteRecord)
@@ -138,7 +140,8 @@ class Game {
             characters: this.data.characters.map(character => character.serialise()),
             quests: this.data.quests?.map(quest => quest.serialise()),
             controllers: this.data.controllers.map(controller => controller.data),
-            narrativeMessages: this.data.narrativeMessages.map(message => message.data)
+            narrativeMessages: this.data.narrativeMessages.map(message => message.data),
+            levels: this.data.levels.map(level => level.data) as NonEmptyArray<LevelInput>
         }
     }
 
@@ -153,7 +156,7 @@ class Game {
     }
 
     get currentLevel(): Level {
-        const {levels, levelIndex} = this.data
+        const { levels, levelIndex } = this.data
         return levels[levelIndex] ?? levels[0]
     }
 

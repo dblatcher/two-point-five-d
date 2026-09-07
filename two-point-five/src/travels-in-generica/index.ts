@@ -1,21 +1,22 @@
 import { Game } from "@/game-classes/Game";
+import { LevelInput } from "@/game-classes/Level";
 import { spriteSheets as sharedSheets, sprites as sharedSprites } from "@/instances/sprites";
 import { QuestData } from "@/rpg-classes/Quest";
+import { NonEmptyArray } from "@/types";
 import { characters } from "./characters";
 import { itemTypes } from "./itemTypes";
 import { level1 } from "./level1";
 import { level2 } from "./level2";
 import { spriteSheets as localSheets, sprites } from "./sprites";
-import { Level } from "@/game-classes/Level";
 
 const spriteSheets = [
     ...sharedSheets,
     ...localSheets,
 ]
 
-const levels:[Level, ...Level[]] = [
-    level1,
-    level2,
+const levels: NonEmptyArray<LevelInput> = [
+    level1.data,
+    level2.data,
 ]
 
 
@@ -41,7 +42,7 @@ const questOne: QuestData = {
 
 const game = new Game({
     levels: levels,
-    playerVantage: levels[0].data.startingVantage || { x: 0, y: 0, direction: 'SOUTH' },
+    playerVantage: levels[0].startingVantage || { x: 0, y: 0, direction: 'SOUTH' },
     controllers: [],
     activeCharacterIndex: 0,
     quests: [
