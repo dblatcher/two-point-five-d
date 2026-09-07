@@ -63,7 +63,6 @@ const levels:[Level, ...Level[]] = [
 
 const game = new Game(
     {
-        level: levels[0],
         levels: levels,
         playerVantage: levels[0].data.startingVantage || { x: 7, y: 0, direction: 'SOUTH' },
         controllers: [],
