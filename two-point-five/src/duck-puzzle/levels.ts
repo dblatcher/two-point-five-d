@@ -5,7 +5,6 @@ import { Controller } from "@/game-classes/Controller";
 import { Direction } from "@/game-classes/Direction";
 import { FloorFeature } from "@/game-classes/FloorFeature";
 import { Item } from "@/game-classes/Item";
-import { Level } from "@/game-classes/Level";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Wall } from "@/game-classes/Wall";
 import { doorway, lowWall } from "../instances/wallShapes";
@@ -14,6 +13,7 @@ import { doorway, lowWall } from "../instances/wallShapes";
 import { duck } from "@/duck-puzzle/figureFactory";
 import { sprites } from "@/instances/sprites";
 
+import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
 import { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed } from "./features";
 import { itemTypes } from "./itemTypes";
@@ -26,7 +26,7 @@ const features = {
     lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed, hintForLevel1, hintForLevel2, blueStar
 }
 
-const duckPuzzleLevel1 = new Level({
+const duckPuzzleLevel1 = putWallsAroundLevel({
     id: "duckPuzzleLevel1",
     height: 6,
     width: 8,
@@ -83,9 +83,9 @@ const duckPuzzleLevel1 = new Level({
     ],
     victoryCondition: areAllDucksOnTheStar,
     victoryMessage: "Well done! But there are more ducks who need your help..."
-}).withWallsAround()
+})
 
-const duckPuzzleLevel2 = new Level({
+const duckPuzzleLevel2 = putWallsAroundLevel({
     id: 'duckPuzzleLevel2',
     height: 6,
     width: 6,
@@ -134,9 +134,9 @@ const duckPuzzleLevel2 = new Level({
     ],
     victoryCondition: areAllDucksOnTheStar,
     victoryMessage: "You're getting the hang of this!"
-}).withWallsAround()
+});
 
-const duckPuzzleLevel3 = new Level({
+const duckPuzzleLevel3 = putWallsAroundLevel({
     id: 'duckPuzzleLevel3',
     height: 7,
     width: 7,
@@ -201,6 +201,7 @@ const duckPuzzleLevel3 = new Level({
     ],
     victoryCondition: areAllDucksOnTheStar,
     victoryMessage: "Something something ducks!"
-}).withWallsAround()
+})
 
 export { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 };
+

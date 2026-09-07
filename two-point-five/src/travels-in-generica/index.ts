@@ -15,8 +15,8 @@ const spriteSheets = [
 ]
 
 const levels: NonEmptyArray<LevelInput> = [
-    level1.data,
-    level2.data,
+    level1,
+    level2,
 ]
 
 

@@ -1,27 +1,27 @@
 import { Color } from "@/canvas/Color";
+import { Controller } from "@/game-classes/Controller";
 import { Direction } from "@/game-classes/Direction";
-import { Level } from "@/game-classes/Level";
+import { Item } from "@/game-classes/Item";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
-import { Item } from "@/game-classes/Item";
-import { Controller } from "@/game-classes/Controller";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 
 
-import { doorway, spikey } from "@/instances/wallShapes"
-import { sprites as sharedSprites } from "@/instances/sprites";
-import * as globalFeatures from "@/travels-in-generica/features"
-import { sprites } from "./sprites";
-import { itemTypes } from "./itemTypes"
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
-import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
 import { Sky } from "@/game-classes/Sky";
+import { sprites as sharedSprites } from "@/instances/sprites";
+import { doorway, spikey } from "@/instances/wallShapes";
+import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
+import * as globalFeatures from "@/travels-in-generica/features";
+import { itemTypes } from "./itemTypes";
+import { sprites } from "./sprites";
 
+import { AbstractFeature } from "@/game-classes/AbstractFeature";
+import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
+import { Figure } from "@/game-classes/Figure";
+import { QuestHook } from "@/rpg-classes/Quest";
 import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
-import { QuestHook } from "@/rpg-classes/Quest";
-import { Figure } from "@/game-classes/Figure";
-import { AbstractFeature } from "@/game-classes/AbstractFeature";
 
 
 
@@ -44,7 +44,7 @@ hut3.walls[0].data.featureIds = ["torch"]
 
 
 
-const level1: Level = new Level({
+const level1 = putWallsAroundLevel({
     id: 'level1',
     height: 10, width: 15,
     startingVantage: { x: 3, y: 7, direction: 'NORTH' },
@@ -188,8 +188,8 @@ const level1: Level = new Level({
 
         new Controller({ inputIds: ["keyhole"], subjectId: "door3", statusChangeOnInputTrigger: "OPEN" }),
     ]
-}).withWallsAround({ patternSprite: sprites.fence, })
+}, { patternSprite: sprites.fence, })
 
 
 
-export { level1 }
+export { level1 };

@@ -1,9 +1,9 @@
 import { Color } from "@/canvas/Color";
 import { Behaviour } from "@/game-classes/Behaviour";
+import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Controller } from "@/game-classes/Controller";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { Item } from "@/game-classes/Item";
-import { Level } from "@/game-classes/Level";
 import { TeleportReaction } from "@/game-classes/Reaction";
 import { Sky } from "@/game-classes/Sky";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
@@ -58,7 +58,7 @@ const features = {
     pit1,
 }
 
-const level2: Level = new Level({
+const level2 = putWallsAroundLevel({
     id: 'level2',
     height: 10, width: 12,
     features,
@@ -189,7 +189,7 @@ const level2: Level = new Level({
             ]
         }),
     ]
-}).withWallsAround()
+})
 
 
 

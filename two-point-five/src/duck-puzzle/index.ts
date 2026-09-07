@@ -18,9 +18,9 @@ const allSprites = {
 }
 
 const levels: NonEmptyArray<LevelInput> = [
-    duckPuzzleLevel1.data,
-    duckPuzzleLevel2.data,
-    duckPuzzleLevel3.data,
+    duckPuzzleLevel1,
+    duckPuzzleLevel2,
+    duckPuzzleLevel3,
 ]
 
 const game = new Game({
