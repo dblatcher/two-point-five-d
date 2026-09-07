@@ -38,11 +38,13 @@ class Actor {
         const { vantage, height = 1, width = 1 } = this.data
         const sprite = this.sprite;
         if (vantage && sprite) {
-            return new Figure({
-                sprite, ...vantage.data,
-                initialAnimation: this.animation,
-                height, width, transitionPhase: this.transitionPhase
-            })
+            return Figure.ofSprite(
+                sprite,
+                {
+                    ...vantage.data,
+                    initialAnimation: this.animation,
+                    height, width, transitionPhase: this.transitionPhase
+                })
         }
         return null
     }
@@ -95,7 +97,9 @@ class Actor {
         }
 
     }
-
+    doAnimation(animationName: string, time: number): void {
+        this.actionQueue.push(new DoAction(animationName, time))
+    }
     handleInteraction(actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
     }
@@ -120,5 +124,5 @@ class Actor {
 
 
 export {
-    Actor
+    Actor, ActorData
 }

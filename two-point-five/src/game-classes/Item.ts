@@ -57,12 +57,13 @@ class Item {
         const { vantage, altitude = 0 } = this.data
         const { figureDimensions = { width: .2, height: .2 }, sprite } = this.itemType.data
         if (vantage) {
-            return new Figure({
+            return Figure.ofSprite(
                 sprite,
-                ...vantage.data,
-                ...figureDimensions,
-                altitude,
-            })
+                {
+                    ...vantage.data,
+                    ...figureDimensions,
+                    altitude,
+                })
         }
 
         return null

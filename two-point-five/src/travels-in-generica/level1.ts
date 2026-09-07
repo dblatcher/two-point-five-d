@@ -75,7 +75,7 @@ const level1: Level = new Level({
     ],
 
     staticFigures: [
-        new Figure({ x: 4, y: 7, direction: 'SOUTH', sprite: sprites.treeOne }),
+        Figure.ofSprite(sprites.treeOne, { x: 4, y: 7, direction: 'SOUTH', sprite: sprites.treeOne }),
     ],
 
     squaresWithFeatures: [

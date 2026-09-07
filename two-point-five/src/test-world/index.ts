@@ -28,7 +28,7 @@ const features = {
     redCeiling: new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } }),
 }
 
-const levels:[Level, ...Level[]] = [
+const levels: [Level, ...Level[]] = [
     new Level({
         id: 'test-level',
         height: 10,
@@ -47,7 +47,7 @@ const levels:[Level, ...Level[]] = [
             new SquareWithFeatures({ x: 8, y: 5, direction: 'NORTH', ceilingFeatureIds: ["redCeiling"] }),
         ],
         staticFigures: [
-            new Figure({ x: 9.5, y: 2.5, direction: 'SOUTH', sprite: gSprites.treeOne }),
+            Figure.ofSprite(gSprites.treeOne, { x: 9.5, y: 2.5, direction: 'SOUTH' }),
         ],
         features,
         controllers: [

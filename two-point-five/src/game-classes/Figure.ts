@@ -1,6 +1,5 @@
 import { Dimensions, DrawingContext, mapPointInSight, Point, RelativePoint, VANISH_RATE } from "@/canvas/canvas-utility";
 import { Vantage, VantageConfig } from "./Vantage";
-
 import { Color } from "@/canvas/Color";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { SpriteSheet } from "@/canvas/SpriteSheet";
@@ -9,8 +8,8 @@ import { Direction } from "./Direction";
 import { RelativeDirection } from "./RelativeDirection";
 import { Wall } from "./Wall";
 
-type FigureConfig = VantageConfig &  {
-    sprite: Sprite
+type FigureConfig = VantageConfig & {
+    spriteId: string
     height?: number
     width?: number
 
@@ -21,12 +20,23 @@ type FigureConfig = VantageConfig &  {
 
 class Figure extends Vantage {
     data: FigureConfig
-    actionName: string
+    sprite: Sprite
 
-    constructor(config: FigureConfig) {
+    constructor(sprite: Sprite, config: FigureConfig) {
         super(config)
         this.data = config
-        this.actionName = config.initialAnimation || Sprite.defaultFigureAnimation
+        this.sprite = sprite
+    }
+
+    static ofSprite(sprite: Sprite, config: Omit<FigureConfig, 'spriteId'> & { sprite?: Sprite | undefined }) {
+        return new Figure(sprite, {
+            ...config,
+            spriteId: sprite.data.id,
+        })
+    }
+
+    get actionName() {
+        return this.data.initialAnimation ?? Sprite.defaultFigureAnimation
     }
 
     getRenderParams(viewedFrom: Direction, forward: number, right: number): {
@@ -63,7 +73,8 @@ class Figure extends Vantage {
     ): void {
         const { place } = renderInstruction
         const { ctx, spriteSheetMap, convertFunction } = drawingContext
-        const { sprite, altitude = 0 } = this.data
+        const { altitude = 0 } = this.data
+        const { sprite } = this
 
         const { centerOnFloor, topLeft, topRight, widthAtDistance, heightAtDistance } = this.getRenderParams(renderInstruction.viewedFrom, place.forward, place.right);
 
@@ -99,10 +110,10 @@ class Figure extends Vantage {
     }
 
     private getSpriteImage(spriteSheetMap: Map<string, SpriteSheet>, renderInstruction: RenderInstruction, tickCount: number): CanvasImageSource {
-        const { sprite } = this.data
+        const { sprite, actionName } = this
 
         try {
-            return sprite.provideImage(spriteSheetMap, this.actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount, this.data.transitionPhase)
+            return sprite.provideImage(spriteSheetMap, actionName, renderInstruction.relativeDirection || RelativeDirection.BACK, tickCount, this.data.transitionPhase)
         } catch (error) {
             console.warn(error instanceof Error ? error.message : error)
         }

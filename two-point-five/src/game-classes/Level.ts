@@ -45,10 +45,10 @@ interface LevelConfig {
     startingVantage?: VantageConfig
     sky?: Sky
     controllers?: Controller[]
+    items: Item[]
     
     walls: Wall[]
     squaresWithFeatures?: SquareWithFeatures[]
-    items: Item[]
     actors?: Actor[]
     staticFigures?: Figure[]
     features?: { [index: string]: AbstractFeature }

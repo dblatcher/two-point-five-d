@@ -42,12 +42,12 @@ interface GameConfig {
 }
 
 interface GameInputs {
-    itemInHand?: string
-    characters: CharacterInput[]
-    activeCharacterIndex: number | undefined
-    quests?: QuestData[]
     playerVantage: VantageConfig,
+    itemInHand?: string
     controllers: ControllerData[]
+    characters: CharacterInput[]
+    quests?: QuestData[]
+    activeCharacterIndex: number | undefined
     intersitial?: undefined
     narrativeMessages: NarrativeMessageData[]
     levelIndex?: number

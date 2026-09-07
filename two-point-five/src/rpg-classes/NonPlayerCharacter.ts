@@ -1,22 +1,13 @@
 import { Color } from "@/canvas/Color"
-import { DoAction } from "@/game-classes/Action"
-import { Actor } from "@/game-classes/Actor"
-import { Behaviour } from "@/game-classes/Behaviour"
+import { Actor, ActorData } from "@/game-classes/Actor"
 import { Game } from "@/game-classes/Game"
 import { Vantage } from "@/game-classes/Vantage"
 import { Quest, QuestHook } from "./Quest"
 
 
-interface NonPlayerCharacterData {
-    vantage?: Vantage
-    spriteId: string;
-    behaviour?: Behaviour
-    height?: number
-    width?: number
-    blocksSquare?: boolean
+type NonPlayerCharacterData = ActorData &  {
     talkMessage?: string
     name?: string
-    canInteractWith?: boolean
     questHooks?: QuestHook[]
 }
 
@@ -37,9 +28,6 @@ class NonPlayerCharacter extends Actor {
         });
     }
 
-    doAnimation(animationName: string, time: number): void {
-        this.actionQueue.push(new DoAction(animationName, time))
-    }
 
     getQuestsWhichICan(hookAction: string, questState: string, game: Game): Quest[] {
         const { questHooks = [] } = this.data
@@ -99,6 +87,6 @@ class NonPlayerCharacter extends Actor {
 }
 
 export {
-    NonPlayerCharacter
+    NonPlayerCharacter, NonPlayerCharacterData
 }
 
