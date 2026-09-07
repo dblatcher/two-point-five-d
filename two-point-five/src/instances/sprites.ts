@@ -1,21 +1,21 @@
 import { Color } from "@/canvas/Color"
-import { Frame, Sprite } from "@/canvas/Sprite"
+import { Sprite } from "@/canvas/Sprite"
 import { SpriteSheet } from "@/canvas/SpriteSheet"
 import { TextBoard } from "@/canvas/TextBoard"
 
-import dinosaur from "@/assets/sprites/dinosaur.png"
 import bricks from "@/assets/sprites/brick_wall.png"
-import window from "@/assets/sprites/open-window.png"
+import dinosaur from "@/assets/sprites/dinosaur.png"
 import fruit from "@/assets/sprites/fruit.png"
+import window from "@/assets/sprites/open-window.png"
 import stairs from "@/assets/sprites/wooden_stairs-ns-crop.png"
 
-import brickWall from "@/assets/sprites/brick_wall.png"
 import bardHat from "@/assets/sprites/bard-hat.png"
-import helmet from "@/assets/sprites/helmet.png"
-import testCard from "@/assets/sprites/test-card.png"
+import brickWall from "@/assets/sprites/brick_wall.png"
 import painting from "@/assets/sprites/ceiling-small.jpg"
-import leverAndButton from "@/assets/sprites/lever-and-button.png"
 import woodenDoor from "@/assets/sprites/door.png"
+import helmet from "@/assets/sprites/helmet.png"
+import leverAndButton from "@/assets/sprites/lever-and-button.png"
+import testCard from "@/assets/sprites/test-card.png"
 
 const sheets: { [index: string]: SpriteSheet } = {
 
@@ -271,7 +271,5 @@ const textBoards = {
 }
 
 export {
-    spriteSheets,
-    sprites,
-    textBoards,
+    sprites, spriteSheets, textBoards
 }

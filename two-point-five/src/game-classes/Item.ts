@@ -69,7 +69,7 @@ class Item {
         return null
     }
 
-    handleInteraction(actor: Vantage | Actor, game: Game): void {
+    handleInteraction(_actor: Vantage | Actor, game: Game): void {
         const { items } = game.currentLevel.data;
         if (!game.data.itemInHand) {
             this.takeIntoHand(items, game)

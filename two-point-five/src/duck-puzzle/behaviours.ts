@@ -24,7 +24,7 @@ const blueStar = new FloorFeature({
     plotConfig: { noFill: false, fillStyle: 'blue' }, shape: starOnFloor
 })
 
-function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) return null

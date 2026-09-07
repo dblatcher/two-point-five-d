@@ -68,7 +68,7 @@ class Vantage extends Position {
     drawInSight(
         drawingContext: DrawingContext,
         renderInstruction: RenderInstruction,
-        tickCount: number
+        _tickCount: number
     ): void {
         const { place, viewedFrom } = renderInstruction
         const { ctx, convertFunction } = drawingContext

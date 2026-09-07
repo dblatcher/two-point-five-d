@@ -19,15 +19,15 @@ class Action {
         this.somethingHappensOnFinish = false
     }
 
-    start(actor: Vantage | Actor, game: Game): void {
+    start(actor: Vantage | Actor, _game: Game): void {
         console.warn(`No start function defined for Action ${this.action}`, actor);
     }
 
-    onContinue(actor: Vantage | Actor, game: Game): void {
+    onContinue(_actor: Vantage | Actor, _game: Game): void {
         return
     }
 
-    onFinish(actor: Vantage | Actor, game: Game): void {
+    onFinish(actor: Vantage | Actor, _game: Game): void {
         console.warn(`No onFinish function defined for Action ${this.action}`, actor);
     }
 
@@ -136,7 +136,7 @@ class DoAction extends Action {
         this.callBack = callback
     }
 
-    start(actor: Vantage | Actor, game: Game): void {
+    start(_actor: Vantage | Actor, _game: Game): void {
         // console.log(`Actor should DO :  ${this.animation}`);
     }
 
@@ -167,7 +167,7 @@ class WalkForward extends Action {
     }
 
 
-    start(actor: Actor, game: Game): void {
+    start(actor: Actor, _game: Game): void {
         const { vantage } = actor.data;
         if (!vantage) {
             this.shouldCancel = true
@@ -203,7 +203,7 @@ class WalkForward extends Action {
 
     }
 
-    onFinish(actor: Vantage | Actor, game: Game): void {
+    onFinish(actor: Vantage | Actor, _game: Game): void {
         console.warn(`No onFinish function defined for Action ${this.action}`, actor);
     }
 

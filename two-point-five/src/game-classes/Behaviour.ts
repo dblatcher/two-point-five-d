@@ -9,7 +9,7 @@ interface DecisionFunction {
     (actor: Actor, game: Game, behaviour: Behaviour): Action | null
 }
 
-function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function moveClockwise(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -26,7 +26,7 @@ function moveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action |
     }
 }
 
-function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function moveAntiClockwise(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -43,7 +43,7 @@ function moveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Acti
     }
 }
 
-function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function moveBackAndForward(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
 
     const { vantage } = actor.data;
     if (!vantage) { return null }
@@ -60,12 +60,12 @@ function moveBackAndForward(actor: Actor, game: Game, behaviour: Behaviour): Act
     }
 }
 
-function shiftAround(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function shiftAround(_actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
     if (game.tickCount % 3 !== 0) { return null }
     return new ShiftAction({ x: Math.random(), y: Math.random() })
 }
 
-function wanderAround(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function wanderAround(actor: Actor, _game: Game, behaviour: Behaviour): Action | null {
     if (actor.currentAction) { return null }
 
     const d6 = Math.ceil(Math.random() * 6);

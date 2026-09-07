@@ -54,7 +54,7 @@ class Position {
         return new Position({ x: this.data.x + vector.x, y: this.data.y + vector.y });
     }
 
-    changePosition(place: Point, game: Game): void {
+    changePosition(place: Point, _game: Game): void {
         this.data.x = Position.roundCoordinate(place.x)
         this.data.y = Position.roundCoordinate(place.y)
     }
@@ -128,7 +128,7 @@ class Position {
     drawInSight(
         drawingContext: DrawingContext,
         renderInstruction: RenderInstruction, 
-        tickCount: number
+        _tickCount: number
     ): void {
         const { ctx, convertFunction } = drawingContext
         const { place, viewedFrom } = renderInstruction

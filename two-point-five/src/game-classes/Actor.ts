@@ -100,11 +100,11 @@ class Actor {
     doAnimation(animationName: string, time: number): void {
         this.actionQueue.push(new DoAction(animationName, time))
     }
-    handleInteraction(actor: Vantage | Actor, game: Game): void {
+    handleInteraction(_actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
     }
 
-    handleBeingHitByFlyingItem(item: Item, game: Game): void {
+    handleBeingHitByFlyingItem(item: Item, _game: Game): void {
         console.log(`${this.data.spriteId} was hit by a ${item.itemType.name} going ${item.data.vantage?.data.direction}.`)
     }
 

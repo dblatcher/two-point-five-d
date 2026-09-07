@@ -9,7 +9,7 @@ class Reaction {
         this.effect = effect
     }
 
-    fire(actor: Vantage|Actor, game: Game): void {
+    fire(actor: Vantage|Actor, _game: Game): void {
         console.warn(`No performance class defined for Reaction ${this.effect}`, actor);
     }
 }
@@ -24,7 +24,7 @@ class TeleportReaction extends Reaction {
         this.destination = destination
     }
 
-    fire(actor: Vantage|Actor, game: Game): void {
+    fire(actor: Vantage|Actor, _game: Game): void {
         const { x, y, direction } = this.destination;
 
         if (Object.getPrototypeOf(actor) == Actor) {

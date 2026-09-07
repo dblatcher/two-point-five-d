@@ -59,7 +59,7 @@ class NonPlayerCharacter extends Actor {
         return questsAndHooks.filter(questAndHook => questAndHook.quest.data.state === questState)
     }
 
-    handleInteraction(actor: Vantage | Actor, game: Game): void {
+    handleInteraction(_actor: Vantage | Actor, game: Game): void {
 
         const questsAvailableAndHook = this.getQuestsAndHooksWhichICan("GIVE", "NOT_TAKEN", game)
 

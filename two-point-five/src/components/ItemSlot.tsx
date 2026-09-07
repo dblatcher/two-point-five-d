@@ -1,4 +1,4 @@
-import { Item, ItemConfig } from "@/game-classes/Item";
+import { Item } from "@/game-classes/Item";
 import { CSSProperties } from "react";
 import { SpriteIcon } from "./SpriteIcon";
 

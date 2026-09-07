@@ -31,7 +31,7 @@ class Monster extends Actor {
 
     get isMonster(): boolean { return true }
 
-    handleInteraction(actor: Vantage | Actor, game: Game): void {
+    handleInteraction(_actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
     }
 
@@ -63,7 +63,8 @@ class Monster extends Actor {
     hasPlayerInFront(game: Game): boolean {
         const { vantage } = this.data
         if (!vantage) { return false }
-        const { playerVantage, level } = game.data
+        const { playerVantage } = game.data
+        const level = game.currentLevel
         const squareAheadIsBlocked = level.hasSquareAheadBlockedByWall(vantage)
         const squareAhead = vantage.translate(vantage.direction)
 
@@ -78,7 +79,7 @@ class Monster extends Actor {
             this.isDying = true
 
             this.actionQueue = []
-            this.currentAction = new DoAction("DIE", 15, function (actor, game) {
+            this.currentAction = new DoAction("DIE", 15, function (actor, _game) {
                 (actor as Actor).data.vantage = undefined
             })
 

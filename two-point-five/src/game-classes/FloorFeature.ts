@@ -1,4 +1,4 @@
-import { ConvertFunction, mapPointOnFloor, plotPolygon, RelativePoint, PlotConfig, Point, DrawingContext } from "@/canvas/canvas-utility";
+import { DrawingContext, mapPointOnFloor, PlotConfig, plotPolygon, Point, RelativePoint } from "@/canvas/canvas-utility";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Item } from "./Item";
 import { Level } from "./Level";
@@ -6,13 +6,10 @@ import { Reaction } from "./Reaction";
 import { RelativeDirection } from "./RelativeDirection";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage } from "./Vantage";
-
-
-import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
-import { Sprite } from "@/canvas/Sprite";
-import { Direction } from "./Direction";
 import { Color } from "@/canvas/Color";
-import { SpriteSheet } from "@/canvas/SpriteSheet";
+import { Sprite } from "@/canvas/Sprite";
+import { AbstractFeature, AbstractFeatureData } from './AbstractFeature';
+import { Direction } from "./Direction";
 
 interface FloorFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
@@ -71,7 +68,7 @@ class FloorFeature extends AbstractFeature {
     drawInSight(
         drawingContext: DrawingContext,
         renderInstruction: RenderInstruction,
-        tickCount: number
+        _tickCount: number
     ): void {
         const { ctx, convertFunction } = drawingContext
         const { shape = Vantage.defaultMarkerShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data
@@ -153,7 +150,7 @@ class Pit extends FloorFeature {
     drawInSight(
         drawingContext: DrawingContext,
         renderInstruction: RenderInstruction, 
-        tickCount: number
+        _tickCount: number
     ): void {
         const { ctx, convertFunction } = drawingContext
         const { place, viewedFrom, level } = renderInstruction
@@ -198,4 +195,4 @@ class Pit extends FloorFeature {
     }
 }
 
-export { FloorFeature, FloorFeatureData, Pit }
+export { FloorFeature, FloorFeatureData, Pit };

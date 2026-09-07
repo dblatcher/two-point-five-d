@@ -37,7 +37,7 @@ function attackOrMoveClockwise(actor: Actor, game: Game, behaviour: Behaviour): 
     return decisionFunctions.moveClockwise(monster, game, behaviour)
 }
 
-function standAndFight(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
+function standAndFight(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
     const monster = actor as Monster;
 
     if (monster.hasPlayerInFront(game)) {

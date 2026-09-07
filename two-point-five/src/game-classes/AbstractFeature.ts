@@ -138,7 +138,7 @@ class AbstractFeature {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    tick(game: Game): void {
+    tick(_game: Game): void {
         this.advanceTransition()
     }
 
@@ -155,7 +155,7 @@ class AbstractFeature {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
+    getDrawInMapPolygons(_direction: Direction, _squareCenter: Point): Point[][] {
         return []
     }
 
@@ -187,7 +187,7 @@ class AbstractFeature {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static isSubClassOf(feature: AbstractFeature): boolean {
+    static isSubClassOf(_feature: AbstractFeature): boolean {
         return true
     }
 

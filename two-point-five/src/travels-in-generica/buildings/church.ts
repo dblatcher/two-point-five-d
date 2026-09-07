@@ -1,8 +1,7 @@
-import { Direction } from "@/game-classes/Direction"
-import { Wall } from "@/game-classes/Wall"
-import { tower, doorway, vaultDoorway } from "@/instances/wallShapes"
-import { sprites as sharedSprites } from "@/instances/sprites";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
+import { Wall } from "@/game-classes/Wall";
+import { sprites as sharedSprites } from "@/instances/sprites";
+import { doorway, tower, vaultDoorway } from "@/instances/wallShapes";
 
 function makeChurch(x: number, y: number): { walls: Wall[], ceilings: SquareWithFeatures[] } {
 
@@ -44,4 +43,4 @@ function makeChurch(x: number, y: number): { walls: Wall[], ceilings: SquareWith
 
 }
 
-export { makeChurch }
+export { makeChurch };

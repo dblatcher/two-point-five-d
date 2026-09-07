@@ -28,7 +28,7 @@ class CeilingFeature extends AbstractFeature {
     drawInSight(
         drawingContext: DrawingContext,
         renderInstruction: RenderInstruction,
-        tickCount: number
+        _tickCount: number
     ): void {
         const { ctx, convertFunction } = drawingContext
         const { shape = this.defaultShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data

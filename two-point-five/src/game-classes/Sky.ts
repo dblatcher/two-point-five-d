@@ -53,14 +53,14 @@ class Sky {
 
     }
 
-    render(ctx: CanvasRenderingContext2D, toCanvasCoords: ConvertFunction, vantage: Vantage, aspect: number, smallestWallHeight:number,timeOfDay:[number,number]):void {
+    render(ctx: CanvasRenderingContext2D, toCanvasCoords: ConvertFunction, vantage: Vantage, aspect: number, _smallestWallHeight:number,timeOfDay:[number,number]):void {
         ctx.fillStyle = this.currentColor(timeOfDay).css
         ctx.beginPath()
         ctx.fillRect(0, 0, ...toCanvasCoords({ x: 1, y: .5  }))
 
         if (this.data.sun) {
             const sunPosition = this.sunPosition(timeOfDay)
-            if (sunPosition &&  vantage.data.direction == sunPosition.direction) {
+            if (sunPosition &&  vantage.data.direction == sunPosition.direction.name) {
                 ctx.fillStyle = Color.YELLOW.lighter(30).css;
                 ctx.beginPath()
 

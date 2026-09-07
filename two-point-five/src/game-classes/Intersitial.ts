@@ -1,5 +1,4 @@
-import { Direction } from "./Direction";
-import { Game } from "./Game"
+import { Game } from "./Game";
 import { PlayerVantage } from "./PlayerVantage";
 
 
@@ -35,4 +34,4 @@ class Intersitial {
     }
 }
 
-export { Intersitial, IntersitialData, IntersitialOptionFunction }
+export { Intersitial, IntersitialData, IntersitialOptionFunction };
