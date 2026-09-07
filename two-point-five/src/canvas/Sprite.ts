@@ -2,8 +2,10 @@ import { transformSpriteImage } from "@/canvas/manipulations"
 import { Dimensions, Point } from "./canvas-utility"
 import { RelativeDirection } from "../game-classes/RelativeDirection"
 import { SpriteSheet } from "./SpriteSheet"
+import { SupportedImageSource } from "./types"
 
 type TransformName = "FLIP_H" | "SKEW_RIGHT" | "SKEW_LEFT" | "RESIZE_CENTER" | "RESIZE_OFFSET" | "CROP_BASE"
+
 
 interface Frame {
     sheet: string
@@ -25,14 +27,14 @@ interface SpriteConfig {
 
 class Sprite {
     data: SpriteConfig
-    loadedFrames: Map<string, CanvasImageSource>
+    loadedFrames: Map<string, SupportedImageSource>
 
     static get defaultWallAnimation(): "NEUTRAL" { return "NEUTRAL" }
     static get defaultFigureAnimation(): "STAND" { return "STAND" }
 
     constructor(config: SpriteConfig) {
         this.data = config
-        this.loadedFrames = new Map<string, CanvasImageSource>();
+        this.loadedFrames = new Map<string, SupportedImageSource>();
     }
 
     get id() {
@@ -40,7 +42,7 @@ class Sprite {
     }
 
     /**
-     * Load the CanvasImageSource for a frame of the sprite.
+     * Load the ValidImageSource for a frame of the sprite.
      * The image is taken from the SpriteSheet, manipulated as required,
      * then saved in the sprite's loadedFrames map property for
      * subsequent calls to provideImage.
@@ -48,9 +50,9 @@ class Sprite {
      * @param frame sprite frame to load the image for
      * @param franimationFrameKeyame the string describing the frame's action, direction and index
      * @throws an Error is the image is not loaded on not found in the Dom
-     * @returns the CanvasImageSource of the sprite frame
+     * @returns the ValidImageSource of the sprite frame
      */
-    private loadImage(frame: Frame, animationFrameKey: string, spriteSheetMap: Map<string, SpriteSheet>): CanvasImageSource {
+    private loadImage(frame: Frame, animationFrameKey: string, spriteSheetMap: Map<string, SpriteSheet>): SupportedImageSource {
         const sheet = spriteSheetMap.get(frame.sheet);
         if (!sheet) {
             throw new Error(`No spriteSheet ${frame.sheet} `)
@@ -60,7 +62,7 @@ class Sprite {
             throw new Error(`SpriteSheet ${frame.sheet} has no bitmap`)
         }
 
-        let image: CanvasImageSource = bitmap;
+        let image: SupportedImageSource = bitmap;
 
         if (sheet.config.pattern === 'GRID') {
             image = sheet.provideFrame(frame.col, frame.row)
@@ -125,7 +127,7 @@ class Sprite {
         direction: RelativeDirection,
         tickCount: number,
         transitionPhase?: number
-    ): CanvasImageSource {
+    ): SupportedImageSource {
         const animation = this.getFrameList(actionName, direction);
 
         if (animation === null) {
@@ -141,7 +143,7 @@ class Sprite {
         const animationFrameKey = `${actionName}_${direction.name}_${frameIndex.toString()}`;
 
         if (this.loadedFrames.has(animationFrameKey)) {
-            return this.loadedFrames.get(animationFrameKey) as CanvasImageSource;
+            return this.loadedFrames.get(animationFrameKey) as SupportedImageSource;
         }
 
         return this.loadImage(animation[frameIndex], animationFrameKey, spriteSheetMap);

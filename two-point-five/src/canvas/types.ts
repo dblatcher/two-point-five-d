@@ -1,0 +1,1 @@
+export type SupportedImageSource = HTMLOrSVGImageElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas

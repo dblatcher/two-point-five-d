@@ -1,3 +1,5 @@
+import { SupportedImageSource } from "./types"
+
 interface SpriteSheetConfig {
     pattern: "SINGLE" | "GRID"
     rows?: number
@@ -31,7 +33,7 @@ class SpriteSheet {
         }
     }
 
-    provideFrame(col = 0, row = 0): CanvasImageSource {
+    provideFrame(col = 0, row = 0): SupportedImageSource {
         if (!this.bitmap) { return new Image() }
         const { rows = 0, cols = 0, pattern } = this.config
         if (pattern == "SINGLE") { return this.bitmap }

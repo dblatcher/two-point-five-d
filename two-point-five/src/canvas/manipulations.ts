@@ -1,7 +1,8 @@
 import { Dimensions, Point, VANISH_RATE } from "./canvas-utility"
 import { Sprite } from "./Sprite"
+import { SupportedImageSource } from "./types"
 
-function flipImage(source: CanvasImageSource): CanvasImageSource {
+function flipImage(source: SupportedImageSource): SupportedImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -14,7 +15,7 @@ function flipImage(source: CanvasImageSource): CanvasImageSource {
     return board
 }
 
-function flipImageVertically(source: CanvasImageSource): CanvasImageSource {
+function flipImageVertically(source: SupportedImageSource): SupportedImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -27,7 +28,7 @@ function flipImageVertically(source: CanvasImageSource): CanvasImageSource {
     return board
 }
 
-function scaleTo(source: CanvasImageSource, width: number, height: number): CanvasImageSource {
+function scaleTo(source: SupportedImageSource, width: number, height: number): SupportedImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -43,7 +44,7 @@ function scaleTo(source: CanvasImageSource, width: number, height: number): Canv
 }
 
 // NEEDS WORK!
-function perspectiveSkew(source: CanvasImageSource, size: Dimensions, isOnObserversRight: boolean): CanvasImageSource {
+function perspectiveSkew(source: SupportedImageSource, size: Dimensions, isOnObserversRight: boolean): SupportedImageSource {
     // return source
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return source }
@@ -105,7 +106,7 @@ function perspectiveSkew(source: CanvasImageSource, size: Dimensions, isOnObserv
     return board
 }
 
-function resizeFrame(source: CanvasImageSource, size: Dimensions, offset = { x: .5, y: .5 }): CanvasImageSource {
+function resizeFrame(source: SupportedImageSource, size: Dimensions, offset = { x: .5, y: .5 }): SupportedImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -130,7 +131,7 @@ function resizeFrame(source: CanvasImageSource, size: Dimensions, offset = { x: 
     return board;
 }
 
-function cropBase(source: CanvasImageSource, baseline: number): CanvasImageSource {
+function cropBase(source: SupportedImageSource, baseline: number): SupportedImageSource {
     const board = document.createElement('canvas')
     if (!source.width || !source.height) { return board }
     if (typeof source.width !== 'number' || typeof source.height != 'number') { return board }
@@ -147,7 +148,7 @@ function cropBase(source: CanvasImageSource, baseline: number): CanvasImageSourc
     return board;
 }
 
-function transformSpriteImage(image: CanvasImageSource, transforms: string[], sprite: Sprite): CanvasImageSource {
+function transformSpriteImage(image: SupportedImageSource, transforms: string[], sprite: Sprite): SupportedImageSource {
     const { size, offset, baseline = 0 } = sprite.data
     transforms.forEach(transform => {
         switch (transform) {

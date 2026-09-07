@@ -6,6 +6,7 @@ import { flipImage, flipImageVertically, perspectiveSkew, resizeFrame, scaleTo }
 import { RenderInstruction } from "./RenderInstruction";
 import { TextBoard } from "./TextBoard";
 import { SpriteSheet } from "./SpriteSheet";
+import { SupportedImageSource } from "./types";
 
 
 function getPatternFill(
@@ -61,7 +62,7 @@ function getTextPatternFill(
     const fullWallPoints = renderInstruction.mapWallShape(Wall.defaultShape);
     const { topLeft, convertedWallDimensions } = getMeasurements(fullWallPoints, convertFunction);
 
-    let image: CanvasImageSource = textBoard.storedCanvas
+    let image: SupportedImageSource = textBoard.storedCanvas
     const { size = Sprite.DEFAULT_SIZE } = textBoard.data
     image = resizeFrame(image, size)
     const facingDirection = renderInstruction.wallFacingDirection
@@ -99,7 +100,7 @@ function getMeasurements(fullWallPoints: Point[], convertFunction: ConvertFuncti
 }
 
 function convertToPattern(
-    image: CanvasImageSource,
+    image: SupportedImageSource,
     convertedWallDimensions: [number, number],
     topLeft: [number, number],
     ctx: CanvasRenderingContext2D,
