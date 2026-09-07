@@ -124,10 +124,10 @@ class Game {
             quests: config.quests?.map(data => new Quest(data)),
             controllers: config.controllers.map(data => new Controller(data)),
             narrativeMessages: config.narrativeMessages.map(data => new NarrativeMessage(data)),
-            levels: config.levels.map(data => new Level(data)) as NonEmptyArray<Level>
+            // TO DO - would it improve memory to only instantiate the currentLevel and serialise the data back when changing?
+            levels: config.levels.map(data => new Level(data, this.spriteRecord)) as NonEmptyArray<Level>
         };
 
-        this.currentLevel.provideSprites(this.spriteRecord)
         this.setActiveCharacter(config.activeCharacterIndex);
     }
 
@@ -349,7 +349,6 @@ class Game {
             console.warn(`There is no level ${levelIndex}!`)
             return
         }
-        newLevel.provideSprites(this.spriteRecord)
         this.data.levelIndex = levelIndex
         playerVantage.data.direction = vantage.data.direction
         playerVantage.data.x = vantage.data.x

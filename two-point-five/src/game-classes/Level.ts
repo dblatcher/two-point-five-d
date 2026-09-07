@@ -39,13 +39,13 @@ interface LevelConfig {
     height: number
     defaultWallPattern?: string
     victoryMessage?: string
-    
+
     floorColor?: Color
     startingVantage?: VantageConfig
     sky?: Sky
     controllers?: Controller[]
     items: Item[]
-    
+
     walls: Wall[]
     squaresWithFeatures?: SquareWithFeatures[]
     actors?: Actor[]
@@ -55,8 +55,7 @@ interface LevelConfig {
     victoryCondition?: VictoryTest
 }
 
-export type LevelInput = LevelConfig
-
+export type LevelInput = LevelConfig;
 
 class Level {
 
@@ -65,7 +64,7 @@ class Level {
     debugElement?: HTMLElement
 
 
-    constructor(config: LevelConfig) {
+    constructor(config: LevelInput, spriteRecord: Record<string, Sprite>) {
         this.data = config
         this.tickCount = 0
 
@@ -79,6 +78,7 @@ class Level {
             squaresWithFeature.floorFeatures = squaresWithFeature.getFloorFeatures()
         })
         this.data.controllers?.forEach(controller => controller.level = this)
+        this.data.actors?.forEach(actor => actor.sprite = spriteRecord[actor.data.spriteId])
     }
 
     get id() {
@@ -87,9 +87,6 @@ class Level {
 
     static defaultFloorColor = new Color(80, 80, 80);
 
-    provideSprites(spriteRecord: Record<string, Sprite>) {
-        this.data.actors?.forEach(actor => actor.sprite = spriteRecord[actor.data.spriteId])
-    }
 
     get timeOfDay(): [number, number] {
         const hour = Math.floor((this.tickCount % (24 * ticksPerMinute)) / ticksPerMinute)
@@ -496,3 +493,4 @@ class Level {
 
 
 export { Blockage, Level, LevelConfig };
+
