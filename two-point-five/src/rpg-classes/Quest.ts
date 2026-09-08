@@ -115,8 +115,8 @@ class Quest {
             } else {
                 const { actors = [] } = level.data
                 const areLiveMonsters = actors
-                    .filter(actor => actor.isMonster)
-                    .find(monster => !(monster as Monster).data.stats.isDead)
+                    .filter(actor => actor instanceof Monster)
+                    .find(monster => !monster.data.stats.isDead)
 
                 if (areLiveMonsters) {
                     return false

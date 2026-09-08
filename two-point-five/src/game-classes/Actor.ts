@@ -24,7 +24,6 @@ class Actor {
     actionQueue: Action[]
     currentAction: Action | undefined
     sprite?: Sprite
-    get isMonster(): boolean { return false }
 
     static MAX_QUEUE_LENGTH = 10
 

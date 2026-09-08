@@ -29,8 +29,6 @@ class Monster extends Actor {
         this.isDying = false
     }
 
-    get isMonster(): boolean { return true }
-
     handleInteraction(_actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)
     }
