@@ -106,12 +106,13 @@ class Game {
         this.spriteSheetMap = new Map<string, SpriteSheet>()
         immutables.spriteSheets.forEach(sheet => this.spriteSheetMap.set(sheet.id, sheet))
 
-        this.spriteRecord = immutables.sprites.reduce((record, nextSpriteConfig) => {
+        const spriteRecord = immutables.sprites.reduce((record, nextSpriteConfig) => {
             return {
                 ...record,
                 [nextSpriteConfig.id]: new Sprite(nextSpriteConfig)
             }
         }, {})
+        this.spriteRecord = spriteRecord
 
         const itemInHand = config.itemInHand && immutables.itemTypeRecord[config.itemInHand] ? Item.ofType(immutables.itemTypeRecord[config.itemInHand]) : undefined
 
@@ -125,7 +126,10 @@ class Game {
             controllers: config.controllers.map(data => new Controller(data)),
             narrativeMessages: config.narrativeMessages.map(data => new NarrativeMessage(data)),
             // TO DO - would it improve memory to only instantiate the currentLevel and serialise the data back when changing?
-            levels: config.levels.map(data => new Level(data, this.spriteRecord)) as NonEmptyArray<Level>
+            levels: config.levels.map(data => new Level(data, {
+                spriteRecord,
+                itemTypeRecord: immutables.itemTypeRecord,
+            })) as NonEmptyArray<Level>
         };
 
         this.setActiveCharacter(config.activeCharacterIndex);

@@ -2,7 +2,6 @@ import { Color } from "@/canvas/Color";
 import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { Item } from "@/game-classes/Item";
 import { TeleportReaction } from "@/game-classes/Reaction";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Vantage } from "@/game-classes/Vantage";
@@ -173,7 +172,7 @@ const level2 = putWallsAroundLevel({
 
     ],
     items: [
-        Item.ofType(itemTypes.apple, { vantage: { x: 4.85, y: 4.4, direction: 'NORTH' } }),
+        { vantage: { x: 4.85, y: 4.4, direction: 'NORTH' }, type: itemTypes.apple.id },
     ],
     controllers: [
         ({

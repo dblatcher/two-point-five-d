@@ -8,7 +8,7 @@ import { AbstractFeature } from "./AbstractFeature";
 import { Controller, ControllerData } from "./Controller";
 import { Figure } from "./Figure";
 import { Game, ticksPerMinute } from "./Game";
-import { Item } from "./Item";
+import { Item, ItemInput } from "./Item";
 import { PlayerVantage } from "./PlayerVantage";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
@@ -17,6 +17,8 @@ import { Sky, SkyData } from "./Sky";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall } from "./Wall";
+import { ItemType } from "./ItemType";
+import { makeItemFunction } from "./constructionHelpers";
 
 const renderingZoneFrames = false;
 
@@ -65,8 +67,7 @@ export type LevelInput = {
     startingVantage?: VantageConfig
     controllers?: ControllerData[]
     sky?: SkyData
-
-    items: Item[]
+    items: ItemInput[]
 
     walls: Wall[]
     squaresWithFeatures?: SquareWithFeatures[]
@@ -84,13 +85,24 @@ class Level {
     debugElement?: HTMLElement
 
 
-    constructor(config: LevelInput, spriteRecord: Record<string, Sprite>) {
+    constructor(
+        config: LevelInput,
+        immutableData: {
+            spriteRecord: Record<string, Sprite>,
+            itemTypeRecord: Record<string, ItemType>
+        }
+    ) {
+        const { spriteRecord } = immutableData;
         this.tickCount = 0
+
+        const makeItem = makeItemFunction(immutableData.itemTypeRecord)
+
         this.data = {
             ...config,
             sky: config.sky && new Sky(config.sky),
             floorColor: config.floorColor && Color.fromConfig(config.floorColor),
             controllers: config.controllers?.map(data => new Controller(data)),
+            items: config.items?.flatMap(itemInput => makeItem(itemInput.type, itemInput) ?? [])
         }
 
         this.data.walls.forEach(wall => {
@@ -112,7 +124,8 @@ class Level {
             ...data,
             sky: data.sky?.data,
             floorColor: data.floorColor?.serialise(),
-            controllers: data.controllers?.map(controller => controller.data)
+            controllers: data.controllers?.map(controller => controller.data),
+            items: data.items.map(item => item.serialise())
         }
     }
 

@@ -7,6 +7,7 @@ import { ItemType } from "./ItemType";
 import { Blockage } from "./Level";
 import { Position } from "./Position";
 import { Vantage, VantageConfig } from "./Vantage";
+import { WithOptional } from "@/types";
 
 
 interface ItemConfig {
@@ -42,7 +43,7 @@ class Item {
         }
     }
 
-    static ofType(itemType: ItemType, config: Omit<ItemInput, 'type'> & { type?: string } = {}) {
+    static ofType(itemType: ItemType, config: WithOptional<'type', ItemInput> = {}) {
         return new Item({
             ...config,
             type: itemType.data.id,
@@ -163,4 +164,4 @@ class Item {
 }
 
 
-export { Item, ItemConfig };
+export { Item, ItemConfig, ItemInput };

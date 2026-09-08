@@ -1,9 +1,12 @@
-import { Color } from "@/canvas/Color";
-import { LevelInput } from "./Level";
 import { Point } from "@/canvas/canvas-utility";
+import { Color } from "@/canvas/Color";
 import { Sprite } from "@/canvas/Sprite";
-import { Wall } from "./Wall";
+import { WithOptional } from "@/types";
 import { Direction } from "./Direction";
+import { Item, ItemInput } from "./Item";
+import { ItemType } from "./ItemType";
+import { LevelInput } from "./Level";
+import { Wall } from "./Wall";
 
 export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): LevelInput => {
     const { walls, width, height } = levelInput;
@@ -35,3 +38,9 @@ export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Co
     }
     return levelInput
 }
+
+export const makeItemFunction = (itemTypeRecord: Record<string, ItemType>) =>
+    (itemTypeId: string | null, config?: WithOptional<'type', ItemInput>) => {
+        const itemType = itemTypeId && itemTypeRecord[itemTypeId];
+        return itemType ? Item.ofType(itemType, config) : null
+    }

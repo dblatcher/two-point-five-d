@@ -1,11 +1,12 @@
 import { Color } from "@/canvas/Color";
+import { ItemType } from "@/game-classes/ItemType";
+import { makeItemFunction } from "@/game-classes/constructionHelpers";
 import { FeedbackToUI, Game } from "../game-classes/Game";
 import { Item } from "../game-classes/Item";
 import { PlayerVantage } from "../game-classes/PlayerVantage";
 import { AttackOption } from "./AttackOption";
 import { CharacterStats, CharacterStatsInput } from "./CharacterStats";
 import { Monster } from "./Monster";
-import { ItemType } from "@/game-classes/ItemType";
 
 
 type EquipmentSlot = "HEAD" | "TORSO" | "LEGS" | "FEET" | "RIGHT_HAND" | "LEFT_HAND"
@@ -32,16 +33,13 @@ class Character {
     constructor(input: CharacterInput, itemTypeRecord: Record<string, ItemType>) {
         const equipmentSlots = Character.emptyEquipmentSlots();
 
-        const makeItem = (itemTypeId: string | null) => {
-            const itemType = itemTypeId && itemTypeRecord[itemTypeId];
-            return itemType ? Item.ofType(itemType) : null
-        }
+        const makeItem = makeItemFunction(itemTypeRecord)
 
         Object.entries(input.equipmentSlots ?? {}).forEach(([key, itemTypeId]) => {
             equipmentSlots.set(key, makeItem(itemTypeId))
         })
 
-        const inventory: Array<Item | null> = input.inventory.map(makeItem)
+        const inventory: Array<Item | null> = input.inventory.map(typeId => makeItem(typeId))
 
         this.data = {
             ...input,
@@ -255,3 +253,4 @@ class Character {
 }
 
 export { Character, CharacterData, CharacterInput };
+

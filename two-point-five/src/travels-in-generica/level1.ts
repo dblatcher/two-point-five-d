@@ -4,7 +4,6 @@ import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { Figure } from "@/game-classes/Figure";
-import { Item } from "@/game-classes/Item";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
@@ -84,12 +83,14 @@ const level1 = putWallsAroundLevel({
     ],
 
     items: [
-        Item.ofType(itemTypes.bardHat, {
+        {
+            type: itemTypes.bardHat.id,
             vantage: { x: 8.2, y: 6.2, direction: 'NORTH' }
-        }),
-        Item.ofType(itemTypes.helmet, {
+        },
+        {
+            type: itemTypes.bean.id,
             vantage: { x: 5.5, y: 4.5, direction: 'NORTH' }
-        }),
+        },
     ],
 
     actors: [

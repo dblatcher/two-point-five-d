@@ -3,7 +3,6 @@ import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { FloorFeature } from "@/game-classes/FloorFeature";
-import { Item } from "@/game-classes/Item";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Wall } from "@/game-classes/Wall";
 import { sprites } from "@/instances/sprites";
@@ -114,11 +113,10 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
         duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
     ],
     items: [
-        Item.ofType(
-            itemTypes.weight,
-            {
-                vantage: { x: 4.5, y: 3.75, direction: 'NORTH' }
-            }),
+        {
+            type: itemTypes.weight.id,
+            vantage: { x: 4.5, y: 3.75, direction: 'NORTH' }
+        },
     ],
     controllers: [
         ({
