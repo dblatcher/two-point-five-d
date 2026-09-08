@@ -3,7 +3,6 @@ import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { TeleportReaction } from "@/game-classes/Reaction";
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
@@ -140,12 +139,9 @@ const level2 = putWallsAroundLevel({
 
     ],
     squaresWithFeatures: [
-
-        new SquareWithFeatures({ x: 4, y: 3, direction: 'NORTH', floorFeatureIds: ["blueSquare"], }),
-        new SquareWithFeatures({ x: 6, y: 3, direction: 'NORTH', floorFeatureIds: ["redSquare"], }),
-        new SquareWithFeatures({ x: 5, y: 2, direction: 'NORTH', floorFeatureIds: ["pit1"] }),
-
-
+        { x: 4, y: 3, direction: 'NORTH', floorFeatureIds: ["blueSquare"], },
+        { x: 6, y: 3, direction: 'NORTH', floorFeatureIds: ["redSquare"], },
+        { x: 5, y: 2, direction: 'NORTH', floorFeatureIds: ["pit1"] },
     ],
     actors: [
         new Monster({

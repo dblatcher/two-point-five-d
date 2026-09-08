@@ -3,7 +3,6 @@ import { AbstractFeature } from "@/game-classes/AbstractFeature";
 import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
-import { Figure } from "@/game-classes/Figure";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
@@ -69,7 +68,7 @@ const level1 = putWallsAroundLevel({
     ],
 
     staticFigures: [
-        Figure.ofSprite(sprites.treeOne, { x: 4, y: 7, direction: 'SOUTH', sprite: sprites.treeOne }),
+        { x: 4, y: 7, direction: 'SOUTH', spriteId: sprites.treeOne.id },
     ],
 
     squaresWithFeatures: [

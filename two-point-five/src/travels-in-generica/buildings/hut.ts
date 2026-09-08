@@ -1,13 +1,13 @@
-import { Direction } from "@/game-classes/Direction"
-import { Wall } from "@/game-classes/Wall"
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
-import { doorway } from "@/instances/wallShapes"
 import { Sprite } from "@/canvas/Sprite";
+import { Direction } from "@/game-classes/Direction";
+import { SquareWithFeaturesData } from "@/game-classes/SquareWithFeatures";
+import { Wall } from "@/game-classes/Wall";
+import { doorway } from "@/instances/wallShapes";
 
-function makeHut(x: number, y: number, doorPlacement: Direction = Direction.south, patternSprite?: Sprite): { walls: Wall[], ceilings: SquareWithFeatures[] } {
+function makeHut(x: number, y: number, doorPlacement: Direction = Direction.south, patternSprite?: Sprite): { walls: Wall[], ceilings: SquareWithFeaturesData[] } {
 
 
-    const base = {
+    const base: { walls: Wall[], ceilings: SquareWithFeaturesData[] } = {
         walls: [
             new Wall({ x: x + 0, y: y + 0, placeName: 'NORTH', patternSprite }),
             new Wall({ x: x + 0, y: y + 0, placeName: 'WEST', patternSprite }),
@@ -19,10 +19,10 @@ function makeHut(x: number, y: number, doorPlacement: Direction = Direction.sout
             new Wall({ x: x + 1, y: y + 1, placeName: 'EAST', patternSprite }),
         ],
         ceilings: [
-            new SquareWithFeatures({ x: x + 0, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 1, y: y + 0, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 0, y: y + 1, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
-            new SquareWithFeatures({ x: x + 1, y: y + 1, direction: 'NORTH',  ceilingFeatureIds: ["brownCeiling"] }),
+            { x: x + 0, y: y + 0, direction: 'NORTH', ceilingFeatureIds: ["brownCeiling"] },
+            { x: x + 1, y: y + 0, direction: 'NORTH', ceilingFeatureIds: ["brownCeiling"] },
+            { x: x + 0, y: y + 1, direction: 'NORTH', ceilingFeatureIds: ["brownCeiling"] },
+            { x: x + 1, y: y + 1, direction: 'NORTH', ceilingFeatureIds: ["brownCeiling"] },
         ]
     }
 
@@ -42,4 +42,4 @@ function makeHut(x: number, y: number, doorPlacement: Direction = Direction.sout
     return base;
 }
 
-export { makeHut }
+export { makeHut };

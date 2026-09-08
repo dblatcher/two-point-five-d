@@ -1,11 +1,9 @@
+import { Color } from "@/canvas/Color";
+import { CeilingFeature } from "@/game-classes/CeilingFeature";
+import { Pit } from "@/game-classes/FloorFeature";
 import { Game } from "@/game-classes/Game";
 import { LevelInput } from "@/game-classes/Level";
 import { Wall } from "@/game-classes/Wall";
-import { Color } from "@/canvas/Color";
-import { CeilingFeature } from "@/game-classes/CeilingFeature";
-import { Figure } from "@/game-classes/Figure";
-import { Pit } from "@/game-classes/FloorFeature";
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { itemTypes } from "@/instances/itemTypes";
 import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
@@ -42,11 +40,11 @@ const levels: NonEmptyArray<LevelInput> = [
 
         ],
         squaresWithFeatures: [
-            new SquareWithFeatures({ x: 7, y: 4, direction: 'NORTH', floorFeatureIds: ["pitOne"] }),
-            new SquareWithFeatures({ x: 8, y: 5, direction: 'NORTH', ceilingFeatureIds: ["redCeiling"] }),
+            { x: 7, y: 4, direction: 'NORTH', floorFeatureIds: ["pitOne"] },
+            { x: 8, y: 5, direction: 'NORTH', ceilingFeatureIds: ["redCeiling"] },
         ],
         staticFigures: [
-            Figure.ofSprite(gSprites.treeOne, { x: 9.5, y: 2.5, direction: 'SOUTH' }),
+            { x: 9.5, y: 2.5, direction: 'SOUTH', spriteId: gSprites.treeOne.id },
         ],
         features,
         controllers: [

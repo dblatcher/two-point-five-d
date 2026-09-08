@@ -3,7 +3,6 @@ import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { FloorFeature } from "@/game-classes/FloorFeature";
-import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Wall } from "@/game-classes/Wall";
 import { sprites } from "@/instances/sprites";
 import { doorway, lowWall } from "../instances/wallShapes";
@@ -44,17 +43,17 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
         new Wall({ x: 7, y: 0, placeName: 'SOUTH' }),
     ],
     squaresWithFeatures: [
-        new SquareWithFeatures({
+        {
             x: 7, y: 5, direction: 'NORTH', floorFeatureIds: ["blueStar"]
-        }),
+        },
 
-        new SquareWithFeatures({
+        {
             x: 7, y: 2, direction: 'NORTH', floorFeatureIds: ["pit1"]
-        }),
+        },
 
-        new SquareWithFeatures({
+        {
             x: 5, y: 2, direction: 'NORTH', floorFeatureIds: ["floorSwitch"]
-        }),
+        },
 
     ],
     actors: [
@@ -96,17 +95,17 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
         new Wall({ x: 4, y: 2, placeName: 'WEST', featureIds: ["door1"], open: true, shape: doorway }),
     ],
     squaresWithFeatures: [
-        new SquareWithFeatures({
+        {
             x: 1, y: 2, direction: 'NORTH', floorFeatureIds: ["blueStar"]
-        }),
+        },
 
-        new SquareWithFeatures({
+        {
             x: 3, y: 1, direction: 'NORTH', floorFeatureIds: ["floorSwitch2"]
-        }),
+        },
 
-        new SquareWithFeatures({
+        {
             x: 3, y: 3, direction: 'NORTH', floorFeatureIds: ["floorSwitch"]
-        }),
+        },
 
     ],
     actors: [
@@ -158,17 +157,17 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
         new Wall({ x: 4, y: 6, placeName: 'WEST', shape: doorway, open: true, featureIds: ["door1"] }),
     ],
     squaresWithFeatures: [
-        new SquareWithFeatures({
+        {
             x: 3, y: 3, direction: 'NORTH', floorFeatureIds: ["blueStar"]
-        }),
+        },
 
-        new SquareWithFeatures({
+        {
             x: 4, y: 0, direction: 'NORTH', floorFeatureIds: ["pitClosed"]
-        }),
+        },
 
-        new SquareWithFeatures({
+        {
             x: 3, y: 0, direction: 'NORTH', floorFeatureIds: ["floorSwitch"]
-        }),
+        },
     ],
     actors: [
         duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),

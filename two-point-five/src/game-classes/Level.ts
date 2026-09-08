@@ -6,7 +6,7 @@ import { Actor } from "@/game-classes/Actor";
 import { Color, ColorParams } from "../canvas/Color";
 import { AbstractFeature } from "./AbstractFeature";
 import { Controller, ControllerData } from "./Controller";
-import { Figure } from "./Figure";
+import { Figure, FigureConfig } from "./Figure";
 import { Game, ticksPerMinute } from "./Game";
 import { Item, ItemInput } from "./Item";
 import { PlayerVantage } from "./PlayerVantage";
@@ -14,7 +14,7 @@ import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Sky, SkyData } from "./Sky";
-import { SquareWithFeatures } from "./SquareWithFeatures";
+import { SquareWithFeatures, SquareWithFeaturesData } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall } from "./Wall";
 import { ItemType } from "./ItemType";
@@ -41,7 +41,6 @@ interface LevelData {
     height: number
     defaultWallPattern?: string
     victoryMessage?: string
-
     floorColor?: Color
     startingVantage?: VantageConfig
     sky?: Sky
@@ -68,11 +67,11 @@ export type LevelInput = {
     controllers?: ControllerData[]
     sky?: SkyData
     items: ItemInput[]
+    staticFigures?: FigureConfig[]
+    squaresWithFeatures?: SquareWithFeaturesData[]
 
     walls: Wall[]
-    squaresWithFeatures?: SquareWithFeatures[]
     actors?: Actor[]
-    staticFigures?: Figure[]
     features?: { [index: string]: AbstractFeature }
 
     victoryCondition?: VictoryTest
@@ -102,7 +101,11 @@ class Level {
             sky: config.sky && new Sky(config.sky),
             floorColor: config.floorColor && Color.fromConfig(config.floorColor),
             controllers: config.controllers?.map(data => new Controller(data)),
-            items: config.items?.flatMap(itemInput => makeItem(itemInput.type, itemInput) ?? [])
+            items: config.items?.flatMap(itemInput => makeItem(itemInput.type, itemInput) ?? []),
+            staticFigures: config.staticFigures?.flatMap(input =>
+                spriteRecord[input.spriteId] ? Figure.ofSprite(spriteRecord[input.spriteId], input) : []
+            ),
+            squaresWithFeatures: config.squaresWithFeatures?.map(input => new SquareWithFeatures(input))
         }
 
         this.data.walls.forEach(wall => {
@@ -125,7 +128,9 @@ class Level {
             sky: data.sky?.data,
             floorColor: data.floorColor?.serialise(),
             controllers: data.controllers?.map(controller => controller.data),
-            items: data.items.map(item => item.serialise())
+            items: data.items.map(item => item.serialise()),
+            staticFigures: data.staticFigures?.map(figure => figure.data),
+            squaresWithFeatures: data.squaresWithFeatures?.map(square => square.data),
         }
     }
 
