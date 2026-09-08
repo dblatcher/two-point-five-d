@@ -1,27 +1,22 @@
 import { Color } from "@/canvas/Color";
-import { Controller } from "@/game-classes/Controller";
+import { AbstractFeature } from "@/game-classes/AbstractFeature";
+import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
+import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
+import { Figure } from "@/game-classes/Figure";
 import { Item } from "@/game-classes/Item";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
-
-
-import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
-import { Sky } from "@/game-classes/Sky";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway, spikey } from "@/instances/wallShapes";
 import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
-import * as globalFeatures from "@/travels-in-generica/features";
-import { itemTypes } from "./itemTypes";
-import { sprites } from "./sprites";
-
-import { AbstractFeature } from "@/game-classes/AbstractFeature";
-import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
-import { Figure } from "@/game-classes/Figure";
 import { QuestHook } from "@/rpg-classes/Quest";
+import * as globalFeatures from "@/travels-in-generica/features";
 import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
+import { itemTypes } from "./itemTypes";
+import { sprites } from "./sprites";
 
 
 
@@ -49,10 +44,10 @@ const level1 = putWallsAroundLevel({
     height: 10, width: 15,
     startingVantage: { x: 3, y: 7, direction: 'NORTH' },
 
-    sky: new Sky({
+    sky: {
         skyBaseColor: new Color(140, 150, 250),
         sun: true,
-    }),
+    },
     features,
     walls: [
         ...church.walls,
@@ -185,11 +180,11 @@ const level1 = putWallsAroundLevel({
     ],
 
     controllers: [
-
-        new Controller({ inputIds: ["keyhole"], subjectId: "door3", statusChangeOnInputTrigger: "OPEN" }),
+        { inputIds: ["keyhole"], subjectId: "door3", statusChangeOnInputTrigger: "OPEN" },
     ]
 }, { patternSprite: sprites.fence, })
 
 
 
 export { level1 };
+

@@ -1,11 +1,9 @@
 import { Color } from "@/canvas/Color";
 import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
-import { Controller } from "@/game-classes/Controller";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { Item } from "@/game-classes/Item";
 import { TeleportReaction } from "@/game-classes/Reaction";
-import { Sky } from "@/game-classes/Sky";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Vantage } from "@/game-classes/Vantage";
 import { Wall } from "@/game-classes/Wall";
@@ -62,9 +60,9 @@ const level2 = putWallsAroundLevel({
     id: 'level2',
     height: 10, width: 12,
     features,
-    sky: new Sky({ indoors: true, skyBaseColor: new Color(60, 60, 25) }),
+    sky: { indoors: true, skyBaseColor: new Color(60, 60, 25) },
     defaultWallPattern: sharedSprites.brickWall.id,
-    floorColor: new Color(70, 70, 30),
+    floorColor: [70, 70, 30],
     startingVantage: { x: 0, y: 5, direction: 'WEST' },
     walls: [
         new Wall({ x: 0, y: 5, placeName: 'WEST', featureIds: ["staircaseAUp"] }),
@@ -178,12 +176,12 @@ const level2 = putWallsAroundLevel({
         Item.ofType(itemTypes.apple, { vantage: { x: 4.85, y: 4.4, direction: 'NORTH' } }),
     ],
     controllers: [
-        new Controller({
+        ({
             inputIds: ["lever1"], subjectId: "door1", defaultSubjectState: "CLOSED", statusMap: [
                 [["ON"], "OPEN"],
             ]
         }),
-        new Controller({
+        ({
             inputIds: ["blueSquare", "redSquare"], subjectId: "pit1", defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
                 [[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "CLOSED"],
             ]

@@ -141,7 +141,7 @@ class Game {
             quests: this.data.quests?.map(quest => quest.serialise()),
             controllers: this.data.controllers.map(controller => controller.data),
             narrativeMessages: this.data.narrativeMessages.map(message => message.data),
-            levels: this.data.levels.map(level => level.data) as NonEmptyArray<LevelInput>
+            levels: this.data.levels.map(level => level.serialise()) as NonEmptyArray<LevelInput>
         }
     }
 

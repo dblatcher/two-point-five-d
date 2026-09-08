@@ -1,10 +1,8 @@
 import { Game } from "@/game-classes/Game";
-import { Level, LevelInput } from "@/game-classes/Level";
+import { LevelInput } from "@/game-classes/Level";
 import { Wall } from "@/game-classes/Wall";
-
 import { Color } from "@/canvas/Color";
 import { CeilingFeature } from "@/game-classes/CeilingFeature";
-import { Controller } from "@/game-classes/Controller";
 import { Figure } from "@/game-classes/Figure";
 import { Pit } from "@/game-classes/FloorFeature";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
@@ -52,12 +50,12 @@ const levels: NonEmptyArray<LevelInput> = [
         ],
         features,
         controllers: [
-            new Controller({
+            {
                 inputIds: ["switch"], subjectId: "door", statusMap: [
                     [["ON"], "OPEN"],
                     [["OFF"], "CLOSED"],
                 ]
-            })
+            }
         ]
     }
 ]

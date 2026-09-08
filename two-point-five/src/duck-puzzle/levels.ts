@@ -1,19 +1,13 @@
-import { Color } from "@/canvas/Color";
-
+import { duck } from "@/duck-puzzle/figureFactory";
 import { Behaviour } from "@/game-classes/Behaviour";
-import { Controller } from "@/game-classes/Controller";
+import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { FloorFeature } from "@/game-classes/FloorFeature";
 import { Item } from "@/game-classes/Item";
 import { SquareWithFeatures } from "@/game-classes/SquareWithFeatures";
 import { Wall } from "@/game-classes/Wall";
-import { doorway, lowWall } from "../instances/wallShapes";
-
-
-import { duck } from "@/duck-puzzle/figureFactory";
 import { sprites } from "@/instances/sprites";
-
-import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
+import { doorway, lowWall } from "../instances/wallShapes";
 import { areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
 import { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed } from "./features";
 import { itemTypes } from "./itemTypes";
@@ -34,7 +28,7 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
         x: 1, y: 4, direction: 'NORTH',
     },
     defaultWallPattern: sprites.brickWall.id,
-    floorColor: new Color(100, 40, 40),
+    floorColor: [100, 40, 40],
     features,
     walls: [
         new Wall({ x: 0, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall }),
@@ -70,12 +64,12 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
     items: [
     ],
     controllers: [
-        new Controller({
+        ({
             inputIds: ["lever1"], defaultSubjectState: "CLOSED", subjectId: "door1",
             statusMap: [[["ON"], "OPEN"]]
         }),
 
-        new Controller({
+        ({
             inputIds: ["floorSwitch"], subjectId: "pit1", defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
                 [[FloorFeature.WEIGHED], "CLOSED"],
             ]
@@ -93,7 +87,7 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
     startingVantage: {
         x: 1, y: 2, direction: 'EAST',
     },
-    floorColor: new Color(30, 120, 90),
+    floorColor: [30, 120, 90],
     walls: [
         new Wall({ x: 5, y: 2, placeName: 'NORTH', shape: lowWall, }),
         new Wall({ x: 5, y: 2, placeName: 'SOUTH', shape: lowWall, }),
@@ -127,7 +121,7 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
             }),
     ],
     controllers: [
-        new Controller({
+        ({
             inputIds: ["floorSwitch", "floorSwitch2"], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subjectId: "door1",
             statusMap: [[[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "OPEN"]]
         }),
@@ -144,7 +138,7 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
     startingVantage: {
         x: 0, y: 0, direction: 'EAST',
     },
-    floorColor: new Color(120, 90, 30),
+    floorColor: [120, 90, 30],
     walls: [
 
         new Wall({ x: 2, y: 2, placeName: 'NORTH', }),
@@ -186,15 +180,15 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
 
     ],
     controllers: [
-        new Controller({
+        ({
             inputIds: ["floorSwitch"], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subjectId: "pitClosed",
             statusMap: [[[FloorFeature.WEIGHED], "OPEN"]]
         }),
-        new Controller({
+        ({
             inputIds: ["floorSwitch"], defaultSubjectState: "CLOSED", useWeightAsStatusForFloorFeatures: true, subjectId: "door1",
             statusMap: [[[FloorFeature.WEIGHED], "OPEN"]]
         }),
-        new Controller({
+        ({
             inputIds: ["lever1"], defaultSubjectState: "CLOSED", subjectId: "door2",
             statusMap: [[["ON"], "OPEN"]]
         }),

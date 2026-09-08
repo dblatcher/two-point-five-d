@@ -18,6 +18,10 @@ class Color {
             this.r, this.g, this.b, this.a
         ]
     }
+    static fromConfig(config: ColorParams) {
+        const [r, g, b, a,] = config
+        return new Color(r, g, b, a)
+    }
 
     get css(): string {
         const { r, g, b, a } = this

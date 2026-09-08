@@ -73,4 +73,4 @@ class Sky {
 }
 
 
-export { Sky }
+export { Sky, SkyData }

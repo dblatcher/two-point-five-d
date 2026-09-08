@@ -3,9 +3,9 @@ import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { SpriteSheet } from "@/canvas/SpriteSheet";
 import { Actor } from "@/game-classes/Actor";
-import { Color } from "../canvas/Color";
+import { Color, ColorParams } from "../canvas/Color";
 import { AbstractFeature } from "./AbstractFeature";
-import { Controller } from "./Controller";
+import { Controller, ControllerData } from "./Controller";
 import { Figure } from "./Figure";
 import { Game, ticksPerMinute } from "./Game";
 import { Item } from "./Item";
@@ -13,7 +13,7 @@ import { PlayerVantage } from "./PlayerVantage";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
-import { Sky } from "./Sky";
+import { Sky, SkyData } from "./Sky";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall } from "./Wall";
@@ -33,7 +33,7 @@ interface Blockage {
     blockageClass?: typeof Wall | typeof SquareWithFeatures | typeof Actor | typeof PlayerVantage
 }
 
-interface LevelConfig {
+interface LevelData {
     id: string,
     width: number
     height: number
@@ -55,18 +55,43 @@ interface LevelConfig {
     victoryCondition?: VictoryTest
 }
 
-export type LevelInput = LevelConfig;
+export type LevelInput = {
+    id: string,
+    width: number
+    height: number
+    defaultWallPattern?: string
+    victoryMessage?: string
+    floorColor?: ColorParams
+    startingVantage?: VantageConfig
+    controllers?: ControllerData[]
+    sky?: SkyData
+
+    items: Item[]
+
+    walls: Wall[]
+    squaresWithFeatures?: SquareWithFeatures[]
+    actors?: Actor[]
+    staticFigures?: Figure[]
+    features?: { [index: string]: AbstractFeature }
+
+    victoryCondition?: VictoryTest
+};
 
 class Level {
 
-    data: LevelConfig
+    data: LevelData
     tickCount: number
     debugElement?: HTMLElement
 
 
     constructor(config: LevelInput, spriteRecord: Record<string, Sprite>) {
-        this.data = config
         this.tickCount = 0
+        this.data = {
+            ...config,
+            sky: config.sky && new Sky(config.sky),
+            floorColor: config.floorColor && Color.fromConfig(config.floorColor),
+            controllers: config.controllers?.map(data => new Controller(data)),
+        }
 
         this.data.walls.forEach(wall => {
             wall.level = this;
@@ -79,6 +104,16 @@ class Level {
         })
         this.data.controllers?.forEach(controller => controller.level = this)
         this.data.actors?.forEach(actor => actor.sprite = spriteRecord[actor.data.spriteId])
+    }
+
+    serialise(): LevelInput {
+        const { data } = this
+        return {
+            ...data,
+            sky: data.sky?.data,
+            floorColor: data.floorColor?.serialise(),
+            controllers: data.controllers?.map(controller => controller.data)
+        }
     }
 
     get id() {
@@ -492,5 +527,5 @@ class Level {
 }
 
 
-export { Blockage, Level, LevelConfig };
+export { Blockage, Level, LevelData as LevelConfig };
 
