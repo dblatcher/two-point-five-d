@@ -16,7 +16,7 @@ import { RelativeDirection } from "./RelativeDirection";
 import { Sky, SkyData } from "./Sky";
 import { SquareWithFeatures, SquareWithFeaturesData } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
-import { Wall } from "./Wall";
+import { Wall, WallInput } from "./Wall";
 import { ItemType } from "./ItemType";
 import { makeItemFunction } from "./constructionHelpers";
 
@@ -46,11 +46,11 @@ interface LevelData {
     sky?: Sky
     controllers?: Controller[]
     items: Item[]
-
-    walls: Wall[]
     squaresWithFeatures?: SquareWithFeatures[]
-    actors?: Actor[]
     staticFigures?: Figure[]
+    walls: Wall[]
+
+    actors?: Actor[]
     features?: { [index: string]: AbstractFeature }
 
     victoryCondition?: VictoryTest
@@ -69,10 +69,10 @@ export type LevelInput = {
     items: ItemInput[]
     staticFigures?: FigureConfig[]
     squaresWithFeatures?: SquareWithFeaturesData[]
+    walls: WallInput[]
 
-    walls: Wall[]
     actors?: Actor[]
-    features?: { [index: string]: AbstractFeature }
+    features?: Record<string, AbstractFeature>
 
     victoryCondition?: VictoryTest
 };
@@ -93,8 +93,8 @@ class Level {
     ) {
         const { spriteRecord } = immutableData;
         this.tickCount = 0
-
         const makeItem = makeItemFunction(immutableData.itemTypeRecord)
+        const levelFeatures = config.features ?? {};
 
         this.data = {
             ...config,
@@ -105,13 +105,13 @@ class Level {
             staticFigures: config.staticFigures?.flatMap(input =>
                 spriteRecord[input.spriteId] ? Figure.ofSprite(spriteRecord[input.spriteId], input) : []
             ),
-            squaresWithFeatures: config.squaresWithFeatures?.map(input => new SquareWithFeatures(input))
+            squaresWithFeatures: config.squaresWithFeatures?.map(input => new SquareWithFeatures(input)),
+            walls: config.walls.map(input => new Wall(
+                input,
+                levelFeatures,
+                input.patternSprite ? spriteRecord[input.patternSprite] : undefined
+            ))
         }
-
-        this.data.walls.forEach(wall => {
-            wall.level = this;
-            wall.features = wall.getFeatures();
-        })
         this.data.squaresWithFeatures?.forEach(squaresWithFeature => {
             squaresWithFeature.level = this
             squaresWithFeature.ceilingFeatures = squaresWithFeature.getCeilingFeatures()
@@ -131,6 +131,7 @@ class Level {
             items: data.items.map(item => item.serialise()),
             staticFigures: data.staticFigures?.map(figure => figure.data),
             squaresWithFeatures: data.squaresWithFeatures?.map(square => square.data),
+            walls: data.walls.map(wall => wall.serialise()),
         }
     }
 

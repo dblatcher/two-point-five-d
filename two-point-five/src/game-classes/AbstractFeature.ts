@@ -200,10 +200,13 @@ class AbstractFeature {
         return undefined
     }
 
-    static getFeaturesFromKeyArray(featureIds: string[], subClass: typeof AbstractFeature, level: Level): AbstractFeature[] {
+    static getFeaturesFromKeyArray(
+        featureIds: string[],
+        subClass: typeof AbstractFeature,
+        levelFeatures: Record<string, AbstractFeature> = {},
+    ): AbstractFeature[] {
 
         const features: AbstractFeature[] = []
-        const levelFeatures = level.data.features || {};
 
         featureIds.forEach(id => {
             const match = levelFeatures[id];

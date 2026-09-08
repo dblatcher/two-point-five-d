@@ -1,22 +1,22 @@
 import { Sprite } from "@/canvas/Sprite";
 import { Direction } from "@/game-classes/Direction";
 import { SquareWithFeaturesData } from "@/game-classes/SquareWithFeatures";
-import { Wall } from "@/game-classes/Wall";
+import { WallInput } from "@/game-classes/Wall";
 import { doorway } from "@/instances/wallShapes";
 
-function makeHut(x: number, y: number, doorPlacement: Direction = Direction.south, patternSprite?: Sprite): { walls: Wall[], ceilings: SquareWithFeaturesData[] } {
+function makeHut(x: number, y: number, doorPlacement: Direction = Direction.south, patternSprite?: Sprite): { walls: WallInput[], ceilings: SquareWithFeaturesData[] } {
 
 
-    const base: { walls: Wall[], ceilings: SquareWithFeaturesData[] } = {
+    const base: { walls: WallInput[], ceilings: SquareWithFeaturesData[] } = {
         walls: [
-            new Wall({ x: x + 0, y: y + 0, placeName: 'NORTH', patternSprite }),
-            new Wall({ x: x + 0, y: y + 0, placeName: 'WEST', patternSprite }),
-            new Wall({ x: x + 1, y: y + 0, placeName: 'NORTH', patternSprite }),
-            new Wall({ x: x + 1, y: y + 0, placeName: 'EAST', patternSprite }),
-            new Wall({ x: x + 0, y: y + 1, placeName: 'SOUTH', patternSprite }),
-            new Wall({ x: x + 0, y: y + 1, placeName: 'WEST', patternSprite }),
-            new Wall({ x: x + 1, y: y + 1, placeName: 'SOUTH', patternSprite }),
-            new Wall({ x: x + 1, y: y + 1, placeName: 'EAST', patternSprite }),
+            ({ x: x + 0, y: y + 0, placeName: 'NORTH', patternSprite: patternSprite?.id }),
+            ({ x: x + 0, y: y + 0, placeName: 'WEST', patternSprite: patternSprite?.id }),
+            ({ x: x + 1, y: y + 0, placeName: 'NORTH', patternSprite: patternSprite?.id }),
+            ({ x: x + 1, y: y + 0, placeName: 'EAST', patternSprite: patternSprite?.id }),
+            ({ x: x + 0, y: y + 1, placeName: 'SOUTH', patternSprite: patternSprite?.id }),
+            ({ x: x + 0, y: y + 1, placeName: 'WEST', patternSprite: patternSprite?.id }),
+            ({ x: x + 1, y: y + 1, placeName: 'SOUTH', patternSprite: patternSprite?.id }),
+            ({ x: x + 1, y: y + 1, placeName: 'EAST', patternSprite: patternSprite?.id }),
         ],
         ceilings: [
             { x: x + 0, y: y + 0, direction: 'NORTH', ceilingFeatureIds: ["brownCeiling"] },
@@ -36,10 +36,11 @@ function makeHut(x: number, y: number, doorPlacement: Direction = Direction.sout
         case Direction.south: doorwayIndex = 6; break;
     }
 
-    base.walls[doorwayIndex].data.shape = doorway;
-    base.walls[doorwayIndex].data.open = true;
+    base.walls[doorwayIndex].shape = doorway;
+    base.walls[doorwayIndex].open = true;
 
     return base;
 }
 
 export { makeHut };
+

@@ -4,7 +4,6 @@ import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { Vantage } from "@/game-classes/Vantage";
-import { Wall } from "@/game-classes/Wall";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway, spikey } from "@/instances/wallShapes";
@@ -32,8 +31,8 @@ const hut4 = makeHut(6, 8, Direction.north, sprites.grayWoodWallOne)
 const hut5 = makeHut(10, 3, Direction.west, sprites.yellowWoodWallOne)
 const hut6 = makeHut(13, 7, Direction.west, sprites.brownWoodWallOne)
 
-church.walls[0].data.featureIds = ["staircaseAdown"]
-hut3.walls[0].data.featureIds = ["torch"]
+church.walls[0].featureIds = ["staircaseAdown"]
+hut3.walls[0].featureIds = ["torch"]
 
 
 
@@ -49,7 +48,7 @@ const level1 = putWallsAroundLevel({
     features,
     walls: [
         ...church.walls,
-        new Wall({ x: 2, y: 2, placeName: 'NORTH', patternSprite: sharedSprites.brickWall, shape: doorway, featureIds: ["door3", "keyhole"], open: true }),
+        ({ x: 2, y: 2, placeName: 'NORTH', patternSprite: sharedSprites.brickWall.id, shape: doorway, featureIds: ["door3", "keyhole"], open: true }),
         ...hut1.walls,
         ...hut2.walls,
         ...hut3.walls,
@@ -57,13 +56,13 @@ const level1 = putWallsAroundLevel({
         ...hut5.walls,
         ...hut6.walls,
 
-        new Wall({ x: 3, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 4, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 5, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
+        ({ x: 3, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
+        ({ x: 4, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
+        ({ x: 5, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
 
-        new Wall({ x: 5, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 6, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
-        new Wall({ x: 7, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN }),
+        ({ x: 5, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
+        ({ x: 6, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
+        ({ x: 7, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
 
     ],
 

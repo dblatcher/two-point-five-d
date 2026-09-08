@@ -2,9 +2,9 @@ import { ConvertFunction, DrawingContext, mapPointInSight, plotPolygon, Point } 
 import { getPatternFill, getUpperLevelPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
-import { Color } from "../canvas/Color";
+import { Color, ColorParams } from "../canvas/Color";
+import { AbstractFeature } from "./AbstractFeature";
 import { CardinalDirectionName, Direction } from "./Direction";
-import { Level } from "./Level";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
@@ -19,6 +19,18 @@ interface WallConfig {
     color?: Color
     patternSprite?: Sprite
     shape?: Point[]
+    open: boolean
+    featureIds?: string[]
+}
+
+
+interface WallInput {
+    x: number
+    y: number
+    placeName: CardinalDirectionName
+    color?: ColorParams
+    patternSprite?: string
+    shape?: Point[]
     open?: boolean
     featureIds?: string[]
 }
@@ -26,15 +38,27 @@ interface WallConfig {
 class Wall extends Position {
     data: WallConfig
     place: Direction
-    level?: Level
     features: WallFeature[]
 
-    constructor(config: WallConfig) {
+    constructor(config: WallInput, levelFeatures: Record<string, AbstractFeature> = {}, patternSprite?: Sprite) {
         super(config)
-        this.data = config
+        this.data = {
+            ...config,
+            color: config.color && Color.fromConfig(config.color),
+            patternSprite,
+            open: !!config.open,
+        }
         this.place = Direction.of(config.placeName)
-        this.data.open = !!this.data.open
-        this.features = []
+        this.features = WallFeature.getFeaturesFromKeyArray(config.featureIds ?? [], WallFeature, levelFeatures) as WallFeature[];
+    }
+
+    serialise(): WallInput {
+        const { data } = this
+        return {
+            ...data,
+            patternSprite: data.patternSprite?.id,
+            color: data.color?.serialise(),
+        }
     }
 
 
@@ -76,18 +100,6 @@ class Wall extends Position {
             else if (relativeDirection.r == -1 && stepsRight <= 0) { return false }
             else { return true }
         }
-    }
-
-    getFeatures(): WallFeature[] {
-
-        const { featureIds = [] } = this.data
-        const allFeatures = []
-
-        if (this.level) {
-            const featuresFromKeys = WallFeature.getFeaturesFromKeyArray(featureIds, WallFeature, this.level) as WallFeature[];
-            allFeatures.push(...featuresFromKeys)
-        }
-        return allFeatures
     }
 
     drawInSight(
@@ -228,4 +240,5 @@ class Wall extends Position {
 }
 
 
-export { Wall, WallConfig };
+export { Wall, WallConfig, WallInput };
+

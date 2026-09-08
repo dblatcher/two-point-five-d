@@ -3,7 +3,6 @@ import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { FloorFeature } from "@/game-classes/FloorFeature";
-import { Wall } from "@/game-classes/Wall";
 import { sprites } from "@/instances/sprites";
 import { doorway, lowWall } from "../instances/wallShapes";
 import { areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
@@ -29,18 +28,18 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
     floorColor: [100, 40, 40],
     features,
     walls: [
-        new Wall({ x: 0, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall }),
-        new Wall({ x: 1, y: 3, placeName: 'NORTH', featureIds: ["hintForLevel1"] }),
-        new Wall({ x: 2, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall }),
-        new Wall({ x: 3, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall }),
-        new Wall({ x: 4, y: 2, placeName: 'WEST', shape: doorway, open: true, featureIds: ["door1"] }),
-        new Wall({ x: 4, y: 1, placeName: 'WEST', featureIds: ["lever1"] }),
-        new Wall({ x: 4, y: 0, placeName: 'WEST' }),
-        new Wall({ x: 6, y: 0, placeName: 'WEST' }),
-        new Wall({ x: 6, y: 1, placeName: 'WEST' }),
-        new Wall({ x: 6, y: 1, placeName: 'SOUTH' }),
-        new Wall({ x: 6, y: 1, placeName: 'EAST' }),
-        new Wall({ x: 7, y: 0, placeName: 'SOUTH' }),
+        ({ x: 0, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall.id }),
+        ({ x: 1, y: 3, placeName: 'NORTH', featureIds: ["hintForLevel1"] }),
+        ({ x: 2, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall.id }),
+        ({ x: 3, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall.id }),
+        ({ x: 4, y: 2, placeName: 'WEST', shape: doorway, open: true, featureIds: ["door1"] }),
+        ({ x: 4, y: 1, placeName: 'WEST', featureIds: ["lever1"] }),
+        ({ x: 4, y: 0, placeName: 'WEST' }),
+        ({ x: 6, y: 0, placeName: 'WEST' }),
+        ({ x: 6, y: 1, placeName: 'WEST' }),
+        ({ x: 6, y: 1, placeName: 'SOUTH' }),
+        ({ x: 6, y: 1, placeName: 'EAST' }),
+        ({ x: 7, y: 0, placeName: 'SOUTH' }),
     ],
     squaresWithFeatures: [
         {
@@ -87,12 +86,12 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
     },
     floorColor: [30, 120, 90],
     walls: [
-        new Wall({ x: 5, y: 2, placeName: 'NORTH', shape: lowWall, }),
-        new Wall({ x: 5, y: 2, placeName: 'SOUTH', shape: lowWall, }),
-        new Wall({ x: 5, y: 3, placeName: 'EAST', featureIds: ["hintForLevel2"] }),
-        new Wall({ x: 4, y: 2, placeName: 'NORTH', shape: lowWall, }),
-        new Wall({ x: 4, y: 2, placeName: 'SOUTH', shape: lowWall, }),
-        new Wall({ x: 4, y: 2, placeName: 'WEST', featureIds: ["door1"], open: true, shape: doorway }),
+        ({ x: 5, y: 2, placeName: 'NORTH', shape: lowWall, }),
+        ({ x: 5, y: 2, placeName: 'SOUTH', shape: lowWall, }),
+        ({ x: 5, y: 3, placeName: 'EAST', featureIds: ["hintForLevel2"] }),
+        ({ x: 4, y: 2, placeName: 'NORTH', shape: lowWall, }),
+        ({ x: 4, y: 2, placeName: 'SOUTH', shape: lowWall, }),
+        ({ x: 4, y: 2, placeName: 'WEST', featureIds: ["door1"], open: true, shape: doorway }),
     ],
     squaresWithFeatures: [
         {
@@ -137,24 +136,23 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
     },
     floorColor: [120, 90, 30],
     walls: [
+        ({ x: 2, y: 2, placeName: 'NORTH', }),
+        ({ x: 3, y: 2, placeName: 'NORTH', shape: doorway, open: true, featureIds: ["door1"] }),
+        ({ x: 4, y: 2, placeName: 'NORTH', }),
 
-        new Wall({ x: 2, y: 2, placeName: 'NORTH', }),
-        new Wall({ x: 3, y: 2, placeName: 'NORTH', shape: doorway, open: true, featureIds: ["door1"] }),
-        new Wall({ x: 4, y: 2, placeName: 'NORTH', }),
+        ({ x: 2, y: 4, placeName: 'SOUTH', }),
+        ({ x: 3, y: 4, placeName: 'SOUTH', shape: doorway, open: true, featureIds: ["door2"] }),
+        ({ x: 4, y: 4, placeName: 'SOUTH', }),
 
-        new Wall({ x: 2, y: 4, placeName: 'SOUTH', }),
-        new Wall({ x: 3, y: 4, placeName: 'SOUTH', shape: doorway, open: true, featureIds: ["door2"] }),
-        new Wall({ x: 4, y: 4, placeName: 'SOUTH', }),
+        ({ x: 2, y: 2, placeName: 'WEST', }),
+        ({ x: 2, y: 3, placeName: 'WEST', featureIds: ["lever1"] }),
+        ({ x: 2, y: 4, placeName: 'WEST', }),
 
-        new Wall({ x: 2, y: 2, placeName: 'WEST', }),
-        new Wall({ x: 2, y: 3, placeName: 'WEST', featureIds: ["lever1"] }),
-        new Wall({ x: 2, y: 4, placeName: 'WEST', }),
+        ({ x: 4, y: 2, placeName: 'EAST', }),
+        ({ x: 4, y: 3, placeName: 'EAST', }),
+        ({ x: 4, y: 4, placeName: 'EAST', }),
 
-        new Wall({ x: 4, y: 2, placeName: 'EAST', }),
-        new Wall({ x: 4, y: 3, placeName: 'EAST', }),
-        new Wall({ x: 4, y: 4, placeName: 'EAST', }),
-
-        new Wall({ x: 4, y: 6, placeName: 'WEST', shape: doorway, open: true, featureIds: ["door1"] }),
+        ({ x: 4, y: 6, placeName: 'WEST', shape: doorway, open: true, featureIds: ["door1"] }),
     ],
     squaresWithFeatures: [
         {

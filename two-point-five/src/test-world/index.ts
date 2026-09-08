@@ -3,7 +3,6 @@ import { CeilingFeature } from "@/game-classes/CeilingFeature";
 import { Pit } from "@/game-classes/FloorFeature";
 import { Game } from "@/game-classes/Game";
 import { LevelInput } from "@/game-classes/Level";
-import { Wall } from "@/game-classes/Wall";
 import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { itemTypes } from "@/instances/itemTypes";
 import { spriteSheets as sharedSpriteSheets, sprites } from "@/instances/sprites";
@@ -31,10 +30,8 @@ const levels: NonEmptyArray<LevelInput> = [
         height: 10,
         width: 10,
         walls: [
-            // new Wall({ x: 6, y: 4, place: Direction.west, shape: vaultDoorway, patternSprite: sprites.brickWall, }),
-            new Wall({ x: 6, y: 3, placeName: 'WEST', patternSprite: sprites.brickWall2, featureIds: ["switch"] }),
-            new Wall({ x: 6, y: 5, placeName: 'NORTH', shape: vaultDoorway, featureIds: ["door"], open: true }),
-            // new Wall({ x: 5, y: 7, place: 'NORTH', shape: tower, patternSprite: sprites.testPattern, }),
+            ({ x: 6, y: 3, placeName: 'WEST', patternSprite: sprites.brickWall2.id, featureIds: ["switch"] }),
+            ({ x: 6, y: 5, placeName: 'NORTH', shape: vaultDoorway, featureIds: ["door"], open: true }),
         ],
         items: [
 
