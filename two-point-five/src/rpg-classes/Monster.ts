@@ -6,14 +6,14 @@ import { Vantage } from "@/game-classes/Vantage"
 import { CharacterStats } from "./CharacterStats"
 
 
-type MonsterData = ActorData & {
+export type MonsterData = ActorData & {
     actorType: 'Monster'
     blocksSquare?: boolean
     stats: CharacterStats
     defaultAttackAnimation?: string
 }
 
-class Monster extends Actor {
+export class Monster extends Actor {
     data: MonsterData
     isDying: boolean
 
@@ -80,7 +80,5 @@ class Monster extends Actor {
     }
 }
 
-export {
-    Monster
-}
+
 

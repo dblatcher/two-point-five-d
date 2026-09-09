@@ -5,6 +5,10 @@ import { WithOptional } from "@/types";
 import { Item, ItemInput } from "./Item";
 import { ItemType } from "./ItemType";
 import { LevelInput } from "./Level";
+import { Behaviour, DecisionFunction } from "./Behaviour";
+import { Actor, ActorData, ActorInput } from "./Actor";
+import { Monster, MonsterData } from "@/rpg-classes/Monster";
+import { NonPlayerCharacter, NonPlayerCharacterData } from "@/rpg-classes/NonPlayerCharacter";
 
 export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): LevelInput => {
     const { walls, width, height } = levelInput;
@@ -42,3 +46,30 @@ export const makeItemFunction = (itemTypeRecord: Record<string, ItemType>) =>
         const itemType = itemTypeId && itemTypeRecord[itemTypeId];
         return itemType ? Item.ofType(itemType, config) : null
     }
+
+export type ImmutableData = {
+    spriteRecord: Record<string, Sprite>,
+    itemTypeRecord: Record<string, ItemType>,
+    decisionFunctions: Record<string, DecisionFunction>
+}
+
+export const constructActorFunction = ({ decisionFunctions }: ImmutableData) => (input: ActorInput): Actor => {
+
+    const decisionFunction = input.behaviour ? decisionFunctions[input.behaviour] : undefined;
+    const behaviour = decisionFunction && new Behaviour(decisionFunction)
+
+    const data: ActorData = {
+        ...input,
+        behaviour,
+    }
+
+    switch (input.actorType) {
+        case 'Monster':
+            return new Monster(data as MonsterData)
+        case 'NonPlayerCharacter': {
+            return new NonPlayerCharacter(data as NonPlayerCharacterData)
+        }
+        default:
+            return new Actor(data)
+    }
+}

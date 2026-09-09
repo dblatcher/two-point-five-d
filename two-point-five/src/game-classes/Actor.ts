@@ -20,6 +20,17 @@ interface ActorData {
     canInteractWith?: boolean
 }
 
+type ActorInput = {
+    actorType: string,
+    vantage?: Vantage
+    spriteId: string
+    behaviour?: string
+    height?: number
+    width?: number
+    blocksSquare?: boolean
+    canInteractWith?: boolean
+}
+
 class Actor {
     data: ActorData
     actionQueue: Action[]
@@ -124,5 +135,5 @@ class Actor {
 
 
 export {
-    Actor, ActorData
+    Actor, ActorData, ActorInput,
 }

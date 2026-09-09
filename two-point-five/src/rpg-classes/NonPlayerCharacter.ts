@@ -5,14 +5,14 @@ import { Vantage } from "@/game-classes/Vantage"
 import { Quest, QuestHook } from "./Quest"
 
 
-type NonPlayerCharacterData = ActorData & {
-    actorType: 'NPC',
+export type NonPlayerCharacterData = ActorData & {
+    actorType: 'NonPlayerCharacter',
     talkMessage?: string
     name?: string
     questHooks?: QuestHook[]
 }
 
-class NonPlayerCharacter extends Actor {
+export class NonPlayerCharacter extends Actor {
     data: NonPlayerCharacterData
 
     constructor(data: NonPlayerCharacterData) {
@@ -87,7 +87,4 @@ class NonPlayerCharacter extends Actor {
 
 }
 
-export {
-    NonPlayerCharacter, NonPlayerCharacterData
-}
 

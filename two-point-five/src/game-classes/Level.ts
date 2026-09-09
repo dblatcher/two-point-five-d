@@ -5,12 +5,11 @@ import { SpriteSheet } from "@/canvas/SpriteSheet";
 import { Actor } from "@/game-classes/Actor";
 import { Color, ColorParams } from "../canvas/Color";
 import { AbstractFeature } from "./AbstractFeature";
-import { makeItemFunction } from "./constructionHelpers";
+import { ImmutableData, makeItemFunction } from "./constructionHelpers";
 import { Controller, ControllerData } from "./Controller";
 import { Figure, FigureConfig } from "./Figure";
 import { Game, ticksPerMinute } from "./Game";
 import { Item, ItemInput } from "./Item";
-import { ItemType } from "./ItemType";
 import { PlayerVantage } from "./PlayerVantage";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
@@ -19,7 +18,6 @@ import { Sky, SkyInput } from "./Sky";
 import { SquareWithFeatures, SquareWithFeaturesData } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall, WallInput } from "./Wall";
-import { DecisionFunction } from "./Behaviour";
 
 const renderingZoneFrames = false;
 
@@ -78,20 +76,15 @@ export type LevelInput = {
     victoryCondition?: VictoryTest
 };
 
-class Level {
 
+class Level {
     data: LevelData
     tickCount: number
     debugElement?: HTMLElement
 
-
     constructor(
         config: LevelInput,
-        immutableData: {
-            spriteRecord: Record<string, Sprite>,
-            itemTypeRecord: Record<string, ItemType>,
-            decisionFunctions: Record<string, DecisionFunction>
-        }
+        immutableData: ImmutableData,
     ) {
         const { spriteRecord, itemTypeRecord } = immutableData;
         this.tickCount = 0
