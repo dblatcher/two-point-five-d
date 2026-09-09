@@ -8,6 +8,8 @@ import { itemTypes } from "./itemTypes";
 import { level1 } from "./level1";
 import { level2 } from "./level2";
 import { spriteSheets as localSheets, sprites } from "./sprites";
+import { decisionFunctions } from "@/game-classes/decisionFunctions";
+import { monsterDecisionFunctions } from "./monsterBehaviour";
 
 const spriteSheets = [
     ...sharedSheets,
@@ -62,6 +64,10 @@ const game = new Game({
         ...Object.values(sprites).map(sprite => sprite.data)
     ],
     itemTypeRecord: itemTypes,
+    decisionFunctions: {
+        ...decisionFunctions,
+        ...monsterDecisionFunctions,
+    }
 }, {
     needCharacterToPickUpItems: true,
     playerBlocksPassage: true,

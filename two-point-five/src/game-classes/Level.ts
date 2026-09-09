@@ -19,6 +19,7 @@ import { Sky, SkyInput } from "./Sky";
 import { SquareWithFeatures, SquareWithFeaturesData } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall, WallInput } from "./Wall";
+import { DecisionFunction } from "./Behaviour";
 
 const renderingZoneFrames = false;
 
@@ -88,12 +89,13 @@ class Level {
         config: LevelInput,
         immutableData: {
             spriteRecord: Record<string, Sprite>,
-            itemTypeRecord: Record<string, ItemType>
+            itemTypeRecord: Record<string, ItemType>,
+            decisionFunctions: Record<string, DecisionFunction>
         }
     ) {
-        const { spriteRecord } = immutableData;
+        const { spriteRecord, itemTypeRecord } = immutableData;
         this.tickCount = 0
-        const makeItem = makeItemFunction(immutableData.itemTypeRecord)
+        const makeItem = makeItemFunction(itemTypeRecord)
         const levelFeatures = config.features ?? {};
 
         this.data = {

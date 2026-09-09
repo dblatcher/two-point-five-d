@@ -1,6 +1,7 @@
 import { Action, DoAction } from "@/game-classes/Action"
 import { Actor } from "@/game-classes/Actor"
-import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour"
+import { Behaviour, DecisionFunction } from "@/game-classes/Behaviour"
+import { decisionFunctions } from "@/game-classes/decisionFunctions"
 import { Game } from "@/game-classes/Game"
 import { Monster } from "@/rpg-classes/Monster"
 
@@ -11,7 +12,9 @@ function makeAttack(monster: Monster): Action | null {
     }
 
     return new DoAction(monster.data.defaultAttackAnimation || 'ATTACK', 10, function (actor, game) {
-        const monster = actor as Monster;
+        if (!(actor instanceof Monster)) {
+            return
+        }
         if (monster.hasPlayerInFront(game)) {
             monster.attackPlayers(game)
         }
@@ -20,34 +23,42 @@ function makeAttack(monster: Monster): Action | null {
 
 
 function attackOrMoveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
-    const monster = actor as Monster;
-
-    if (monster.hasPlayerInFront(game)) {
-        return makeAttack(monster)
+    if (!(actor instanceof Monster)) {
+        return null
     }
-    return decisionFunctions.moveAntiClockwise(monster, game, behaviour)
+
+    if (actor.hasPlayerInFront(game)) {
+        return makeAttack(actor)
+    }
+    return decisionFunctions.moveAntiClockwise(actor, game, behaviour)
 }
 
 function attackOrMoveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
-    const monster = actor as Monster;
-
-    if (monster.hasPlayerInFront(game)) {
-        return makeAttack(monster)
+    if (!(actor instanceof Monster)) {
+        return null
     }
-    return decisionFunctions.moveClockwise(monster, game, behaviour)
+
+    if (actor.hasPlayerInFront(game)) {
+        return makeAttack(actor)
+    }
+    return decisionFunctions.moveClockwise(actor, game, behaviour)
 }
 
 function standAndFight(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
-    const monster = actor as Monster;
+    if (!(actor instanceof Monster)) {
+        return null
+    }
 
-    if (monster.hasPlayerInFront(game)) {
-        return makeAttack(monster)
+    if (actor.hasPlayerInFront(game)) {
+        return makeAttack(actor)
     }
     return null
 }
 
 
 
-export {
-    attackOrMoveAntiClockwise, standAndFight, attackOrMoveClockwise
+export const monsterDecisionFunctions: Record<string, DecisionFunction> = {
+    attackOrMoveAntiClockwise,
+    standAndFight,
+    attackOrMoveClockwise
 }

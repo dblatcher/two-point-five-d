@@ -6,6 +6,7 @@ import { NonEmptyArray } from "@/types";
 import { itemTypes } from "./itemTypes";
 import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels";
 import { spriteSheets as duckPuzzleSheets, duckPuzzleSprites } from "./sprites";
+import { decisionFunctions } from "@/game-classes/decisionFunctions";
 
 const allSpriteSheets = [
     ...sharedSheets,
@@ -34,6 +35,7 @@ const game = new Game({
     spriteSheets: allSpriteSheets,
     sprites: Object.values(allSprites).map(sprite => sprite.data),
     itemTypeRecord: itemTypes,
+    decisionFunctions: decisionFunctions,
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,

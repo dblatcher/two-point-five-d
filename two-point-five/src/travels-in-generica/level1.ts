@@ -1,7 +1,8 @@
 import { Color } from "@/canvas/Color";
 import { AbstractFeature } from "@/game-classes/AbstractFeature";
-import { Behaviour, decisionFunctions } from "@/game-classes/Behaviour";
+import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
+import { decisionFunctions } from "@/game-classes/decisionFunctions";
 import { Direction } from "@/game-classes/Direction";
 import { Vantage } from "@/game-classes/Vantage";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";

@@ -10,7 +10,7 @@ import { CharacterStats } from "@/rpg-classes/CharacterStats";
 import { Monster } from "@/rpg-classes/Monster";
 import * as globalFeatures from "@/travels-in-generica/features";
 import { itemTypes } from "./itemTypes";
-import * as monsterDecisionFunctions from "./monsterBehaviour";
+import { monsterDecisionFunctions } from "./monsterBehaviour";
 import { sprites } from "./sprites";
 
 const bigSquareOnFloor: [number, number][] = [

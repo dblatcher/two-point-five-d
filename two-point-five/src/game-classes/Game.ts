@@ -22,6 +22,7 @@ import { SpriteSheet } from '@/canvas/SpriteSheet'
 import { Sprite, SpriteConfig } from '@/canvas/Sprite'
 import { FeedbackToUI } from './FeebackToUi'
 import { NonEmptyArray } from '@/types'
+import { DecisionFunction } from './Behaviour'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -61,6 +62,7 @@ interface GameImmutables {
     sprites: SpriteConfig[]
     itemTypeRecord: Record<string, ItemType>
     gameCompleteMessage?: string
+    decisionFunctions: Record<string, DecisionFunction>
 }
 
 interface GameRules {
@@ -129,6 +131,7 @@ class Game {
             levels: config.levels.map(data => new Level(data, {
                 spriteRecord,
                 itemTypeRecord: immutables.itemTypeRecord,
+                decisionFunctions: immutables.decisionFunctions,
             })) as NonEmptyArray<Level>
         };
 
