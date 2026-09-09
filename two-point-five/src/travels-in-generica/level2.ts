@@ -1,4 +1,3 @@
-import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { TeleportReaction } from "@/game-classes/Reaction";
@@ -7,10 +6,8 @@ import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFe
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";
 import { CharacterStats } from "@/rpg-classes/CharacterStats";
-import { Monster } from "@/rpg-classes/Monster";
 import * as globalFeatures from "@/travels-in-generica/features";
 import { itemTypes } from "./itemTypes";
-import { monsterDecisionFunctions } from "./monsterBehaviour";
 import { sprites } from "./sprites";
 
 const bigSquareOnFloor: [number, number][] = [
@@ -142,30 +139,29 @@ const level2 = putWallsAroundLevel({
         { x: 5, y: 2, direction: 'NORTH', floorFeatureIds: ["pit1"] },
     ],
     actors: [
-        new Monster({
+        {
             actorType: 'Monster',
             vantage: new Vantage({ x: 5.5, y: 6.5, direction: 'WEST' }),
             spriteId: sprites.skeletonArcher.data.id,
             defaultAttackAnimation: "ATTACK_SWING",
             stats: new CharacterStats({ health: [1, 10], stamina: [10, 10], mana: [0, 0] }),
-            behaviour: new Behaviour(monsterDecisionFunctions.standAndFight),
-        }),
+            behaviour: 'standAndFight',
+        },
 
-        new Monster({
+        {
             actorType: 'Monster',
             vantage: new Vantage({ x: 4.5, y: 8.5, direction: 'SOUTH' }),
             spriteId: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
-            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveClockwise),
-        }),
-
-        new Monster({
+            behaviour: 'attackOrMoveClockwise',
+        },
+        {
             actorType: 'Monster',
             vantage: new Vantage({ x: 6.5, y: 9.5, direction: 'NORTH' }),
             spriteId: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
-            behaviour: new Behaviour(monsterDecisionFunctions.attackOrMoveAntiClockwise),
-        }),
+            behaviour: 'attackOrMoveAntiClockwise',
+        },
 
     ],
     items: [

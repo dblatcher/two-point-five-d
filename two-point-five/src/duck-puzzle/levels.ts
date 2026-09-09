@@ -1,11 +1,10 @@
 import { duck } from "@/duck-puzzle/figureFactory";
-import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { FloorFeature } from "@/game-classes/FloorFeature";
 import { sprites } from "@/instances/sprites";
 import { doorway, lowWall } from "../instances/wallShapes";
-import { areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
+import { areAllDucksOnTheStar, blueStar } from "./behaviours";
 import { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed } from "./features";
 import { itemTypes } from "./itemTypes";
 
@@ -56,7 +55,7 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
 
     ],
     actors: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
+        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: 'moveAntiClockwiseUnlessOnStar' }),
     ],
     items: [
     ],
@@ -108,7 +107,7 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
 
     ],
     actors: [
-        duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
+        duck({ x: 5.5, y: 2.5, direction: Direction.east, behaviour: 'moveAntiClockwiseUnlessOnStar' }),
     ],
     items: [
         {
@@ -168,8 +167,8 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
         },
     ],
     actors: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
-        duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: new Behaviour(moveAntiClockwiseUnlessOnStar) }),
+        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: 'moveAntiClockwiseUnlessOnStar' }),
+        duck({ x: 0.5, y: 3.5, direction: Direction.north, behaviour: 'moveAntiClockwiseUnlessOnStar' }),
     ],
     items: [
 

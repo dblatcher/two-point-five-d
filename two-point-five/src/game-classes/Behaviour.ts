@@ -9,11 +9,13 @@ interface DecisionFunction {
 class Behaviour {
     decisionFunction: DecisionFunction
     history: Action[]
+    functionName: string
     static historyLength = 5
 
-    constructor(decisionFunction: DecisionFunction) {
+    constructor(decisionFunction: DecisionFunction, functionName: string) {
         this.decisionFunction = decisionFunction
         this.history = []
+        this.functionName = functionName
     }
 
     decideAction(actor: Actor, game: Game): Action | null {

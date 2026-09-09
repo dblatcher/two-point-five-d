@@ -1,14 +1,11 @@
 import { Color } from "@/canvas/Color";
 import { AbstractFeature } from "@/game-classes/AbstractFeature";
-import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
-import { decisionFunctions } from "@/game-classes/decisionFunctions";
 import { Direction } from "@/game-classes/Direction";
 import { Vantage } from "@/game-classes/Vantage";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway, spikey } from "@/instances/wallShapes";
-import { NonPlayerCharacter } from "@/rpg-classes/NonPlayerCharacter";
 import { QuestHook } from "@/rpg-classes/Quest";
 import * as globalFeatures from "@/travels-in-generica/features";
 import { makeChurch } from "./buildings/church";
@@ -92,31 +89,31 @@ const level1 = putWallsAroundLevel({
     ],
 
     actors: [
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.smith.data.id,
             vantage: new Vantage({ x: 1.5, y: 7.5, direction: 'EAST' }),
             talkMessage: "Wanna buy a hammer?",
             name: "George the blacksmith",
         }),
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.farmer2.data.id,
-            behaviour: new Behaviour(decisionFunctions.wanderAround),
+            behaviour: ('wanderAround'),
             vantage: new Vantage({ x: 8.25, y: 4.25, direction: 'NORTH' }),
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",
         }),
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.farmer.data.id,
-            behaviour: new Behaviour(decisionFunctions.walkInCircle),
+            behaviour: ('walkInCircle'),
             vantage: new Vantage({ x: 6.25, y: 6.25, direction: 'WEST' }),
             talkMessage: "I should get back to the cows.",
             name: "Roger the herdsman",
         }),
 
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.armedMan.data.id,
             vantage: new Vantage({ x: 10.75, y: 5.75, direction: 'NORTH' }),
@@ -124,16 +121,16 @@ const level1 = putWallsAroundLevel({
             name: "Harry Longblade",
         }),
 
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.guard2.data.id,
             vantage: new Vantage({ x: 5.25, y: 7.25, direction: 'NORTH' }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
-            behaviour: new Behaviour(decisionFunctions.moveBackAndForward),
+            behaviour: ('moveBackAndForward'),
         }),
 
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.guard3.data.id,
             vantage: new Vantage({ x: 4.5, y: 3.5, direction: 'SOUTH' }),
@@ -150,7 +147,7 @@ const level1 = putWallsAroundLevel({
             ]
         }),
 
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.redMonk.data.id,
             vantage: new Vantage({ x: 3.5, y: 0.5, direction: 'SOUTH' }),
@@ -176,7 +173,7 @@ const level1 = putWallsAroundLevel({
                 }),
             ]
         }),
-        new NonPlayerCharacter({
+        ({
             actorType: 'NonPlayerCharacter',
             spriteId: sprites.innKeeper.data.id,
             vantage: new Vantage({ x: 6.5, y: 2.25, direction: 'SOUTH' }),

@@ -2,10 +2,10 @@ import { ConvertFunction, DrawingContext, getPlacesInSight, getViewportMapFuncti
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
 import { SpriteSheet } from "@/canvas/SpriteSheet";
-import { Actor } from "@/game-classes/Actor";
+import { Actor, ActorInput } from "@/game-classes/Actor";
 import { Color, ColorParams } from "../canvas/Color";
 import { AbstractFeature } from "./AbstractFeature";
-import { ImmutableData, makeItemFunction } from "./constructionHelpers";
+import { constructActorFunction, ImmutableData, makeItemFunction } from "./constructionHelpers";
 import { Controller, ControllerData } from "./Controller";
 import { Figure, FigureConfig } from "./Figure";
 import { Game, ticksPerMinute } from "./Game";
@@ -69,8 +69,8 @@ export type LevelInput = {
     staticFigures?: FigureConfig[]
     squaresWithFeatures?: SquareWithFeaturesData[]
     walls: WallInput[]
+    actors?: ActorInput[]
 
-    actors?: Actor[]
     features?: Record<string, AbstractFeature>
 
     victoryCondition?: VictoryTest
@@ -89,6 +89,7 @@ class Level {
         const { spriteRecord, itemTypeRecord } = immutableData;
         this.tickCount = 0
         const makeItem = makeItemFunction(itemTypeRecord)
+        const makeActor = constructActorFunction(immutableData)
         const levelFeatures = config.features ?? {};
 
         this.data = {
@@ -105,7 +106,8 @@ class Level {
                 input,
                 levelFeatures,
                 input.patternSprite ? spriteRecord[input.patternSprite] : undefined
-            ))
+            )),
+            actors: config.actors?.map(input => makeActor(input))
         }
         this.data.squaresWithFeatures?.forEach(squaresWithFeature => {
             squaresWithFeature.level = this
@@ -127,6 +129,7 @@ class Level {
             staticFigures: data.staticFigures?.map(figure => figure.data),
             squaresWithFeatures: data.squaresWithFeatures?.map(square => square.data),
             walls: data.walls.map(wall => wall.serialise()),
+            actors: data.actors?.map(actor => actor.serialise())
         }
     }
 

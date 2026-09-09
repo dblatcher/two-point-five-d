@@ -1,6 +1,6 @@
 import { Color } from "@/canvas/Color";
 import { CeilingFeature } from "@/game-classes/CeilingFeature";
-import { decisionFunctions } from "@/game-classes/decisionFunctions";
+import { genericDecisionFunctions } from "@/game-classes/decisionFunctions";
 import { Pit } from "@/game-classes/FloorFeature";
 import { Game } from "@/game-classes/Game";
 import { LevelInput } from "@/game-classes/Level";
@@ -69,7 +69,7 @@ const game = new Game(
         spriteSheets,
         sprites: Object.values(sprites).map(sprite => sprite.data),
         itemTypeRecord: itemTypes,
-        decisionFunctions: decisionFunctions,
+        decisionFunctions: genericDecisionFunctions,
     },
     { noCharacters: true }
 )

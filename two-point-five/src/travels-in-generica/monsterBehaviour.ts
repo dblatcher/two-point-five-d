@@ -1,7 +1,7 @@
 import { Action, DoAction } from "@/game-classes/Action"
 import { Actor } from "@/game-classes/Actor"
 import { Behaviour, DecisionFunction } from "@/game-classes/Behaviour"
-import { decisionFunctions } from "@/game-classes/decisionFunctions"
+import { genericDecisionFunctions } from "@/game-classes/decisionFunctions"
 import { Game } from "@/game-classes/Game"
 import { Monster } from "@/rpg-classes/Monster"
 
@@ -30,7 +30,7 @@ function attackOrMoveAntiClockwise(actor: Actor, game: Game, behaviour: Behaviou
     if (actor.hasPlayerInFront(game)) {
         return makeAttack(actor)
     }
-    return decisionFunctions.moveAntiClockwise(actor, game, behaviour)
+    return genericDecisionFunctions.moveAntiClockwise(actor, game, behaviour)
 }
 
 function attackOrMoveClockwise(actor: Actor, game: Game, behaviour: Behaviour): Action | null {
@@ -41,7 +41,7 @@ function attackOrMoveClockwise(actor: Actor, game: Game, behaviour: Behaviour): 
     if (actor.hasPlayerInFront(game)) {
         return makeAttack(actor)
     }
-    return decisionFunctions.moveClockwise(actor, game, behaviour)
+    return genericDecisionFunctions.moveClockwise(actor, game, behaviour)
 }
 
 function standAndFight(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {

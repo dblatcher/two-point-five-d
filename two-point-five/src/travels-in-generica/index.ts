@@ -8,7 +8,7 @@ import { itemTypes } from "./itemTypes";
 import { level1 } from "./level1";
 import { level2 } from "./level2";
 import { spriteSheets as localSheets, sprites } from "./sprites";
-import { decisionFunctions } from "@/game-classes/decisionFunctions";
+import { genericDecisionFunctions } from "@/game-classes/decisionFunctions";
 import { monsterDecisionFunctions } from "./monsterBehaviour";
 
 const spriteSheets = [
@@ -65,7 +65,7 @@ const game = new Game({
     ],
     itemTypeRecord: itemTypes,
     decisionFunctions: {
-        ...decisionFunctions,
+        ...genericDecisionFunctions,
         ...monsterDecisionFunctions,
     }
 }, {

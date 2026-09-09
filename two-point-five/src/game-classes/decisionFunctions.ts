@@ -91,7 +91,7 @@ function walkInCircle(actor: Actor, game: Game, behaviour: Behaviour): Action | 
     }
 }
 
-export const decisionFunctions: Record<string, DecisionFunction> = {
+export const genericDecisionFunctions: Record<string, DecisionFunction> = {
     moveClockwise, 
     moveAntiClockwise, 
     shiftAround, 

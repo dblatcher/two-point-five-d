@@ -1,12 +1,13 @@
 
+import { genericDecisionFunctions } from "@/game-classes/decisionFunctions";
 import { Game } from "@/game-classes/Game";
 import { LevelInput } from "@/game-classes/Level";
 import { spriteSheets as sharedSheets, sprites as sharedSprites } from "@/instances/sprites";
 import { NonEmptyArray } from "@/types";
+import { moveAntiClockwiseUnlessOnStar } from "./behaviours";
 import { itemTypes } from "./itemTypes";
 import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels";
 import { spriteSheets as duckPuzzleSheets, duckPuzzleSprites } from "./sprites";
-import { decisionFunctions } from "@/game-classes/decisionFunctions";
 
 const allSpriteSheets = [
     ...sharedSheets,
@@ -35,7 +36,10 @@ const game = new Game({
     spriteSheets: allSpriteSheets,
     sprites: Object.values(allSprites).map(sprite => sprite.data),
     itemTypeRecord: itemTypes,
-    decisionFunctions: decisionFunctions,
+    decisionFunctions: {
+        ...genericDecisionFunctions,
+        moveAntiClockwiseUnlessOnStar,
+    },
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,

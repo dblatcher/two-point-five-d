@@ -54,9 +54,8 @@ export type ImmutableData = {
 }
 
 export const constructActorFunction = ({ decisionFunctions }: ImmutableData) => (input: ActorInput): Actor => {
-
     const decisionFunction = input.behaviour ? decisionFunctions[input.behaviour] : undefined;
-    const behaviour = decisionFunction && new Behaviour(decisionFunction)
+    const behaviour = decisionFunction && new Behaviour(decisionFunction, input.behaviour ?? '')
 
     const data: ActorData = {
         ...input,

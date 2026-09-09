@@ -9,7 +9,7 @@ import { Action, DoAction } from "./Action"
 import { Item } from "./Item"
 import { Blockage } from "./Level"
 
-interface ActorData {
+type ActorData = {
     actorType: string,
     vantage?: Vantage
     spriteId: string
@@ -29,7 +29,7 @@ type ActorInput = {
     width?: number
     blocksSquare?: boolean
     canInteractWith?: boolean
-}
+} & Record<string, unknown>
 
 class Actor {
     data: ActorData
@@ -43,6 +43,13 @@ class Actor {
         this.data = data
         this.actionQueue = []
         this.currentAction = undefined
+    }
+
+    serialise(): ActorInput {
+        return {
+            ...this.data,
+            behaviour: this.data.behaviour?.functionName,
+        }
     }
 
     get figure(): Figure | null {
