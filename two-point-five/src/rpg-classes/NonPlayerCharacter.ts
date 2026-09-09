@@ -5,7 +5,8 @@ import { Vantage } from "@/game-classes/Vantage"
 import { Quest, QuestHook } from "./Quest"
 
 
-type NonPlayerCharacterData = ActorData &  {
+type NonPlayerCharacterData = ActorData & {
+    actorType: 'NPC',
     talkMessage?: string
     name?: string
     questHooks?: QuestHook[]

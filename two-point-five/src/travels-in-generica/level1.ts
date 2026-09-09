@@ -93,12 +93,14 @@ const level1 = putWallsAroundLevel({
 
     actors: [
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.smith.data.id,
             vantage: new Vantage({ x: 1.5, y: 7.5, direction: 'EAST' }),
             talkMessage: "Wanna buy a hammer?",
             name: "George the blacksmith",
         }),
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.farmer2.data.id,
             behaviour: new Behaviour(decisionFunctions.wanderAround),
             vantage: new Vantage({ x: 8.25, y: 4.25, direction: 'NORTH' }),
@@ -106,6 +108,7 @@ const level1 = putWallsAroundLevel({
             name: "John the farmer",
         }),
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.farmer.data.id,
             behaviour: new Behaviour(decisionFunctions.walkInCircle),
             vantage: new Vantage({ x: 6.25, y: 6.25, direction: 'WEST' }),
@@ -114,6 +117,7 @@ const level1 = putWallsAroundLevel({
         }),
 
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.armedMan.data.id,
             vantage: new Vantage({ x: 10.75, y: 5.75, direction: 'NORTH' }),
             talkMessage: "They aren't offering enough money for me to fight any monsters.",
@@ -121,6 +125,7 @@ const level1 = putWallsAroundLevel({
         }),
 
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.guard2.data.id,
             vantage: new Vantage({ x: 5.25, y: 7.25, direction: 'NORTH' }),
             talkMessage: "Abide by the laws and we won't have any trouble.",
@@ -129,6 +134,7 @@ const level1 = putWallsAroundLevel({
         }),
 
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.guard3.data.id,
             vantage: new Vantage({ x: 4.5, y: 3.5, direction: 'SOUTH' }),
             talkMessage: "I'm just a guard.",
@@ -145,6 +151,7 @@ const level1 = putWallsAroundLevel({
         }),
 
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.redMonk.data.id,
             vantage: new Vantage({ x: 3.5, y: 0.5, direction: 'SOUTH' }),
             name: "Father Dunlaw",
@@ -170,6 +177,7 @@ const level1 = putWallsAroundLevel({
             ]
         }),
         new NonPlayerCharacter({
+            actorType: 'NPC',
             spriteId: sprites.innKeeper.data.id,
             vantage: new Vantage({ x: 6.5, y: 2.25, direction: 'SOUTH' }),
             name: "Widow Elsa",

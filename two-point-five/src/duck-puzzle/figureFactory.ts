@@ -17,6 +17,7 @@ function duck(config: DuckConfig): Actor {
     const { x, y, direction, behaviour } = config
 
     return new Actor({
+        actorType: '',
         vantage: new Vantage({ x, y, direction: direction.name }),
         spriteId: duckPuzzleSprites.duckSprite.data.id,
         behaviour,

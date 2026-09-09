@@ -1,18 +1,13 @@
 import { Color } from "@/canvas/Color"
 import { DoAction } from "@/game-classes/Action"
-import { Actor } from "@/game-classes/Actor"
-import { Behaviour } from "@/game-classes/Behaviour"
+import { Actor, ActorData } from "@/game-classes/Actor"
 import { Game } from "@/game-classes/Game"
 import { Vantage } from "@/game-classes/Vantage"
 import { CharacterStats } from "./CharacterStats"
 
 
-interface MonsterData {
-    vantage?: Vantage
-    spriteId: string
-    behaviour?: Behaviour
-    height?: number
-    width?: number
+type MonsterData = ActorData & {
+    actorType: 'Monster'
     blocksSquare?: boolean
     stats: CharacterStats
     defaultAttackAnimation?: string
@@ -88,3 +83,4 @@ class Monster extends Actor {
 export {
     Monster
 }
+

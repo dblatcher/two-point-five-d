@@ -10,6 +10,7 @@ import { Item } from "./Item"
 import { Blockage } from "./Level"
 
 interface ActorData {
+    actorType: string,
     vantage?: Vantage
     spriteId: string
     behaviour?: Behaviour
