@@ -1,4 +1,3 @@
-import { Color } from "@/canvas/Color";
 import { Behaviour } from "@/game-classes/Behaviour";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
@@ -57,7 +56,7 @@ const level2 = putWallsAroundLevel({
     id: 'level2',
     height: 10, width: 12,
     features,
-    sky: { indoors: true, skyBaseColor: new Color(60, 60, 25) },
+    sky: { indoors: true, skyBaseColor: [60, 60, 25] },
     defaultWallPattern: sharedSprites.brickWall.id,
     floorColor: [70, 70, 30],
     startingVantage: { x: 0, y: 5, direction: 'WEST' },

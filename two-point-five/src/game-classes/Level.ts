@@ -5,20 +5,20 @@ import { SpriteSheet } from "@/canvas/SpriteSheet";
 import { Actor } from "@/game-classes/Actor";
 import { Color, ColorParams } from "../canvas/Color";
 import { AbstractFeature } from "./AbstractFeature";
+import { makeItemFunction } from "./constructionHelpers";
 import { Controller, ControllerData } from "./Controller";
 import { Figure, FigureConfig } from "./Figure";
 import { Game, ticksPerMinute } from "./Game";
 import { Item, ItemInput } from "./Item";
+import { ItemType } from "./ItemType";
 import { PlayerVantage } from "./PlayerVantage";
 import { PointerLocator } from "./PointerLocator";
 import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
-import { Sky, SkyData } from "./Sky";
+import { Sky, SkyInput } from "./Sky";
 import { SquareWithFeatures, SquareWithFeaturesData } from "./SquareWithFeatures";
 import { Vantage, VantageConfig } from "./Vantage";
 import { Wall, WallInput } from "./Wall";
-import { ItemType } from "./ItemType";
-import { makeItemFunction } from "./constructionHelpers";
 
 const renderingZoneFrames = false;
 
@@ -65,7 +65,7 @@ export type LevelInput = {
     floorColor?: ColorParams
     startingVantage?: VantageConfig
     controllers?: ControllerData[]
-    sky?: SkyData
+    sky?: SkyInput
     items: ItemInput[]
     staticFigures?: FigureConfig[]
     squaresWithFeatures?: SquareWithFeaturesData[]
@@ -125,7 +125,7 @@ class Level {
         const { data } = this
         return {
             ...data,
-            sky: data.sky?.data,
+            sky: data.sky?.serialise(),
             floorColor: data.floorColor?.serialise(),
             controllers: data.controllers?.map(controller => controller.data),
             items: data.items.map(item => item.serialise()),

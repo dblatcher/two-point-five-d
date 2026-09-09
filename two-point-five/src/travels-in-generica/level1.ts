@@ -40,9 +40,8 @@ const level1 = putWallsAroundLevel({
     id: 'level1',
     height: 10, width: 15,
     startingVantage: { x: 3, y: 7, direction: 'NORTH' },
-
     sky: {
-        skyBaseColor: new Color(140, 150, 250),
+        skyBaseColor: [140, 150, 250],
         sun: true,
     },
     features,
