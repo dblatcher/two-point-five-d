@@ -8,7 +8,6 @@ import { CharacterStats } from "./CharacterStats"
 
 export type MonsterData = ActorData & {
     actorType: 'Monster'
-    blocksSquare?: boolean
     stats: CharacterStats
     defaultAttackAnimation?: string
 }

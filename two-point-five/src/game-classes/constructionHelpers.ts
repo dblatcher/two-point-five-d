@@ -9,6 +9,7 @@ import { Behaviour, DecisionFunction } from "./Behaviour";
 import { Actor, ActorData, ActorInput } from "./Actor";
 import { Monster, MonsterData } from "@/rpg-classes/Monster";
 import { NonPlayerCharacter, NonPlayerCharacterData } from "@/rpg-classes/NonPlayerCharacter";
+import { Vantage } from "./Vantage";
 
 export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): LevelInput => {
     const { walls, width, height } = levelInput;
@@ -57,10 +58,12 @@ export const constructActorFunction = ({ decisionFunctions, spriteRecord }: Immu
     const decisionFunction = input.behaviour ? decisionFunctions[input.behaviour] : undefined;
     const behaviour = decisionFunction && new Behaviour(decisionFunction, input.behaviour ?? '')
     const sprite = spriteRecord[input.sprite]
+    const vantage = input.vantage && new Vantage(input.vantage);
 
     const data: ActorData = {
         ...input,
         sprite,
+        vantage,
         behaviour,
     }
 

@@ -4,7 +4,7 @@ import { Behaviour } from "@/game-classes/Behaviour"
 import { Figure } from "@/game-classes/Figure"
 import { Game } from "@/game-classes/Game"
 import { RelativeDirection } from "@/game-classes/RelativeDirection"
-import { Vantage } from "@/game-classes/Vantage"
+import { Vantage, VantageConfig } from "@/game-classes/Vantage"
 import { Action, DoAction } from "./Action"
 import { Item } from "./Item"
 import { Blockage } from "./Level"
@@ -22,7 +22,7 @@ type ActorData = {
 
 type ActorInput = {
     actorType: string,
-    vantage?: Vantage
+    vantage?: VantageConfig,
     sprite: string
     behaviour?: string
     height?: number
@@ -48,6 +48,7 @@ class Actor {
         return {
             ...this.data,
             sprite: this.data.sprite.id,
+            vantage: this.data.vantage?.data,
             behaviour: this.data.behaviour?.functionName,
         }
     }

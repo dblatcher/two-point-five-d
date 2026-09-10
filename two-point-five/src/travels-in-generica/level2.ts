@@ -1,7 +1,6 @@
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
 import { TeleportReaction } from "@/game-classes/Reaction";
-import { Vantage } from "@/game-classes/Vantage";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";
@@ -141,7 +140,7 @@ const level2 = putWallsAroundLevel({
     actors: [
         {
             actorType: 'Monster',
-            vantage: new Vantage({ x: 5.5, y: 6.5, direction: 'WEST' }),
+            vantage: ({ x: 5.5, y: 6.5, direction: 'WEST' }),
             sprite: sprites.skeletonArcher.data.id,
             defaultAttackAnimation: "ATTACK_SWING",
             stats: new CharacterStats({ health: [1, 10], stamina: [10, 10], mana: [0, 0] }),
@@ -150,14 +149,14 @@ const level2 = putWallsAroundLevel({
 
         {
             actorType: 'Monster',
-            vantage: new Vantage({ x: 4.5, y: 8.5, direction: 'SOUTH' }),
+            vantage: ({ x: 4.5, y: 8.5, direction: 'SOUTH' }),
             sprite: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
             behaviour: 'attackOrMoveClockwise',
         },
         {
             actorType: 'Monster',
-            vantage: new Vantage({ x: 6.5, y: 9.5, direction: 'NORTH' }),
+            vantage: ({ x: 6.5, y: 9.5, direction: 'NORTH' }),
             sprite: sprites.skeletonSpearman.data.id,
             stats: new CharacterStats({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
             behaviour: 'attackOrMoveAntiClockwise',

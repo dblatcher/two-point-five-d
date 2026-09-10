@@ -1,9 +1,7 @@
 import { ActorInput } from '@/game-classes/Actor';
-import { Vantage } from '@/game-classes/Vantage';
 import { genericDecisionFunctions } from '@/game-classes/decisionFunctions';
 import { Direction } from "../game-classes/Direction";
 import { duckPuzzleSprites } from './sprites';
-
 
 
 interface DuckConfig {
@@ -18,7 +16,7 @@ function duck(config: DuckConfig): ActorInput {
 
     return {
         actorType: '',
-        vantage: new Vantage({ x, y, direction: direction.name }),
+        vantage: ({ x, y, direction: direction.name }),
         sprite: duckPuzzleSprites.duckSprite.data.id,
         behaviour,
         height: .5, width: .5
@@ -26,3 +24,4 @@ function duck(config: DuckConfig): ActorInput {
 }
 
 export { duck };
+
