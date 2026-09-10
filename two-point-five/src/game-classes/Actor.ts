@@ -12,7 +12,6 @@ import { Blockage } from "./Level"
 type ActorData = {
     actorType: string,
     vantage?: Vantage
-    spriteId: string
     sprite: Sprite
     behaviour?: Behaviour
     height?: number
@@ -24,7 +23,7 @@ type ActorData = {
 type ActorInput = {
     actorType: string,
     vantage?: Vantage
-    spriteId: string
+    sprite: string
     behaviour?: string
     height?: number
     width?: number
@@ -48,7 +47,7 @@ class Actor {
     serialise(): ActorInput {
         return {
             ...this.data,
-            sprite: undefined,
+            sprite: this.data.sprite.id,
             behaviour: this.data.behaviour?.functionName,
         }
     }
@@ -128,7 +127,7 @@ class Actor {
     }
 
     handleBeingHitByFlyingItem(item: Item, _game: Game): void {
-        console.log(`${this.data.spriteId} was hit by a ${item.itemType.name} going ${item.data.vantage?.data.direction}.`)
+        console.log(`${this.sprite.id} was hit by a ${item.itemType.name} going ${item.data.vantage?.data.direction}.`)
     }
 
     move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined {

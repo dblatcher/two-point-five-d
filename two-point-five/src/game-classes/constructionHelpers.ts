@@ -56,7 +56,7 @@ export type ImmutableData = {
 export const constructActorFunction = ({ decisionFunctions, spriteRecord }: ImmutableData) => (input: ActorInput): Actor => {
     const decisionFunction = input.behaviour ? decisionFunctions[input.behaviour] : undefined;
     const behaviour = decisionFunction && new Behaviour(decisionFunction, input.behaviour ?? '')
-    const sprite = spriteRecord[input.spriteId]
+    const sprite = spriteRecord[input.sprite]
 
     const data: ActorData = {
         ...input,

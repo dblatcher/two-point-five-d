@@ -19,7 +19,7 @@ function duck(config: DuckConfig): ActorInput {
     return {
         actorType: '',
         vantage: new Vantage({ x, y, direction: direction.name }),
-        spriteId: duckPuzzleSprites.duckSprite.data.id,
+        sprite: duckPuzzleSprites.duckSprite.data.id,
         behaviour,
         height: .5, width: .5
     }

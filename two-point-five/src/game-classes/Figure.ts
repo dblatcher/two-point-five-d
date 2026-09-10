@@ -7,6 +7,7 @@ import { Sprite } from '../canvas/Sprite';
 import { Direction } from "./Direction";
 import { RelativeDirection } from "./RelativeDirection";
 import { Wall } from "./Wall";
+import { WithOptional } from "@/types";
 
 type FigureConfig = VantageConfig & {
     spriteId: string
@@ -28,7 +29,7 @@ class Figure extends Vantage {
         this.sprite = sprite
     }
 
-    static ofSprite(sprite: Sprite, config: Omit<FigureConfig, 'spriteId'> & { sprite?: Sprite | undefined }) {
+    static ofSprite(sprite: Sprite, config: WithOptional<'spriteId', FigureConfig> & { sprite?: Sprite | undefined }) {
         return new Figure(sprite, {
             ...config,
             spriteId: sprite.data.id,
