@@ -13,6 +13,7 @@ type ActorData = {
     actorType: string,
     vantage?: Vantage
     spriteId: string
+    sprite: Sprite
     behaviour?: Behaviour
     height?: number
     width?: number
@@ -35,7 +36,6 @@ class Actor {
     data: ActorData
     actionQueue: Action[]
     currentAction: Action | undefined
-    sprite?: Sprite
 
     static MAX_QUEUE_LENGTH = 10
 
@@ -48,8 +48,13 @@ class Actor {
     serialise(): ActorInput {
         return {
             ...this.data,
+            sprite: undefined,
             behaviour: this.data.behaviour?.functionName,
         }
+    }
+
+    get sprite(): Sprite {
+        return this.data.sprite
     }
 
     get figure(): Figure | null {

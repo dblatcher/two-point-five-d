@@ -115,7 +115,6 @@ class Level {
             squaresWithFeature.floorFeatures = squaresWithFeature.getFloorFeatures()
         })
         this.data.controllers?.forEach(controller => controller.level = this)
-        this.data.actors?.forEach(actor => actor.sprite = spriteRecord[actor.data.spriteId])
     }
 
     serialise(): LevelInput {
