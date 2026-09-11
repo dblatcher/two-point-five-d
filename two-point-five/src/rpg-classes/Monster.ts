@@ -1,9 +1,11 @@
 import { Color } from "@/canvas/Color"
 import { DoAction } from "@/game-classes/Action"
-import { Actor, ActorData } from "@/game-classes/Actor"
+import { Actor, ActorData, ActorInput } from "@/game-classes/Actor"
 import { Game } from "@/game-classes/Game"
 import { Vantage } from "@/game-classes/Vantage"
-import { CharacterStats } from "./CharacterStats"
+import { CharacterStats, CharacterStatsInput } from "./CharacterStats"
+import { Sprite } from "@/canvas/Sprite"
+import { Behaviour } from "@/game-classes/Behaviour"
 
 
 export type MonsterData = ActorData & {
@@ -12,16 +14,42 @@ export type MonsterData = ActorData & {
     defaultAttackAnimation?: string
 }
 
+export type MonsterInput = ActorInput & {
+    actorType: 'Monster'
+    stats: CharacterStatsInput
+    defaultAttackAnimation?: string
+}
+
 export class Monster extends Actor {
     data: MonsterData
     isDying: boolean
 
-    constructor(data: MonsterData) {
-        super(data)
-        this.data = data
+    constructor(input: MonsterInput, sprite: Sprite, behaviour: Behaviour | undefined) {
+        super(input, sprite, behaviour)
+        this.data = {
+            ...input,
+            vantage: input.vantage && new Vantage(input.vantage),
+            stats: new CharacterStats(input.stats),
+            sprite,
+            behaviour,
+        }
         this.data.blocksSquare = true
         this.isDying = false
     }
+
+
+    serialise(): MonsterInput {
+        const { data } = this
+        return {
+            ...data,
+            sprite: data.sprite.id,
+            vantage: data.vantage?.data,
+            behaviour: data.behaviour?.functionName,
+            stats: data.stats.serialise(),
+            defaultAttackAnimation: data.defaultAttackAnimation,
+        }
+    }
+
 
     handleInteraction(_actor: Vantage | Actor, game: Game): void {
         console.log('handleInteraction', game.tickCount)

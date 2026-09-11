@@ -5,7 +5,6 @@ import { Direction } from "@/game-classes/Direction";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway, spikey } from "@/instances/wallShapes";
-import { QuestHook } from "@/rpg-classes/Quest";
 import * as globalFeatures from "@/travels-in-generica/features";
 import { makeChurch } from "./buildings/church";
 import { makeHut } from "./buildings/hut";
@@ -136,7 +135,7 @@ const level1 = putWallsAroundLevel({
             talkMessage: "I'm just a guard.",
             name: "Corporal Colin",
             questHooks: [
-                new QuestHook({
+                ({
                     questId: "questOne",
                     action: "GIVE",
                     message: "Old Father Dunlaw in there messed up the last rites on dead wizard and now the crypt is full of skeletons. Can you smash them up for him?",
@@ -153,19 +152,19 @@ const level1 = putWallsAroundLevel({
             name: "Father Dunlaw",
             talkMessage: "Welcome to Saint Bernard's Chapel.",
             questHooks: [
-                new QuestHook({
+                ({
                     questId: "questOne",
                     action: "GIVE",
                     message: "The dead have risen in the church crypt. Rather embarassing, actually. Please put them to rest by smashing their bones.",
                     acceptMessage: "Thank you - here is the key to the crypt. The stairs down are behind the door over there.",
                     refuseMessage: "Oh well... maybe someone braver will come along. hopefully before the bishop's inspection.",
                 }),
-                new QuestHook({
+                ({
                     questId: "questOne",
                     action: "REMIND",
                     message: "How are you getting on in the crypt?"
                 }),
-                new QuestHook({
+                ({
                     questId: "questOne",
                     action: "REWARD",
                     message: "Bless you, my children. Now the dead can sleep easy again... as can I."

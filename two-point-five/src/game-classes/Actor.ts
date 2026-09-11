@@ -38,18 +38,24 @@ class Actor {
 
     static MAX_QUEUE_LENGTH = 10
 
-    constructor(data: ActorData) {
-        this.data = data
+    constructor(data: ActorInput, sprite: Sprite, behaviour: Behaviour | undefined) {
+        this.data = {
+            ...data,
+            sprite,
+            behaviour,
+            vantage: data.vantage && new Vantage(data.vantage)
+        }
         this.actionQueue = []
         this.currentAction = undefined
     }
 
     serialise(): ActorInput {
+        const { data } = this
         return {
-            ...this.data,
-            sprite: this.data.sprite.id,
-            vantage: this.data.vantage?.data,
-            behaviour: this.data.behaviour?.functionName,
+            ...data,
+            sprite: data.sprite.id,
+            vantage: data.vantage?.data,
+            behaviour: data.behaviour?.functionName,
         }
     }
 

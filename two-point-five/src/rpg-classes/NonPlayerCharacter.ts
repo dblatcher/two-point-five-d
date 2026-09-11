@@ -1,8 +1,10 @@
 import { Color } from "@/canvas/Color"
-import { Actor, ActorData } from "@/game-classes/Actor"
+import { Actor, ActorData, ActorInput } from "@/game-classes/Actor"
 import { Game } from "@/game-classes/Game"
 import { Vantage } from "@/game-classes/Vantage"
-import { Quest, QuestHook } from "./Quest"
+import { Quest, QuestHook, QuestHookData } from "./Quest"
+import { Sprite } from "@/canvas/Sprite"
+import { Behaviour } from "@/game-classes/Behaviour"
 
 
 export type NonPlayerCharacterData = ActorData & {
@@ -12,14 +14,40 @@ export type NonPlayerCharacterData = ActorData & {
     questHooks?: QuestHook[]
 }
 
+export type NonPlayerCharacterInput = ActorInput & {
+    actorType: 'NonPlayerCharacter',
+    talkMessage?: string
+    name?: string
+    questHooks?: QuestHookData[]
+}
+
 export class NonPlayerCharacter extends Actor {
     data: NonPlayerCharacterData
 
-    constructor(data: NonPlayerCharacterData) {
-        super(data)
-        this.data = data
+    constructor(input: NonPlayerCharacterInput, sprite: Sprite, behaviour: Behaviour | undefined) {
+        super(input, sprite, behaviour)
+        this.data = {
+            ...input,
+            vantage: input.vantage && new Vantage(input.vantage),
+            sprite,
+            behaviour,
+            questHooks: input.questHooks?.map(input => new QuestHook(input)),
+        }
         this.data.blocksSquare = true
-        this.data.canInteractWith = typeof data.canInteractWith == 'undefined' ? true : data.canInteractWith
+        this.data.canInteractWith = typeof input.canInteractWith == 'undefined' ? true : input.canInteractWith
+    }
+
+    serialise(): NonPlayerCharacterInput {
+        const { data } = this
+        return {
+            ...data,
+            sprite: data.sprite.id,
+            vantage: data.vantage?.data,
+            behaviour: data.behaviour?.functionName,
+            talkMessage: data.talkMessage,
+            name: data.name,
+            questHooks: data.questHooks?.map(hook => hook.data),
+        }
     }
 
     say(content: string, game: Game): void {

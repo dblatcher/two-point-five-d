@@ -4,7 +4,6 @@ import { TeleportReaction } from "@/game-classes/Reaction";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";
-import { CharacterStats } from "@/rpg-classes/CharacterStats";
 import * as globalFeatures from "@/travels-in-generica/features";
 import { itemTypes } from "./itemTypes";
 import { sprites } from "./sprites";
@@ -143,7 +142,7 @@ const level2 = putWallsAroundLevel({
             vantage: ({ x: 5.5, y: 6.5, direction: 'WEST' }),
             sprite: sprites.skeletonArcher.data.id,
             defaultAttackAnimation: "ATTACK_SWING",
-            stats: new CharacterStats({ health: [1, 10], stamina: [10, 10], mana: [0, 0] }),
+            stats: ({ health: [1, 10], stamina: [10, 10], mana: [0, 0] }),
             behaviour: 'standAndFight',
         },
 
@@ -151,14 +150,14 @@ const level2 = putWallsAroundLevel({
             actorType: 'Monster',
             vantage: ({ x: 4.5, y: 8.5, direction: 'SOUTH' }),
             sprite: sprites.skeletonSpearman.data.id,
-            stats: new CharacterStats({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
+            stats: ({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
             behaviour: 'attackOrMoveClockwise',
         },
         {
             actorType: 'Monster',
             vantage: ({ x: 6.5, y: 9.5, direction: 'NORTH' }),
             sprite: sprites.skeletonSpearman.data.id,
-            stats: new CharacterStats({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
+            stats: ({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
             behaviour: 'attackOrMoveAntiClockwise',
         },
 

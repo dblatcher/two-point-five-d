@@ -1,15 +1,14 @@
 import { Point } from "@/canvas/canvas-utility";
 import { Color } from "@/canvas/Color";
 import { Sprite } from "@/canvas/Sprite";
+import { Monster, MonsterInput } from "@/rpg-classes/Monster";
+import { NonPlayerCharacter, NonPlayerCharacterInput } from "@/rpg-classes/NonPlayerCharacter";
 import { WithOptional } from "@/types";
+import { Actor, ActorInput } from "./Actor";
+import { Behaviour, DecisionFunction } from "./Behaviour";
 import { Item, ItemInput } from "./Item";
 import { ItemType } from "./ItemType";
 import { LevelInput } from "./Level";
-import { Behaviour, DecisionFunction } from "./Behaviour";
-import { Actor, ActorData, ActorInput } from "./Actor";
-import { Monster, MonsterData } from "@/rpg-classes/Monster";
-import { NonPlayerCharacter, NonPlayerCharacterData } from "@/rpg-classes/NonPlayerCharacter";
-import { Vantage } from "./Vantage";
 
 export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): LevelInput => {
     const { walls, width, height } = levelInput;
@@ -58,22 +57,15 @@ export const constructActorFunction = ({ decisionFunctions, spriteRecord }: Immu
     const decisionFunction = input.behaviour ? decisionFunctions[input.behaviour] : undefined;
     const behaviour = decisionFunction && new Behaviour(decisionFunction, input.behaviour ?? '')
     const sprite = spriteRecord[input.sprite]
-    const vantage = input.vantage && new Vantage(input.vantage);
 
-    const data: ActorData = {
-        ...input,
-        sprite,
-        vantage,
-        behaviour,
-    }
 
     switch (input.actorType) {
         case 'Monster':
-            return new Monster(data as MonsterData)
+            return new Monster(input as MonsterInput, sprite, behaviour)
         case 'NonPlayerCharacter': {
-            return new NonPlayerCharacter(data as NonPlayerCharacterData)
+            return new NonPlayerCharacter(input as NonPlayerCharacterInput, sprite, behaviour)
         }
         default:
-            return new Actor(data)
+            return new Actor(input, sprite, behaviour)
     }
 }
