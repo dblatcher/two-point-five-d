@@ -28,7 +28,7 @@ const door2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED'
 const doorOpenable1 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 const doorOpenable2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 
-const teleportToCorner = new TeleportReaction({ x: 0, y: 0, direction: 'SOUTH' })
+const teleportToCorner = new TeleportReaction({ reactionType: 'TELEPORT', destination: { x: 0, y: 0, direction: 'SOUTH' } })
 const button1 = new InteractableWallFeature({ spriteId: sharedSprites.buttonSprite.id, reactions: [teleportToCorner] })
 
 const pit1 = new Pit({});
