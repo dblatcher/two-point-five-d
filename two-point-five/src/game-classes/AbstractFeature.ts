@@ -4,13 +4,10 @@ import { Actor } from "@/game-classes/Actor"
 import { AnimationTransition, AnimationTransitionInput } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
-import { ItemType } from "./ItemType"
 import { Level } from "./Level"
 import { Position } from "./Position"
 import { Reaction } from "./Reaction"
 import { Vantage } from "./Vantage"
-
-
 
 
 interface AbstractFeatureData {
@@ -18,7 +15,7 @@ interface AbstractFeatureData {
     status?: string
     reactions?: Reaction[]
     blocksByDefault?: boolean
-    requiresItem?: ItemType
+    requiredItemTypeId?: string
     consumesItem?: boolean
     spriteId?: string
     transitions?: AnimationTransitionInput[]
@@ -161,16 +158,24 @@ class AbstractFeature {
     }
 
     fireTriggers(game: Game): void {
-        const { requiresItem, consumesItem } = this.data
+        const { requiredItemTypeId: requiredItemTypeId, consumesItem } = this.data
         const { itemInHand } = game.data;
-        if (requiresItem) {
-            if (requiresItem !== itemInHand?.itemType) {
-                console.log(`Do not have ${requiresItem.name}.`)
-                return
-            }
-            if (consumesItem) {
-                console.log(`Used up ${requiresItem.name}.`)
-                game.data.itemInHand = undefined;
+        const {itemTypeRecord} = game.immutables
+
+        if (requiredItemTypeId) {
+            const requiredItemType = itemTypeRecord[requiredItemTypeId];
+            if (requiredItemType) {
+
+                if (requiredItemType !== itemInHand?.itemType) {
+                    console.log(`Do not have ${requiredItemType.name}.`)
+                    return
+                }
+                if (consumesItem) {
+                    console.log(`Used up ${requiredItemType.name}.`)
+                    game.data.itemInHand = undefined;
+                }
+            } else {
+                console.warn(`no such item type for firing feature`, this.data.id, requiredItemTypeId)
             }
         }
         game.featuresTriggeredThisTick.push(this)

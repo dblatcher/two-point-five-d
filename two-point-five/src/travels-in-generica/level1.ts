@@ -16,7 +16,7 @@ import { sprites } from "./sprites";
 const features: { [index: string]: AbstractFeature } = {
     ...globalFeatures,
     door3: new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
-    keyhole: new InteractableWallFeature({ spriteId: sharedSprites.keyHole.id, requiresItem: itemTypes.key, consumesItem: false, onBothSides: true }),
+    keyhole: new InteractableWallFeature({ spriteId: sharedSprites.keyHole.id, requiredItemTypeId: itemTypes.key.id, consumesItem: false, onBothSides: true }),
 }
 
 const church = makeChurch(0, 0)
