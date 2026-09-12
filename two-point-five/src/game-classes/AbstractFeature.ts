@@ -1,7 +1,7 @@
 import { ConvertFunction, Dimensions, PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { Sprite } from "@/canvas/Sprite"
 import { Actor } from "@/game-classes/Actor"
-import { AnimationTransition } from "./AnimationTransition"
+import { AnimationTransition, AnimationTransitionInput } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { ItemType } from "./ItemType"
@@ -21,7 +21,7 @@ interface AbstractFeatureData {
     requiresItem?: ItemType
     consumesItem?: boolean
     spriteId?: string
-    transitions?: AnimationTransition[]
+    transitions?: AnimationTransitionInput[]
 }
 
 class AbstractFeature {
@@ -104,7 +104,7 @@ class AbstractFeature {
             } else {
                 this.transitionTickCount = 0
             }
-            this.transition = transition
+            this.transition = new AnimationTransition(transition)
             this.transitionReversed = false
         } else if (reversedTransition) {
             if (reversedTransition == this.transition) {
@@ -112,7 +112,7 @@ class AbstractFeature {
             } else {
                 this.transitionTickCount = 0
             }
-            this.transition = reversedTransition
+            this.transition = new AnimationTransition(reversedTransition)
             this.transitionReversed = true
         } else {
             this.transitionTickCount = undefined

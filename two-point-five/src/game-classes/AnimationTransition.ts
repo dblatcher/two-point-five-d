@@ -1,12 +1,25 @@
+
+interface AnimationTransitionInput {
+    startStatus: string
+    endStatus: string
+    duration: number
+}
+
 class AnimationTransition {
     startStatus: string
     endStatus: string
     duration: number
 
-    constructor(startStatus: string, endStatus: string, duration: number) {
+    constructor({ startStatus, duration, endStatus }: AnimationTransitionInput) {
         this.duration = duration
         this.startStatus = startStatus
         this.endStatus = endStatus
+    }
+    serialise(): AnimationTransitionInput {
+        const { startStatus, endStatus, duration } = this;
+        return {
+            startStatus, endStatus, duration
+        }
     }
 
     get animationKey(): string {
@@ -25,4 +38,4 @@ class AnimationTransition {
     }
 }
 
-export {AnimationTransition}
+export { AnimationTransition, AnimationTransitionInput }

@@ -5,7 +5,7 @@ import { Sprite } from "@/canvas/Sprite"
 import { TextBoard } from "@/canvas/TextBoard"
 import { Actor } from "@/game-classes/Actor"
 import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
-import { AnimationTransition } from "./AnimationTransition"
+import { AnimationTransitionInput } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Vantage } from "./Vantage"
@@ -96,7 +96,7 @@ interface DoorConfig {
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
     onBothSides?: boolean
-    transitions?: AnimationTransition[]
+    transitions?: AnimationTransitionInput[]
 }
 
 class Door extends InteractableWallFeature {
@@ -106,7 +106,7 @@ class Door extends InteractableWallFeature {
         super(config)
         this.data = config
         if (typeof config.onBothSides == 'undefined') { this.data.onBothSides = true }
-        this.data.transitions = [new AnimationTransition('CLOSED', 'OPEN', 15)]
+        this.data.transitions = [{ startStatus: 'CLOSED', endStatus: 'OPEN', duration: 15 }]
     }
 
     get defaultStatus(): string { return 'OPEN' }
