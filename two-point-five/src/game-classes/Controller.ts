@@ -41,7 +41,7 @@ class Controller {
 
             if (!feature) { return "" }
 
-            if (this.data.useWeightAsStatusForFloorFeatures && feature.isFloorFeature) {
+            if (this.data.useWeightAsStatusForFloorFeatures && feature instanceof FloorFeature) {
                 return (feature as FloorFeature).hadWeightOnItLastTick ? FloorFeature.WEIGHED : FloorFeature.NOT_WEIGHED
             }
 

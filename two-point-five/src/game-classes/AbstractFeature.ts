@@ -39,9 +39,6 @@ class AbstractFeature {
         this.transition = undefined
     }
     get defaultStatus(): string { return 'NEUTRAL' }
-    get isFloorFeature(): boolean { return false }
-    get isWallFeature(): boolean { return false }
-    isCeilingFeature = false;
     get isDrawnInMap(): boolean { return false }
     get isBlocking(): boolean { return !!this.data.blocksByDefault }
 
@@ -186,15 +183,10 @@ class AbstractFeature {
         })
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static isSubClassOf(_feature: AbstractFeature): boolean {
-        return true
-    }
-
     static getFeatureFromKey(featureId: string, subClass: typeof AbstractFeature, level: Level): AbstractFeature | undefined {
         const levelFeatures = level.data.features || {};
         const match = levelFeatures[featureId];
-        if (match && subClass.isSubClassOf(match)) {
+        if (match instanceof subClass) {
             return match
         }
         return undefined
@@ -210,7 +202,7 @@ class AbstractFeature {
 
         featureIds.forEach(id => {
             const match = levelFeatures[id];
-            if (match && subClass.isSubClassOf(match)) {
+            if (match instanceof subClass) {
                 features.push(match)
             }
         })

@@ -27,7 +27,6 @@ class WallFeature extends AbstractFeature {
     }
 
     get requiredAnimations(): string[] { return this.data.spriteId ? [Sprite.defaultWallAnimation] : [] }
-    get isWallFeature(): boolean { return true }
     get canInteract(): boolean { return false }
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {
@@ -56,7 +55,6 @@ class WallFeature extends AbstractFeature {
     ): void {
         const { spriteRecord, spriteSheetMap, convertFunction, ctx } = drawingContext
         const sprite = this.data.spriteId && spriteRecord[this.data.spriteId]
-        console.log(this, this.data, sprite)
         let featureImage: CanvasPattern | null = null;
         if (sprite) {
             featureImage = getPatternFill(spriteSheetMap, ctx, convertFunction, renderInstruction, tickCount, sprite, this.getAnimation(spriteRecord), fullWallPoints, this.transitionPhase);
@@ -68,10 +66,6 @@ class WallFeature extends AbstractFeature {
         if (featureImage) {
             plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle: featureImage })
         }
-    }
-
-    static isSubClassOf(feature: AbstractFeature): boolean {
-        return feature.isWallFeature
     }
 }
 

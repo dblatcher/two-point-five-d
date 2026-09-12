@@ -30,7 +30,6 @@ class FloorFeature extends AbstractFeature {
         this.thingsOnMeLastTick = []
     }
 
-    get isFloorFeature(): boolean { return true }
     get isDrawnInMap(): boolean { return true }
 
     static WEIGHED = "WEIGHED"
@@ -98,10 +97,6 @@ class FloorFeature extends AbstractFeature {
     defaultShape: [number, number][] = [
         [0, -.25], [.25, 0], [0, .25], [-.25, 0]
     ]
-
-    static isSubClassOf(feature: AbstractFeature): boolean {
-        return feature.isFloorFeature
-    }
 }
 
 

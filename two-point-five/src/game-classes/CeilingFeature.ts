@@ -19,8 +19,6 @@ class CeilingFeature extends AbstractFeature {
         this.data.status = config.status || this.defaultStatus
     }
 
-    get isFloorFeature(): boolean { return false }
-    isCeilingFeature = true;
     get isDrawnInMap(): boolean { return false }
 
 
@@ -48,10 +46,6 @@ class CeilingFeature extends AbstractFeature {
     defaultShape: [number, number][] = [
         [-.5, -.5], [.5, -.5], [.5, .5], [-.5, .5]
     ]
-
-    static isSubClassOf(feature: AbstractFeature): boolean {
-        return feature.isCeilingFeature
-    }
 }
 
 
