@@ -20,14 +20,12 @@ interface FloorFeatureData extends AbstractFeatureData {
 class FloorFeature extends AbstractFeature {
     data: FloorFeatureData
     hadWeightOnItLastTick?: boolean
-    thingsOnMeLastTick: Array<Item | Vantage>
 
     constructor(config: FloorFeatureData) {
         super(config)
         this.data = config
         this.data.status = config.status || this.defaultStatus
         this.hadWeightOnItLastTick = false
-        this.thingsOnMeLastTick = []
     }
 
     get isDrawnInMap(): boolean { return true }
@@ -43,7 +41,6 @@ class FloorFeature extends AbstractFeature {
      * @param square 
      */
     checkWeightChange(square: SquareWithFeatures): {
-        newThings: Array<Item | Vantage>
         usedToHaveWeightOn: boolean
         hasWeightOnNow: boolean
     } {
@@ -54,13 +51,11 @@ class FloorFeature extends AbstractFeature {
         ]
 
         const hasWeightOnNow = thingsOnMeNow.length != 0
-        const newThings = thingsOnMeNow.filter(thing => !this.thingsOnMeLastTick.includes(thing))
         const usedToHaveWeightOn = !!this.hadWeightOnItLastTick
 
         this.hadWeightOnItLastTick = hasWeightOnNow;
-        this.thingsOnMeLastTick = thingsOnMeNow
 
-        return { newThings, usedToHaveWeightOn, hasWeightOnNow }
+        return { usedToHaveWeightOn, hasWeightOnNow }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -144,7 +139,7 @@ class Pit extends FloorFeature {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     drawInSight(
         drawingContext: DrawingContext,
-        renderInstruction: RenderInstruction, 
+        renderInstruction: RenderInstruction,
         _tickCount: number
     ): void {
         const { ctx, convertFunction } = drawingContext

@@ -1,5 +1,4 @@
 import { Color } from "@/canvas/Color";
-import { AbstractFeature } from "@/game-classes/AbstractFeature";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { Door, InteractableWallFeature } from "@/game-classes/WallFeature";
@@ -11,13 +10,6 @@ import { makeHut } from "./buildings/hut";
 import { itemTypes } from "./itemTypes";
 import { sprites } from "./sprites";
 
-
-
-const features: { [index: string]: AbstractFeature } = {
-    ...globalFeatures,
-    door3: new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
-    keyhole: new InteractableWallFeature({ spriteId: sharedSprites.keyHole.id, requiredItemTypeId: itemTypes.key.id, consumesItem: false, onBothSides: true }),
-}
 
 const church = makeChurch(0, 0)
 const hut1 = makeHut(6, 0, Direction.south, sprites.grayWoodWallOne)
@@ -40,7 +32,11 @@ const level1 = putWallsAroundLevel({
         skyBaseColor: [140, 150, 250],
         sun: true,
     },
-    features,
+    features: {
+        ...globalFeatures,
+        door3: new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
+        keyhole: new InteractableWallFeature({ spriteId: sharedSprites.keyHole.id, requiredItemTypeId: itemTypes.key.id, consumesItem: false, onBothSides: true }),
+    },
     walls: [
         ...church.walls,
         ({ x: 2, y: 2, placeName: 'NORTH', patternSprite: sharedSprites.brickWall.id, shape: doorway, featureIds: ["door3", "keyhole"], open: true }),

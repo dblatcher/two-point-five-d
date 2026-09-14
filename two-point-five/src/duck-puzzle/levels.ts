@@ -12,7 +12,7 @@ import { itemTypes } from "./itemTypes";
 const hintForLevel1 = makeSign(["Help the duck", "reach the", "blue star!",])
 const hintForLevel2 = makeSign(["Use both plates", "to open", "the door"])
 
-const features = {
+const duckPuzzleFeatures = {
     lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed, hintForLevel1, hintForLevel2, blueStar
 }
 
@@ -25,7 +25,7 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
     },
     defaultWallPattern: sprites.brickWall.id,
     floorColor: [100, 40, 40],
-    features,
+    features: duckPuzzleFeatures,
     walls: [
         ({ x: 0, y: 3, placeName: 'NORTH', patternSprite: sprites.windowWall.id }),
         ({ x: 1, y: 3, placeName: 'NORTH', featureIds: ["hintForLevel1"] }),
@@ -79,7 +79,7 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
     id: 'duckPuzzleLevel2',
     height: 6,
     width: 6,
-    features,
+    features: duckPuzzleFeatures,
     startingVantage: {
         x: 1, y: 2, direction: 'EAST',
     },
@@ -129,7 +129,7 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
     id: 'duckPuzzleLevel3',
     height: 7,
     width: 7,
-    features,
+    features: duckPuzzleFeatures,
     startingVantage: {
         x: 0, y: 0, direction: 'EAST',
     },

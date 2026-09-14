@@ -33,24 +33,22 @@ const button1 = new InteractableWallFeature({ spriteId: sharedSprites.buttonSpri
 
 const pit1 = new Pit({});
 
-const features = {
-    staircaseAUp: globalFeatures.staircaseAUp,
-    painting1: globalFeatures.painting1,
-    lever1,
-    door1,
-    door2,
-    doorOpenable1,
-    doorOpenable2,
-    button1,
-    redSquare,
-    blueSquare,
-    pit1,
-}
-
 const level2 = putWallsAroundLevel({
     id: 'level2',
     height: 10, width: 12,
-    features,
+    features: {
+        staircaseAUp: globalFeatures.staircaseAUp,
+        painting1: globalFeatures.painting1,
+        lever1,
+        door1,
+        door2,
+        doorOpenable1,
+        doorOpenable2,
+        button1,
+        redSquare,
+        blueSquare,
+        pit1,
+    },
     sky: { indoors: true, skyBaseColor: [60, 60, 25] },
     defaultWallPattern: sharedSprites.brickWall.id,
     floorColor: [70, 70, 30],
@@ -167,12 +165,19 @@ const level2 = putWallsAroundLevel({
     ],
     controllers: [
         ({
-            inputIds: ["lever1"], subjectId: "door1", defaultSubjectState: "CLOSED", statusMap: [
+            subjectId: "door1",
+            inputIds: ["lever1"],
+            defaultSubjectState: "CLOSED",
+            statusMap: [
                 [["ON"], "OPEN"],
             ]
         }),
         ({
-            inputIds: ["blueSquare", "redSquare"], subjectId: "pit1", defaultSubjectState: "OPEN", useWeightAsStatusForFloorFeatures: true, statusMap: [
+            subjectId: "pit1",
+            inputIds: ["blueSquare", "redSquare"],
+            useWeightAsStatusForFloorFeatures: true,
+            defaultSubjectState: "OPEN",
+            statusMap: [
                 [[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "CLOSED"],
             ]
         }),

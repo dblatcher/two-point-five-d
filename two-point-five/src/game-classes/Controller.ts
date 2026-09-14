@@ -36,13 +36,13 @@ class Controller {
         )
     }
 
-    get inputStatus(): string[] {
+    private get inputStatus(): string[] {
         const status: string[] = this.inputs.map(feature => {
 
             if (!feature) { return "" }
 
             if (this.data.useWeightAsStatusForFloorFeatures && feature instanceof FloorFeature) {
-                return (feature as FloorFeature).hadWeightOnItLastTick ? FloorFeature.WEIGHED : FloorFeature.NOT_WEIGHED
+                return feature.hadWeightOnItLastTick ? FloorFeature.WEIGHED : FloorFeature.NOT_WEIGHED
             }
 
             return feature.data.status || feature.defaultStatus
@@ -70,13 +70,9 @@ class Controller {
         const { subject } = this
 
         if (statusMap) {
-            const matchingEntry = statusMap.find(entry => {
-                const statusListToMatch = entry[0];
+            const matchingEntry = statusMap.find(([statusListToMatch]) => {
                 if (statusListToMatch.length !== inputStatus.length) { return false }
-                for (let index = 0; index < statusListToMatch.length; index++) {
-                    if (inputStatus[index] !== statusListToMatch[index]) { return false }
-                }
-                return true
+                return inputStatus.every((status, index) => status === statusListToMatch[index])
             })
 
             if (matchingEntry) {

@@ -16,15 +16,6 @@ const spriteSheets = [
     ...gSpriteSheets
 ]
 
-const features = {
-    painting: new WallFeature({ spriteId: sprites.paintingWall.id }),
-    switch: new WallSwitch({ spriteId: sprites.leverSprite.id }),
-    door: new Door({ spriteId: sprites.doorSprite.id, status: "CLOSED" }),
-    pitOne: new Pit({ status: "OPEN" }),
-    grayCeiling: new CeilingFeature({ plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } }),
-    redCeiling: new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } }),
-}
-
 const levels: NonEmptyArray<LevelInput> = [
     {
         id: 'test-level',
@@ -44,7 +35,14 @@ const levels: NonEmptyArray<LevelInput> = [
         staticFigures: [
             { x: 9.5, y: 2.5, direction: 'SOUTH', spriteId: gSprites.treeOne.id },
         ],
-        features,
+        features: {
+            painting: new WallFeature({ spriteId: sprites.paintingWall.id }),
+            switch: new WallSwitch({ spriteId: sprites.leverSprite.id }),
+            door: new Door({ spriteId: sprites.doorSprite.id, status: "CLOSED" }),
+            pitOne: new Pit({ status: "OPEN" }),
+            grayCeiling: new CeilingFeature({ plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } }),
+            redCeiling: new CeilingFeature({ plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } }),
+        },
         controllers: [
             {
                 inputIds: ["switch"], subjectId: "door", statusMap: [
