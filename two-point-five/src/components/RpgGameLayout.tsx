@@ -11,6 +11,7 @@ import { MessageBox } from "./MessageBox"
 import { QuestScreen } from "./QuestScreen"
 import { SightCanvas } from "./SightCanvas"
 import { MapScreen } from "./MapScreen"
+import { PointerIcon } from "./PointerIcon"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -34,9 +35,15 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
 
 
     return <main>
-
+        <section style={{
+            display: 'flex',
+            alignSelf: 'flex-start',
+        }}>
+            <span style={{ flex: 1 }}>{gameData.itemInHand?.itemType.name ?? " "}</span>
+            <button onClick={() => setQuestScreenOpen(true)}>quests</button>
+            <button onClick={() => setMapScreenOpen(true)}>map</button>
+        </section>
         <CharacterBar setCharacterScreenOpen={setCharacterScreenOpen} />
-
         <section style={{
             display: 'grid',
             gridTemplateColumns: "500px 1fr",
@@ -54,11 +61,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                     borderWidth: 1,
                     borderStyle: 'dashed',
                 }}>
-                    <ItemSlot
-                        item={gameData.itemInHand}
-                    />
-                    <button onClick={() => setQuestScreenOpen(true)}>quests</button>
-                    <button onClick={() => setMapScreenOpen(true)}>map</button>
+
                 </div>
                 <AttackButtons />
                 <div style={{ marginTop: 'auto' }}>
@@ -69,23 +72,34 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
         </section>
         <MessageBox />
 
-        {gameData.intersitial && (
-            <Intersitial
-                intersitialData={gameData.intersitial.data}
-                selectOption={(index) => game().handleInterstitialOptionClick(index)} />
-        )}
+        {
+            gameData.intersitial && (
+                <Intersitial
+                    intersitialData={gameData.intersitial.data}
+                    selectOption={(index) => game().handleInterstitialOptionClick(index)} />
+            )
+        }
 
-        {typeof characterScreenOpen === 'number' && (
-            <CharacterScreen
-                characterIndex={characterScreenOpen}
-                close={() => setCharacterScreenOpen(undefined)} />
-        )}
+        {
+            typeof characterScreenOpen === 'number' && (
+                <CharacterScreen
+                    characterIndex={characterScreenOpen}
+                    close={() => setCharacterScreenOpen(undefined)} />
+            )
+        }
 
-        {questScreenOpen && (
-            <QuestScreen close={() => setQuestScreenOpen(false)} />
-        )}
-        {mapScreenOpen && (
-            <MapScreen close={() => setMapScreenOpen(false)} />
-        )}
-    </main>
+        {
+            questScreenOpen && (
+                <QuestScreen close={() => setQuestScreenOpen(false)} />
+            )
+        }
+        {
+            mapScreenOpen && (
+                <MapScreen close={() => setMapScreenOpen(false)} />
+            )
+        }
+        <PointerIcon >
+            <ItemSlot item={gameData.itemInHand} />
+        </PointerIcon>
+    </main >
 }
