@@ -2,9 +2,14 @@ import { DrawingContext, mapPointOnCeiling, PlotConfig, plotPolygon, RelativePoi
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { RelativeDirection } from "./RelativeDirection";
 import { Vantage } from "./Vantage";
-import { AbstractFeature, AbstractFeatureData } from './AbstractFeature';
+import { AbstractFeature, AbstractFeatureData, AbstractFeatureInput } from './AbstractFeature';
+import { buildReaction } from "./Reaction";
 
 interface CeilingFeatureData extends AbstractFeatureData {
+    shape?: [number, number][]
+    plotConfig?: PlotConfig,
+}
+interface CeilingFeatureInput extends AbstractFeatureInput {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
@@ -13,10 +18,13 @@ interface CeilingFeatureData extends AbstractFeatureData {
 class CeilingFeature extends AbstractFeature {
     data: CeilingFeatureData
 
-    constructor(config: CeilingFeatureData) {
-        super(config)
-        this.data = config
-        this.data.status = config.status || this.defaultStatus
+    constructor(input: CeilingFeatureInput) {
+        super(input)
+        this.data = {
+            ...input,
+            status: input.status ?? this.defaultStatus,
+            reactions: input.reactions?.map(buildReaction),
+        }
     }
 
     get isDrawnInMap(): boolean { return false }

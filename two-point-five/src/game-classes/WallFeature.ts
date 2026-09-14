@@ -4,13 +4,20 @@ import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { Sprite } from "@/canvas/Sprite"
 import { TextBoard } from "@/canvas/TextBoard"
 import { Actor } from "@/game-classes/Actor"
-import { AbstractFeature, AbstractFeatureData } from './AbstractFeature'
+import { AbstractFeature, AbstractFeatureData, AbstractFeatureInput } from './AbstractFeature'
 import { AnimationTransitionInput } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Vantage } from "./Vantage"
+import { buildReaction } from "./Reaction"
 
 interface WallFeatureData extends AbstractFeatureData {
+    textBoard?: TextBoard
+    onBothSides: boolean
+    clipToWall?: boolean
+}
+
+interface WallFeatureInput extends AbstractFeatureInput {
     textBoard?: TextBoard
     onBothSides?: boolean
     clipToWall?: boolean
@@ -19,11 +26,14 @@ interface WallFeatureData extends AbstractFeatureData {
 class WallFeature extends AbstractFeature {
     data: WallFeatureData
 
-    constructor(config: WallFeatureData) {
-        super(config)
-        this.data = config
-        this.data.status = config.status || this.defaultStatus
-        this.data.onBothSides == !!config.onBothSides
+    constructor(input: WallFeatureInput) {
+        super(input)
+        this.data = {
+            ...input,
+            reactions: input.reactions?.map(buildReaction),
+            status: input.status || this.defaultStatus,
+            onBothSides: !!input.onBothSides
+        }
     }
 
     get requiredAnimations(): string[] { return this.data.spriteId ? [Sprite.defaultWallAnimation] : [] }
@@ -91,22 +101,30 @@ class WallSwitch extends InteractableWallFeature {
 }
 
 
-interface DoorConfig {
+interface DoorData {
     spriteId: string
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
-    onBothSides?: boolean
+    onBothSides: boolean
+    transitions: AnimationTransitionInput[]
+}
+interface DoorInput {
+    spriteId: string
+    status: "OPEN" | "CLOSED"
+    canOpenDirectly?: boolean
     transitions?: AnimationTransitionInput[]
 }
 
 class Door extends InteractableWallFeature {
-    data: DoorConfig
+    data: DoorData
 
-    constructor(config: DoorConfig) {
-        super(config)
-        this.data = config
-        if (typeof config.onBothSides == 'undefined') { this.data.onBothSides = true }
-        this.data.transitions = [{ startStatus: 'CLOSED', endStatus: 'OPEN', duration: 15 }]
+    constructor(input: DoorInput) {
+        super(input)
+        this.data = {
+            ...input,
+            onBothSides: true,
+            transitions: input.transitions ?? [{ startStatus: 'CLOSED', endStatus: 'OPEN', duration: 15 }]
+        }
     }
 
     get defaultStatus(): string { return 'OPEN' }

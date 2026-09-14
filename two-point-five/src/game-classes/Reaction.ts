@@ -149,16 +149,16 @@ export const buildReaction = (config: ReactionConfig): Reaction => {
     }
 }
 
-export function makeTwoWayTunnel(id1: string, id2: string): [TunnelReaction, TunnelReaction] {
-    const end1 = new TunnelReaction({
+export function makeTwoWayTunnel(id1: string, id2: string): [TunnelConfig, TunnelConfig] {
+    const end1: TunnelConfig = {
         reactionType: 'TUNNEL',
         startId: id1,
         destinationId: id2
-    });
-    const end2 = new TunnelReaction({
+    };
+    const end2: TunnelConfig = {
         reactionType: 'TUNNEL',
         startId: id2,
         destinationId: id1
-    });
+    };
     return [end1, end2];
 }

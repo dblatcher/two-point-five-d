@@ -1,17 +1,21 @@
 import { DrawingContext, mapPointOnFloor, PlotConfig, plotPolygon, Point, RelativePoint } from "@/canvas/canvas-utility";
+import { Color } from "@/canvas/Color";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
+import { AbstractFeature, AbstractFeatureData, AbstractFeatureInput } from './AbstractFeature';
+import { Direction } from "./Direction";
 import { Item } from "./Item";
 import { Level } from "./Level";
-import { Reaction } from "./Reaction";
+import { buildReaction, Reaction, ReactionConfig } from "./Reaction";
 import { RelativeDirection } from "./RelativeDirection";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage } from "./Vantage";
-import { Color } from "@/canvas/Color";
-import { Sprite } from "@/canvas/Sprite";
-import { AbstractFeature, AbstractFeatureData } from './AbstractFeature';
-import { Direction } from "./Direction";
 
 interface FloorFeatureData extends AbstractFeatureData {
+    shape?: [number, number][]
+    plotConfig?: PlotConfig,
+}
+
+interface FloorFeatureInput extends AbstractFeatureInput {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
@@ -21,10 +25,13 @@ class FloorFeature extends AbstractFeature {
     data: FloorFeatureData
     hadWeightOnItLastTick?: boolean
 
-    constructor(config: FloorFeatureData) {
-        super(config)
-        this.data = config
-        this.data.status = config.status || this.defaultStatus
+    constructor(input: FloorFeatureInput) {
+        super(input)
+        this.data = {
+            ...input,
+            reactions: input.reactions?.map(buildReaction),
+            status: input.status ?? this.defaultStatus
+        }
         this.hadWeightOnItLastTick = false
     }
 
@@ -95,21 +102,29 @@ class FloorFeature extends AbstractFeature {
 }
 
 
-interface pitConfig {
+interface PitData {
     reactions?: Reaction[]
     blocksByDefault?: boolean
-    sprite?: Sprite
-    status?: "OPEN" | "CLOSED"
-
+    status: "OPEN" | "CLOSED"
+    plotConfig?: PlotConfig,
+}
+interface PitInput {
+    reactions?: ReactionConfig[]
+    blocksByDefault?: boolean
+    status: "OPEN" | "CLOSED"
     plotConfig?: PlotConfig,
 }
 
 class Pit extends FloorFeature {
-    data: pitConfig
-    constructor(config: pitConfig) {
-        super(config)
-        this.data = config
-        if (typeof config.blocksByDefault == 'undefined') { this.data.blocksByDefault = true }
+    data: PitData
+    constructor(input: PitInput) {
+        super(input)
+        this.data = {
+            ...input,
+            reactions: input.reactions?.map(buildReaction),
+            status: input.status ?? this.defaultStatus
+        }
+        if (typeof input.blocksByDefault == 'undefined') { this.data.blocksByDefault = true }
     }
 
     get defaultStatus(): string { return 'OPEN' }
@@ -185,4 +200,5 @@ class Pit extends FloorFeature {
     }
 }
 
-export { FloorFeature, FloorFeatureData, Pit };
+export { FloorFeature, FloorFeatureData, FloorFeatureInput, Pit };
+

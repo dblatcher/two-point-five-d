@@ -6,14 +6,24 @@ import { Direction } from "./Direction"
 import { Game } from "./Game"
 import { Level } from "./Level"
 import { Position } from "./Position"
-import { Reaction } from "./Reaction"
+import { buildReaction, Reaction, ReactionConfig } from "./Reaction"
 import { Vantage } from "./Vantage"
 
 
 interface AbstractFeatureData {
     id?: string
-    status?: string
+    status: string
     reactions?: Reaction[]
+    blocksByDefault?: boolean
+    requiredItemTypeId?: string
+    consumesItem?: boolean
+    spriteId?: string
+    transitions?: AnimationTransitionInput[]
+}
+interface AbstractFeatureInput {
+    id?: string
+    status?: string
+    reactions?: ReactionConfig[]
     blocksByDefault?: boolean
     requiredItemTypeId?: string
     consumesItem?: boolean
@@ -27,15 +37,20 @@ class AbstractFeature {
     transitionReversed: boolean
     transition: AnimationTransition | undefined
 
-    constructor(config: AbstractFeatureData) {
-        this.data = config
-        this.data.status = config.status || this.defaultStatus
+    get defaultStatus(): string { return 'NEUTRAL' }
+
+    constructor(input: AbstractFeatureInput) {
+        this.data = {
+            ...input,
+            reactions: input.reactions?.map(buildReaction),
+            status: input.status || this.defaultStatus
+        }
 
         this.transitionTickCount = undefined
         this.transitionReversed = false
         this.transition = undefined
     }
-    get defaultStatus(): string { return 'NEUTRAL' }
+
     get isDrawnInMap(): boolean { return false }
     get isBlocking(): boolean { return !!this.data.blocksByDefault }
 
@@ -160,7 +175,7 @@ class AbstractFeature {
     fireTriggers(game: Game): void {
         const { requiredItemTypeId: requiredItemTypeId, consumesItem } = this.data
         const { itemInHand } = game.data;
-        const {itemTypeRecord} = game.immutables
+        const { itemTypeRecord } = game.immutables
 
         if (requiredItemTypeId) {
             const requiredItemType = itemTypeRecord[requiredItemTypeId];
@@ -217,4 +232,4 @@ class AbstractFeature {
 }
 
 
-export { AbstractFeature, AbstractFeatureData }
+export { AbstractFeature, AbstractFeatureData, AbstractFeatureInput }

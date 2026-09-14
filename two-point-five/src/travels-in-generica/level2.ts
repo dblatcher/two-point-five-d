@@ -1,6 +1,6 @@
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { TeleportReaction } from "@/game-classes/Reaction";
+import { ReactionConfig } from "@/game-classes/Reaction";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";
@@ -28,10 +28,14 @@ const door2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED'
 const doorOpenable1 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 const doorOpenable2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 
-const teleportToCorner = new TeleportReaction({ reactionType: 'TELEPORT', destination: { x: 0, y: 0, direction: 'SOUTH' } })
-const button1 = new InteractableWallFeature({ spriteId: sharedSprites.buttonSprite.id, reactions: [teleportToCorner] })
+const button1 = new InteractableWallFeature({
+    spriteId: sharedSprites.buttonSprite.id,
+    reactions: [
+        { reactionType: 'TELEPORT', destination: { x: 0, y: 0, direction: 'SOUTH' } }
+    ]
+})
 
-const pit1 = new Pit({});
+const pit1 = new Pit({ status: 'OPEN' });
 
 const level2 = putWallsAroundLevel({
     id: 'level2',
