@@ -83,7 +83,7 @@ export class WallFeature extends AbstractFeature {
 }
 
 
-type WallSwitchInput = WallFeatureInput & {
+export type WallSwitchInput = WallFeatureInput & {
     featureType: 'WallSwitch'
 }
 

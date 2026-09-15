@@ -5,17 +5,17 @@ import { Vantage } from "./Vantage";
 import { AbstractFeature, AbstractFeatureData, AbstractFeatureInput } from './AbstractFeature';
 import { buildReaction } from "./Reaction";
 
-interface CeilingFeatureData extends AbstractFeatureData {
+export interface CeilingFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
-interface CeilingFeatureInput extends AbstractFeatureInput {
+export interface CeilingFeatureInput extends AbstractFeatureInput {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
 
 
-class CeilingFeature extends AbstractFeature {
+export class CeilingFeature extends AbstractFeature {
     data: CeilingFeatureData
 
     constructor(input: CeilingFeatureInput) {
@@ -56,7 +56,3 @@ class CeilingFeature extends AbstractFeature {
     ]
 }
 
-
-
-
-export { CeilingFeature, CeilingFeatureData };

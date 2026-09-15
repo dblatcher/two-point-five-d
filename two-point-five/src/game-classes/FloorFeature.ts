@@ -10,18 +10,18 @@ import { RelativeDirection } from "./RelativeDirection";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage } from "./Vantage";
 
-interface FloorFeatureData extends AbstractFeatureData {
+export interface FloorFeatureData extends AbstractFeatureData {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
 
-interface FloorFeatureInput extends AbstractFeatureInput {
+export interface FloorFeatureInput extends AbstractFeatureInput {
     shape?: [number, number][]
     plotConfig?: PlotConfig,
 }
 
 
-class FloorFeature extends AbstractFeature {
+export class FloorFeature extends AbstractFeature {
     data: FloorFeatureData
     hadWeightOnItLastTick?: boolean
 
@@ -109,7 +109,7 @@ interface PitData {
     status: "OPEN" | "CLOSED"
     plotConfig?: PlotConfig,
 }
-interface PitInput {
+export interface PitInput {
     featureType: 'Pit'
     reactions?: ReactionConfig[]
     blocksByDefault?: boolean
@@ -117,7 +117,7 @@ interface PitInput {
     plotConfig?: PlotConfig,
 }
 
-class Pit extends FloorFeature {
+export class Pit extends FloorFeature {
     data: PitData
     constructor(input: PitInput) {
         super(input)
@@ -202,5 +202,4 @@ class Pit extends FloorFeature {
     }
 }
 
-export { FloorFeature, FloorFeatureData, FloorFeatureInput, Pit };
 

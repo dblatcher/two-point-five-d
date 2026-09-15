@@ -9,6 +9,10 @@ import { Behaviour, DecisionFunction } from "./Behaviour";
 import { Item, ItemInput } from "./Item";
 import { ItemType } from "./ItemType";
 import { LevelInput } from "./Level";
+import { AbstractFeature } from "./AbstractFeature";
+import { Door, DoorInput, WallFeature, WallFeatureInput, WallSwitch, WallSwitchInput } from "./WallFeature";
+import { FloorFeature, FloorFeatureInput, Pit, PitInput } from "./FloorFeature";
+import { CeilingFeature, CeilingFeatureInput } from "./CeilingFeature";
 
 export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): LevelInput => {
     const { walls, width, height } = levelInput;
@@ -67,5 +71,19 @@ export const constructActorFunction = ({ decisionFunctions, spriteRecord }: Immu
         }
         default:
             return new Actor(input, sprite, behaviour)
+    }
+}
+
+export const constructFeature = (input: WallFeatureInput | WallSwitchInput | DoorInput | FloorFeatureInput | CeilingFeatureInput | PitInput): AbstractFeature => {
+
+    switch (input.featureType) {
+        case 'Door': return new Door(input as DoorInput);
+        case 'WallSwitch': return new WallSwitch(input as WallSwitchInput);
+        case 'Pit': return new Pit(input as PitInput)
+
+        case 'FloorFeature': return new FloorFeature(input)
+        case 'WallFeature': return new WallFeature(input)
+        case 'CeilingFeature': return new CeilingFeature(input)
+        default: return new CeilingFeature(input)
     }
 }
