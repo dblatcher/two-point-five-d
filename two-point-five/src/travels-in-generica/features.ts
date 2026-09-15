@@ -1,14 +1,14 @@
 import { Color } from "@/canvas/Color";
+import { TextBoardInput } from "@/canvas/TextBoard";
 import { CeilingFeature } from "@/game-classes/CeilingFeature";
 import { makeTwoWayTunnel } from "@/game-classes/Reaction";
-import { InteractableWallFeature, WallFeature } from "@/game-classes/WallFeature";
+import { WallFeature } from "@/game-classes/WallFeature";
 import { sprites } from "@/instances/sprites";
 import { sprites as mySprites } from "./sprites";
-import { TextBoardInput } from "@/canvas/TextBoard";
 
 
-const painting1 = new WallFeature({featureType:'WallFeature',  spriteId: sprites.paintingWall.id, })
-const paintingClipped = new WallFeature({featureType:'WallFeature', spriteId: sprites.paintingWall.id, clipToWall: true })
+const painting1 = new WallFeature({ featureType: 'WallFeature', spriteId: sprites.paintingWall.id, })
+const paintingClipped = new WallFeature({ featureType: 'WallFeature', spriteId: sprites.paintingWall.id, clipToWall: true })
 
 const poemTextBoard: TextBoardInput = {
     content: [
@@ -23,13 +23,13 @@ const poemTextBoard: TextBoardInput = {
 }
 
 const poemBoard = new WallFeature({
-    featureType:'WallFeature',
+    featureType: 'WallFeature',
     clipToWall: true,
     textBoard: poemTextBoard,
 })
 
 const advertBoard = new WallFeature({
-    featureType:'WallFeature',
+    featureType: 'WallFeature',
     clipToWall: true,
     textBoard: {
         content: [
@@ -43,27 +43,35 @@ const advertBoard = new WallFeature({
 })
 
 const [toLevel1OnStaircaseA, toLevel2OnStaircaseA] = makeTwoWayTunnel('upstairs', 'downstairs');
-const staircaseAUp = new InteractableWallFeature({ 
-    featureType:'InteractableWallFeature',
-    spriteId: sprites.stairs.id, reactions: [toLevel1OnStaircaseA] })
-const staircaseAdown = new InteractableWallFeature({ 
-    featureType:'InteractableWallFeature',
-    spriteId: sprites.stairs.id, reactions: [toLevel2OnStaircaseA] })
+const staircaseAUp = new WallFeature({
+    featureType: 'WallFeature',
+    interactable: true,
+    spriteId: sprites.stairs.id, reactions: [toLevel1OnStaircaseA]
+})
+const staircaseAdown = new WallFeature({
+    featureType: 'WallFeature',
+    interactable: true,
+    spriteId: sprites.stairs.id, reactions: [toLevel2OnStaircaseA]
+})
 
 
-const brownCeiling = new CeilingFeature({ 
-    featureType:'CeilingFeature',
-    plotConfig: { fillStyle: 'saddlebrown', strokeStyle: 'sandybrown' } });
-const grayCeiling = new CeilingFeature({ 
-    featureType:'CeilingFeature',
-    plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } });
-const redCeiling = new CeilingFeature({ 
-    featureType:'CeilingFeature',
-    plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css } });
+const brownCeiling = new CeilingFeature({
+    featureType: 'CeilingFeature',
+    plotConfig: { fillStyle: 'saddlebrown', strokeStyle: 'sandybrown' }
+});
+const grayCeiling = new CeilingFeature({
+    featureType: 'CeilingFeature',
+    plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' }
+});
+const redCeiling = new CeilingFeature({
+    featureType: 'CeilingFeature',
+    plotConfig: { fillStyle: Color.RED.css, strokeStyle: Color.YELLOW.css }
+});
 
 const torch = new WallFeature({
-    featureType:'WallFeature',
+    featureType: 'WallFeature',
     spriteId: mySprites.torch.id,
 })
 
 export { advertBoard, brownCeiling, grayCeiling, painting1, paintingClipped, poemBoard, redCeiling, staircaseAdown, staircaseAUp, torch };
+

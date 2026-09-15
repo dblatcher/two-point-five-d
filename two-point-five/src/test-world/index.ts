@@ -37,7 +37,7 @@ const levels: NonEmptyArray<LevelInput> = [
         ],
         features: {
             painting: new WallFeature({ featureType: 'WallFeature', spriteId: sprites.paintingWall.id }),
-            switch: new WallSwitch({ featureType: 'WallFeature', spriteId: sprites.leverSprite.id }),
+            switch: new WallSwitch({ featureType: 'WallSwitch', spriteId: sprites.leverSprite.id }),
             door: new Door({ featureType: 'Door', spriteId: sprites.doorSprite.id, status: "CLOSED" }),
             pitOne: new Pit({ featureType: 'Pit', status: "OPEN" }),
             grayCeiling: new CeilingFeature({ featureType: 'CeilingFeature', plotConfig: { fillStyle: 'gray', strokeStyle: 'gray' } }),

@@ -1,6 +1,6 @@
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";
 import * as globalFeatures from "@/travels-in-generica/features";
@@ -23,15 +23,16 @@ const redSquare = new FloorFeature({
     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
 })
 
-const lever1 = new WallSwitch({featureType:'WallSwitch', spriteId: sharedSprites.leverSprite.id, })
-const door1 = new Door({featureType:'Door',  spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({featureType:'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
-const doorOpenable1 = new Door({featureType:'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
-const doorOpenable2 = new Door({featureType:'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
+const lever1 = new WallSwitch({ featureType: 'WallSwitch', spriteId: sharedSprites.leverSprite.id, })
+const door1 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const door2 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const doorOpenable1 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
+const doorOpenable2 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 
-const button1 = new InteractableWallFeature({
-    featureType: 'InteractableWallFeature',
+const button1 = new WallFeature({
+    featureType: 'WallFeature',
     spriteId: sharedSprites.buttonSprite.id,
+    interactable: true,
     reactions: [
         { reactionType: 'TELEPORT', destination: { x: 0, y: 0, direction: 'SOUTH' } }
     ]

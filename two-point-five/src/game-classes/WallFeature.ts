@@ -15,12 +15,14 @@ interface WallFeatureData extends AbstractFeatureData {
     textBoard?: TextBoard
     onBothSides: boolean
     clipToWall?: boolean
+    interactable?: boolean
 }
 
 export interface WallFeatureInput extends AbstractFeatureInput {
     textBoard?: TextBoardInput
     onBothSides?: boolean
     clipToWall?: boolean
+    interactable?: boolean
 }
 
 export class WallFeature extends AbstractFeature {
@@ -38,7 +40,7 @@ export class WallFeature extends AbstractFeature {
     }
 
     get requiredAnimations(): string[] { return this.data.spriteId ? [Sprite.defaultWallAnimation] : [] }
-    get canInteract(): boolean { return false }
+    get canInteract(): boolean { return !!this.data.interactable }
 
     handleInteraction(actor: Vantage | Actor, game: Game): void {
         this.fireTriggers(game)
@@ -80,12 +82,17 @@ export class WallFeature extends AbstractFeature {
     }
 }
 
-export class InteractableWallFeature extends WallFeature {
-    get canInteract(): boolean { return true }
+
+type WallSwitchInput = WallFeatureInput & {
+    featureType: 'WallSwitch'
 }
 
-export class WallSwitch extends InteractableWallFeature {
+export class WallSwitch extends WallFeature {
 
+    constructor(input: WallSwitchInput) {
+        super(input)
+    }
+    get canInteract(): boolean { return true }
     get requiredAnimations(): string[] { return ["OFF", "ON"] }
     get isDrawnInMap(): boolean { return true }
     get defaultStatus(): string { return 'OFF' }
@@ -118,7 +125,7 @@ export interface DoorInput {
     transitions?: AnimationTransitionInput[]
 }
 
-export class Door extends InteractableWallFeature {
+export class Door extends WallFeature {
     data: DoorData
 
     constructor(input: DoorInput) {
