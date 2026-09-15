@@ -34,8 +34,8 @@ const level1 = putWallsAroundLevel({
     },
     features: {
         ...globalFeatures,
-        door3: new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
-        keyhole: new InteractableWallFeature({ spriteId: sharedSprites.keyHole.id, requiredItemTypeId: itemTypes.key.id, consumesItem: false, onBothSides: true }),
+        door3: new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
+        keyhole: new InteractableWallFeature({ featureType: 'InteractableWallFeature', spriteId: sharedSprites.keyHole.id, requiredItemTypeId: itemTypes.key.id, consumesItem: false, onBothSides: true }),
     },
     walls: [
         ...church.walls,

@@ -17,13 +17,13 @@ interface WallFeatureData extends AbstractFeatureData {
     clipToWall?: boolean
 }
 
-interface WallFeatureInput extends AbstractFeatureInput {
+export interface WallFeatureInput extends AbstractFeatureInput {
     textBoard?: TextBoardInput
     onBothSides?: boolean
     clipToWall?: boolean
 }
 
-class WallFeature extends AbstractFeature {
+export class WallFeature extends AbstractFeature {
     data: WallFeatureData
 
     constructor(input: WallFeatureInput) {
@@ -80,11 +80,11 @@ class WallFeature extends AbstractFeature {
     }
 }
 
-class InteractableWallFeature extends WallFeature {
+export class InteractableWallFeature extends WallFeature {
     get canInteract(): boolean { return true }
 }
 
-class WallSwitch extends InteractableWallFeature {
+export class WallSwitch extends InteractableWallFeature {
 
     get requiredAnimations(): string[] { return ["OFF", "ON"] }
     get isDrawnInMap(): boolean { return true }
@@ -103,20 +103,22 @@ class WallSwitch extends InteractableWallFeature {
 
 
 interface DoorData {
+    featureType: 'Door'
     spriteId: string
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
     onBothSides: boolean
     transitions: AnimationTransitionInput[]
 }
-interface DoorInput {
+export interface DoorInput {
+    featureType: 'Door',
     spriteId: string
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
     transitions?: AnimationTransitionInput[]
 }
 
-class Door extends InteractableWallFeature {
+export class Door extends InteractableWallFeature {
     data: DoorData
 
     constructor(input: DoorInput) {
@@ -169,6 +171,4 @@ class Door extends InteractableWallFeature {
     }
 
 }
-
-export { Door, InteractableWallFeature, WallFeature, WallSwitch }
 

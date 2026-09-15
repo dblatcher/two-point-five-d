@@ -103,12 +103,14 @@ class FloorFeature extends AbstractFeature {
 
 
 interface PitData {
+    featureType: 'Pit'
     reactions?: Reaction[]
     blocksByDefault?: boolean
     status: "OPEN" | "CLOSED"
     plotConfig?: PlotConfig,
 }
 interface PitInput {
+    featureType: 'Pit'
     reactions?: ReactionConfig[]
     blocksByDefault?: boolean
     status: "OPEN" | "CLOSED"

@@ -11,6 +11,7 @@ import { Vantage } from "./Vantage"
 
 
 interface AbstractFeatureData {
+    featureType: string
     id?: string
     status: string
     reactions?: Reaction[]
@@ -21,6 +22,7 @@ interface AbstractFeatureData {
     transitions?: AnimationTransitionInput[]
 }
 interface AbstractFeatureInput {
+    featureType: string
     id?: string
     status?: string
     reactions?: ReactionConfig[]

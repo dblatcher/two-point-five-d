@@ -12,29 +12,32 @@ const bigSquareOnFloor: [number, number][] = [
 ]
 
 const blueSquare = new FloorFeature({
+    featureType: 'FloorFeature',
     blocksByDefault: false,
     plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor
 })
 
 const redSquare = new FloorFeature({
+    featureType: 'FloorFeature',
     blocksByDefault: false,
     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
 })
 
-const lever1 = new WallSwitch({ spriteId: sharedSprites.leverSprite.id, })
-const door1 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
-const doorOpenable1 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
-const doorOpenable2 = new Door({ spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
+const lever1 = new WallSwitch({featureType:'WallSwitch', spriteId: sharedSprites.leverSprite.id, })
+const door1 = new Door({featureType:'Door',  spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const door2 = new Door({featureType:'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const doorOpenable1 = new Door({featureType:'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
+const doorOpenable2 = new Door({featureType:'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 
 const button1 = new InteractableWallFeature({
+    featureType: 'InteractableWallFeature',
     spriteId: sharedSprites.buttonSprite.id,
     reactions: [
         { reactionType: 'TELEPORT', destination: { x: 0, y: 0, direction: 'SOUTH' } }
     ]
 })
 
-const pit1 = new Pit({ status: 'OPEN' });
+const pit1 = new Pit({ featureType: 'Pit', status: 'OPEN' });
 
 const level2 = putWallsAroundLevel({
     id: 'level2',

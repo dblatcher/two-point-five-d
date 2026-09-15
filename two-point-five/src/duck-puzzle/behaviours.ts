@@ -20,6 +20,7 @@ const starOnFloor: [number, number][] = [
 
 
 const blueStar = new FloorFeature({
+    featureType: 'FloorFeature',
     blocksByDefault: false,
     plotConfig: { noFill: false, fillStyle: 'blue' }, shape: starOnFloor
 })
@@ -53,7 +54,7 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, _behaviour: Beh
     }
 }
 
-const areAllDucksOnTheStar = (level: Level, game: Game):boolean => {
+const areAllDucksOnTheStar = (level: Level, game: Game): boolean => {
 
     const ducks: Actor[] = (level.data.actors || [])
         .filter(npc => npc.sprite?.id === mySprites.duckSprite.id)
