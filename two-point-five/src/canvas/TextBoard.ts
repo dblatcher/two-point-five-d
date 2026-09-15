@@ -1,5 +1,5 @@
 import { Dimensions, Point } from "./canvas-utility";
-import { Color } from "./Color";
+import { Color, ColorParams } from "./Color";
 
 interface TextBoardData {
     content: string[]
@@ -9,21 +9,44 @@ interface TextBoardData {
     textColor?: Color
     textScale?: number
     resolution?: number
-    font?:string
+    font?: string
 }
+interface TextBoardInput {
+    content: string[]
+    size?: Dimensions
+    offset?: Point
+    backgroundColor?: ColorParams
+    textColor?: ColorParams
+    textScale?: number
+    resolution?: number
+    font?: string
+}
+
 
 
 class TextBoard {
     data: TextBoardData
     storedCanvas: HTMLCanvasElement
 
-    constructor(config: TextBoardData) {
-        this.data = config
+    constructor(input: TextBoardInput) {
+        this.data = {
+            ...input,
+            textColor: input.textColor && Color.fromConfig(input.textColor),
+            backgroundColor: input.backgroundColor && Color.fromConfig(input.backgroundColor),
+        }
         this.storedCanvas = this.createCanvas()
+    }
+    serialise(): TextBoardInput {
+        const { data } = this
+        return {
+            ...data,
+            textColor: data.textColor?.serialise(),
+            backgroundColor: data.backgroundColor?.serialise(),
+        }
     }
 
     createCanvas(): HTMLCanvasElement {
-        const { content, backgroundColor = Color.TRANSPARENT, textColor = Color.BLACK, resolution = 1, textScale = 1, font='arial' } = this.data
+        const { content, backgroundColor = Color.TRANSPARENT, textColor = Color.BLACK, resolution = 1, textScale = 1, font = 'arial' } = this.data
 
         const dimensions: Dimensions = { x: 800 * resolution, y: 450 * resolution }
 
@@ -52,4 +75,4 @@ class TextBoard {
     }
 }
 
-export { TextBoard, TextBoardData }
+export { TextBoard, TextBoardData, TextBoardInput }

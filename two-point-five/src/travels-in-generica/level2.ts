@@ -1,6 +1,5 @@
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { ReactionConfig } from "@/game-classes/Reaction";
 import { Door, InteractableWallFeature, WallSwitch } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";

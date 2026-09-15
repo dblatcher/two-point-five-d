@@ -2,7 +2,7 @@ import { DrawingContext, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { getPatternFill, getTextPatternFill } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { Sprite } from "@/canvas/Sprite"
-import { TextBoard } from "@/canvas/TextBoard"
+import { TextBoard, TextBoardInput } from "@/canvas/TextBoard"
 import { Actor } from "@/game-classes/Actor"
 import { AbstractFeature, AbstractFeatureData, AbstractFeatureInput } from './AbstractFeature'
 import { AnimationTransitionInput } from "./AnimationTransition"
@@ -18,7 +18,7 @@ interface WallFeatureData extends AbstractFeatureData {
 }
 
 interface WallFeatureInput extends AbstractFeatureInput {
-    textBoard?: TextBoard
+    textBoard?: TextBoardInput
     onBothSides?: boolean
     clipToWall?: boolean
 }
@@ -30,6 +30,7 @@ class WallFeature extends AbstractFeature {
         super(input)
         this.data = {
             ...input,
+            textBoard: input.textBoard && new TextBoard(input.textBoard),
             reactions: input.reactions?.map(buildReaction),
             status: input.status || this.defaultStatus,
             onBothSides: !!input.onBothSides

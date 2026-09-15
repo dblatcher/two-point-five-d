@@ -1,7 +1,5 @@
-import { Color } from "@/canvas/Color"
 import { Sprite } from "@/canvas/Sprite"
 import { SpriteSheet } from "@/canvas/SpriteSheet"
-import { TextBoard } from "@/canvas/TextBoard"
 
 import bricks from "@/assets/sprites/brick_wall.png"
 import dinosaur from "@/assets/sprites/dinosaur.png"
@@ -246,30 +244,8 @@ const sprites = {
     helmet: Sprite.itemSpriteOneFrame({ sheet: sheets.helmet.id }, { id: 'helmet', baseline: .05, transforms: ["CROP_BASE",], }),
 }
 
-const textBoards = {
-
-    poem: new TextBoard({
-        content: [
-            "My name is Ozymandias, King of Kings",
-            "Look on my Works, ye Mighty, and despair!"
-        ],
-        size: { x: .8, y: .5 },
-        resolution: 1,
-        font: 'fantasy',
-        textScale: 1.25,
-        backgroundColor: new Color(150, 120, 200)
-    }),
-    advert: new TextBoard({
-        content: [
-            "BUY",
-            "FISH",
-            "HERE",
-        ],
-        size: { x: .8, y: .5 },
-        textScale: 4.5,
-    }),
-}
 
 export {
-    sprites, spriteSheets, textBoards
+    sprites, spriteSheets
 }
+

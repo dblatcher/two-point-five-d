@@ -1,5 +1,4 @@
 import { Color } from "@/canvas/Color"
-import { TextBoard } from "@/canvas/TextBoard"
 import { FloorFeature, Pit } from "@/game-classes/FloorFeature"
 import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature"
 import { sprites } from "@/instances/sprites"
@@ -7,14 +6,14 @@ import { sprites } from "@/instances/sprites"
 function makeSign(text: string[]): WallFeature {
     return new WallFeature({
         clipToWall: true,
-        textBoard: new TextBoard({
+        textBoard: {
             content: text,
             size: { x: .8, y: .5 },
             textScale: 3.5,
             font: 'arial',
-            textColor: Color.BLUE,
-            backgroundColor: Color.YELLOW,
-        }),
+            textColor: Color.BLUE.serialise(),
+            backgroundColor: Color.YELLOW.serialise(),
+        },
     })
 }
 
@@ -41,4 +40,4 @@ const floorSwitch2 = new FloorFeature({
 const pit1 = new Pit({ status: "OPEN" })
 const pitClosed = new Pit({ status: "CLOSED" })
 
-export { makeSign, lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed }
+export { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed }
