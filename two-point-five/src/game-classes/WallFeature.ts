@@ -39,6 +39,15 @@ export class WallFeature extends AbstractFeature {
         }
     }
 
+    serialise(): WallFeatureInput {
+        const {data} =this
+        return {
+            ...data,
+            reactions: data.reactions?.map(reaction => reaction.serialise()),
+            textBoard: data.textBoard?.serialise(),
+        }
+    }
+
     get requiredAnimations(): string[] { return this.data.spriteId ? [Sprite.defaultWallAnimation] : [] }
     get canInteract(): boolean { return !!this.data.interactable }
 

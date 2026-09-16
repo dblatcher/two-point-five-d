@@ -1,7 +1,7 @@
 import { Action, MovementAction, MovementByAction } from "@/game-classes/Action";
 import { Actor } from "@/game-classes/Actor";
 import { Behaviour } from "@/game-classes/Behaviour";
-import { FloorFeature } from "@/game-classes/FloorFeature";
+import { FloorFeatureInput } from "@/game-classes/FloorFeature";
 import { Game } from "@/game-classes/Game";
 import { Level } from "@/game-classes/Level";
 import { RelativeDirection } from "@/game-classes/RelativeDirection";
@@ -19,11 +19,12 @@ const starOnFloor: [number, number][] = [
 ]
 
 
-const blueStar = new FloorFeature({
+const blueStar: FloorFeatureInput = {
+    id: 'blueStar',
     featureType: 'FloorFeature',
     blocksByDefault: false,
     plotConfig: { noFill: false, fillStyle: 'blue' }, shape: starOnFloor
-})
+}
 
 function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
 
@@ -32,7 +33,7 @@ function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, _behaviour: Beh
 
     const squareWithStar = (game.currentLevel.data.squaresWithFeatures || [])
         .find(square => {
-            return square.floorFeatures.includes(blueStar)
+            return square.floorFeatures.some(feature => feature.data.id === blueStar.id)
         })
 
     if (squareWithStar && squareWithStar.isInSameSquareAs(vantage)) {
@@ -62,7 +63,7 @@ const areAllDucksOnTheStar = (level: Level, game: Game): boolean => {
 
     const squareWithStar = (game.currentLevel.data.squaresWithFeatures || [])
         .find(square => {
-            return square.floorFeatures.includes(blueStar)
+            return square.floorFeatures.some(feature => feature.data.id === blueStar.id)
         })
 
     if (!squareWithStar) { return false }
@@ -72,5 +73,5 @@ const areAllDucksOnTheStar = (level: Level, game: Game): boolean => {
 
 
 export {
-    areAllDucksOnTheStar, moveAntiClockwiseUnlessOnStar, blueStar
-}
+    areAllDucksOnTheStar, blueStar, moveAntiClockwiseUnlessOnStar
+};

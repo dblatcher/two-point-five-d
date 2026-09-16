@@ -1,7 +1,6 @@
 import { Color } from "@/canvas/Color";
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
-import { Door, WallFeature } from "@/game-classes/WallFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway, spikey } from "@/instances/wallShapes";
 import * as globalFeatures from "@/travels-in-generica/features";
@@ -34,8 +33,8 @@ const level1 = putWallsAroundLevel({
     },
     features: {
         ...globalFeatures,
-        door3: new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
-        keyhole: new WallFeature({ featureType: 'WallFeature', interactable: true, spriteId: sharedSprites.keyHole.id, requiredItemTypeId: itemTypes.key.id, consumesItem: false, onBothSides: true }),
+        door3: ({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false }),
+        keyhole: ({ featureType: 'WallFeature', interactable: true, spriteId: sharedSprites.keyHole.id, requiredItemTypeId: itemTypes.key.id, consumesItem: false, onBothSides: true }),
     },
     walls: [
         ...church.walls,

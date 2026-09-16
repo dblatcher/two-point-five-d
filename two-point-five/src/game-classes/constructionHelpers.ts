@@ -74,7 +74,18 @@ export const constructActorFunction = ({ decisionFunctions, spriteRecord }: Immu
     }
 }
 
-export const constructFeature = (input: WallFeatureInput | WallSwitchInput | DoorInput | FloorFeatureInput | CeilingFeatureInput | PitInput): AbstractFeature => {
+export function mapRecord<InputValue, OutputValue>(convertFunction: { (input: InputValue): OutputValue }, input?: Record<string, InputValue>): Record<string, OutputValue> {
+    if (!input) {
+        return {}
+    }
+    return Object.entries(input).reduce(
+        (record, [key, config]) => ({ ...record, [key]: convertFunction(config) }),
+        {}
+    )
+}
+
+export type SupportedFeatureConfig = WallFeatureInput | WallSwitchInput | DoorInput | FloorFeatureInput | CeilingFeatureInput | PitInput
+export const constructFeature = (input: SupportedFeatureConfig): AbstractFeature => {
 
     switch (input.featureType) {
         case 'Door': return new Door(input as DoorInput);

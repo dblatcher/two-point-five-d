@@ -5,7 +5,7 @@ import { SpriteSheet } from "@/canvas/SpriteSheet";
 import { Actor, ActorInput } from "@/game-classes/Actor";
 import { Color, ColorParams } from "../canvas/Color";
 import { AbstractFeature } from "./AbstractFeature";
-import { constructActorFunction, ImmutableData, makeItemFunction } from "./constructionHelpers";
+import { constructActorFunction, constructFeature, ImmutableData, makeItemFunction, mapRecord, SupportedFeatureConfig } from "./constructionHelpers";
 import { Controller, ControllerData } from "./Controller";
 import { Figure, FigureConfig } from "./Figure";
 import { Game, ticksPerMinute } from "./Game";
@@ -48,9 +48,8 @@ interface LevelData {
     squaresWithFeatures?: SquareWithFeatures[]
     staticFigures?: Figure[]
     walls: Wall[]
-
     actors?: Actor[]
-    features?: { [index: string]: AbstractFeature }
+    features?: Record<string, AbstractFeature>
 
     victoryCondition?: VictoryTest
 }
@@ -70,8 +69,7 @@ export type LevelInput = {
     squaresWithFeatures?: SquareWithFeaturesData[]
     walls: WallInput[]
     actors?: ActorInput[]
-
-    features?: Record<string, AbstractFeature>
+    features?: Record<string, SupportedFeatureConfig>
 
     victoryCondition?: VictoryTest
 };
@@ -90,10 +88,11 @@ class Level {
         this.tickCount = 0
         const makeItem = makeItemFunction(itemTypeRecord)
         const makeActor = constructActorFunction(immutableData)
-        const levelFeatures = config.features ?? {};
+        const levelFeatures = mapRecord(constructFeature, config.features)
 
         this.data = {
             ...config,
+            features: levelFeatures,
             sky: config.sky && new Sky(config.sky),
             floorColor: config.floorColor && Color.fromConfig(config.floorColor),
             controllers: config.controllers?.map(data => new Controller(data)),
@@ -128,7 +127,8 @@ class Level {
             staticFigures: data.staticFigures?.map(figure => figure.data),
             squaresWithFeatures: data.squaresWithFeatures?.map(square => square.data),
             walls: data.walls.map(wall => wall.serialise()),
-            actors: data.actors?.map(actor => actor.serialise())
+            actors: data.actors?.map(actor => actor.serialise()),
+            features: mapRecord((feature) => feature.serialise(), data.features)
         }
     }
 

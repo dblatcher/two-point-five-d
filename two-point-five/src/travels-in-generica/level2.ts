@@ -1,35 +1,35 @@
 import { putWallsAroundLevel } from "@/game-classes/constructionHelpers";
-import { FloorFeature, Pit } from "@/game-classes/FloorFeature";
-import { Door, WallFeature, WallSwitch } from "@/game-classes/WallFeature";
+import { FloorFeature, FloorFeatureInput, PitInput } from "@/game-classes/FloorFeature";
 import { sprites as sharedSprites } from "@/instances/sprites";
 import { doorway } from "@/instances/wallShapes";
 import * as globalFeatures from "@/travels-in-generica/features";
 import { itemTypes } from "./itemTypes";
 import { sprites } from "./sprites";
+import { WallFeatureInput } from "@/game-classes/WallFeature";
 
 const bigSquareOnFloor: [number, number][] = [
     [-.45, -.45], [.45, -.45], [.45, .45], [-.45, .45]
 ]
 
-const blueSquare = new FloorFeature({
+const blueSquare: FloorFeatureInput = {
     featureType: 'FloorFeature',
     blocksByDefault: false,
     plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor
-})
+}
 
-const redSquare = new FloorFeature({
+const redSquare: FloorFeatureInput = {
     featureType: 'FloorFeature',
     blocksByDefault: false,
     plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
-})
+}
 
-const lever1 = new WallSwitch({ featureType: 'WallSwitch', spriteId: sharedSprites.leverSprite.id, })
-const door1 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
-const door2 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
-const doorOpenable1 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
-const doorOpenable2 = new Door({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
+const lever1 = ({ featureType: 'WallSwitch', spriteId: sharedSprites.leverSprite.id, })
+const door1 = ({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const door2 = ({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const doorOpenable1 = ({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
+const doorOpenable2 = ({ featureType: 'Door', spriteId: sharedSprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: true })
 
-const button1 = new WallFeature({
+const button1: WallFeatureInput = ({
     featureType: 'WallFeature',
     spriteId: sharedSprites.buttonSprite.id,
     interactable: true,
@@ -38,7 +38,7 @@ const button1 = new WallFeature({
     ]
 })
 
-const pit1 = new Pit({ featureType: 'Pit', status: 'OPEN' });
+const pit1: PitInput = { featureType: 'Pit', status: 'OPEN' };
 
 const level2 = putWallsAroundLevel({
     id: 'level2',

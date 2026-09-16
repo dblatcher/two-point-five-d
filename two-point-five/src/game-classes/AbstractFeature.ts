@@ -53,6 +53,14 @@ class AbstractFeature {
         this.transition = undefined
     }
 
+    serialise(): AbstractFeatureInput {
+        const { data } = this
+        return {
+            ...data,
+            reactions: data.reactions?.map(reaction => reaction.serialise()),
+        }
+    }
+
     get isDrawnInMap(): boolean { return false }
     get isBlocking(): boolean { return !!this.data.blocksByDefault }
 
