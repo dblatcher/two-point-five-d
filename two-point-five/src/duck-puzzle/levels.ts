@@ -4,7 +4,7 @@ import { Direction } from "@/game-classes/Direction";
 import { FloorFeature } from "@/game-classes/FloorFeature";
 import { sprites } from "@/instances/sprites";
 import { doorway, lowWall } from "../instances/wallShapes";
-import { areAllDucksOnTheStar, blueStar } from "./behaviours";
+import { blueStar } from "./behaviours";
 import { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed } from "./features";
 import { itemTypes } from "./itemTypes";
 
@@ -71,7 +71,7 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
             ]
         }),
     ],
-    victoryCondition: areAllDucksOnTheStar,
+    victoryCondition: 'areAllDucksOnTheStar',
     victoryMessage: "Well done! But there are more ducks who need your help..."
 })
 
@@ -121,7 +121,7 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
             statusMap: [[[FloorFeature.WEIGHED, FloorFeature.WEIGHED], "OPEN"]]
         }),
     ],
-    victoryCondition: areAllDucksOnTheStar,
+    victoryCondition: 'areAllDucksOnTheStar',
     victoryMessage: "You're getting the hang of this!"
 });
 
@@ -187,7 +187,7 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
             statusMap: [[["ON"], "OPEN"]]
         }),
     ],
-    victoryCondition: areAllDucksOnTheStar,
+    victoryCondition: 'areAllDucksOnTheStar',
     victoryMessage: "Something something ducks!"
 })
 

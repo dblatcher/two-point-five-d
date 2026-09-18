@@ -4,7 +4,7 @@ import { Game } from "@/game-classes/Game";
 import { LevelInput } from "@/game-classes/Level";
 import { spriteSheets as sharedSheets, sprites as sharedSprites } from "@/instances/sprites";
 import { NonEmptyArray } from "@/types";
-import { moveAntiClockwiseUnlessOnStar } from "./behaviours";
+import { areAllDucksOnTheStar, moveAntiClockwiseUnlessOnStar } from "./behaviours";
 import { itemTypes } from "./itemTypes";
 import { duckPuzzleLevel1, duckPuzzleLevel2, duckPuzzleLevel3 } from "./levels";
 import { spriteSheets as duckPuzzleSheets, duckPuzzleSprites } from "./sprites";
@@ -40,6 +40,9 @@ const game = new Game({
         ...genericDecisionFunctions,
         moveAntiClockwiseUnlessOnStar,
     },
+    levelEndFunctions: {
+        areAllDucksOnTheStar
+    }
 }, {
     needCharacterToPickUpItems: false,
     noCharacters: true,

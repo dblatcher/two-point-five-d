@@ -27,6 +27,11 @@ import { DecisionFunction } from './Behaviour'
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
 
+interface VictoryTest {
+    (level: Level, game: Game): boolean
+}
+
+
 const ticksPerMinute = 60
 
 interface GameConfig {
@@ -63,6 +68,7 @@ interface GameImmutables {
     itemTypeRecord: Record<string, ItemType>
     gameCompleteMessage?: string
     decisionFunctions: Record<string, DecisionFunction>
+    levelEndFunctions?: Record<string, VictoryTest>
 }
 
 interface GameRules {
@@ -242,6 +248,8 @@ class Game {
             controllers: levelControllers = []
         } = this.currentLevel.data;
 
+        const victoryTest = victoryCondition ? this.immutables.levelEndFunctions?.[victoryCondition] : undefined
+
         const allControllers = [...this.data.controllers, ...levelControllers];
 
         const nextPlayerAction = this.queuedPlayerActions.shift();
@@ -303,7 +311,7 @@ class Game {
             controller.reactToInputStatus()
         })
 
-        if (victoryCondition && victoryCondition(this.currentLevel, this)) {
+        if (victoryTest && victoryTest(this.currentLevel, this)) {
             this.handleVictory(this.currentLevel)
         }
 
@@ -584,4 +592,4 @@ class Game {
     }
 }
 
-export { Game, GameConfig, FeedbackToUI, FigureMap, ticksPerMinute }
+export { Game, GameConfig, FeedbackToUI, FigureMap, ticksPerMinute, VictoryTest }

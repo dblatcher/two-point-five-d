@@ -21,9 +21,6 @@ import { Wall, WallInput } from "./Wall";
 
 const renderingZoneFrames = false;
 
-interface VictoryTest {
-    (level: Level, game: Game): boolean
-}
 
 interface Blockage {
     edgeOfLevel?: boolean
@@ -51,7 +48,7 @@ interface LevelData {
     actors?: Actor[]
     features?: Record<string, AbstractFeature>
 
-    victoryCondition?: VictoryTest
+    victoryCondition?: string
 }
 
 export type LevelInput = {
@@ -71,7 +68,7 @@ export type LevelInput = {
     actors?: ActorInput[]
     features?: Record<string, SupportedFeatureConfig>
 
-    victoryCondition?: VictoryTest
+    victoryCondition?: string
 };
 
 

@@ -63,7 +63,7 @@ const areAllDucksOnTheStar = (level: Level, game: Game): boolean => {
 
     const squareWithStar = (game.currentLevel.data.squaresWithFeatures || [])
         .find(square => {
-            return square.floorFeatures.some(feature => feature.data.id === blueStar.id)
+            return square.floorFeatures.some(feature => feature.data.id === blueStar.id) // TO DO - use identity of feature with game.immutables.feature[id] or level.features[id] ?
         })
 
     if (!squareWithStar) { return false }
