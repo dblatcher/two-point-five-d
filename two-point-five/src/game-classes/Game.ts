@@ -84,6 +84,27 @@ interface FigureMap {
     subjectClass: typeof Item | typeof Actor
 }
 
+const hydrateData = (_inputs: GameInputs, immutables: GameImmutables, spriteRecord: Record<string, Sprite>): GameConfig => {
+    const inputs = structuredClone(_inputs)
+    return {
+        ...inputs,
+        playerVantage: new PlayerVantage(inputs.playerVantage),
+        itemInHand: inputs.itemInHand && immutables.itemTypeRecord[inputs.itemInHand] ? Item.ofType(immutables.itemTypeRecord[inputs.itemInHand]) : undefined,
+        levelIndex: inputs.levelIndex ?? 0,
+        characters: inputs.characters.map(input => new Character(input, immutables.itemTypeRecord)),
+        quests: inputs.quests?.map(data => new Quest(data)),
+        controllers: inputs.controllers.map(data => new Controller(data)),
+        narrativeMessages: inputs.narrativeMessages.map(data => new NarrativeMessage(data)),
+        // TO DO - would it improve memory to only instantiate the currentLevel and serialise the data back when changing?
+        levels: inputs.levels.map(data => new Level(data, {
+            spriteRecord,
+            itemTypeRecord: immutables.itemTypeRecord,
+            decisionFunctions: immutables.decisionFunctions,
+        })) as NonEmptyArray<Level>
+    };
+}
+
+
 class Game {
     data: GameConfig
     immutables: GameImmutables
@@ -114,38 +135,19 @@ class Game {
         this.spriteSheetMap = new Map<string, SpriteSheet>()
         immutables.spriteSheets.forEach(sheet => this.spriteSheetMap.set(sheet.id, sheet))
 
-        const spriteRecord = immutables.sprites.reduce((record, nextSpriteConfig) => {
+        const spriteRecord: Record<string, Sprite> = immutables.sprites.reduce((record, nextSpriteConfig) => {
             return {
                 ...record,
                 [nextSpriteConfig.id]: new Sprite(nextSpriteConfig)
             }
         }, {})
         this.spriteRecord = spriteRecord
-
-        const itemInHand = config.itemInHand && immutables.itemTypeRecord[config.itemInHand] ? Item.ofType(immutables.itemTypeRecord[config.itemInHand]) : undefined
-
-        this.data = {
-            ...config,
-            playerVantage: new PlayerVantage(config.playerVantage),
-            itemInHand,
-            levelIndex: config.levelIndex ?? 0,
-            characters: config.characters.map(input => new Character(input, immutables.itemTypeRecord)),
-            quests: config.quests?.map(data => new Quest(data)),
-            controllers: config.controllers.map(data => new Controller(data)),
-            narrativeMessages: config.narrativeMessages.map(data => new NarrativeMessage(data)),
-            // TO DO - would it improve memory to only instantiate the currentLevel and serialise the data back when changing?
-            levels: config.levels.map(data => new Level(data, {
-                spriteRecord,
-                itemTypeRecord: immutables.itemTypeRecord,
-                decisionFunctions: immutables.decisionFunctions,
-            })) as NonEmptyArray<Level>
-        };
-
+        this.data = hydrateData(config, immutables, spriteRecord)
         this.setActiveCharacter(config.activeCharacterIndex);
     }
 
     serialiseData(): GameInputs {
-        return {
+        return structuredClone({
             ...this.data,
             intersitial: undefined,
             playerVantage: this.data.playerVantage.data,
@@ -155,7 +157,11 @@ class Game {
             controllers: this.data.controllers.map(controller => controller.data),
             narrativeMessages: this.data.narrativeMessages.map(message => message.data),
             levels: this.data.levels.map(level => level.serialise()) as NonEmptyArray<LevelInput>
-        }
+        })
+    }
+
+    loadData(inputs: GameInputs) {
+        this.data = hydrateData(inputs, this.immutables, this.spriteRecord)
     }
 
     static MAX_QUEUE_LENGTH: 10
@@ -592,4 +598,4 @@ class Game {
     }
 }
 
-export { Game, GameConfig, FeedbackToUI, FigureMap, ticksPerMinute, VictoryTest }
+export { Game, GameConfig, FeedbackToUI, FigureMap, ticksPerMinute, VictoryTest, GameInputs }

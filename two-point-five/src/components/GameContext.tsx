@@ -20,6 +20,6 @@ export const useCharacter = (index: number): [CharacterData | undefined, RefObje
     const characterRef = useRef<Character>(undefined)
     useEffect(() => {
         characterRef.current = game().data.characters.at(index)
-    }, [index])
+    }, [index, game().data.characters])
     return [characterData, characterRef, isActive]
 }

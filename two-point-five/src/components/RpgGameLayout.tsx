@@ -1,5 +1,6 @@
+import { GameInputs } from "@/game-classes/Game"
 import { DirectionName } from "@/types"
-import { Dispatch, SetStateAction, useCallback, useState } from "react"
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react"
 import { Arrows } from "./Arrows"
 import { AttackButtons } from "./AttackButtons"
 import { CharacterBar } from "./CharacterBar"
@@ -7,11 +8,11 @@ import { CharacterScreen } from "./CharacterScreen"
 import { useGame } from "./GameContext"
 import { Intersitial } from "./Intersitial"
 import { ItemSlot } from "./ItemSlot"
+import { MapScreen } from "./MapScreen"
 import { MessageBox } from "./MessageBox"
+import { PointerIcon } from "./PointerIcon"
 import { QuestScreen } from "./QuestScreen"
 import { SightCanvas } from "./SightCanvas"
-import { MapScreen } from "./MapScreen"
-import { PointerIcon } from "./PointerIcon"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -33,6 +34,8 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
         game().queuePlayerMovementAction({ action: 'TURN', direction })
     }, [])
 
+    const savedGame = useRef<GameInputs>(null)
+    const [hasSave, setHasSave] = useState(false)
 
     return <main>
         <section style={{
@@ -42,6 +45,23 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
             <span style={{ flex: 1 }}>{gameData.itemInHand?.itemType.name ?? " "}</span>
             <button onClick={() => setQuestScreenOpen(true)}>quests</button>
             <button onClick={() => setMapScreenOpen(true)}>map</button>
+
+            <button onClick={() => {
+                const input = game().serialiseData();
+                savedGame.current = input
+                setHasSave(true)
+            }}>save</button>
+            <button
+                disabled={!hasSave}
+                onClick={() => {
+                    const { current } = savedGame;
+                    if (!current) {
+                        return
+                    }
+                    game().loadData(current)
+                }}
+            >load</button>
+
         </section>
         <CharacterBar setCharacterScreenOpen={setCharacterScreenOpen} />
         <section style={{
@@ -79,7 +99,6 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                     selectOption={(index) => game().handleInterstitialOptionClick(index)} />
             )
         }
-
         {
             typeof characterScreenOpen === 'number' && (
                 <CharacterScreen
@@ -87,7 +106,6 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
                     close={() => setCharacterScreenOpen(undefined)} />
             )
         }
-
         {
             questScreenOpen && (
                 <QuestScreen close={() => setQuestScreenOpen(false)} />
