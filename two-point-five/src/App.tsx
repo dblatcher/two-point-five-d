@@ -4,12 +4,9 @@ import { game } from '@/travels-in-generica'
 import { GameContext } from './components/GameContext'
 import { RpgGameLayout } from './components/RpgGameLayout'
 import { useGameRunner } from './useGameRunner'
-import { VIEWSIZE } from './constants'
 
 function App() {
-
-  const { ready, gameData, gameRef, setCanvas, canvas } = useGameRunner(game, VIEWSIZE)
-
+  const { ready, gameData, gameRef, emitter } = useGameRunner(game)
   if (!ready) {
     return null
   }
@@ -17,9 +14,10 @@ function App() {
   return (
     <GameContext.Provider value={{
       game: () => gameRef.current,
-      gameData
+      gameData,
+      emitter
     }}>
-      <RpgGameLayout canvas={canvas} setCanvas={setCanvas} />
+      <RpgGameLayout />
     </GameContext.Provider>
   )
 }

@@ -25,6 +25,9 @@ class Vantage extends Position {
         return Direction.of(this.data.direction)
     }
 
+    clone(): Vantage {
+        return new Vantage(structuredClone(this.data))
+    }
     move(relativeDirection: RelativeDirection, game: Game): Blockage | undefined {
         return this.moveAbsolute(relativeDirection.getAbsoluteDirection(this.direction), game)
     }

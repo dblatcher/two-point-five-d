@@ -1,6 +1,7 @@
+import { VIEWSIZE } from "@/constants"
 import { GameInputs } from "@/game-classes/Game"
 import { DirectionName } from "@/types"
-import { Dispatch, ReactNode, SetStateAction, useCallback, useRef, useState } from "react"
+import { ReactNode, useCallback, useRef, useState } from "react"
 import { Arrows } from "./Arrows"
 import { AttackButtons } from "./AttackButtons"
 import { CharacterBar } from "./CharacterBar"
@@ -13,12 +14,7 @@ import { MessageBox } from "./MessageBox"
 import { PointerIcon } from "./PointerIcon"
 import { QuestScreen } from "./QuestScreen"
 import { SightCanvas } from "./SightCanvas"
-import { VIEWSIZE } from "@/constants"
 
-interface Props {
-    setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
-    canvas: HTMLCanvasElement | null;
-}
 
 const UiRow = ({ children }: { children?: ReactNode }) => {
     return <section style={{
@@ -28,7 +24,7 @@ const UiRow = ({ children }: { children?: ReactNode }) => {
 }
 
 
-export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
+export const RpgGameLayout = () => {
     const { gameData, game } = useGame()
     const [characterScreenOpen, setCharacterScreenOpen] = useState<number>()
     const [questScreenOpen, setQuestScreenOpen] = useState(false)
@@ -77,7 +73,7 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
 
 
         <UiRow>
-            <SightCanvas canvas={canvas} setCanvas={setCanvas} />
+            <SightCanvas />
             <div></div>
             <div style={{
                 display: 'flex',

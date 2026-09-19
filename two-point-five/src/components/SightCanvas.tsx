@@ -1,20 +1,25 @@
-import { Dispatch, SetStateAction } from "react";
-import { useGame } from "./GameContext";
 import { VIEWSIZE } from "@/constants";
+import { useCallback, useState } from "react";
+import { useGame, useGameTick } from "./GameContext";
 
 interface Props {
-    setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
-    canvas: HTMLCanvasElement | null;
+    viewSize?: number
 }
 
-export const SightCanvas = ({ setCanvas, canvas }: Props) => {
-
+export const SightCanvas = ({ viewSize = VIEWSIZE }: Props) => {
+    const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
     const { game } = useGame()
+    const renderSight = useCallback(() => {
+        if (canvas) {
+            game().renderSight(canvas, viewSize)
+        }
+    }, [canvas, game])
+    useGameTick(renderSight)
 
     return (
         <canvas
             style={{
-                maxWidth: VIEWSIZE
+                maxWidth: viewSize
             }}
             ref={setCanvas}
             onClick={(event) => {

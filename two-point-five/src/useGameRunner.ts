@@ -1,18 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Game } from "./game-classes/Game"
 
 
-export const useGameRunner = (game: Game, viewWidth: number) => {
+export const useGameRunner = (game: Game) => {
     const gameRef = useRef(game)
     const [gameData, setGameData] = useState(gameRef.current.data)
-    const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
+    const [emitter] = useState(new EventTarget()) 
     const [ready, setReady] = useState(false)
-
-    const renderSight = useCallback(() => {
-        if (canvas) {
-            gameRef.current.renderSight(canvas, viewWidth)
-        }
-    }, [canvas])
 
     useEffect(() => {
         if (ready) {
@@ -20,9 +14,8 @@ export const useGameRunner = (game: Game, viewWidth: number) => {
         }
         gameRef.current.loadImages().then(() => {
             setReady(true)
-            renderSight()
         })
-    }, [renderSight, ready])
+    }, [ ready])
 
     useEffect(() => {
         const runTick = () => {
@@ -30,16 +23,16 @@ export const useGameRunner = (game: Game, viewWidth: number) => {
                 return
             }
             gameRef.current.tick()
-            renderSight()
+            emitter.dispatchEvent(new Event('tick'))
             setGameData({ ...gameRef.current.data })
         }
         const interval = setInterval(runTick, 100)
         return () => {
             clearInterval(interval)
         }
-    }, [renderSight, ready])
+    }, [ready])
 
     return {
-        ready, canvas, setCanvas, gameData, gameRef
+        ready, gameData, gameRef, emitter
     }
 }
