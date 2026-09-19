@@ -1,7 +1,8 @@
 import { Game, GameConfig } from "@/game-classes/Game";
 import { Character, CharacterData } from "@/rpg-classes/Character";
 import { game } from "@/test-world";
-import { createContext, RefObject, useContext, useEffect, useRef } from "react";
+import { useGameRunner } from "@/useGameRunner";
+import { createContext, ReactNode, RefObject, useContext, useEffect, useRef } from "react";
 
 export const GameContext = createContext<{
     game: () => Game
@@ -13,9 +14,30 @@ export const GameContext = createContext<{
     emitter: new EventTarget(),
 })
 
+type GameProviderProps = {
+    children?: ReactNode;
+    game: Game
+}
+export const GameProvider = ({ children, game }: GameProviderProps) => {
+    const { ready, gameData, gameRef, emitter } = useGameRunner(game)
+    if (!ready) {
+        return null
+    }
+
+    return (
+        <GameContext.Provider value={{
+            game: () => gameRef.current,
+            gameData,
+            emitter
+        }}>
+            {children}
+        </GameContext.Provider>
+    )
+}
+
 export const useGame = () => useContext(GameContext)
 
-export const useGameTick = (callback:{():void}) => {
+export const useGameTick = (callback: { (): void }) => {
     const { emitter } = useGame()
     return useEffect(() => {
         emitter.addEventListener('tick', callback)
