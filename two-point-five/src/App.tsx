@@ -4,10 +4,11 @@ import { game } from '@/travels-in-generica'
 import { GameContext } from './components/GameContext'
 import { RpgGameLayout } from './components/RpgGameLayout'
 import { useGameRunner } from './useGameRunner'
+import { VIEWSIZE } from './constants'
 
 function App() {
 
-  const { ready, gameData, gameRef, setCanvas, canvas } = useGameRunner(game)
+  const { ready, gameData, gameRef, setCanvas, canvas } = useGameRunner(game, VIEWSIZE)
 
   if (!ready) {
     return null

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Game } from "./game-classes/Game"
 
 
-export const useGameRunner = (game: Game) => {
+export const useGameRunner = (game: Game, viewWidth: number) => {
     const gameRef = useRef(game)
     const [gameData, setGameData] = useState(gameRef.current.data)
     const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
@@ -10,7 +10,7 @@ export const useGameRunner = (game: Game) => {
 
     const renderSight = useCallback(() => {
         if (canvas) {
-            gameRef.current.renderSight(canvas)
+            gameRef.current.renderSight(canvas, viewWidth)
         }
     }, [canvas])
 

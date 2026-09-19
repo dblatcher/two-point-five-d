@@ -1,6 +1,6 @@
 import { GameInputs } from "@/game-classes/Game"
 import { DirectionName } from "@/types"
-import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react"
+import { Dispatch, ReactNode, SetStateAction, useCallback, useRef, useState } from "react"
 import { Arrows } from "./Arrows"
 import { AttackButtons } from "./AttackButtons"
 import { CharacterBar } from "./CharacterBar"
@@ -13,10 +13,18 @@ import { MessageBox } from "./MessageBox"
 import { PointerIcon } from "./PointerIcon"
 import { QuestScreen } from "./QuestScreen"
 import { SightCanvas } from "./SightCanvas"
+import { VIEWSIZE } from "@/constants"
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
     canvas: HTMLCanvasElement | null;
+}
+
+const UiRow = ({ children }: { children?: ReactNode }) => {
+    return <section style={{
+        display: 'grid',
+        gridTemplateColumns: `${VIEWSIZE}px 1fr 250px`,
+    }}>{children}</section>
 }
 
 
@@ -38,58 +46,51 @@ export const RpgGameLayout = ({ setCanvas, canvas }: Props) => {
     const [hasSave, setHasSave] = useState(false)
 
     return <main>
-        <section style={{
-            display: 'flex',
-            alignSelf: 'flex-start',
-        }}>
-            <span style={{ flex: 1 }}>{gameData.itemInHand?.itemType.name ?? " "}</span>
-            <button onClick={() => setQuestScreenOpen(true)}>quests</button>
-            <button onClick={() => setMapScreenOpen(true)}>map</button>
+        <UiRow>
+            <span>{gameData.itemInHand?.itemType.name ?? " "}</span>
+            <div></div>
+            <div>
+                <button onClick={() => setQuestScreenOpen(true)}>quests</button>
+                <button onClick={() => setMapScreenOpen(true)}>map</button>
 
-            <button onClick={() => {
-                const input = game().serialiseData();
-                savedGame.current = input
-                setHasSave(true)
-            }}>save</button>
-            <button
-                disabled={!hasSave}
-                onClick={() => {
-                    const { current } = savedGame;
-                    if (!current) {
-                        return
-                    }
-                    game().loadData(current)
-                }}
-            >load</button>
+                <button onClick={() => {
+                    const input = game().serialiseData();
+                    savedGame.current = input
+                    setHasSave(true)
+                }}>save</button>
+                <button
+                    disabled={!hasSave}
+                    onClick={() => {
+                        const { current } = savedGame;
+                        if (!current) {
+                            return
+                        }
+                        game().loadData(current)
+                    }}
+                >load</button>
+            </div>
+        </UiRow>
 
-        </section>
-        <CharacterBar setCharacterScreenOpen={setCharacterScreenOpen} />
-        <section style={{
-            display: 'grid',
-            gridTemplateColumns: "500px 1fr",
-        }}>
+        <UiRow>
+            <CharacterBar setCharacterScreenOpen={setCharacterScreenOpen} />
+        </UiRow>
+
+
+        <UiRow>
             <SightCanvas canvas={canvas} setCanvas={setCanvas} />
-
+            <div></div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
             }}>
-                <div style={{
-                    display: 'inline-flex',
-                    alignSelf: 'flex-start',
-                    margin: 5,
-                    borderWidth: 1,
-                    borderStyle: 'dashed',
-                }}>
-
-                </div>
                 <AttackButtons />
                 <div style={{ marginTop: 'auto' }}>
                     <Arrows move={move} turn={turn} />
                 </div>
 
             </div>
-        </section>
+        </UiRow>
+
         <MessageBox />
 
         {

@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { useGame } from "./GameContext";
+import { VIEWSIZE } from "@/constants";
 
 interface Props {
     setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
@@ -13,7 +14,7 @@ export const SightCanvas = ({ setCanvas, canvas }: Props) => {
     return (
         <canvas
             style={{
-                maxWidth: 500
+                maxWidth: VIEWSIZE
             }}
             ref={setCanvas}
             onClick={(event) => {
