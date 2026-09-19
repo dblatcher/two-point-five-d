@@ -1,19 +1,25 @@
 import { VIEWSIZE } from "@/constants";
 import { useCallback, useState } from "react";
 import { useGame, useGameTick } from "./GameContext";
+import { Game } from "@/game-classes/Game";
 
 interface Props {
     viewSize?: number
+    getPOV?: { (game: Game, canvas: HTMLCanvasElement, viewSize: number): void }
 }
 
-export const SightCanvas = ({ viewSize = VIEWSIZE }: Props) => {
+export const SightCanvas = ({ viewSize = VIEWSIZE, getPOV }: Props) => {
     const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
     const { game } = useGame()
     const renderSight = useCallback(() => {
         if (canvas) {
-            game().renderSight(canvas, viewSize)
+            if (getPOV) {
+                getPOV(game(), canvas, viewSize)
+            } else {
+                game().renderSight(canvas, viewSize)
+            }
         }
-    }, [canvas, game])
+    }, [canvas, game, getPOV])
     useGameTick(renderSight)
 
     return (

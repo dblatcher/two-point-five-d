@@ -43,7 +43,12 @@ class Vantage extends Position {
     translateToVantage(vector: PositionConfig): Vantage {
         return new Vantage({ x: this.data.x + vector.x, y: this.data.y + vector.y, direction: this.data.direction });
     }
-
+    turnToLeft(): Vantage {
+        return new Vantage({ x: this.data.x, y: this.data.y, direction: Direction.of(this.data.direction).leftOf.name });
+    }
+    turnToRight(): Vantage {
+        return new Vantage({ x: this.data.x, y: this.data.y, direction: Direction.of(this.data.direction).rightOf.name });
+    }
 
     get drawInMapPoints(): Point[][] {
         const d = this.direction;

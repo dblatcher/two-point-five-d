@@ -1,5 +1,5 @@
 import { VIEWSIZE } from "@/constants"
-import { GameInputs } from "@/game-classes/Game"
+import { Game, GameInputs } from "@/game-classes/Game"
 import { DirectionName } from "@/types"
 import { ReactNode, useCallback, useRef, useState } from "react"
 import { Arrows } from "./Arrows"
@@ -74,7 +74,6 @@ export const RpgGameLayout = () => {
 
         <UiRow>
             <SightCanvas />
-            <div></div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
