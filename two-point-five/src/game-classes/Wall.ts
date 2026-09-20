@@ -1,4 +1,4 @@
-import { ConvertFunction, DrawingContext, mapPointInSight, plotPolygon, Point } from "@/canvas/canvas-utility";
+import { ConvertFunction, DrawingContext, getMappedPoints, mapPointInSight, plotPolygon, Point } from "@/canvas/canvas-utility";
 import { getPatternFill, getUpperLevelPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";
@@ -143,28 +143,6 @@ class Wall extends Position {
             feature.drawInSight(drawingContext, renderInstruction, tickCount, fullWallPoints, wallShapePoints)
         })
 
-
-        function getMappedPoints(relativeDirection: RelativeDirection = RelativeDirection.BACK, shape: Point[], place: { forward: number, right: number }): Point[] {
-            switch (relativeDirection) {
-                case RelativeDirection.LEFT:
-                    return shape.map(point => {
-                        return mapPointInSight(place.forward - .5 - point.x, place.right - .5, point.y)
-                    })
-                case RelativeDirection.RIGHT:
-                    return shape.map(point => {
-                        return mapPointInSight(place.forward - .5 - point.x, place.right + .5, point.y)
-                    })
-                case RelativeDirection.FORWARD:
-                    return shape.map(point => {
-                        return mapPointInSight(place.forward - .5, place.right - .5 + point.x, point.y)
-                    })
-                default:
-                case RelativeDirection.BACK:
-                    return shape.map(point => {
-                        return mapPointInSight(place.forward - .5 - 1, place.right - .5 + point.x, point.y)
-                    })
-            }
-        }
 
         function getColorFill(relativeDirection: RelativeDirection = RelativeDirection.BACK, baseColor: Color): string {
             switch (relativeDirection) {

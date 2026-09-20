@@ -1,4 +1,4 @@
-import { DrawingContext, plotPolygon, Point } from "@/canvas/canvas-utility"
+import { DrawingContext, getMappedPoints, PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { getPatternFill, getTextPatternFill } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { Sprite } from "@/canvas/Sprite"
@@ -8,8 +8,10 @@ import { AbstractFeature, AbstractFeatureData, AbstractFeatureInput } from './Ab
 import { AnimationTransitionInput } from "./AnimationTransition"
 import { Direction } from "./Direction"
 import { Game } from "./Game"
-import { Vantage } from "./Vantage"
 import { buildReaction } from "./Reaction"
+import { RelativeDirection } from "./RelativeDirection"
+import { Vantage } from "./Vantage"
+import { Color } from "@/canvas/Color"
 
 interface WallFeatureData extends AbstractFeatureData {
     textBoard?: TextBoard
@@ -40,7 +42,7 @@ export class WallFeature extends AbstractFeature {
     }
 
     serialise(): WallFeatureInput {
-        const {data} =this
+        const { data } = this
         return {
             ...data,
             reactions: data.reactions?.map(reaction => reaction.serialise()),
@@ -68,6 +70,11 @@ export class WallFeature extends AbstractFeature {
         ]
     }
 
+    getDrawInMapShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
+        return []
+    }
+
+
     drawInSight(
         drawingContext: DrawingContext,
         renderInstruction: RenderInstruction,
@@ -87,7 +94,16 @@ export class WallFeature extends AbstractFeature {
 
         if (featureImage) {
             plotPolygon(ctx, convertFunction, this.data.clipToWall ? wallShapePoints : fullWallPoints, { noStroke: true, fillStyle: featureImage })
+            return
         }
+
+        const shapes = this.getDrawInMapShapes()
+        shapes.forEach(({ shape, plotConfig }) => {
+            const { place, relativeDirection = RelativeDirection.BACK } = renderInstruction
+            const mappedShape = getMappedPoints(relativeDirection, shape, place);
+            plotPolygon(ctx, convertFunction, mappedShape, plotConfig)
+
+        })
     }
 }
 
@@ -120,18 +136,20 @@ export class WallSwitch extends WallFeature {
 
 interface DoorData {
     featureType: 'Door'
-    spriteId: string
+    spriteId?: string
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
     onBothSides: boolean
     transitions: AnimationTransitionInput[]
+    fillColor?: string
 }
 export interface DoorInput {
     featureType: 'Door',
-    spriteId: string
+    spriteId?: string
     status: "OPEN" | "CLOSED"
     canOpenDirectly?: boolean
-    transitions?: AnimationTransitionInput[]
+    transitions?: AnimationTransitionInput[],
+    fillColor?: string
 }
 
 export class Door extends WallFeature {
@@ -162,6 +180,58 @@ export class Door extends WallFeature {
             }
         }
         WallFeature.prototype.handleInteraction.apply(this, [actor, game]);
+    }
+
+    getDrawInMapShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
+        const openness = this.transitionPhase ?? (this.data.status === 'OPEN' ? 1 : 0)
+        const doorWidth = 0.8 - (openness * .7)
+        const fillStyle = this.data.fillColor ?? Color.BLACK.css;
+        return [
+            {
+                shape: [
+                    { x: 0.1, y: 0.1 },
+                    { x: 0.1, y: 0.4 },
+                    { x: 0.1 + doorWidth, y: 0.4 },
+                    { x: 0.1 + doorWidth, y: 0.1 },
+                ],
+                plotConfig: {
+                    fillStyle
+                },
+            },
+            {
+                shape: [
+                    { x: 0.1, y: 0.6 },
+                    { x: 0.1, y: 0.8 },
+                    { x: 0.1 + doorWidth, y: 0.8 },
+                    { x: 0.1 + doorWidth, y: 0.6 },
+                ],
+                plotConfig: {
+                    fillStyle
+                },
+            },
+            {
+                shape: [
+                    { x: 0.1, y: 0.6 },
+                    { x: 0.1, y: 0.4 },
+                    { x: Math.max(0.1 + doorWidth - .6, 0.1), y: 0.4 },
+                    { x: Math.max(0.1 + doorWidth - .6, 0.1), y: 0.6 },
+                ],
+                plotConfig: {
+                    fillStyle
+                },
+            },
+            {
+                shape: [
+                    { x: Math.max(0.1 + doorWidth - .2, 0.1), y: 0.4 },
+                    { x: Math.max(0.1 + doorWidth - .2, 0.1), y: 0.6 },
+                    { x: 0.1 + doorWidth, y: 0.6 },
+                    { x: 0.1 + doorWidth, y: 0.4 },
+                ],
+                plotConfig: {
+                    fillStyle
+                },
+            },
+        ]
     }
 
     getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {

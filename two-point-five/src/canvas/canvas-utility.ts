@@ -1,3 +1,4 @@
+import { RelativeDirection } from "@/game-classes/RelativeDirection";
 import { Direction } from "../game-classes/Direction";
 import { Position } from "../game-classes/Position";
 import { Vantage } from "../game-classes/Vantage";
@@ -33,6 +34,28 @@ function mapPointInSight(forwardDistance: number, rightDistance: number, upDista
     const y = .5 + (wallHeightAtDistance / 2) - (upDistance * wallHeightAtDistance)
     const x = .5 + (rightDistance * wallWidthAtDistance)
     return { x, y }
+}
+
+export function getMappedPoints(relativeDirection: RelativeDirection = RelativeDirection.BACK, shape: Point[], place: { forward: number, right: number }): Point[] {
+    switch (relativeDirection) {
+        case RelativeDirection.LEFT:
+            return shape.map(point => {
+                return mapPointInSight(place.forward - .5 - point.x, place.right - .5, point.y)
+            })
+        case RelativeDirection.RIGHT:
+            return shape.map(point => {
+                return mapPointInSight(place.forward - .5 - point.x, place.right + .5, point.y)
+            })
+        case RelativeDirection.FORWARD:
+            return shape.map(point => {
+                return mapPointInSight(place.forward - .5, place.right - .5 + point.x, point.y)
+            })
+        default:
+        case RelativeDirection.BACK:
+            return shape.map(point => {
+                return mapPointInSight(place.forward - .5 - 1, place.right - .5 + point.x, point.y)
+            })
+    }
 }
 
 function mapPointOnFloor(forwardDistance: number, rightDistance: number): Point {

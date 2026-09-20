@@ -19,8 +19,8 @@ function makeSign(text: string[]): WallFeatureInput {
 }
 
 const lever1: WallSwitchInput = { featureType: 'WallSwitch', spriteId: sprites.leverSprite.id, }
-const door1: DoorInput = ({ featureType: 'Door', spriteId: sprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
-const door2: DoorInput = ({ featureType: 'Door', spriteId: sprites.doorSprite.id, status: 'CLOSED', canOpenDirectly: false })
+const door1: DoorInput = ({ featureType: 'Door', fillColor:'yellow', status: 'CLOSED', canOpenDirectly: false })
+const door2: DoorInput = ({ featureType: 'Door', fillColor:'yellow', status: 'CLOSED', canOpenDirectly: false })
 
 
 const bigSquareOnFloor: [number, number][] = [
