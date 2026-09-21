@@ -59,7 +59,7 @@ const level2 = putWallsAroundLevel({
     sky: { indoors: true, skyBaseColor: [60, 60, 25] },
     defaultWallPattern: sharedSprites.brickWall.id,
     floorColor: [70, 70, 30],
-    startingVantage: { x: 0, y: 5, direction: 'WEST' },
+    startingVantage: [0, 5, 'WEST'],
     walls: [
         ({ x: 0, y: 5, placeName: 'WEST', featureIds: ["staircaseAUp"] }),
         ({ x: 0, y: 5, placeName: 'NORTH' }),

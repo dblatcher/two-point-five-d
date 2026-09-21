@@ -44,7 +44,7 @@ const questOne: QuestData = {
 
 const game = new Game({
     levels: levels,
-    playerVantage: levels[0].startingVantage || { x: 0, y: 0, direction: 'SOUTH' },
+    playerVantage: levels[0].startingVantage || [0, 0, 'SOUTH'],
     controllers: [],
     activeCharacterIndex: 0,
     quests: [

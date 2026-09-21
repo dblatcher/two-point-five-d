@@ -16,7 +16,7 @@ import { Position } from "./Position";
 import { RelativeDirection } from "./RelativeDirection";
 import { Sky, SkyInput } from "./Sky";
 import { SquareWithFeatures, SquareWithFeaturesData } from "./SquareWithFeatures";
-import { Vantage, VantageConfig } from "./Vantage";
+import { Vantage, VantageTupple } from "./Vantage";
 import { Wall, WallInput } from "./Wall";
 
 const renderingZoneFrames = false;
@@ -38,7 +38,7 @@ interface LevelData {
     defaultWallPattern?: string
     victoryMessage?: string
     floorColor?: Color
-    startingVantage?: VantageConfig
+    startingVantage?: VantageTupple
     sky?: Sky
     controllers?: Controller[]
     items: Item[]
@@ -58,7 +58,7 @@ export type LevelInput = {
     defaultWallPattern?: string
     victoryMessage?: string
     floorColor?: ColorParams
-    startingVantage?: VantageConfig
+    startingVantage?: VantageTupple
     controllers?: ControllerData[]
     sky?: SkyInput
     items: ItemInput[]

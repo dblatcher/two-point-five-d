@@ -26,7 +26,7 @@ hut3.walls[0].featureIds = ["torch"]
 const level1 = putWallsAroundLevel({
     id: 'level1',
     height: 10, width: 15,
-    startingVantage: { x: 3, y: 7, direction: 'NORTH' },
+    startingVantage: [3, 7, 'NORTH'],
     sky: {
         skyBaseColor: [140, 150, 250],
         sun: true,

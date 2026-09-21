@@ -54,7 +54,7 @@ const levels: NonEmptyArray<LevelInput> = [
 const game = new Game(
     {
         levels: levels,
-        playerVantage: levels[0].startingVantage || { x: 7, y: 0, direction: 'SOUTH' },
+        playerVantage: levels[0].startingVantage || [7, 0, 'SOUTH'],
         controllers: [],
         characters: [],
         activeCharacterIndex: undefined,

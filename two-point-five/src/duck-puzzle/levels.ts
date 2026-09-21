@@ -20,9 +20,7 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
     id: "duckPuzzleLevel1",
     height: 6,
     width: 8,
-    startingVantage: {
-        x: 1, y: 4, direction: 'NORTH',
-    },
+    startingVantage: [1, 4, 'NORTH'],
     defaultWallPattern: sprites.brickWall.id,
     floorColor: [100, 40, 40],
     features: duckPuzzleFeatures,
@@ -80,9 +78,7 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
     height: 6,
     width: 6,
     features: duckPuzzleFeatures,
-    startingVantage: {
-        x: 1, y: 2, direction: 'EAST',
-    },
+    startingVantage: [1, 2, 'EAST'],
     floorColor: [30, 120, 90],
     walls: [
         ({ x: 5, y: 2, placeName: 'NORTH', shape: lowWall, }),
@@ -130,9 +126,7 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
     height: 7,
     width: 7,
     features: duckPuzzleFeatures,
-    startingVantage: {
-        x: 0, y: 0, direction: 'EAST',
-    },
+    startingVantage: [0, 0, 'EAST'],
     floorColor: [120, 90, 30],
     walls: [
         ({ x: 2, y: 2, placeName: 'NORTH', }),

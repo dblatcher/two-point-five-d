@@ -1,28 +1,28 @@
-import { Level, LevelInput } from './Level'
+import { Color } from '@/canvas/Color'
+import { Sprite, SpriteConfig } from '@/canvas/Sprite'
+import { SpriteSheet } from '@/canvas/SpriteSheet'
+import { Actor } from '@/game-classes/Actor'
+import { AttackOption } from '@/rpg-classes/AttackOption'
+import { Monster } from '@/rpg-classes/Monster'
+import { Quest, QuestData } from '@/rpg-classes/Quest'
+import { NonEmptyArray } from '@/types'
+import { Character, CharacterInput } from '../rpg-classes/Character'
+import { AbstractFeature } from './AbstractFeature'
 import { Action, InterAction, MovementAction, NpcInterAction } from './Action'
+import { DecisionFunction } from './Behaviour'
+import { Controller, ControllerData } from './Controller'
+import { FeedbackToUI } from './FeebackToUi'
 import { Figure } from './Figure'
+import { Intersitial } from './Intersitial'
+import { Item } from './Item'
+import { ItemType } from './ItemType'
+import { Level, LevelInput } from './Level'
+import { NarrativeMessage, NarrativeMessageData } from './NarrativeMessage'
+import { PlayerVantage } from './PlayerVantage'
 import { PointerLocator } from './PointerLocator'
 import { Position } from './Position'
 import { RelativeDirection } from './RelativeDirection'
-import { Item } from './Item'
-import { PlayerVantage } from './PlayerVantage'
-import { Character, CharacterInput } from '../rpg-classes/Character'
-import { Vantage, VantageConfig } from './Vantage'
-import { Controller, ControllerData } from './Controller'
-import { AbstractFeature } from './AbstractFeature'
-import { Color } from '@/canvas/Color'
-import { Intersitial } from './Intersitial'
-import { NarrativeMessage, NarrativeMessageData } from './NarrativeMessage'
-import { Actor } from '@/game-classes/Actor'
-import { Monster } from '@/rpg-classes/Monster'
-import { AttackOption } from '@/rpg-classes/AttackOption'
-import { Quest, QuestData } from '@/rpg-classes/Quest'
-import { ItemType } from './ItemType'
-import { SpriteSheet } from '@/canvas/SpriteSheet'
-import { Sprite, SpriteConfig } from '@/canvas/Sprite'
-import { FeedbackToUI } from './FeebackToUi'
-import { NonEmptyArray } from '@/types'
-import { DecisionFunction } from './Behaviour'
+import { Vantage, VantageTupple } from './Vantage'
 
 
 interface Movement { action: "TURN" | "MOVE", direction: "FORWARD" | "LEFT" | "RIGHT" | "BACK" }
@@ -49,7 +49,7 @@ interface GameConfig {
 }
 
 interface GameInputs {
-    playerVantage: VantageConfig,
+    playerVantage: VantageTupple,
     itemInHand?: string
     controllers: ControllerData[]
     characters: CharacterInput[]
@@ -88,7 +88,7 @@ const hydrateData = (_inputs: GameInputs, immutables: GameImmutables, spriteReco
     const inputs = structuredClone(_inputs)
     return {
         ...inputs,
-        playerVantage: new PlayerVantage(inputs.playerVantage),
+        playerVantage: PlayerVantage.fromTupple(inputs.playerVantage),
         itemInHand: inputs.itemInHand && immutables.itemTypeRecord[inputs.itemInHand] ? Item.ofType(immutables.itemTypeRecord[inputs.itemInHand]) : undefined,
         levelIndex: inputs.levelIndex ?? 0,
         characters: inputs.characters.map(input => new Character(input, immutables.itemTypeRecord)),
@@ -150,7 +150,7 @@ class Game {
         return structuredClone({
             ...this.data,
             intersitial: undefined,
-            playerVantage: this.data.playerVantage.data,
+            playerVantage: this.data.playerVantage.toTupple(),
             itemInHand: this.data.itemInHand?.itemType.id,
             characters: this.data.characters.map(character => character.serialise()),
             quests: this.data.quests?.map(quest => quest.serialise()),
@@ -598,4 +598,4 @@ class Game {
     }
 }
 
-export { Game, GameConfig, FeedbackToUI, FigureMap, ticksPerMinute, VictoryTest, GameInputs }
+export { FeedbackToUI, FigureMap, Game, GameConfig, GameInputs, ticksPerMinute, VictoryTest }
