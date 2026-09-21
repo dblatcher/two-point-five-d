@@ -1,5 +1,5 @@
 import { VIEWSIZE } from "@/constants"
-import { Game, GameInputs } from "@/game-classes/Game"
+import { GameInputs } from "@/game-classes/Game"
 import { DirectionName } from "@/types"
 import { ReactNode, useCallback, useRef, useState } from "react"
 import { Arrows } from "./Arrows"

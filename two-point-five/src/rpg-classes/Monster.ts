@@ -28,7 +28,7 @@ export class Monster extends Actor {
         super(input, sprite, behaviour)
         this.data = {
             ...input,
-            vantage: input.vantage && new Vantage(input.vantage),
+            vantage: input.vantage && Vantage.fromTupple(input.vantage),
             stats: new CharacterStats(input.stats),
             sprite,
             behaviour,
@@ -43,7 +43,7 @@ export class Monster extends Actor {
         return {
             ...data,
             sprite: data.sprite.id,
-            vantage: data.vantage?.data,
+            vantage: data.vantage?.toTupple(),
             behaviour: data.behaviour?.functionName,
             stats: data.stats.serialise(),
             defaultAttackAnimation: data.defaultAttackAnimation,

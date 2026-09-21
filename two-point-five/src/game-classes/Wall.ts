@@ -1,4 +1,4 @@
-import { ConvertFunction, DrawingContext, getMappedPoints, mapPointInSight, plotPolygon, Point } from "@/canvas/canvas-utility";
+import { ConvertFunction, DrawingContext, getMappedPoints, plotPolygon, Point } from "@/canvas/canvas-utility";
 import { getPatternFill, getUpperLevelPatternFill } from "@/canvas/patterns";
 import { RenderInstruction } from "@/canvas/RenderInstruction";
 import { Sprite } from "@/canvas/Sprite";

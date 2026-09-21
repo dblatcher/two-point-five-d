@@ -1,13 +1,13 @@
 import { Point } from "@/canvas/canvas-utility";
 import { Actor } from "@/game-classes/Actor";
+import { WithOptional } from "@/types";
 import { Direction } from "./Direction";
 import { Figure } from "./Figure";
 import { Game } from "./Game";
 import { ItemType } from "./ItemType";
 import { Blockage } from "./Level";
 import { Position } from "./Position";
-import { Vantage, VantageConfig } from "./Vantage";
-import { WithOptional } from "@/types";
+import { Vantage, VantageTupple } from "./Vantage";
 
 
 interface ItemConfig {
@@ -18,7 +18,7 @@ interface ItemConfig {
 }
 
 interface ItemInput {
-    vantage?: VantageConfig
+    vantage?: VantageTupple
     type: string
     altitude?: number
     momentum?: number
@@ -31,7 +31,7 @@ class Item {
     constructor(config: ItemInput, itemType: ItemType) {
         this.data = {
             ...config,
-            vantage: config.vantage && new Vantage(config.vantage),
+            vantage: config.vantage && Vantage.fromTupple(config.vantage),
         }
         this.itemType = itemType
     }
@@ -39,7 +39,7 @@ class Item {
     serialise(): ItemInput {
         return {
             ...this.data,
-            vantage: this.data.vantage?.data
+            vantage: this.data.vantage?.toTupple()
         }
     }
 
@@ -165,3 +165,4 @@ class Item {
 
 
 export { Item, ItemConfig, ItemInput };
+

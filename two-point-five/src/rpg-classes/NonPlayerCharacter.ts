@@ -28,7 +28,7 @@ export class NonPlayerCharacter extends Actor {
         super(input, sprite, behaviour)
         this.data = {
             ...input,
-            vantage: input.vantage && new Vantage(input.vantage),
+            vantage: input.vantage && Vantage.fromTupple(input.vantage),
             sprite,
             behaviour,
             questHooks: input.questHooks?.map(input => new QuestHook(input)),
@@ -42,7 +42,7 @@ export class NonPlayerCharacter extends Actor {
         return {
             ...data,
             sprite: data.sprite.id,
-            vantage: data.vantage?.data,
+            vantage: data.vantage?.toTupple(),
             behaviour: data.behaviour?.functionName,
             talkMessage: data.talkMessage,
             name: data.name,

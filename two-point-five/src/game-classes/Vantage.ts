@@ -12,12 +12,21 @@ interface VantageConfig {
     direction: CardinalDirectionName
 }
 
+export type VantageTupple = [number, number, CardinalDirectionName];
+
 class Vantage extends Position {
     data: VantageConfig
 
     constructor(config: VantageConfig) {
         super(config)
         this.data = config
+    }
+    static fromTupple(input: VantageTupple) {
+        const [x, y, direction] = input;
+        return new Vantage({ x, y, direction })
+    }
+    toTupple():VantageTupple {
+        return [this.data.x, this.data.y, this.data.direction]
     }
 
     get isVantage(): boolean { return true }

@@ -415,7 +415,7 @@ class Game {
             Item.ofType(
                 itemType,
                 {
-                    vantage: { ...inFrontOfPlayer, direction: direction.name },
+                    vantage: [inFrontOfPlayer.x, inFrontOfPlayer.y, direction.name],
                     altitude: dropHeight
                 }
             )

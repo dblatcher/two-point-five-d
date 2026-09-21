@@ -112,7 +112,7 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
     items: [
         {
             type: itemTypes.weight.id,
-            vantage: { x: 4.5, y: 3.75, direction: 'NORTH' }
+            vantage: [4.5, 3.75, 'NORTH'],
         },
     ],
     controllers: [

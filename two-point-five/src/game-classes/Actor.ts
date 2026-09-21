@@ -4,7 +4,7 @@ import { Behaviour } from "@/game-classes/Behaviour"
 import { Figure } from "@/game-classes/Figure"
 import { Game } from "@/game-classes/Game"
 import { RelativeDirection } from "@/game-classes/RelativeDirection"
-import { Vantage, VantageConfig } from "@/game-classes/Vantage"
+import { Vantage, VantageTupple } from "@/game-classes/Vantage"
 import { Action, DoAction } from "./Action"
 import { Item } from "./Item"
 import { Blockage } from "./Level"
@@ -22,7 +22,7 @@ type ActorData = {
 
 type ActorInput = {
     actorType: string,
-    vantage?: VantageConfig,
+    vantage?: VantageTupple,
     sprite: string
     behaviour?: string
     height?: number
@@ -43,7 +43,7 @@ class Actor {
             ...data,
             sprite,
             behaviour,
-            vantage: data.vantage && new Vantage(data.vantage)
+            vantage: data.vantage && Vantage.fromTupple(data.vantage)
         }
         this.actionQueue = []
         this.currentAction = undefined
@@ -54,7 +54,7 @@ class Actor {
         return {
             ...data,
             sprite: data.sprite.id,
-            vantage: data.vantage?.data,
+            vantage: data.vantage?.toTupple(),
             behaviour: data.behaviour?.functionName,
         }
     }
@@ -153,5 +153,5 @@ class Actor {
 
 
 export {
-    Actor, ActorData, ActorInput,
+    Actor, ActorData, ActorInput
 }

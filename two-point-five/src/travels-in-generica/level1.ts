@@ -73,11 +73,11 @@ const level1 = putWallsAroundLevel({
     items: [
         {
             type: itemTypes.bardHat.id,
-            vantage: { x: 8.2, y: 6.2, direction: 'NORTH' }
+            vantage: [8.2, 6.2, 'NORTH'],
         },
         {
             type: itemTypes.bean.id,
-            vantage: { x: 5.5, y: 4.5, direction: 'NORTH' }
+            vantage: [5.5, 4.5, 'NORTH']
         },
     ],
 
@@ -85,7 +85,7 @@ const level1 = putWallsAroundLevel({
         ({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.smith.data.id,
-            vantage: ({ x: 1.5, y: 7.5, direction: 'EAST' }),
+            vantage: [1.5, 7.5, 'EAST'],
             talkMessage: "Wanna buy a hammer?",
             name: "George the blacksmith",
         }),
@@ -93,7 +93,7 @@ const level1 = putWallsAroundLevel({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.farmer2.data.id,
             behaviour: ('wanderAround'),
-            vantage: ({ x: 8.25, y: 4.25, direction: 'NORTH' }),
+            vantage: [8.25, 4.25, 'NORTH'],
             talkMessage: "I am taking my turnips to the market.",
             name: "John the farmer",
         }),
@@ -101,7 +101,7 @@ const level1 = putWallsAroundLevel({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.farmer.data.id,
             behaviour: ('walkInCircle'),
-            vantage: ({ x: 6.25, y: 6.25, direction: 'WEST' }),
+            vantage: [6.25, 6.25, 'WEST'],
             talkMessage: "I should get back to the cows.",
             name: "Roger the herdsman",
         }),
@@ -109,7 +109,7 @@ const level1 = putWallsAroundLevel({
         ({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.armedMan.data.id,
-            vantage: ({ x: 10.75, y: 5.75, direction: 'NORTH' }),
+            vantage: [10.75, 5.75, 'NORTH'],
             talkMessage: "They aren't offering enough money for me to fight any monsters.",
             name: "Harry Longblade",
         }),
@@ -117,7 +117,7 @@ const level1 = putWallsAroundLevel({
         ({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.guard2.data.id,
-            vantage: ({ x: 5.25, y: 7.25, direction: 'NORTH' }),
+            vantage: [5.25, 7.25, 'NORTH'],
             talkMessage: "Abide by the laws and we won't have any trouble.",
             name: "Corporal Mack",
             behaviour: ('moveBackAndForward'),
@@ -126,7 +126,7 @@ const level1 = putWallsAroundLevel({
         ({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.guard3.data.id,
-            vantage: ({ x: 4.5, y: 3.5, direction: 'SOUTH' }),
+            vantage: [4.5, 3.5, 'SOUTH'],
             talkMessage: "I'm just a guard.",
             name: "Corporal Colin",
             questHooks: [
@@ -143,7 +143,7 @@ const level1 = putWallsAroundLevel({
         ({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.redMonk.data.id,
-            vantage: ({ x: 3.5, y: 0.5, direction: 'SOUTH' }),
+            vantage: [3.5, 0.5, 'SOUTH'],
             name: "Father Dunlaw",
             talkMessage: "Welcome to Saint Bernard's Chapel.",
             questHooks: [
@@ -169,7 +169,7 @@ const level1 = putWallsAroundLevel({
         ({
             actorType: 'NonPlayerCharacter',
             sprite: sprites.innKeeper.data.id,
-            vantage: ({ x: 6.5, y: 2.25, direction: 'SOUTH' }),
+            vantage: [6.5, 2.25, 'SOUTH'],
             name: "Widow Elsa",
             talkMessage: "No rooms for the likes of you!",
         }),

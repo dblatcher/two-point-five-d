@@ -144,7 +144,7 @@ const level2 = putWallsAroundLevel({
     actors: [
         {
             actorType: 'Monster',
-            vantage: ({ x: 5.5, y: 6.5, direction: 'WEST' }),
+            vantage: [5.5, 6.5, 'WEST'],
             sprite: sprites.skeletonArcher.data.id,
             defaultAttackAnimation: "ATTACK_SWING",
             stats: ({ health: [1, 10], stamina: [10, 10], mana: [0, 0] }),
@@ -153,14 +153,14 @@ const level2 = putWallsAroundLevel({
 
         {
             actorType: 'Monster',
-            vantage: ({ x: 4.5, y: 8.5, direction: 'SOUTH' }),
+            vantage: [4.5, 8.5, 'SOUTH'],
             sprite: sprites.skeletonSpearman.data.id,
             stats: ({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
             behaviour: 'attackOrMoveClockwise',
         },
         {
             actorType: 'Monster',
-            vantage: ({ x: 6.5, y: 9.5, direction: 'NORTH' }),
+            vantage: [6.5, 9.5, 'NORTH'],
             sprite: sprites.skeletonSpearman.data.id,
             stats: ({ health: [10, 10], stamina: [10, 10], mana: [0, 0] }),
             behaviour: 'attackOrMoveAntiClockwise',
@@ -168,7 +168,7 @@ const level2 = putWallsAroundLevel({
 
     ],
     items: [
-        { vantage: { x: 4.85, y: 4.4, direction: 'NORTH' }, type: itemTypes.apple.id },
+        { vantage: [4.85, 4.4, 'NORTH'], type: itemTypes.apple.id },
     ],
     controllers: [
         ({
