@@ -1,5 +1,5 @@
-import { CSSProperties, useEffect, useState } from "react"
-import { useGame } from "./GameContext"
+import { CSSProperties } from "react"
+import { MapCanvas } from "./MapCanvas"
 
 interface Props {
     close: { (): void }
@@ -37,24 +37,13 @@ const styles = {
 
 
 export const MapScreen = ({ close }: Props) => {
-    const { gameData, game } = useGame()
-    const [mapCanvas, setMapCanvas] = useState<HTMLCanvasElement | null>(null)
-
-    useEffect(() => {
-        if (!mapCanvas) {
-            return
-        }
-        const gameInstance = game();
-        gameInstance.currentLevel.drawAsMap(mapCanvas, gameData.playerVantage, 25)
-    }, [mapCanvas, gameData])
-
     return <article style={styles.frame}>
         <header style={{ ...styles.header, gridArea: 'a' }}>
             <div>Map</div>
             <button onClick={close}>close</button>
         </header>
         <section style={{ gridArea: 'b', ...styles.section }}>
-            <canvas ref={setMapCanvas} style={styles.mapCanvas}></canvas>
+            <MapCanvas style={styles.mapCanvas} />
         </section>
     </article>
 

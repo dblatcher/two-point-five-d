@@ -227,12 +227,20 @@ class Game {
         viewWidth?: number,
         viewHeight?: number
     ): void {
-        const { playerVantage } = this.data;
+        this.renderPov(this.data.playerVantage, canvas, viewWidth, viewHeight)
+    }
+
+    renderPov(
+        vantage: Vantage,
+        canvas: HTMLCanvasElement,
+        viewWidth?: number,
+        viewHeight?: number
+    ): void {
         this.currentLevel.drawAsSight(
             this.spriteRecord,
             this.spriteSheetMap,
             canvas,
-            playerVantage,
+            vantage,
             viewWidth,
             viewHeight
         )
