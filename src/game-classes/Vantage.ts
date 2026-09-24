@@ -25,7 +25,7 @@ class Vantage extends Position {
         const [x, y, direction] = input;
         return new Vantage({ x, y, direction })
     }
-    toTupple():VantageTupple {
+    toTupple(): VantageTupple {
         return [this.data.x, this.data.y, this.data.direction]
     }
 
@@ -57,6 +57,15 @@ class Vantage extends Position {
     }
     turnToRight(): Vantage {
         return new Vantage({ x: this.data.x, y: this.data.y, direction: Direction.of(this.data.direction).rightOf.name });
+    }
+    translateRelative(relativeDirection: RelativeDirection, distance = 1): Vantage {
+        const absoluteDirection = relativeDirection.getAbsoluteDirection(this.direction);
+        const vector = {
+            x: absoluteDirection.x * distance,
+            y: absoluteDirection.y * distance,
+        }
+        const { x, y } = this.translate(vector).data
+        return new Vantage({ x, y, direction: this.direction.name })
     }
 
     get drawInMapPoints(): Point[][] {
