@@ -10,15 +10,9 @@ import { RelativeDirection } from "./RelativeDirection";
 import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage } from "./Vantage";
 
-export interface FloorFeatureData extends AbstractFeatureData {
-    shape?: [number, number][] // TO DO - use the generic shapes array instead
-    plotConfig?: PlotConfig,
-}
+export interface FloorFeatureData extends AbstractFeatureData { }
 
-export interface FloorFeatureInput extends AbstractFeatureInput {
-    shape?: [number, number][]
-    plotConfig?: PlotConfig,
-}
+export interface FloorFeatureInput extends AbstractFeatureInput { }
 
 
 export class FloorFeature extends AbstractFeature {
@@ -72,7 +66,7 @@ export class FloorFeature extends AbstractFeature {
         _tickCount: number
     ): void {
         const { ctx, convertFunction } = drawingContext
-        const { shape = Vantage.defaultMarkerShape, plotConfig = Vantage.defaultMarkerPlotConfig, shapes } = this.data
+        const { shapes = [{ shape: Vantage.defaultMarkerShape, plotConfig: Vantage.defaultMarkerPlotConfig }] } = this.data
         const { place, viewedFrom, relativeDirection = RelativeDirection.FORWARD } = renderInstruction
 
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(renderInstruction.thing as Vantage);
@@ -81,18 +75,14 @@ export class FloorFeature extends AbstractFeature {
             r: place.right - .5 + rotatedSquarePosition.y
         }
 
-        const shapePoints = relativeDirection.rotateShape(exactPlace, shape).map(corner => mapPointOnFloor(corner.f, corner.r))
-        plotPolygon(ctx, convertFunction, shapePoints, plotConfig)
-
         shapes?.forEach(({ shape, plotConfig }) => {
-            const { relativeDirection = RelativeDirection.BACK } = renderInstruction;
             const mappedShape = relativeDirection.rotateShape(exactPlace, shape).map(corner => mapPointOnFloor(corner.f, corner.r))
             plotPolygon(ctx, convertFunction, mappedShape, plotConfig)
         })
     }
 
     getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
-        const shape = this.data.shape || this.defaultShape
+        const shape = this.data.shapes?.at(0)?.shape || this.defaultShape
         const points = shape.map(coord => {
             let point = direction.translatePoint(squareCenter, coord[0])
             point = direction.leftOf.translatePoint(point, coord[1])
@@ -156,7 +146,7 @@ export class Pit extends FloorFeature {
 
 
     getDrawInMapConfig(): PlotConfig {
-        return { noClose: true, noFill: this.data.status == "CLOSED" }
+        return { noClose: true, noFill: this.data.status == "CLOSED", fillStyle: Color.BLACK.css }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

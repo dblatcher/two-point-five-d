@@ -14,13 +14,17 @@ const bigSquareOnFloor: [number, number][] = [
 const blueSquare: FloorFeatureInput = {
     featureType: 'FloorFeature',
     blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor
+    shapes: [
+        { plotConfig: { noFill: false, fillStyle: 'blue' }, shape: bigSquareOnFloor }
+    ]
 }
 
 const redSquare: FloorFeatureInput = {
     featureType: 'FloorFeature',
     blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor
+    shapes: [
+        { plotConfig: { noFill: false, fillStyle: 'red' }, shape: bigSquareOnFloor }
+    ]
 }
 
 const lever1 = ({ featureType: 'WallSwitch', spriteId: sharedSprites.leverSprite.id, })

@@ -32,12 +32,16 @@ const bigSquareOnFloor: [number, number][] = [
 const floorSwitch: FloorFeatureInput = ({
     featureType: 'FloorFeature',
     blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
+    shapes: [{
+        plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
+    }]
 })
 const floorSwitch2: FloorFeatureInput = ({
     featureType: 'FloorFeature',
     blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
+    shapes: [{
+        plotConfig: { noFill: false, fillStyle: 'gray' }, shape: bigSquareOnFloor
+    }]
 })
 
 const pit1: PitInput = ({ featureType: 'Pit', status: "OPEN" })

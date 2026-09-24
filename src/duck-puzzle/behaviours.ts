@@ -22,8 +22,10 @@ const starOnFloor: [number, number][] = [
 const blueStar: FloorFeatureInput = {
     id: 'blueStar',
     featureType: 'FloorFeature',
+    shapes: [
+        { plotConfig: { noFill: false, fillStyle: 'blue' }, shape: starOnFloor }
+    ],
     blocksByDefault: false,
-    plotConfig: { noFill: false, fillStyle: 'blue' }, shape: starOnFloor
 }
 
 function moveAntiClockwiseUnlessOnStar(actor: Actor, game: Game, _behaviour: Behaviour): Action | null {
