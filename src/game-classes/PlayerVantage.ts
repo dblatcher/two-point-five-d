@@ -1,6 +1,6 @@
 import { PlotConfig, Point } from "@/canvas/canvas-utility";
 import { Color } from "@/canvas/Color";
-import { Vantage, VantageConfig } from "./Vantage";
+import { Vantage, VantageConfig, VantageTupple } from "./Vantage";
 
 
 class PlayerVantage extends Vantage {
@@ -24,6 +24,10 @@ class PlayerVantage extends Vantage {
         return [[arrowEnd, arrowLeft, origin, arrowRight]]
     }
 
+    static fromTupple(input: VantageTupple) {
+        const [x, y, direction] = input;
+        return new PlayerVantage({ x, y, direction })
+    }
 }
 
 export { PlayerVantage };
