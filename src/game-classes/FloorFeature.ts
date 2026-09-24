@@ -176,16 +176,16 @@ export class Pit extends FloorFeature {
         const floorColor = level.data.floorColor || Level.defaultFloorColor;
 
         if (this.data.status === 'CLOSED') {
-            plotPolygon(ctx, convertFunction, corners, { strokeStyle: Color.BLACK.css, fillStyle: floorColor.lighter(5).css })
+            plotPolygon(ctx, convertFunction, corners, { strokeStyle: Color.BLACK.css, fillStyle: floorColor.lighter(15).css })
             return
         }
 
-        plotPolygon(ctx, convertFunction, corners, { fillStyle: floorColor.darker(5).css })
+        plotPolygon(ctx, convertFunction, corners, { fillStyle: floorColor.darker(15).css })
 
         if (forwardLeft.x > backLeft.x) {
             const leftBottom: Point = { x: forwardLeft.x, y: backLeft.y }
             plotPolygon(ctx, convertFunction, [forwardLeft, leftBottom, backLeft],
-                { fillStyle: floorColor.darker(25).css }
+                { fillStyle: floorColor.darker(35).css }
             )
         }
 

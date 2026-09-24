@@ -133,6 +133,18 @@ export class WallSwitch extends WallFeature {
 
         WallFeature.prototype.handleInteraction.apply(this, [actor, game]);
     }
+
+    getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {
+        const { status } = this.data
+        const edgeMiddle = place.translatePoint(squareCenter, .5);
+        const leftCorner = place.leftOf.translatePoint(edgeMiddle, .5);
+        const rightCorner = place.rightOf.translatePoint(edgeMiddle, .5);
+        const switchLevel = place.behind.translatePoint(edgeMiddle, .15);
+        const switchEnd = { ...switchLevel, y: switchLevel.y + .25 * (status === 'ON' ? 1 : -1) }
+        return [
+            [rightCorner, edgeMiddle, switchEnd, edgeMiddle, leftCorner]
+        ]
+    }
 }
 
 
@@ -187,7 +199,10 @@ export class Door extends WallFeature {
     getDrawInMapShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
         const openness = this.transitionPhase ?? (this.data.status === 'OPEN' ? 1 : 0)
         const doorWidth = 0.8 - (openness * .7)
-        const fillStyle = this.data.fillColor ?? Color.BLACK.css;
+        const plotConfig: PlotConfig = {
+            fillStyle: this.data.fillColor ?? Color.BLACK.css,
+            strokeStyle: this.data.fillColor ?? Color.BLACK.css,
+        }
         return [
             {
                 shape: [
@@ -196,9 +211,7 @@ export class Door extends WallFeature {
                     { x: 0.1 + doorWidth, y: 0.4 },
                     { x: 0.1 + doorWidth, y: 0.1 },
                 ],
-                plotConfig: {
-                    fillStyle
-                },
+                plotConfig
             },
             {
                 shape: [
@@ -207,20 +220,16 @@ export class Door extends WallFeature {
                     { x: 0.1 + doorWidth, y: 0.8 },
                     { x: 0.1 + doorWidth, y: 0.6 },
                 ],
-                plotConfig: {
-                    fillStyle
-                },
+                plotConfig
             },
             {
                 shape: [
-                    { x: 0.1, y: 0.6 },
-                    { x: 0.1, y: 0.4 },
-                    { x: Math.max(0.1 + doorWidth - .6, 0.1), y: 0.4 },
-                    { x: Math.max(0.1 + doorWidth - .6, 0.1), y: 0.6 },
+                    { x: 0.1, y: 0.8 },
+                    { x: 0.1, y: 0.1 },
+                    { x: Math.max(0.1 + doorWidth - .6, 0.1), y: 0.1 },
+                    { x: Math.max(0.1 + doorWidth - .6, 0.1), y: 0.8 },
                 ],
-                plotConfig: {
-                    fillStyle
-                },
+                plotConfig,
             },
             {
                 shape: [
@@ -229,9 +238,7 @@ export class Door extends WallFeature {
                     { x: 0.1 + doorWidth, y: 0.6 },
                     { x: 0.1 + doorWidth, y: 0.4 },
                 ],
-                plotConfig: {
-                    fillStyle
-                },
+                plotConfig,
             },
         ]
     }
