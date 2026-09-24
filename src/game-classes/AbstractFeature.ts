@@ -20,6 +20,7 @@ interface AbstractFeatureData {
     consumesItem?: boolean
     spriteId?: string
     transitions?: AnimationTransitionInput[]
+    shapes?: { shape: [number, number][], plotConfig: PlotConfig }[]
 }
 interface AbstractFeatureInput {
     featureType: string
@@ -31,6 +32,7 @@ interface AbstractFeatureInput {
     consumesItem?: boolean
     spriteId?: string
     transitions?: AnimationTransitionInput[]
+    shapes?: { shape: [number, number][], plotConfig: PlotConfig }[]
 }
 
 class AbstractFeature {

@@ -19,8 +19,8 @@ function makeSign(text: string[]): WallFeatureInput {
 }
 
 const lever1: WallSwitchInput = { featureType: 'WallSwitch', spriteId: sprites.leverSprite.id, }
-const door1: DoorInput = ({ featureType: 'Door', fillColor:'yellow', status: 'CLOSED', canOpenDirectly: false })
-const door2: DoorInput = ({ featureType: 'Door', fillColor:'yellow', status: 'CLOSED', canOpenDirectly: false })
+const door1: DoorInput = ({ featureType: 'Door', fillColor: 'yellow', status: 'CLOSED', canOpenDirectly: false })
+const door2: DoorInput = ({ featureType: 'Door', fillColor: 'yellow', status: 'CLOSED', canOpenDirectly: false })
 
 
 const bigSquareOnFloor: [number, number][] = [
@@ -43,5 +43,19 @@ const floorSwitch2: FloorFeatureInput = ({
 const pit1: PitInput = ({ featureType: 'Pit', status: "OPEN" })
 const pitClosed: PitInput = ({ featureType: 'Pit', status: "CLOSED" })
 
-export { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed }
+const shapeOnWall: WallFeatureInput = {
+    featureType: 'WallFeature',
+    shapes: [
+        {
+            plotConfig: { fillStyle: 'pink' },
+            shape: [
+                [0, 0],
+                [1, 0],
+                [0, 1],
+            ]
+        }
+    ]
+}
+
+export { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed, shapeOnWall }
 

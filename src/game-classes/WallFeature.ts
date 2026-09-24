@@ -1,4 +1,4 @@
-import { DrawingContext, getMappedPoints, PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility"
+import { coordsToPoint, DrawingContext, getMappedPoints, PlotConfig, plotPolygon, Point } from "@/canvas/canvas-utility"
 import { getPatternFill, getTextPatternFill } from "@/canvas/patterns"
 import { RenderInstruction } from "@/canvas/RenderInstruction"
 import { Sprite } from "@/canvas/Sprite"
@@ -71,7 +71,10 @@ export class WallFeature extends AbstractFeature {
     }
 
     getDrawInMapShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
-        return []
+        return (this.data.shapes ?? []).map(shapeConfig => ({
+            plotConfig: shapeConfig.plotConfig,
+            shape: shapeConfig.shape.map(coordsToPoint)
+        }))
     }
 
 
@@ -102,7 +105,6 @@ export class WallFeature extends AbstractFeature {
             const { place, relativeDirection = RelativeDirection.BACK } = renderInstruction
             const mappedShape = getMappedPoints(relativeDirection, shape, place);
             plotPolygon(ctx, convertFunction, mappedShape, plotConfig)
-
         })
     }
 }

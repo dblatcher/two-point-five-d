@@ -5,7 +5,7 @@ import { FloorFeature } from "@/game-classes/FloorFeature";
 import { sprites } from "@/instances/sprites";
 import { doorway, lowWall } from "../instances/wallShapes";
 import { blueStar } from "./behaviours";
-import { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed } from "./features";
+import { door1, door2, floorSwitch, floorSwitch2, lever1, makeSign, pit1, pitClosed, shapeOnWall } from "./features";
 import { itemTypes } from "./itemTypes";
 
 
@@ -13,7 +13,7 @@ const hintForLevel1 = makeSign(["Help the duck", "reach the", "blue star!",])
 const hintForLevel2 = makeSign(["Use both plates", "to open", "the door"])
 
 const duckPuzzleFeatures = {
-    lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed, hintForLevel1, hintForLevel2, blueStar
+    lever1, door1, door2, floorSwitch, floorSwitch2, pit1, pitClosed, hintForLevel1, hintForLevel2, blueStar, shapeOnWall
 }
 
 const duckPuzzleLevel1 = putWallsAroundLevel({

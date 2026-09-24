@@ -18,6 +18,8 @@ interface PlotConfig {
     strokeStyle?: string | CanvasPattern | CanvasGradient
 }
 
+export const coordsToPoint = ([x, y]: [number, number]): Point => ({ x, y })
+
 interface DrawingContext {
     spriteRecord: Record<string, Sprite>
     spriteSheetMap: Map<string, SpriteSheet>,

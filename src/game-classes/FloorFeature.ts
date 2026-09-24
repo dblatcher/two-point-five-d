@@ -11,7 +11,7 @@ import { SquareWithFeatures } from "./SquareWithFeatures";
 import { Vantage } from "./Vantage";
 
 export interface FloorFeatureData extends AbstractFeatureData {
-    shape?: [number, number][]
+    shape?: [number, number][] // TO DO - use the generic shapes array instead
     plotConfig?: PlotConfig,
 }
 
@@ -72,7 +72,7 @@ export class FloorFeature extends AbstractFeature {
         _tickCount: number
     ): void {
         const { ctx, convertFunction } = drawingContext
-        const { shape = Vantage.defaultMarkerShape, plotConfig = Vantage.defaultMarkerPlotConfig } = this.data
+        const { shape = Vantage.defaultMarkerShape, plotConfig = Vantage.defaultMarkerPlotConfig, shapes } = this.data
         const { place, viewedFrom, relativeDirection = RelativeDirection.FORWARD } = renderInstruction
 
         const rotatedSquarePosition = viewedFrom.rotateSquarePosition(renderInstruction.thing as Vantage);
@@ -83,6 +83,12 @@ export class FloorFeature extends AbstractFeature {
 
         const shapePoints = relativeDirection.rotateShape(exactPlace, shape).map(corner => mapPointOnFloor(corner.f, corner.r))
         plotPolygon(ctx, convertFunction, shapePoints, plotConfig)
+
+        shapes?.forEach(({ shape, plotConfig }) => {
+            const { relativeDirection = RelativeDirection.BACK } = renderInstruction;
+            const mappedShape = relativeDirection.rotateShape(exactPlace, shape).map(corner => mapPointOnFloor(corner.f, corner.r))
+            plotPolygon(ctx, convertFunction, mappedShape, plotConfig)
+        })
     }
 
     getDrawInMapPolygons(direction: Direction, squareCenter: Point): Point[][] {
