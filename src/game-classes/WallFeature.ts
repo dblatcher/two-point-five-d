@@ -70,7 +70,7 @@ export class WallFeature extends AbstractFeature {
         ]
     }
 
-    getDrawInMapShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
+    getDrawInSightShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
         return (this.data.shapes ?? []).map(shapeConfig => ({
             plotConfig: shapeConfig.plotConfig,
             shape: shapeConfig.shape.map(coordsToPoint)
@@ -100,7 +100,7 @@ export class WallFeature extends AbstractFeature {
             return
         }
 
-        const shapes = this.getDrawInMapShapes()
+        const shapes = this.getDrawInSightShapes()
         shapes.forEach(({ shape, plotConfig }) => {
             const { place, relativeDirection = RelativeDirection.BACK } = renderInstruction
             const mappedShape = getMappedPoints(relativeDirection, shape, place);
@@ -196,7 +196,7 @@ export class Door extends WallFeature {
         WallFeature.prototype.handleInteraction.apply(this, [actor, game]);
     }
 
-    getDrawInMapShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
+    getDrawInSightShapes(): { shape: Point[], plotConfig: PlotConfig }[] {
         const openness = this.transitionPhase ?? (this.data.status === 'OPEN' ? 1 : 0)
         const doorWidth = 0.8 - (openness * .7)
         const plotConfig: PlotConfig = {
@@ -244,7 +244,6 @@ export class Door extends WallFeature {
     }
 
     getDrawInMapPolygons(place: Direction, squareCenter: Point): Point[][] {
-
         const edge = place.translatePoint(squareCenter, .5);
         const leftCorner = place.leftOf.translatePoint(edge, .5);
         const rightCorner = place.rightOf.translatePoint(edge, .5);
