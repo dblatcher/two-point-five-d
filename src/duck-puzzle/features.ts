@@ -1,7 +1,6 @@
 import { Color } from "@/canvas/Color"
 import { FloorFeatureInput, PitInput } from "@/game-classes/FloorFeature"
 import { DoorInput, WallFeatureInput, WallSwitchInput } from "@/game-classes/WallFeature"
-import { sprites } from "@/instances/sprites"
 
 function makeSign(text: string[]): WallFeatureInput {
     return {
@@ -18,7 +17,7 @@ function makeSign(text: string[]): WallFeatureInput {
     }
 }
 
-const lever1: WallSwitchInput = { featureType: 'WallSwitch', spriteId: sprites.leverSprite.id, }
+const lever1: WallSwitchInput = { featureType: 'WallSwitch', }
 const door1: DoorInput = ({ featureType: 'Door', fillColor: 'yellow', status: 'CLOSED', canOpenDirectly: false })
 const door2: DoorInput = ({ featureType: 'Door', fillColor: 'yellow', status: 'CLOSED', canOpenDirectly: false })
 

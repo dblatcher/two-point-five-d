@@ -118,6 +118,8 @@ export class WallSwitch extends WallFeature {
 
     constructor(input: WallSwitchInput) {
         super(input)
+        this.data.transitions = this.data.transitions ??
+            [{ startStatus: 'OFF', endStatus: 'ON', duration: 5 }]
     }
     get canInteract(): boolean { return true }
     get requiredAnimations(): string[] { return ["OFF", "ON"] }
@@ -140,9 +142,52 @@ export class WallSwitch extends WallFeature {
         const leftCorner = place.leftOf.translatePoint(edgeMiddle, .5);
         const rightCorner = place.rightOf.translatePoint(edgeMiddle, .5);
         const switchLevel = place.behind.translatePoint(edgeMiddle, .15);
-        const switchEnd = { ...switchLevel, y: switchLevel.y + .25 * (status === 'ON' ? 1 : -1) }
+        const switchEnd = place.leftOf.translatePoint(switchLevel, status === 'ON' ? .2 : -.2)
         return [
             [rightCorner, edgeMiddle, switchEnd, edgeMiddle, leftCorner]
+        ]
+    }
+
+    getDrawInSightShapes(): { shape: Point[]; plotConfig: PlotConfig }[] {
+        const isOn = this.data.status === 'ON'
+        const switchHeight = this.transitionPhase ?? (isOn ? 1 : 0)
+
+        return [
+            {
+                shape: [
+                    { x: .4, y: .35 },
+                    { x: .6, y: .35 },
+                    { x: .6, y: .65 },
+                    { x: .4, y: .65 },
+                ],
+                plotConfig: {
+                    fillStyle: Color.GRAY.css,
+                    strokeStyle: Color.BLACK.lighter(10).css,
+                }
+            },
+            {
+                shape: [
+                    { x: .49, y: .4 },
+                    { x: .51, y: .4 },
+                    { x: .51, y: .6 },
+                    { x: .49, y: .6 },
+                ],
+                plotConfig: {
+                    fillStyle: Color.BLACK.css,
+                }
+            },
+            {
+                shape: [
+                    { x: .45, y: .4 + switchHeight * .15 },
+                    { x: .55, y: .4 + switchHeight * .15 },
+                    { x: .55, y: .45 + switchHeight * .15 },
+                    { x: .45, y: .45 + switchHeight * .15 },
+                ],
+                plotConfig: {
+                    fillStyle: Color.GRAY.lighter(20).css,
+                    strokeStyle: Color.BLACK.lighter(10).css,
+                }
+            },
         ]
     }
 }
