@@ -19,8 +19,8 @@ const levels: NonEmptyArray<LevelInput> = [
         height: 10,
         width: 10,
         walls: [
-            { x: 6, y: 3, placeName: 'WEST', patternSprite: sprites.brickWall2.id, featureIds: ["switch"] },
-            { x: 6, y: 5, placeName: 'NORTH', shape: vaultDoorway, featureIds: ["door"], open: true },
+            { place: [6, 3, 'WEST'], patternSprite: sprites.brickWall2.id, featureIds: ["switch"] },
+            { place: [6, 5, 'NORTH'], shape: vaultDoorway, featureIds: ["door"], open: true },
         ],
         items: [
 

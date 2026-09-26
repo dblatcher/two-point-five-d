@@ -38,7 +38,7 @@ const level1 = putWallsAroundLevel({
     },
     walls: [
         ...church.walls,
-        ({ x: 2, y: 2, placeName: 'NORTH', patternSprite: sharedSprites.brickWall.id, shape: doorway, featureIds: ["door3", "keyhole"], open: true }),
+        { place: [2, 2, 'NORTH'], patternSprite: sharedSprites.brickWall.id, shape: doorway, featureIds: ["door3", "keyhole"], open: true },
         ...hut1.walls,
         ...hut2.walls,
         ...hut3.walls,
@@ -46,13 +46,13 @@ const level1 = putWallsAroundLevel({
         ...hut5.walls,
         ...hut6.walls,
 
-        ({ x: 3, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
-        ({ x: 4, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
-        ({ x: 5, y: 15, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
+        { place: [3, 15, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
+        { place: [4, 15, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
+        { place: [5, 15, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
 
-        ({ x: 5, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
-        ({ x: 6, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
-        ({ x: 7, y: 12, placeName: 'SOUTH', shape: spikey, color: Color.GREEN.serialise() }),
+        { place: [5, 12, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
+        { place: [6, 12, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
+        { place: [7, 12, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
 
     ],
 

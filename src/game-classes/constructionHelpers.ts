@@ -13,33 +13,37 @@ import { AbstractFeature } from "./AbstractFeature";
 import { Door, DoorInput, WallFeature, WallFeatureInput, WallSwitch, WallSwitchInput } from "./WallFeature";
 import { FloorFeature, FloorFeatureInput, Pit, PitInput } from "./FloorFeature";
 import { CeilingFeature, CeilingFeatureInput } from "./CeilingFeature";
+import { CardinalDirectionName } from "./Direction";
+import { WallInput } from "./Wall";
 
 export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): LevelInput => {
     const { walls, width, height } = levelInput;
     const { color, patternSprite, shape } = config;
 
+    const makeWall = (direction: CardinalDirectionName): WallInput => ({ place: [x, y, direction], color: color?.serialise(), patternSprite: patternSprite?.id, shape })
+
     let x = 0, y = 0;
     for (x = 0; x < width; x++) {
-        if (!walls.find(wall => Math.floor(wall.x) == x && Math.floor(wall.y) == y && wall.placeName == 'NORTH')) {
-            walls.push(({ x, y, placeName: 'NORTH', color: color?.serialise(), patternSprite: patternSprite?.id, shape }))
+        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'NORTH')) {
+            walls.push(makeWall('NORTH'))
         }
     }
     x = 0;
     for (y = 0; y < height; y++) {
-        if (!walls.find(wall => Math.floor(wall.x) == x && Math.floor(wall.y) == y && wall.placeName == 'WEST')) {
-            walls.push(({ x, y, placeName: 'WEST', color: color?.serialise(), patternSprite: patternSprite?.id, shape }))
+        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'WEST')) {
+            walls.push(makeWall('WEST'))
         }
     }
     y = height - 1;
     for (x = 0; x < width; x++) {
-        if (!walls.find(wall => Math.floor(wall.x) == x && Math.floor(wall.y) == y && wall.placeName == 'SOUTH')) {
-            walls.push(({ x, y, placeName: 'SOUTH', color: color?.serialise(), patternSprite: patternSprite?.id, shape }))
+        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'SOUTH')) {
+            walls.push(makeWall('SOUTH'))
         }
     }
     x = width - 1;
     for (y = 0; y < height; y++) {
-        if (!walls.find(wall => Math.floor(wall.x) == x && Math.floor(wall.y) == y && wall.placeName == 'EAST')) {
-            walls.push(({ x, y, placeName: 'EAST', color: color?.serialise(), patternSprite: patternSprite?.id, shape }))
+        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'EAST')) {
+            walls.push(makeWall('EAST'))
         }
     }
     return levelInput

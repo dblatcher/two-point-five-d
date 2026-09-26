@@ -9,14 +9,14 @@ function makeHut(x: number, y: number, doorPlacement: Direction = Direction.sout
 
     const base: { walls: WallInput[], ceilings: SquareWithFeaturesData[] } = {
         walls: [
-            ({ x: x + 0, y: y + 0, placeName: 'NORTH', patternSprite: patternSprite?.id }),
-            ({ x: x + 0, y: y + 0, placeName: 'WEST', patternSprite: patternSprite?.id }),
-            ({ x: x + 1, y: y + 0, placeName: 'NORTH', patternSprite: patternSprite?.id }),
-            ({ x: x + 1, y: y + 0, placeName: 'EAST', patternSprite: patternSprite?.id }),
-            ({ x: x + 0, y: y + 1, placeName: 'SOUTH', patternSprite: patternSprite?.id }),
-            ({ x: x + 0, y: y + 1, placeName: 'WEST', patternSprite: patternSprite?.id }),
-            ({ x: x + 1, y: y + 1, placeName: 'SOUTH', patternSprite: patternSprite?.id }),
-            ({ x: x + 1, y: y + 1, placeName: 'EAST', patternSprite: patternSprite?.id }),
+            { place: [x + 0, y + 0, 'NORTH'], patternSprite: patternSprite?.id },
+            { place: [x + 0, y + 0, 'WEST'], patternSprite: patternSprite?.id },
+            { place: [x + 1, y + 0, 'NORTH'], patternSprite: patternSprite?.id },
+            { place: [x + 1, y + 0, 'EAST'], patternSprite: patternSprite?.id },
+            { place: [x + 0, y + 1, 'SOUTH'], patternSprite: patternSprite?.id },
+            { place: [x + 0, y + 1, 'WEST'], patternSprite: patternSprite?.id },
+            { place: [x + 1, y + 1, 'SOUTH'], patternSprite: patternSprite?.id },
+            { place: [x + 1, y + 1, 'EAST'], patternSprite: patternSprite?.id },
         ],
         ceilings: [
             { x: x + 0, y: y + 0, direction: 'NORTH', ceilingFeatureIds: ["brownCeiling"] },

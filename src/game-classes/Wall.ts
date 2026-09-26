@@ -23,11 +23,10 @@ interface WallConfig {
     featureIds?: string[]
 }
 
+export type WallPlaceTupple = [number, number, CardinalDirectionName];
 
 interface WallInput {
-    x: number
-    y: number
-    placeName: CardinalDirectionName
+    place: WallPlaceTupple
     color?: ColorParams
     patternSprite?: string
     shape?: Point[]
@@ -40,22 +39,26 @@ class Wall extends Position {
     place: Direction
     features: WallFeature[]
 
-    constructor(config: WallInput, levelFeatures: Record<string, AbstractFeature> = {}, patternSprite?: Sprite) {
-        super(config)
-        this.data = {
-            ...config,
-            color: config.color && Color.fromConfig(config.color),
+    constructor(input: WallInput, levelFeatures: Record<string, AbstractFeature> = {}, patternSprite?: Sprite) {
+        const [x, y, placeName] = input.place
+        const data: WallConfig = {
+            ...input,
+            x, y, placeName,
+            color: input.color && Color.fromConfig(input.color),
             patternSprite,
-            open: !!config.open,
+            open: !!input.open,
         }
-        this.place = Direction.of(config.placeName)
-        this.features = WallFeature.getFeaturesFromKeyArray(config.featureIds ?? [], WallFeature, levelFeatures) as WallFeature[];
+        super(data)
+        this.data = data
+        this.place = Direction.of(data.placeName)
+        this.features = WallFeature.getFeaturesFromKeyArray(input.featureIds ?? [], WallFeature, levelFeatures) as WallFeature[];
     }
 
     serialise(): WallInput {
         const { data } = this
         return {
             ...data,
+            place: [data.x, data.y, data.placeName],
             patternSprite: data.patternSprite?.id,
             color: data.color?.serialise(),
         }
