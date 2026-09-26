@@ -18,8 +18,8 @@ function makeSign(text: string[]): WallFeatureInput {
 }
 
 const lever1: WallSwitchInput = { featureType: 'WallSwitch', }
-const door1: DoorInput = ({ featureType: 'Door', fillColor: 'yellow', status: 'CLOSED', canOpenDirectly: false })
-const door2: DoorInput = ({ featureType: 'Door', fillColor: 'yellow', status: 'CLOSED', canOpenDirectly: false })
+const door1: DoorInput = ({ featureType: 'Door', fillColor: 'burlywood', status: 'CLOSED', canOpenDirectly: false })
+const door2: DoorInput = ({ featureType: 'Door', fillColor: 'chocolate', status: 'CLOSED', canOpenDirectly: false })
 
 
 const bigSquareOnFloor: [number, number][] = [
