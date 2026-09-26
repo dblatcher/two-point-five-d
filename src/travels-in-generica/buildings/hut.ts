@@ -1,4 +1,5 @@
 import { Sprite } from "@/canvas/Sprite";
+import { setWallInputOptions } from "@/game-classes/constructionHelpers";
 import { Direction } from "@/game-classes/Direction";
 import { SquareWithFeaturesData } from "@/game-classes/SquareWithFeatures";
 import { WallInput } from "@/game-classes/Wall";
@@ -6,17 +7,16 @@ import { doorway } from "@/instances/wallShapes";
 
 function makeHut(x: number, y: number, doorPlacement: Direction = Direction.south, patternSprite?: Sprite): { walls: WallInput[], ceilings: SquareWithFeaturesData[] } {
 
-
     const base: { walls: WallInput[], ceilings: SquareWithFeaturesData[] } = {
         walls: [
-            { place: [x + 0, y + 0, 'NORTH'], patternSprite: patternSprite?.id },
-            { place: [x + 0, y + 0, 'WEST'], patternSprite: patternSprite?.id },
-            { place: [x + 1, y + 0, 'NORTH'], patternSprite: patternSprite?.id },
-            { place: [x + 1, y + 0, 'EAST'], patternSprite: patternSprite?.id },
-            { place: [x + 0, y + 1, 'SOUTH'], patternSprite: patternSprite?.id },
-            { place: [x + 0, y + 1, 'WEST'], patternSprite: patternSprite?.id },
-            { place: [x + 1, y + 1, 'SOUTH'], patternSprite: patternSprite?.id },
-            { place: [x + 1, y + 1, 'EAST'], patternSprite: patternSprite?.id },
+            [x + 0, y + 0, 'NORTH', { patternSprite: patternSprite?.id }],
+            [x + 0, y + 0, 'WEST', { patternSprite: patternSprite?.id }],
+            [x + 1, y + 0, 'NORTH', { patternSprite: patternSprite?.id }],
+            [x + 1, y + 0, 'EAST', { patternSprite: patternSprite?.id }],
+            [x + 0, y + 1, 'SOUTH', { patternSprite: patternSprite?.id }],
+            [x + 0, y + 1, 'WEST', { patternSprite: patternSprite?.id }],
+            [x + 1, y + 1, 'SOUTH', { patternSprite: patternSprite?.id }],
+            [x + 1, y + 1, 'EAST', { patternSprite: patternSprite?.id }],
         ],
         ceilings: [
             { x: x + 0, y: y + 0, direction: 'NORTH', ceilingFeatureIds: ["brownCeiling"] },
@@ -36,9 +36,7 @@ function makeHut(x: number, y: number, doorPlacement: Direction = Direction.sout
         case Direction.south: doorwayIndex = 6; break;
     }
 
-    base.walls[doorwayIndex].shape = doorway;
-    base.walls[doorwayIndex].open = true;
-
+    setWallInputOptions(base.walls[doorwayIndex], { shape: doorway, open: true })
     return base;
 }
 

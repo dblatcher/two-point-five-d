@@ -18,8 +18,8 @@ const hut4 = makeHut(6, 8, Direction.north, sprites.grayWoodWallOne)
 const hut5 = makeHut(10, 3, Direction.west, sprites.yellowWoodWallOne)
 const hut6 = makeHut(13, 7, Direction.west, sprites.brownWoodWallOne)
 
-church.walls[0].featureIds = ["staircaseAdown"]
-hut3.walls[0].featureIds = ["torch"]
+if (church.walls[0][3]) { church.walls[0][3].featureIds = ["staircaseAdown"] } else { church.walls[0][3] = { featureIds: ['staircaseAdown'] } }
+if (hut3.walls[0][3]) { hut3.walls[0][3].featureIds = ["torch"] } else { hut3.walls[0][3] = { featureIds: ['torch'] } }
 
 
 
@@ -38,22 +38,19 @@ const level1 = putWallsAroundLevel({
     },
     walls: [
         ...church.walls,
-        { place: [2, 2, 'NORTH'], patternSprite: sharedSprites.brickWall.id, shape: doorway, featureIds: ["door3", "keyhole"], open: true },
+        [2, 2, 'NORTH', { patternSprite: sharedSprites.brickWall.id, shape: doorway, featureIds: ["door3", "keyhole"], open: true }],
         ...hut1.walls,
         ...hut2.walls,
         ...hut3.walls,
         ...hut4.walls,
         ...hut5.walls,
         ...hut6.walls,
-
-        { place: [3, 15, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
-        { place: [4, 15, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
-        { place: [5, 15, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
-
-        { place: [5, 12, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
-        { place: [6, 12, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
-        { place: [7, 12, 'SOUTH'], shape: spikey, color: Color.GREEN.serialise() },
-
+        [3, 15, 'SOUTH', { shape: spikey, color: Color.GREEN.serialise() }],
+        [4, 15, 'SOUTH', { shape: spikey, color: Color.GREEN.serialise() }],
+        [5, 15, 'SOUTH', { shape: spikey, color: Color.GREEN.serialise() }],
+        [5, 12, 'SOUTH', { shape: spikey, color: Color.GREEN.serialise() }],
+        [6, 12, 'SOUTH', { shape: spikey, color: Color.GREEN.serialise() }],
+        [7, 12, 'SOUTH', { shape: spikey, color: Color.GREEN.serialise() }],
     ],
 
     staticFigures: [

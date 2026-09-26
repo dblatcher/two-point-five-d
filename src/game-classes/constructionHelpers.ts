@@ -14,35 +14,37 @@ import { Door, DoorInput, WallFeature, WallFeatureInput, WallSwitch, WallSwitchI
 import { FloorFeature, FloorFeatureInput, Pit, PitInput } from "./FloorFeature";
 import { CeilingFeature, CeilingFeatureInput } from "./CeilingFeature";
 import { CardinalDirectionName } from "./Direction";
-import { WallInput } from "./Wall";
+import { WallInput, WallOptions } from "./Wall";
 
 export const putWallsAroundLevel = (levelInput: LevelInput, config: { color?: Color, patternSprite?: Sprite, shape?: Point[] } = {}): LevelInput => {
     const { walls, width, height } = levelInput;
     const { color, patternSprite, shape } = config;
 
-    const makeWall = (direction: CardinalDirectionName): WallInput => ({ place: [x, y, direction], color: color?.serialise(), patternSprite: patternSprite?.id, shape })
+    const makeWall = (direction: CardinalDirectionName): WallInput => (
+        [x, y, direction, { color: color?.serialise(), patternSprite: patternSprite?.id, shape }]
+    )
 
     let x = 0, y = 0;
     for (x = 0; x < width; x++) {
-        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'NORTH')) {
+        if (!walls.find(wall => Math.floor(wall[0]) == x && Math.floor(wall[1]) == y && wall[2] == 'NORTH')) {
             walls.push(makeWall('NORTH'))
         }
     }
     x = 0;
     for (y = 0; y < height; y++) {
-        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'WEST')) {
+        if (!walls.find(wall => Math.floor(wall[0]) == x && Math.floor(wall[1]) == y && wall[2] == 'WEST')) {
             walls.push(makeWall('WEST'))
         }
     }
     y = height - 1;
     for (x = 0; x < width; x++) {
-        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'SOUTH')) {
+        if (!walls.find(wall => Math.floor(wall[0]) == x && Math.floor(wall[1]) == y && wall[2] == 'SOUTH')) {
             walls.push(makeWall('SOUTH'))
         }
     }
     x = width - 1;
     for (y = 0; y < height; y++) {
-        if (!walls.find(wall => Math.floor(wall.place[0]) == x && Math.floor(wall.place[1]) == y && wall.place[2] == 'EAST')) {
+        if (!walls.find(wall => Math.floor(wall[0]) == x && Math.floor(wall[1]) == y && wall[2] == 'EAST')) {
             walls.push(makeWall('EAST'))
         }
     }
@@ -101,4 +103,12 @@ export const constructFeature = (input: SupportedFeatureConfig): AbstractFeature
         case 'CeilingFeature': return new CeilingFeature(input)
         default: return new CeilingFeature(input)
     }
+}
+
+export const setWallInputOptions = (wallInput:WallInput, options:Partial<WallOptions>):WallInput => {
+    wallInput[3] = {
+        ...wallInput[3],
+        ...options
+    }
+    return wallInput
 }

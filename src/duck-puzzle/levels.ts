@@ -25,18 +25,22 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
     floorColor: [100, 40, 40],
     features: duckPuzzleFeatures,
     walls: [
-        { place: [0, 3, 'NORTH'], patternSprite: sprites.windowWall.id },
-        { place: [1, 3, 'NORTH'], featureIds: ["hintForLevel1"] },
-        { place: [2, 3, 'NORTH'], patternSprite: sprites.windowWall.id },
-        { place: [3, 3, 'NORTH'], patternSprite: sprites.windowWall.id },
-        { place: [4, 2, 'WEST'], shape: doorway, open: true, featureIds: ["door1"] },
-        { place: [4, 1, 'WEST'], featureIds: ["lever1"] },
-        { place: [4, 0, 'WEST'] },
-        { place: [6, 0, 'WEST'] },
-        { place: [6, 1, 'WEST'] },
-        { place: [6, 1, 'SOUTH'] },
-        { place: [6, 1, 'EAST'] },
-        { place: [7, 0, 'SOUTH'] },
+        [0, 3, 'NORTH', { patternSprite: sprites.windowWall.id }],
+        [0, 2, 'NORTH', { patternSprite: sprites.windowWall.id }],
+        [1, 2, 'NORTH', { patternSprite: sprites.windowWall.id }],
+        [2, 2, 'NORTH', { patternSprite: sprites.windowWall.id }],
+        [3, 2, 'NORTH', { patternSprite: sprites.windowWall.id }],
+        [1, 3, 'NORTH', { featureIds: ["hintForLevel1"] }],
+        [2, 3, 'NORTH', { patternSprite: sprites.windowWall.id }],
+        [3, 3, 'NORTH', { patternSprite: sprites.windowWall.id }],
+        [4, 2, 'WEST', { shape: doorway, open: true, featureIds: ["door1"] }],
+        [4, 1, 'WEST', { featureIds: ["lever1"] }],
+        [4, 0, 'WEST'],
+        [6, 0, 'WEST'],
+        [6, 1, 'WEST'],
+        [6, 1, 'SOUTH'],
+        [6, 1, 'EAST'],
+        [7, 0, 'SOUTH'],
     ],
     squaresWithFeatures: [
         {
@@ -53,7 +57,7 @@ const duckPuzzleLevel1 = putWallsAroundLevel({
 
     ],
     actors: [
-        duck({ x: 0.5, y: 0.5, direction: Direction.east, behaviour: 'moveAntiClockwiseUnlessOnStar' }),
+        duck({ x: 0.5, y: 2.5, direction: Direction.east, behaviour: 'moveAntiClockwiseUnlessOnStar' }),
     ],
     items: [
     ],
@@ -81,12 +85,12 @@ const duckPuzzleLevel2 = putWallsAroundLevel({
     startingVantage: [1, 2, 'EAST'],
     floorColor: [30, 120, 90],
     walls: [
-        { place: [5, 2, 'NORTH'], shape: lowWall, },
-        { place: [5, 2, 'SOUTH'], shape: lowWall, },
-        { place: [5, 3, 'EAST'], featureIds: ["hintForLevel2"] },
-        { place: [4, 2, 'NORTH'], shape: lowWall, },
-        { place: [4, 2, 'SOUTH'], shape: lowWall, },
-        { place: [4, 2, 'WEST'], featureIds: ["door1"], open: true, shape: doorway },
+        [5, 2, 'NORTH', { shape: lowWall, }],
+        [5, 2, 'SOUTH', { shape: lowWall, }],
+        [5, 3, 'EAST', { featureIds: ["hintForLevel2"] }],
+        [4, 2, 'NORTH', { shape: lowWall, }],
+        [4, 2, 'SOUTH', { shape: lowWall, }],
+        [4, 2, 'WEST', { featureIds: ["door1"], open: true, shape: doorway }],
     ],
     squaresWithFeatures: [
         {
@@ -129,23 +133,23 @@ const duckPuzzleLevel3 = putWallsAroundLevel({
     startingVantage: [0, 0, 'EAST'],
     floorColor: [120, 90, 30],
     walls: [
-        { place: [2, 2, 'NORTH'], },
-        { place: [3, 2, 'NORTH'], shape: doorway, open: true, featureIds: ["door1"] },
-        { place: [4, 2, 'NORTH'], },
+        [2, 2, 'NORTH'],
+        [3, 2, 'NORTH', { shape: doorway, open: true, featureIds: ["door1"] }],
+        [4, 2, 'NORTH'],
 
-        { place: [2, 4, 'SOUTH'], },
-        { place: [3, 4, 'SOUTH'], shape: doorway, open: true, featureIds: ["door2"] },
-        { place: [4, 4, 'SOUTH'], },
+        [2, 4, 'SOUTH'],
+        [3, 4, 'SOUTH', { shape: doorway, open: true, featureIds: ["door2"] }],
+        [4, 4, 'SOUTH'],
 
-        { place: [2, 2, 'WEST'], },
-        { place: [2, 3, 'WEST'], featureIds: ["lever1"] },
-        { place: [2, 4, 'WEST'], },
+        [2, 2, 'WEST'],
+        [2, 3, 'WEST', { featureIds: ["lever1"] }],
+        [2, 4, 'WEST'],
 
-        { place: [4, 2, 'EAST'], },
-        { place: [4, 3, 'EAST'], },
-        { place: [4, 4, 'EAST'], },
+        [4, 2, 'EAST'],
+        [4, 3, 'EAST'],
+        [4, 4, 'EAST'],
 
-        { place: [4, 6, 'WEST'], shape: doorway, open: true, featureIds: ["door1"] },
+        [4, 6, 'WEST', { shape: doorway, open: true, featureIds: ["door1"] }],
     ],
     squaresWithFeatures: [
         {

@@ -23,16 +23,16 @@ interface WallConfig {
     featureIds?: string[]
 }
 
-export type WallPlaceTupple = [number, number, CardinalDirectionName];
-
-interface WallInput {
-    place: WallPlaceTupple
+interface WallOptions {
     color?: ColorParams
     patternSprite?: string
     shape?: Point[]
     open?: boolean
     featureIds?: string[]
 }
+type WallInput = [number, number, CardinalDirectionName] | [number, number, CardinalDirectionName, WallOptions];
+
+
 
 class Wall extends Position {
     data: WallConfig
@@ -40,30 +40,30 @@ class Wall extends Position {
     features: WallFeature[]
 
     constructor(input: WallInput, levelFeatures: Record<string, AbstractFeature> = {}, patternSprite?: Sprite) {
-        const [x, y, placeName] = input.place
+        const [x, y, placeName, options = {}] = input
         const data: WallConfig = {
-            ...input,
             x, y, placeName,
-            color: input.color && Color.fromConfig(input.color),
+            ...options,
+            color: options.color && Color.fromConfig(options.color),
+            open: !!options.open,
             patternSprite,
-            open: !!input.open,
         }
         super(data)
         this.data = data
         this.place = Direction.of(data.placeName)
-        this.features = WallFeature.getFeaturesFromKeyArray(input.featureIds ?? [], WallFeature, levelFeatures) as WallFeature[];
+        this.features = WallFeature.getFeaturesFromKeyArray(options.featureIds ?? [], WallFeature, levelFeatures) as WallFeature[];
     }
 
     serialise(): WallInput {
-        const { data } = this
-        return {
-            ...data,
-            place: [data.x, data.y, data.placeName],
-            patternSprite: data.patternSprite?.id,
-            color: data.color?.serialise(),
-        }
+        const { x, y, placeName, color, patternSprite, shape, open, featureIds } = this.data
+        return [x, y, placeName, {
+            color: color?.serialise(),
+            patternSprite: patternSprite?.id,
+            shape: shape,
+            open: open,
+            featureIds: featureIds
+        }]
     }
-
 
     get isBlocking(): boolean {
         const { open } = this.data;
@@ -221,5 +221,5 @@ class Wall extends Position {
 }
 
 
-export { Wall, WallConfig, WallInput };
+export { Wall, WallConfig, WallInput, WallOptions };
 

@@ -101,7 +101,7 @@ class Level {
             walls: config.walls.map(input => new Wall(
                 input,
                 levelFeatures,
-                input.patternSprite ? spriteRecord[input.patternSprite] : undefined
+                input[3]?.patternSprite ? spriteRecord[input[3].patternSprite] : undefined
             )),
             actors: config.actors?.map(input => makeActor(input))
         }
